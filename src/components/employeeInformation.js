@@ -18,7 +18,7 @@ class employeeInformation extends Component {// 状況変動一覧
         super(props);
         this.state = this.initialState;// 初期化
 		this.options = {
-			sizePerPage: 15,
+			sizePerPage: 12,
 			pageStartIndex: 1,
 			paginationSize: 3,
 			prePage: '<', // Previous page button text
@@ -190,14 +190,14 @@ class employeeInformation extends Component {// 状況変動一覧
                     selectRow={selectRow}
 					cellEdit={cellEdit}
 　					striped hover condensed>
-							<TableHeaderColumn tdStyle={{ padding: '.45em' }} width='12%' dataField='rowNo' editable={false} dataSort >番号</TableHeaderColumn>
-							<TableHeaderColumn tdStyle={{ padding: '.45em' }} width='12%' dataField='employeeNo' isKey editable={false}>社員番号</TableHeaderColumn>
-							<TableHeaderColumn tdStyle={{ padding: '.45em' }} width='12%' dataField='employeeName' editable={false}>社員名</TableHeaderColumn>
-                            <TableHeaderColumn tdStyle={{ padding: '.45em' }} width='12%' dataField='stayPeriodDate' dataFormat={this.stayPeriodChange} editable={false} dataSort >在留カード</TableHeaderColumn>                           
-                            <TableHeaderColumn tdStyle={{ padding: '.45em' }} width='12%' dataField='birthdayDate' dataFormat={this.birthdayChange} editable={false} dataSort >誕生日</TableHeaderColumn>
-							<TableHeaderColumn tdStyle={{ padding: '.45em' }} width='12%' dataField='contractDeadlineDate' dataFormat={this.contractDeadlineChange} editable={false} dataSort >契約</TableHeaderColumn>
-							<TableHeaderColumn tdStyle={{ padding: '.45em' }} width='12%' dataField='passportStayPeriodDate' dataFormat={this.passportStayPeriodChange} editable={false} dataSort >パスポート</TableHeaderColumn>
-							<TableHeaderColumn tdStyle={{ padding: '.45em' }} width='12%' dataField='dealDistinctioCode' dataFormat={this.formatType.bind(this)} customEditor={{ getElement: tableSelect }} editable={true}>処理区分</TableHeaderColumn>
+							<TableHeaderColumn /*tdStyle={{ padding: '.45em' }}*/ width='12%' height='100px' dataField='rowNo' editable={false} dataSort >番号</TableHeaderColumn>
+							<TableHeaderColumn /*tdStyle={{ padding: '.45em' }}*/ width='12%' dataField='employeeNo' isKey editable={false}>社員番号</TableHeaderColumn>
+							<TableHeaderColumn /*tdStyle={{ padding: '.45em' }}*/ width='12%' dataField='employeeName' editable={false}>社員名</TableHeaderColumn>
+                            <TableHeaderColumn /*tdStyle={{ padding: '.45em' }}*/ width='12%' dataField='stayPeriodDate' dataFormat={this.stayPeriodChange} editable={false} dataSort >在留カード</TableHeaderColumn>                           
+                            <TableHeaderColumn /*tdStyle={{ padding: '.45em' }}*/ width='12%' dataField='birthdayDate' dataFormat={this.birthdayChange} editable={false} dataSort >誕生日</TableHeaderColumn>
+							<TableHeaderColumn /*tdStyle={{ padding: '.45em' }}*/ width='12%' dataField='contractDeadlineDate' dataFormat={this.contractDeadlineChange} editable={false} dataSort >契約</TableHeaderColumn>
+							<TableHeaderColumn /*tdStyle={{ padding: '.45em' }}*/ width='12%' dataField='passportStayPeriodDate' dataFormat={this.passportStayPeriodChange} editable={false} dataSort >パスポート</TableHeaderColumn>
+							<TableHeaderColumn /*tdStyle={{ padding: '.45em' }}*/ width='12%' dataField='dealDistinctioCode' dataFormat={this.formatType.bind(this)} customEditor={{ getElement: tableSelect }} editable={true}>処理区分</TableHeaderColumn>
 					</BootstrapTable>
                     </div>
                  </Col>

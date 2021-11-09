@@ -59,7 +59,7 @@ class salesProfit extends React.Component {
 			})
 		})
 		.catch(function(error) {
-			alert(error);
+			//alert(error);
 		});	
 		if (this.props.location.state !== undefined) {
             var sendValue = this.props.location.state.sendValue;

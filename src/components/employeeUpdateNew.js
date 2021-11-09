@@ -347,7 +347,7 @@ class employeeUpdateNew extends React.Component {
 			});
 		})
 		.catch(function(error) {
-			alert(error);
+			//alert(error);
 		});		
 		axios.post(this.state.serverIP + "subMenu/getCompanyDate")
 		.then(response => {

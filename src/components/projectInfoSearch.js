@@ -901,10 +901,10 @@ class ProjectInfoSearch extends Component {
                             </Col>
                             <Col sm={5}>
                                 <div style={{ "float": "right" }}>
-                                	<Button size="sm" onClick={this.endFlagChange} name="clickButton" id="endFlag" variant="info"><FontAwesomeIcon icon={faList} />{this.state.endFlag === "0" ? "終了": "未終了"}</Button>{' '}
-                                    <Button size="sm" onClick={this.shuseiTo.bind(this, "detail")} name="clickButton" id="detail" variant="info"><FontAwesomeIcon icon={faList} />詳細</Button>{' '}
-                                    <Button size="sm" onClick={this.shuseiTo.bind(this, "update")} name="clickButton" id="update" variant="info"><FontAwesomeIcon icon={faEdit} />修正</Button>{' '}
-                                    <Button size="sm" variant="info" name="clickButton" id="delete" variant="info" onClick={this.delete}><FontAwesomeIcon icon={faTrash} /> 削	除</Button>{' '}
+                                	<Button size="sm" onClick={this.endFlagChange} name="clickButton" id="endFlag" variant="info"><FontAwesomeIcon icon={faList} />{this.state.endFlag === "0" ? " 再開": " 終了"}</Button>{' '}
+                                    <Button size="sm" onClick={this.shuseiTo.bind(this, "detail")} name="clickButton" id="detail" variant="info"><FontAwesomeIcon icon={faList} /> 詳細</Button>{' '}
+                                    <Button size="sm" onClick={this.shuseiTo.bind(this, "update")} name="clickButton" id="update" variant="info"><FontAwesomeIcon icon={faEdit} /> 修正</Button>{' '}
+                                    <Button size="sm" variant="info" name="clickButton" id="delete" variant="info" onClick={this.delete}><FontAwesomeIcon icon={faTrash} /> 削除</Button>{' '}
                                     <Button size="sm" variant="info" name="clickButton" id="projectContent" variant="info" onClick={this.handleShowModal.bind(this)}><FontAwesomeIcon icon={faBook} /> 案件文章</Button>
                                 </div>
                             </Col>

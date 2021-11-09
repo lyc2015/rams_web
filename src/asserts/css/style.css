@@ -1297,6 +1297,16 @@ body {
 	color: "#495057"
 }
 
+.Autocompletestyle-dutyManagement {
+	width: 10.6rem;
+	height: 31px;
+	border-color: "#ced4da";
+	border-width: 1;
+	border-style: "solid";
+	font-size: ".875rem";
+	color: "#495057"
+}
+
 .Autocompletestyle-customerInfoSearch {
 	width: 14.4rem;
 	height: 31px;

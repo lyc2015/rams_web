@@ -12,6 +12,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faUpload, faSearch, faDownload } from '@fortawesome/free-solid-svg-icons';
 import * as publicUtils from './utils/publicUtils.js';
 import MyToast from './myToast';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 import store from './redux/store';
 registerLocale("ja", ja);
 axios.defaults.withCredentials = true;
@@ -38,7 +39,7 @@ class dutyManagement extends React.Component {
 			})
 		})
 		.catch(function(error) {
-			alert(error);
+			//alert(error);
 		});	
 		this.searchDutyManagement();
 	}
@@ -74,7 +75,9 @@ class dutyManagement extends React.Component {
 		rowApprovalStatus: '',
 		rowSelectWorkingTimeReport: '',
 		rowDownload: "",
+		customerNo: null,
 		loading: true,
+        customerAbbreviationList: store.getState().dropDown[73].slice(1),
 		approvalStatuslist: store.getState().dropDown[27],
 		checkSectionlist: store.getState().dropDown[28],
 		costClassification: store.getState().dropDown[30],
@@ -112,6 +115,7 @@ class dutyManagement extends React.Component {
 		const emp = {
 			yearAndMonth: publicUtils.formateDate($("#datePicker").val(), false),
 			approvalStatus: $("#approvalStatus").val(),
+			customerNo: this.state.customerNo,
 		};
 		axios.post(this.state.serverIP + "dutyManagement/selectDutyManagement", emp)
 			.then(response => {
@@ -189,13 +193,18 @@ class dutyManagement extends React.Component {
 					}
 				}
 				if(!flag){
-					this.setState({
-						rowSelectEmployeeNo: "",
-						rowSelectEmployeeName: "",
+					axios.post(this.state.serverIP + "subMenu/checkSession")
+					.then(resultMap => {
+						if(!(resultMap.data === null || resultMap.data === '')){
+							this.setState({
+								rowSelectEmployeeNo: "",
+								rowSelectEmployeeName: "",
+							})
+							this.refs.table.setState({
+								selectedRowKeys: []
+							});
+						}
 					})
-					this.refs.table.setState({
-						selectedRowKeys: []
-					});
 					$("#update").attr("disabled",true);
 					$("#workRepot").attr("disabled",true);
 					$("#syounin").attr("disabled",true);
@@ -445,6 +454,27 @@ class dutyManagement extends React.Component {
 		}
 	}
 	
+    /**
+     * 社員名連想
+     * @param {} event 
+     */
+    getCustomer = (event, values) => {
+        this.setState({
+            [event.target.name]: event.target.value,
+        }, () => {
+            let customerNo = null;
+            if (values !== null) {
+                customerNo = values.code;
+            }
+            this.setState({
+                customerNo: customerNo,
+                customerAbbreviation: customerNo,
+            },() => {
+            	this.searchDutyManagement();
+            })
+        })
+    }
+	
 	costFormat = (cell,row) => {
         let returnItem = cell;
         const options = {
@@ -574,8 +604,7 @@ class dutyManagement extends React.Component {
 						</Form.Group>
 						<Form.Group>
 							<Row>
-								<Col sm={10}>
-									<Col sm={6} style={{padding:"0px"}}>
+								<Col sm={5}>
 									<InputGroup size="sm" className="mb-2">
 										<InputGroup.Prepend>
 											<InputGroup.Text id="inputGroup-sizing-sm">年月</InputGroup.Text><DatePicker
@@ -602,11 +631,38 @@ class dutyManagement extends React.Component {
 											<option value="3">未承認</option>
 											<option value="4">承認済</option>
 										</Form.Control>
-										<font style={{ marginLeft: "90px" }}></font>
+										<font style={{ marginLeft: "80px" }}></font>
 									</InputGroup>
 								</Col>
-								</Col>
-							</Row>
+								<Col sm={3} style={{ marginLeft: "-80px" }}>
+			                        <InputGroup size="sm" className="mb-3">
+			                            <InputGroup.Prepend>
+			                                <InputGroup.Text id="sanKanji">お客様</InputGroup.Text>
+			                            </InputGroup.Prepend>
+			                            <Autocomplete
+			                                id="customerAbbreviation"
+			                                name="customerAbbreviation"
+			                                value={this.state.customerAbbreviationList.find(v => v.code === this.state.customerAbbreviation) || ""}
+			                                options={this.state.customerAbbreviationList}
+			                                getOptionLabel={(option) => option.text ? option.text : ""}
+			                                onChange={(event, values) => this.getCustomer(event, values)}
+			                                renderOption={(option) => {
+			                                    return (
+			                                        <React.Fragment>
+			                                            {option.name}
+			                                        </React.Fragment>
+			                                    )
+			                                }}
+			                                renderInput={(params) => (
+			                                    <div ref={params.InputProps.ref}>
+			                                        <input type="text" {...params.inputProps} className="auto form-control Autocompletestyle-dutyManagement"
+			                                        />
+			                                    </div>
+			                                )}
+			                            />
+			                        </InputGroup>
+		                        </Col>
+	                        </Row>
 						</Form.Group>
 					</div>
 				</Form>

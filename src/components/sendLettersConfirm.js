@@ -277,7 +277,7 @@ class sendLettersConfirm extends React.Component {
 				})
 			})
 			.catch(function(error) {
-				alert(error);
+				//alert(error);
 			});
 
 	}
@@ -413,7 +413,7 @@ Email：`+ this.state.loginUserInfo[0].companyMail + ` 営業共通：eigyou@lyc
 				})
 			})
 			.catch(function(error) {
-				alert(error);
+				//alert(error);
 			});
 	}
 
@@ -425,7 +425,7 @@ Email：`+ this.state.loginUserInfo[0].companyMail + ` 営業共通：eigyou@lyc
 				})
 			})
 			.catch(function(error) {
-				alert(error);
+				//alert(error);
 			});
 	}
 

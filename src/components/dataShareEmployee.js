@@ -35,7 +35,7 @@ class dataShareEmployee extends React.Component {
 				})
 			})
 			.catch(function(error) {
-				alert(error);
+				//alert(error);
 			});
 	}
 	

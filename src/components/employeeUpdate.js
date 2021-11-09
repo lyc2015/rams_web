@@ -237,7 +237,7 @@ class employeeUpdate extends React.Component {
 			});
 		})
 		.catch(function(error) {
-			alert(error);
+			//alert(error);
 		});		
 	}
 	

@@ -126,7 +126,7 @@ class salaryDetailSend extends Component {// 状況変動一覧
 				})
 			})
 			.catch(function(error) {
-				alert(error);
+				//alert(error);
 			});
 	}
     

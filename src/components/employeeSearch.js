@@ -110,7 +110,7 @@ class employeeSearch extends React.Component {
 			this.searchEmployee(result.data[0].authorityCode);
 		})
 		.catch(function(error) {
-			alert(error);
+			//alert(error);
 		});		
 		this.clickButtonDisabled();
 		if (this.props.location.state !== undefined) {

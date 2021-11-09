@@ -263,7 +263,7 @@ class sendRepotConfirm extends React.Component {
 				})
 			})
 			.catch(function(error) {
-				alert(error);
+				//alert(error);
 			});
 
 	}
@@ -427,7 +427,7 @@ class sendRepotConfirm extends React.Component {
 				})
 			})
 			.catch(function(error) {
-				alert(error);
+				//alert(error);
 			});
 	}
 
@@ -439,7 +439,7 @@ class sendRepotConfirm extends React.Component {
 				})
 			})
 			.catch(function(error) {
-				alert(error);
+				//alert(error);
 			});
 	}
 
