@@ -29,7 +29,6 @@ class workRepot extends React.Component {
 		$("#workRepotDownload").attr("disabled",true);
 		$("#workRepotClear").attr("disabled",true);
 		this.selectWorkTime();
-		this.searchWorkRepot();
 	}
 	//onchange
 	valueChange = event => {
@@ -51,6 +50,8 @@ class workRepot extends React.Component {
 			}
 			this.setState({ 
 				disabledFlag: disabledFlag
+			},() => {
+				this.searchWorkRepot();
 			})
 		});
 	}
@@ -69,6 +70,8 @@ class workRepot extends React.Component {
 			return "";
 		if(row.sumWorkTime === "" || row.sumWorkTime === null)
 			return "";
+		if(row.workingTimeReportFile === "ファイルをアップロードしてください")
+			return "時間入力済み";
 		let approvalStatuss = this.state.approvalStatuslist;
         for (var i in approvalStatuss) {
             if (code === approvalStatuss[i].code) {

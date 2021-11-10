@@ -360,7 +360,7 @@ class DutyRegistration extends React.Component {
 					this.setTableStyle();
 				})
 				.catch(function (e) {
-					alert("error");
+					//alert("error");
 				})
 		
 		axios.post(this.state.serverIP + "dutyRegistration/selectWorkRepot",postData)
@@ -517,6 +517,7 @@ class DutyRegistration extends React.Component {
 			});
 		});
 	}
+	
 	onBack = (event) => {
 		this.setState({ isConfirmedPage: false, rowNo: [], }, () => {
 			this.setTableStyle();

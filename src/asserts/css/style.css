@@ -613,7 +613,7 @@ body {
 
 .dutyRegistration-DataTableEditingCell select {
 	border: 0;
-	background: #F5F5F5;
+	background: #ffffff;
 	height: 20px;
 	padding: 0px 0px 0px 0px;
 	font-size: 14px;
@@ -653,17 +653,17 @@ body {
 }
 
 .dutyRegistration-Work {
-	background-color: #f5f5f5;
+	background-color: #ffffff;
 	color: black;
 }
 
 .dutyRegistration-Sleep {
-	background-color: #f5f5f5;
+	background-color: #ffffff;
 	color: #ff0000;
 }
 
 .dutyRegistration-WorkSleep {
-	background-color: #f5f5f5;
+	background-color: #ffffff;
 	color: #0000ff;
 }
 

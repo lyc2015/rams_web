@@ -143,6 +143,7 @@ class dataShare extends React.Component {
 			this.setState({ 
 				dataShareList: data,
 				fileNo: fileNo,
+				rowChangeFlag: false,
 			})
 			
 			let rowNo = this.state.rowNo;
@@ -185,6 +186,7 @@ class dataShare extends React.Component {
 					rowFilePath: row.filePath,
 					rowShareStatus: row.shareStatus,
 					rowClickFlag: false,
+					rowChangeFlag: row.changeFlag,
 				})
 			} else {
 				this.setState({
@@ -193,6 +195,7 @@ class dataShare extends React.Component {
 					rowFilePath: '',
 					rowShareStatus: '',
 					rowClickFlag: true,
+					rowChangeFlag: false,
 				})
 			}
 		}
@@ -204,6 +207,7 @@ class dataShare extends React.Component {
 					rowFilePath: this.state.rowFilePath.concat([row.filePath]),
 					rowShareStatus: this.state.rowShareStatus.concat([row.shareStatus]),
 					rowClickFlag: false,
+					rowChangeFlag: row.changeFlag,
 				})
 			} else {
 	    		let index;
@@ -229,6 +233,7 @@ class dataShare extends React.Component {
 	    			rowFilePath: this.state.rowFilePath,
 	    			rowShareStatus: this.state.rowShareStatus,
 	    			rowClickFlag: this.state.rowNo.length === 0 ? true : false,
+	    			rowChangeFlag: false,
 	    		});
 			}
 		}
@@ -431,7 +436,32 @@ class dataShare extends React.Component {
         }
 	}
 	
-	nameReset = () => {
+	//onChange
+	tableValueChange = (event, cell, row) => {
+		let dataShareList = this.state.dataShareList;
+		dataShareList[row.rowNo - 1][event.target.name] = event.target.value;
+
+		this.setState({
+			dataShareList: dataShareList
+		})
+	}
+	
+	
+	fileNameChange = () => {
+		let dataShareList = this.state.dataShareList;
+		dataShareList[this.state.rowNo - 1].changeFlag = true;
+		this.setState({
+			dataShareList: dataShareList,
+			rowChangeFlag: true,
+		});
+	}
+	
+	fileNameReset = () => {
+		if(this.state.dataShareList[this.state.rowNo - 1].fileName === null || this.state.dataShareList[this.state.rowNo - 1].fileName === ""){
+			alert("ファイル名を入力してください。")
+			return;
+		}
+		
 		var model = {};
 		model["fileNo"] = this.state.fileNo;
 		model["fileName"] = this.state.dataShareList[this.state.rowNo - 1].fileName;
@@ -442,6 +472,7 @@ class dataShare extends React.Component {
 			if (response.data != null && response.data.flag) {
 				this.setState({
 					rowFilePath: response.data.newFilePath,
+					rowChangeFlag: false,
 				},()=>{
 						this.searchData();
 					})
@@ -451,6 +482,14 @@ class dataShare extends React.Component {
 				alert("err")
 			}
 		});
+	}
+	
+	fileNameFormat = (cell,row) => {
+		if(row.changeFlag){
+			return (<span class="dutyRegistration-DataTableEditingCell"><input type="text" class=" form-control editor edit-text" name="fileName" value={cell} onChange={(event) => this.tableValueChange(event, cell, row)} /></span>)
+		}else{
+			return cell;
+		}
 	}
 	
 	render() {
@@ -486,10 +525,6 @@ class dataShare extends React.Component {
 			sortIndicator: false, // 隐藏初始排序箭头
 		};
 		
-		const cellEdit = {
-				mode: 'click',
-				blurToSave: true,
-			}
 		return (
 			<div>
 				<div style={{ "display": this.state.myToastShow ? "block" : "none" }}>
@@ -580,8 +615,8 @@ class dataShare extends React.Component {
 								<Button variant="info" size="sm" onClick={this.state.dataStatus === "0" ? publicUtils.handleDownload.bind(this, this.state.rowFilePath, this.state.serverIP) : this.downLoad} id="workRepotDownload" disabled={this.state.rowShareStatus === "" || this.state.rowShareStatus.length === 0}>
 	                          		 <FontAwesomeIcon icon={faDownload} /> Download
 		                        </Button>{' '}
-								<Button variant="info" size="sm" onClick={this.nameReset} disabled={this.state.rowClickFlag}>
-									<FontAwesomeIcon icon={faUpload} />ファイル名修正
+								<Button variant="info" size="sm" onClick={this.state.rowChangeFlag ? this.fileNameReset : this.fileNameChange} disabled={this.state.rowClickFlag}>
+									<FontAwesomeIcon icon={faUpload} />{this.state.rowChangeFlag ? "ファイル名更新" : "ファイル名修正"}
 								</Button>
 	 						</div>
 						</Col>
@@ -594,13 +629,13 @@ class dataShare extends React.Component {
 					</Col>
                     </Row>
 					<Col >
-					<BootstrapTable data={dataShareList} pagination={true}  ref='table' options={options} cellEdit={cellEdit} approvalRow selectRow={selectRow} headerStyle={ { background: '#5599FF'} } striped hover condensed >
-						<TableHeaderColumn width='10%'　tdStyle={ { padding: '.45em' } }   dataField='rowNo' editable={false} isKey dataSort>番号</TableHeaderColumn>
-						<TableHeaderColumn width='10%' tdStyle={ { padding: '.45em' } }   dataField='employeeNo' editable={false} dataSort>社員番号</TableHeaderColumn>
-						<TableHeaderColumn width='35%' tdStyle={ { padding: '.45em' } }   dataField='fileName' editColumnClassName="dutyRegistration-DataTableEditingCell">ファイル名</TableHeaderColumn>
-						<TableHeaderColumn width='15%' tdStyle={ { padding: '.45em' } }   dataField='shareUser' editable={false} >共有者</TableHeaderColumn>
-						<TableHeaderColumn width='20%' tdStyle={ { padding: '.45em' } }   dataField='updateTime' editable={false} dataSort>日付</TableHeaderColumn>
-						<TableHeaderColumn width='10%' tdStyle={ { padding: '.45em' } } dataFormat={this.shareStatus.bind(this)} dataField='shareStatus' editable={false}>ステータス</TableHeaderColumn>
+					<BootstrapTable data={dataShareList} pagination={true}  ref='table' options={options} approvalRow selectRow={selectRow} headerStyle={ { background: '#5599FF'} } striped hover condensed >
+						<TableHeaderColumn width='10%'　tdStyle={ { padding: '.45em' } }   dataField='rowNo' isKey dataSort>番号</TableHeaderColumn>
+						<TableHeaderColumn width='10%' tdStyle={ { padding: '.45em' } }   dataField='employeeNo' dataSort>社員番号</TableHeaderColumn>
+						<TableHeaderColumn width='35%' tdStyle={ { padding: '.45em' } }   dataField='fileName' dataFormat={this.fileNameFormat}>ファイル名</TableHeaderColumn>
+						<TableHeaderColumn width='15%' tdStyle={ { padding: '.45em' } }   dataField='shareUser' >共有者</TableHeaderColumn>
+						<TableHeaderColumn width='20%' tdStyle={ { padding: '.45em' } }   dataField='updateTime' dataSort>日付</TableHeaderColumn>
+						<TableHeaderColumn width='10%' tdStyle={ { padding: '.45em' } } dataFormat={this.shareStatus.bind(this)} dataField='shareStatus'>ステータス</TableHeaderColumn>
 					</BootstrapTable>
 					</Col>
 				</div>

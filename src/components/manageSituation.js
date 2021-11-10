@@ -1046,7 +1046,7 @@ class manageSituation extends React.Component {
 		axios.post(this.state.serverIP + "salesSituation/getPersonalSalesInfo", { employeeNo: row.employeeNo })
 		.then(result => {
 			let employeeStatus = this.state.employees.find((v) => (v.code === result.data[0].employeeStatus)).name || "";
-			let developLanguage = [this.fromCodeToNameLanguage(result.data[0].developLanguage1),this.fromCodeToNameLanguage(result.data[0].developLanguage2),this.fromCodeToNameLanguage(result.data[0].developLanguage3),this.fromCodeToNameLanguage(result.data[0].developLanguage4),this.fromCodeToNameLanguage(result.data[0].developLanguage5)].filter(function(s) {return s && s.trim();}).join('、');
+			let developLanguage = [this.fromCodeToNameLanguage(result.data[0].developLanguage1),this.fromCodeToNameLanguage(result.data[0].developLanguage2),this.fromCodeToNameLanguage(result.data[0].developLanguage3),this.fromCodeToNameLanguage(result.data[0].developLanguage4),this.fromCodeToNameLanguage(result.data[0].developLanguage5),this.fromCodeToNameLanguage(result.data[0].developLanguage6)].filter(function(s) {return s && s.trim();}).join('、');
 			let admissionEndDate = row.admissionEndDate === null || row.admissionEndDate === "" ? row.scheduledEndDate : row.admissionEndDate.substring(0,6);
             let beginMonth = result.data[0].theMonthOfStartWork === null || result.data[0].theMonthOfStartWork === "" ? new Date(this.getNextMonthTemp((admissionEndDate === null || admissionEndDate === "" ? new Date() : publicUtils.converToLocalTime(admissionEndDate, false)),1)).getTime() : new Date(result.data[0].theMonthOfStartWork).getTime();
 			let salesProgressCode = row.salesProgressCode;
