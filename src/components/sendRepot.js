@@ -83,6 +83,8 @@ class sendRepot extends React.Component {
 		isHidden:true,
 		addCustomerCode: "",
 		backbackPage: "",
+		loading: true,
+		sendOver: false,
 	};
 
 	// 
@@ -879,6 +881,88 @@ class sendRepot extends React.Component {
 		})
 	}
 	
+	sendLetterBefore = () => {
+		let allCustomer = this.state.allCustomer;	
+		let emailModel = [];
+		for(let i in allCustomer){
+			if(allCustomer[i].sendRepotsAppend !== ""){
+				var name = allCustomer[i].sendRepotsAppend.split(",");
+				var nameText = ``;
+				for(let j in name){
+					nameText = nameText + name[j] + `
+`;
+				}
+				var mailConfirmContont = allCustomer[i].customerName + `様
+
+お世話になっております、` + this.state.loginUserInfo[0].employeeFristName + this.state.loginUserInfo[0].employeeLastName + `と申します。
+
+` + (new Date().getMonth() + 1) + `月の作業報告書を添付します。
+
+作業者は以下になります。
+` + nameText + `
+ご確認お願い致します。
+
+以上、よろしくお願いいたします。
+
+******************************************************************
+LYC株式会社 `+ this.state.loginUserInfo[0].employeeFristName + ` ` + this.state.loginUserInfo[0].employeeLastName + `
+〒:101-0032 東京都千代田区岩本町3-3-3サザンビル3F
+http://www.lyc.co.jp/
+TEL：03-6908-5796  携帯：`+ this.state.loginUserInfo[0].phoneNo + `(優先）
+Email：`+ this.state.loginUserInfo[0].companyMail + ` 営業共通：eigyou@lyc.co.jp
+労働者派遣事業許可番号　派遣許可番号　派13-306371
+ＩＳＭＳ：MSA-IS-385
+*****************************************************************`;
+				var model = {};
+				
+				model["mailTitle"] = new Date().getFullYear() + "年" + (new Date().getMonth() + 1) + "月作業報告書";
+				model["mailConfirmContont"] = mailConfirmContont;
+				model["selectedmail"] = allCustomer[i].purchasingManagersMail;
+				model["resumePath"] = allCustomer[i].sendRepotsAppend;
+				model["mailFrom"] = this.state.loginUserInfo[0].companyMail;
+				
+				emailModel. push(model);
+			}
+		}
+		if(emailModel.length > 0){
+	        var a = window.confirm("送信してもよろしいでしょうか？");
+	        if(a){
+				this.sendLetter(emailModel);
+	        }
+		}else{
+			alert("送信対象存在していません、チェックしてください。")
+		}
+	}
+	
+	sendLetter = (emailModel) => {
+		this.setState({ loading: false,})
+		axios.post(this.state.serverIP + "sendRepot/sendLetter", emailModel)
+		.then(result => {
+			let allCustomer = this.state.allCustomer;
+			if (result.data.errorsMessage != null) {
+				for(let i in allCustomer){
+					if(allCustomer[i].sendRepotsAppend !== "")
+						allCustomer[i].sentReportStatus = "0";
+				}
+				this.setState({ sendOver: false, allCustomer: allCustomer });
+				this.setState({ "errorsMessageShow": true, errorsMessageValue: result.data.errorsMessage });
+				setTimeout(() => this.setState({ "errorsMessageShow": false }), 3000);
+			} 								
+			else{
+				for(let i in allCustomer){
+					if(allCustomer[i].sendRepotsAppend !== "")
+						allCustomer[i].sentReportStatus = "1";
+				}
+				this.setState({  sendOver: true, allCustomer: allCustomer});
+			}
+			this.setState({ loading: true,})
+		})
+		.catch(function (err) {
+			this.setState({ loading: true,})
+			alert("送信失敗")
+		})
+	}
+	
 	shuseiTo = (actionType) => {
 		var path = {};
 		const sendValue = this.state.sendValue;
@@ -1135,8 +1219,9 @@ class sendRepot extends React.Component {
 								<Button size="sm" onClick={this.openMail} variant="info" name="clickButton"
 									disabled={((this.state.sendRepotsAppend !== "" || !this.state.sendLetterBtnFlag ? false : true) || (this.state.backPage !== "" && this.state.backPage !== "manageSituation") ? true : false)}>
 								<FontAwesomeIcon icon={faEnvelope} />メール確認</Button>{' '}
-								<Button size="sm" onClick={this.shuseiTo.bind(this,"sendLettersMatter")} variant="info" name="clickButton"
-									disabled={((this.state.selectetRowIds.length !== 0 || !this.state.sendLetterBtnFlag ? false : true) || (this.state.backPage !== "" && this.state.backPage !== "projectInfoSearch") ? true : false) || this.state.storageListName === "" ? true : false }>
+								<Button size="sm" onClick={this.sendLetterBefore} variant="info" name="clickButton"
+									disabled={ this.state.storageListName === "" || this.state.sendOver
+										/*((this.state.selectetRowIds.length !== 0 || !this.state.sendLetterBtnFlag ? false : true) || (this.state.backPage !== "" && this.state.backPage !== "projectInfoSearch") ? true : false) || this.state.storageListName === "" ? true : false */}>
 								<FontAwesomeIcon icon={faEnvelope} />送信</Button>{' '}
 							</div>
 						</Col>
@@ -1167,6 +1252,7 @@ class sendRepot extends React.Component {
 						</BootstrapTable>
 					</Col>
 				</Row>
+		        <div className='loadingImage' hidden={this.state.loading} style = {{"position": "absolute","top":"60%","left":"60%","margin-left":"-200px", "margin-top":"-150px",}}></div>
 			</div>
 		);
 	}
