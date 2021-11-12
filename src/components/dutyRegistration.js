@@ -363,16 +363,18 @@ class DutyRegistration extends React.Component {
 					//alert("error");
 				})
 		
-		axios.post(this.state.serverIP + "dutyRegistration/selectWorkRepot",postData)
-		.then(response => response.data)
-		.then((data) => {
-			if(data){
-				alert("作業報告書データすでに存在しています、クリアしてください。")
-			}
-			this.setState({ 
-				disabledFlag: data
-			})
-		});
+		if(!this.state.disabledFlag){
+			axios.post(this.state.serverIP + "dutyRegistration/selectWorkRepot",postData)
+			.then(response => response.data)
+			.then((data) => {
+				if(data){
+					alert("作業報告書データすでに存在しています、クリアしてください。")
+				}
+				this.setState({ 
+					disabledFlag: data
+				})
+			});
+		}
 	}
 	/**
 	 * 小さい画面の閉め
@@ -486,6 +488,11 @@ class DutyRegistration extends React.Component {
 					}
 					if (publicUtils.isEmpty(dateData[i]["endTime"])) {
 						errorMessage += messageUtils.getMessage("E0004", dateData[i]["day"], true);
+						dateData[i].errorFlag = "Time";
+						break;
+					}
+					if (publicUtils.isEmpty(dateData[i]["workHour"]) || Number(dateData[i]["workHour"]) <= 0) {
+						errorMessage += messageUtils.getMessage("E0005", dateData[i]["day"], true);
 						dateData[i].errorFlag = "Time";
 						break;
 					}

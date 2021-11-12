@@ -354,6 +354,16 @@ class dutyManagement extends React.Component {
 					},
 				}
 				break;
+			case "sendInvoice":
+				path = {
+					pathname: '/subMenuManager/sendInvoice',
+					state: {
+						employeeNo: this.state.rowSelectEmployeeNo,
+						backPage: "dutyManagement",
+						sendValue: sendValue,
+					},
+				}
+				break;
 			default:
 		}
 		this.props.history.push(path);
@@ -668,10 +678,11 @@ class dutyManagement extends React.Component {
 				</Form>
 				<div >
                     <Row>
-						<Col sm={2}>
+						<Col sm={3}>
 							{/*<font style={{ whiteSpace: 'nowrap' }}>稼動人数：{this.state.totalPersons}</font>*/}
                             <Button size="sm" onClick={this.shuseiTo.bind(this, "employeeInfo")} disabled={this.state.rowSelectEmployeeNo === "" ? true : false} variant="info" id="employeeInfo">個人情報</Button>{' '}
 							<Button size="sm" onClick={this.shuseiTo.bind(this, "siteInfo")} disabled={this.state.rowSelectEmployeeNo === "" ? true : false} name="clickButton" variant="info" id="siteInfo">現場情報</Button>{' '}
+							<Button size="sm" onClick={this.shuseiTo.bind(this, "sendInvoice")} name="clickButton" variant="info" id="siteInfo">請求書一覧</Button>{' '}
 						</Col>
 						<Col>
 							<InputGroup size="sm">

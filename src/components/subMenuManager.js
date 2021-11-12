@@ -17,6 +17,7 @@ import systemSet from './systemSet';
 import profitChartist from './profitChartist';
 import CustomerInfoSearch from './customerInfoSearch';
 import siteInfo from './siteInfo';
+import sendInvoice from './sendInvoice';
 import ManageSituation from './manageSituation';
 import salaryDetailSend from './salaryDetailSend';
 import SendRepot from './sendRepot';
@@ -608,6 +609,7 @@ class SubMenu extends Component {
 								<Route exact path={`${this.props.match.url}/dutyManagement`} component={dutyManagement} />
 								<Route exact path={`${this.props.match.url}/customerInfo`} component={CustomerInfo} />
 								<Route exact path={`${this.props.match.url}/siteInfo`} component={siteInfo} />
+								<Route exact path={`${this.props.match.url}/sendInvoice`} component={sendInvoice} />
 								<Route exact path={`${this.props.match.url}/siteSearch`} component={siteSearch} />
 								<Route exact path={`${this.props.match.url}/customerInfoSearch`} component={CustomerInfoSearch} />
 								<Route exact path={`${this.props.match.url}/manageSituation`} component={ManageSituation} />
