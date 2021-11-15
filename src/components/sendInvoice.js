@@ -40,9 +40,10 @@ class sendInvoice extends React.Component {
 	}
 	//　初期化データ
 	initialState = {
-		yearAndMonth: new Date(new Date().getFullYear() + '/' + (new Date().getMonth() + 1 < 10 ? '0' + (new Date().getMonth() + 1) : (new Date().getMonth() + 1))).getTime(),
+		yearAndMonth: new Date(new Date().getMonth() === 0 ? (new Date().getFullYear() - 1) + "/12" : new Date().getFullYear() + "/" + new Date().getMonth()).getTime(),
 		month: new Date().getMonth() + 1,
 		sendInvoiceList: [],
+		rowCustomerNo: "",
 		loading: true,
         customerAbbreviationList: store.getState().dropDown[73].slice(1),
 		serverIP: store.getState().dropDown[store.getState().dropDown.length - 1],
@@ -50,7 +51,23 @@ class sendInvoice extends React.Component {
 
 	//　検索
 	searchSendInvoiceList = () => {
-
+		const emp = {
+				yearAndMonth: publicUtils.formateDate($("#datePicker").val(), false),
+				customerNo: this.state.customerNo,
+			};
+		axios.post(this.state.serverIP + "sendInvoice/selectSendInvoice",emp)
+		.then(result => {
+			this.setState({
+				sendInvoiceList: result.data,
+				rowCustomerNo: "",
+			})
+			this.refs.table.setState({
+				selectedRowKeys: []
+			});
+		})
+		.catch(function(error) {
+			//alert(error);
+		});	
 	}
     
 	//　年月
@@ -69,44 +86,51 @@ class sendInvoice extends React.Component {
 	//行Selectファンクション
 	handleRowSelect = (row, isSelected, e) => {
 		if (isSelected) {
-			
+			this.setState({
+				rowCustomerNo: row.customerNo,
+			});
 		} else {
-			
+			this.setState({
+				rowCustomerNo: "",
+			});
 		}	
 	}
 	
 	shuseiTo = (actionType) => {
 		var path = {};
 		const sendValue = {
-				yearAndMonthDate: this.state.yearAndMonthDate,
-				enterPeriodKbn: this.state.enterPeriodKbn,
-				employeeName: this.state.employeeName,
-				employeeNo: $("#employeeName").val(),
+
 		};
 		switch (actionType) {
-			case "employeeInfo":
+			case "dutyManagement":
 				path = {
-					pathname: '/subMenuManager/employeeUpdateNew',
+					pathname: '/subMenuManager/dutyManagement',
 					state: {
-						id: this.state.rowSelectEmployeeNo,
-						employeeNo: this.state.rowSelectEmployeeNo,
-						backPage: "dutyManagement",
-						sendValue: sendValue,
-	                    searchFlag: true,
-	                    actionType:"update",
-					},
-				}
-				break;
-			case "siteInfo":
-				path = {
-					pathname: '/subMenuManager/siteInfo',
-					state: {
-						employeeNo: this.state.rowSelectEmployeeNo,
-						backPage: "dutyManagement",
+						backPage: "sendInvoice",
 						sendValue: sendValue,
 					},
 				}
 				break;
+            case "customer":
+                path = {
+                    pathname: '/subMenuManager/customerInfo',
+                    state: {
+                        actionType: 'update',
+                        customerNo: this.state.rowCustomerNo,
+                        backPage: "sendInvoice", 
+                        sendValue: sendValue,
+                    },
+                }
+                break;
+            case "invoicePDF":
+            	path = {
+                    pathname: '/subMenuManager/invoicePDF',
+                    state: {
+                        backPage: "sendInvoice", 
+                        sendValue: sendValue,
+                    },
+                }
+            	break;
 			default:
 		}
 		this.props.history.push(path);
@@ -140,8 +164,31 @@ class sendInvoice extends React.Component {
             })
         })
     }
+    
+    affiliationFormat = (cell,row) => {
+    	if(row.employeeNo.substring(0,2) === "BP")
+    		return "BP";
+    	else
+    		return "社員";
+    }
+    
+    payOffRangeFormat = (cell,row) => {
+    	let payOffRange = "";
+    	if(row.payOffRange1 == 0 || row.payOffRange1 == 1)
+    		payOffRange = row.payOffRange1 == 0 ? "固定" : "出勤日";
+    	else
+    		payOffRange = row.payOffRange1 + "-" + row.payOffRange2;
+    	return payOffRange;
+    }
+    
+    unitPriceFormat = (cell,row) => {
+    	if(row.deductionsAndOvertimePayOfUnitPrice === null || row.deductionsAndOvertimePayOfUnitPrice === "" || row.deductionsAndOvertimePayOfUnitPrice === "0")
+    		return "";
+    	else	
+    		return ("￥" + publicUtils.addComma(row.deductionsAndOvertimePayOfUnitPrice));
+    }
 	
-	costFormat = (cell,row) => {
+    employeeListFormat = (cell,row) => {
         let returnItem = cell;
         const options = {
             noDataText: (<i className="" style={{ 'fontSize': '20px' }}>データなし</i>),
@@ -164,9 +211,6 @@ class sendInvoice extends React.Component {
                 <Popover.Content >
                 <div>
                     <Row>
-	                    <Col style={{"padding": "0px","marginTop": "10px"}}>
-		                	<font>{this.state.month + "月"}</font>
-						</Col>
 						<Col style={{"padding": "0px","marginTop": "10px"}}>
 							<h2>要員確認</h2>
 						</Col>
@@ -175,22 +219,21 @@ class sendInvoice extends React.Component {
 		                    <BootstrapTable
 		                        pagination={false}
 		                        options={options}
-		                        data={row.costRegistrationModel}
+		                        data={row.sendInvoiceWorkTimeModel}
 		                		selectRow={selectRow}
 		                        headerStyle={{ background: '#5599FF' }}
-		                    	trClassName={this.rowClassNameFormat}
-		                        condensed>
+		                    	striped hover condensed >
 		                        <TableHeaderColumn isKey={true} dataField='rowNo' tdStyle={{ padding: '.45em' }}>
 		                        番号</TableHeaderColumn>
-		                        <TableHeaderColumn dataField='costClassificationCode' width='10%' tdStyle={{ padding: '.45em' }}>
+		                        <TableHeaderColumn dataField='affiliation' width='15%' dataFormat={this.affiliationFormat} tdStyle={{ padding: '.45em' }}>
 		                        所属</TableHeaderColumn>
-		                        <TableHeaderColumn dataField='happendDate' width='30%' tdStyle={{ padding: '.45em' }}>
+		                        <TableHeaderColumn dataField='employeeName' width='25%' tdStyle={{ padding: '.45em' }}>
 		                        氏名</TableHeaderColumn>
-		                        <TableHeaderColumn dataField='costFile' width='10%' tdStyle={{ padding: '.45em' }}>
+		                        <TableHeaderColumn dataField='payOffRange' width='20%' dataFormat={this.payOffRangeFormat} tdStyle={{ padding: '.45em' }}>
 		                        基準時間</TableHeaderColumn>
-		                        <TableHeaderColumn dataField='costTotal' width='15%' tdStyle={{ padding: '.45em' }}>
+		                        <TableHeaderColumn dataField='sumWorkTime' width='15%' tdStyle={{ padding: '.45em' }}>
 		                        稼働時間</TableHeaderColumn>
-		                        <TableHeaderColumn dataField='remark' width='20%' tdStyle={{ padding: '.45em' }}>
+		                        <TableHeaderColumn dataField='unitPrice' dataFormat={this.unitPriceFormat} width='16%' tdStyle={{ padding: '.45em' }}>
 		                        残業・控除</TableHeaderColumn>
 		                    </BootstrapTable>
 					</Row>
@@ -199,12 +242,12 @@ class sendInvoice extends React.Component {
             </Popover>
             }
         >
-        <div style={{ "float": "right" }}>
-        	<Button variant="warning" size="sm" >詳細</Button>
+        <div>
+        	<Button variant="warning" size="sm" >要員</Button>
         </div>
       </OverlayTrigger>
-      if(row.costRegistrationModel.length > 0)
-    	  return (<div>{publicUtils.addComma(cell)}{" "}{returnItem}</div>);
+      if(row.sendInvoiceWorkTimeModel.length > 0)
+    	  return (<div>{returnItem}</div>);
       else 
     	  return "";
 	}
@@ -311,24 +354,24 @@ class sendInvoice extends React.Component {
 				<div >
                     <Row>
 						<Col sm={12}>
-                            <Button size="sm" variant="info" id="employeeInfo">勤務管理</Button>{' '}
-							<Button size="sm" name="clickButton" variant="info" id="siteInfo">お客様情報</Button>{' '}
+                            <Button size="sm" variant="info" onClick={this.shuseiTo.bind(this, "dutyManagement")}>勤務管理</Button>{' '}
+							<Button size="sm" name="clickButton" variant="info" onClick={this.shuseiTo.bind(this, "customer")} disabled={this.state.rowCustomerNo === ""}>お客様情報</Button>{' '}
 
                             <div style={{ "float": "right" }}>
-		                        <Button variant="info" size="sm" id="workRepot">請求書確認</Button>{' '}
-	                            <Button variant="info" size="sm" id="update">送信</Button>{' '}
+		                        <Button variant="info" size="sm" onClick={this.shuseiTo.bind(this, "invoicePDF")} disabled={this.state.rowCustomerNo === ""}>請求書確認</Button>{' '}
+	                            <Button variant="info" size="sm" disabled={this.state.rowCustomerNo === ""}>送信</Button>{' '}
 	 						</div>
 						</Col>  
                     </Row>
                     <Col>
 						<BootstrapTable data={sendInvoiceList} ref='table' selectRow={selectRow} pagination={true} options={options} approvalRow headerStyle={ { background: '#5599FF'} } striped hover condensed >
-							<TableHeaderColumn width='14%'　tdStyle={ { padding: '.45em' } } dataField='rowNo' isKey>番号</TableHeaderColumn>
-							<TableHeaderColumn width='14%' tdStyle={ { padding: '.45em' } } dataField='customerName' >お客様</TableHeaderColumn>
-							<TableHeaderColumn width='14%' tdStyle={ { padding: '.45em' } } dataField='stationName' >担当者</TableHeaderColumn>
-							<TableHeaderColumn width='16%' tdStyle={ { padding: '.45em' } } dataField='payOffRange' >メール</TableHeaderColumn>
-							<TableHeaderColumn width='14%' tdStyle={ { padding: '.45em' } }  dataField='workTime' >関連要員</TableHeaderColumn>
-							<TableHeaderColumn width='14%' tdStyle={ { padding: '.45em' } }  dataField='updateTime' >送信日付</TableHeaderColumn>
-							<TableHeaderColumn width='14%' tdStyle={ { padding: '.45em' } }  dataField='updateTime' >送信ステータス</TableHeaderColumn>
+							<TableHeaderColumn width='5%'　tdStyle={ { padding: '.45em' } } dataField='rowNo' isKey>番号</TableHeaderColumn>
+							<TableHeaderColumn width='20%' tdStyle={ { padding: '.45em' } } dataField='customerName' >お客様</TableHeaderColumn>
+							<TableHeaderColumn width='15%' tdStyle={ { padding: '.45em' } } dataField='purchasingManagers' >担当者</TableHeaderColumn>
+							<TableHeaderColumn width='25%' tdStyle={ { padding: '.45em' } } dataField='purchasingManagersMail' >メール</TableHeaderColumn>
+							<TableHeaderColumn width='7%' tdStyle={ { padding: '.45em' } }  dataField='employeeList' dataFormat={this.employeeListFormat.bind(this)} >関連要員</TableHeaderColumn>
+							<TableHeaderColumn width='20%' tdStyle={ { padding: '.45em' } }  dataField='sendDate' >送信日付</TableHeaderColumn>
+							<TableHeaderColumn width='13%' tdStyle={ { padding: '.45em' } }  dataField='sendState' >送信ステータス</TableHeaderColumn>
 						</BootstrapTable>
 					</Col>  
 				</div>

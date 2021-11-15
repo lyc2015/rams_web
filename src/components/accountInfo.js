@@ -358,7 +358,7 @@ class BankInfo extends Component {
 	    	                            }}
 	    	                            renderInput={(params) => (
 	    	                                <div ref={params.InputProps.ref}>
-	    	                                    <input placeholder="  例：浦和支店" type="text" {...params.inputProps} className="auto form-control Autocompletestyle-salaryDetailSend" />
+	    	                                    <input placeholder="  例：浦和支店" type="text" {...params.inputProps} className="auto form-control Autocompletestyle-accountInfo" />
 	    	                                </div>
 	    	                            )}
 	    							/>
@@ -391,7 +391,7 @@ class BankInfo extends Component {
 	    	                            }}
 	    	                            renderInput={(params) => (
 	    	                                <div ref={params.InputProps.ref}>
-	    	                                    <input placeholder="  例：010" type="text" {...params.inputProps} className="auto form-control Autocompletestyle-salaryDetailSend" />
+	    	                                    <input placeholder="  例：010" type="text" {...params.inputProps} className="auto form-control Autocompletestyle-accountInfo" />
 	    	                                </div>
 	    	                            )}
 	    							/>

@@ -847,8 +847,10 @@ class CustomerInfo extends Component {
                 <div>
                     <Modal aria-labelledby="contained-modal-title-vcenter" centered backdrop="static" dialogClassName="modal-accountInfo"
                         onHide={this.handleHideModal.bind(this, "bankInfo")} show={this.state.showBankInfoModal}>
-                        <Modal.Header closeButton>
-                        </Modal.Header>
+                        <Modal.Header closeButton><Col className="text-center">
+							<h2>口座情報</h2>
+						</Col>
+						</Modal.Header>
                         <Modal.Body >
                             <BankInfo accountInfo={accountInfo} actionType={actionType} customerNo={customerNo} accountTokuro={this.accountInfoGet} />
                         </Modal.Body>

@@ -1744,6 +1744,16 @@ body {
 	color: "#495057"
 }
 
+.Autocompletestyle-accountInfo {
+	width: 10.2rem;
+	height: 31px;
+	border-color: "#ced4da";
+	border-width: 1;
+	border-style: "solid";
+	font-size: ".875rem";
+	color: "#495057"
+}
+
 #wagesInfoDatePicker-nextRaiseMonth-readOnly {
 	background-repeat: no-repeat;
 	width: 13.55rem;
