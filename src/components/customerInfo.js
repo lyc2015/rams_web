@@ -1276,7 +1276,7 @@ class CustomerInfo extends Component {
                                 </Button>{" "}
                             <Button
                                 size="sm"
-                                hidden={backPage !== "customerInfoSearch" && backPage !== "salesSendLetter"  ? true : false}
+                                hidden={backPage !== "customerInfoSearch" && backPage !== "salesSendLetter" && backPage !== "sendInvoice"  ? true : false}
                                 variant="info"
                                 onClick={this.back}
                             >

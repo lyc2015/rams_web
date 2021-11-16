@@ -40,7 +40,7 @@ class sendInvoice extends React.Component {
 	}
 	//　初期化データ
 	initialState = {
-		yearAndMonth: new Date(new Date().getMonth() === 0 ? (new Date().getFullYear() - 1) + "/12" : new Date().getFullYear() + "/" + new Date().getMonth()).getTime(),
+		yearAndMonth: new Date(),//new Date(new Date().getMonth() === 0 ? (new Date().getFullYear() - 1) + "/12" : new Date().getFullYear() + "/" + new Date().getMonth()).getTime(),
 		month: new Date().getMonth() + 1,
 		sendInvoiceList: [],
 		rowCustomerNo: "",
@@ -127,6 +127,7 @@ class sendInvoice extends React.Component {
                     pathname: '/subMenuManager/invoicePDF',
                     state: {
                         backPage: "sendInvoice", 
+                        customerNo: this.state.rowCustomerNo,
                         sendValue: sendValue,
                     },
                 }
@@ -165,13 +166,6 @@ class sendInvoice extends React.Component {
         })
     }
     
-    affiliationFormat = (cell,row) => {
-    	if(row.employeeNo.substring(0,2) === "BP")
-    		return "BP";
-    	else
-    		return "社員";
-    }
-    
     payOffRangeFormat = (cell,row) => {
     	let payOffRange = "";
     	if(row.payOffRange1 == 0 || row.payOffRange1 == 1)
@@ -182,6 +176,13 @@ class sendInvoice extends React.Component {
     }
     
     unitPriceFormat = (cell,row) => {
+    	if(row.unitPrice === null || row.unitPrice === "" || row.unitPrice === "0")
+    		return "";
+    	else	
+    		return ("￥" + publicUtils.addComma(row.unitPrice));
+    }
+    
+    costFormat = (cell,row) => {
     	if(row.deductionsAndOvertimePayOfUnitPrice === null || row.deductionsAndOvertimePayOfUnitPrice === "" || row.deductionsAndOvertimePayOfUnitPrice === "0")
     		return "";
     	else	
@@ -223,17 +224,17 @@ class sendInvoice extends React.Component {
 		                		selectRow={selectRow}
 		                        headerStyle={{ background: '#5599FF' }}
 		                    	striped hover condensed >
-		                        <TableHeaderColumn isKey={true} dataField='rowNo' tdStyle={{ padding: '.45em' }}>
+		                        <TableHeaderColumn isKey={true} width='10%'　dataField='rowNo' tdStyle={{ padding: '.45em' }}>
 		                        番号</TableHeaderColumn>
-		                        <TableHeaderColumn dataField='affiliation' width='15%' dataFormat={this.affiliationFormat} tdStyle={{ padding: '.45em' }}>
-		                        所属</TableHeaderColumn>
-		                        <TableHeaderColumn dataField='employeeName' width='25%' tdStyle={{ padding: '.45em' }}>
+		                        <TableHeaderColumn dataField='employeeName' width='18%' tdStyle={{ padding: '.45em' }}>
 		                        氏名</TableHeaderColumn>
-		                        <TableHeaderColumn dataField='payOffRange' width='20%' dataFormat={this.payOffRangeFormat} tdStyle={{ padding: '.45em' }}>
+		                        <TableHeaderColumn dataField='payOffRange' width='18%' dataFormat={this.payOffRangeFormat} tdStyle={{ padding: '.45em' }}>
 		                        基準時間</TableHeaderColumn>
-		                        <TableHeaderColumn dataField='sumWorkTime' width='15%' tdStyle={{ padding: '.45em' }}>
+		                        <TableHeaderColumn dataField='sumWorkTime' width='18%' tdStyle={{ padding: '.45em' }}>
 		                        稼働時間</TableHeaderColumn>
-		                        <TableHeaderColumn dataField='unitPrice' dataFormat={this.unitPriceFormat} width='16%' tdStyle={{ padding: '.45em' }}>
+		                        <TableHeaderColumn dataField='unitPrice' dataFormat={this.unitPriceFormat} width='18%' tdStyle={{ padding: '.45em' }}>
+		                        単価</TableHeaderColumn>
+		                        <TableHeaderColumn dataField='cost' dataFormat={this.costFormat} width='18%' tdStyle={{ padding: '.45em' }}>
 		                        残業・控除</TableHeaderColumn>
 		                    </BootstrapTable>
 					</Row>
@@ -359,19 +360,20 @@ class sendInvoice extends React.Component {
 
                             <div style={{ "float": "right" }}>
 		                        <Button variant="info" size="sm" onClick={this.shuseiTo.bind(this, "invoicePDF")} disabled={this.state.rowCustomerNo === ""}>請求書確認</Button>{' '}
-	                            <Button variant="info" size="sm" disabled={this.state.rowCustomerNo === ""}>送信</Button>{' '}
+	                            <Button variant="info" size="sm" disabled={this.state.rowCustomerNo === "" || Number(String(this.state.yearAndMonth.getFullYear()) + (this.state.yearAndMonth.getMonth() + 1)) < Number(String(new Date().getFullYear()) + new Date().getMonth())}>送信</Button>{' '}
 	 						</div>
 						</Col>  
                     </Row>
                     <Col>
 						<BootstrapTable data={sendInvoiceList} ref='table' selectRow={selectRow} pagination={true} options={options} approvalRow headerStyle={ { background: '#5599FF'} } striped hover condensed >
 							<TableHeaderColumn width='5%'　tdStyle={ { padding: '.45em' } } dataField='rowNo' isKey>番号</TableHeaderColumn>
-							<TableHeaderColumn width='20%' tdStyle={ { padding: '.45em' } } dataField='customerName' >お客様</TableHeaderColumn>
-							<TableHeaderColumn width='15%' tdStyle={ { padding: '.45em' } } dataField='purchasingManagers' >担当者</TableHeaderColumn>
-							<TableHeaderColumn width='25%' tdStyle={ { padding: '.45em' } } dataField='purchasingManagersMail' >メール</TableHeaderColumn>
+							<TableHeaderColumn width='15%' tdStyle={ { padding: '.45em' } } dataField='customerNo' >お客様番号</TableHeaderColumn>
+							<TableHeaderColumn width='18%' tdStyle={ { padding: '.45em' } } dataField='customerName' >お客様</TableHeaderColumn>
+							<TableHeaderColumn width='13%' tdStyle={ { padding: '.45em' } } dataField='purchasingManagers' >担当者</TableHeaderColumn>
+							<TableHeaderColumn width='20%' tdStyle={ { padding: '.45em' } } dataField='purchasingManagersMail' >メール</TableHeaderColumn>
 							<TableHeaderColumn width='7%' tdStyle={ { padding: '.45em' } }  dataField='employeeList' dataFormat={this.employeeListFormat.bind(this)} >関連要員</TableHeaderColumn>
-							<TableHeaderColumn width='20%' tdStyle={ { padding: '.45em' } }  dataField='sendDate' >送信日付</TableHeaderColumn>
-							<TableHeaderColumn width='13%' tdStyle={ { padding: '.45em' } }  dataField='sendState' >送信ステータス</TableHeaderColumn>
+							<TableHeaderColumn width='18%' tdStyle={ { padding: '.45em' } }  dataField='sendDate' >送信日付</TableHeaderColumn>
+							<TableHeaderColumn width='12%' tdStyle={ { padding: '.45em' } }  dataField='sendState' >送信ステータス</TableHeaderColumn>
 						</BootstrapTable>
 					</Col>  
 				</div>

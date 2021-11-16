@@ -537,7 +537,8 @@ class manageSituation extends React.Component {
 		/*if(row.employeeNo.indexOf("BP") != -1){
 			unitPrice = row.unitPrice;
 		}else{*/
-			unitPrice = (row.unitPrice === "" ? "" : (row.unitPrice / 10000).toFixed(1).replace(".0",""));
+		let num = (row.unitPrice / 10000).toFixed(1).replace(".0","");
+			unitPrice = (row.unitPrice === "" ? "" : (Number(num) === 0 ? row.unitPrice : num));
 		/*}*/
 		if(row.salesProgressCode === "0" || row.salesProgressCode === "1"){
 			if(row.bpUnitPrice !== null)
@@ -1407,7 +1408,7 @@ class manageSituation extends React.Component {
 						sendValue = {{
 									empNo: this.state.employeeNo,
 									salesProgressCode: this.state.salesProgressCode,
-									unitPrice: this.state.unitPrice,
+									unitPrice: Number(this.state.unitPrice) < 1000 ? Number(this.state.unitPrice) * 10000 : Number(this.state.unitPrice),
 									remark: (this.state.remark1 === "" || this.state.remark2 === "" ? "" : "①") + this.state.remark1 + " " + (this.state.remark1 === "" || this.state.remark2 === "" ? "" : "②") + this.state.remark2,
 									interviewDate: 
 									this.state.interviewDate1 !== "" && this.state.interviewDate2 !== "" ? 

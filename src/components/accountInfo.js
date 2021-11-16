@@ -5,7 +5,7 @@ import $ from 'jquery';
 import * as utils from './utils/publicUtils.js';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSave, faUndo, faEdit } from '@fortawesome/free-solid-svg-icons';
+import { faSave, faUndo, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import MyToast from './myToast';
 import ErrorsMessageToast from './errorsMessageToast';
 import store from './redux/store';
@@ -139,7 +139,7 @@ class BankInfo extends Component {
         		bankBranchDrop.push(this.state.bankBranchDropAll[i]);
         	}
         }
-        if(accountInfoMod.bankBranchName === undefined){
+        if(accountInfoMod.bankBranchName === undefined && this.state.bankBranchDrop.find(v => v.code === accountInfoMod.bankBranchCode) !== undefined){
             this.setState({
             	bankBranchName: this.state.bankBranchDrop.find(v => v.code === accountInfoMod.bankBranchCode).name,
             })
@@ -297,6 +297,28 @@ class BankInfo extends Component {
         }
 	}
     
+    deleteAccount = () => {
+        var a = window.confirm("削除していただきますか？");
+        if (a) {
+        	var accountInfo = {};
+            accountInfo["employeeOrCustomerNo"] = this.state.employeeOrCustomerNo;
+            axios.post(this.state.serverIP + "bankInfo/delete", accountInfo)
+            .then(result => {
+                if (result.data.result) {
+                    this.setState({ "myToastShow": true, "type": "success", "errorsMessageShow": false, message: "削除成功" });
+                    setTimeout(() => this.setState({ "myToastShow": false }), 3000);
+                    this.props.accountTokuro(accountInfo);
+                } else {
+                    this.setState({ "myToastShow": true, "type": "fail", "errorsMessageShow": false, message: '削除失敗' });
+                    setTimeout(() => this.setState({ "myToastShow": false }), 3000);
+                }
+            })
+            .catch(function (error) {
+                this.setState({ "errorsMessageShow": true, errorsMessageValue: "エラーが発生してしまいました、画面をリフレッシュしてください" });
+            });
+        }
+    }
+    
     render() {
         const { actionType, errorsMessageValue, accountInfoName, bankCode, bankBranchName, bankBranchCode, accountNo, accountName , message , type} = this.state;
         return (
@@ -430,6 +452,9 @@ class BankInfo extends Component {
                         </Row>
                         <Row>
                             <Col className="text-center">
+	                            <Button onClick={this.deleteAccount} variant="info" size="sm" disabled={actionType !== "update"}>
+		                            <FontAwesomeIcon icon={faTrash} /> 削除
+		                        </Button>{" "}
                                 {actionType === "update" ?
                                     <Button size="sm" onClick={this.accountTokuro.bind(this)} variant="info" id="toroku" type="button">
                                         <FontAwesomeIcon icon={faEdit} /> 更新

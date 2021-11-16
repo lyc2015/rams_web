@@ -58,7 +58,7 @@ import {
 	faCalendarAlt, faThList, faCogs, faCloudUploadAlt, faSearch, faSave,faFileExcel,
 	faCommentDollar, faList, faSearchMinus, faNewspaper,faDownload,
 	faFilePowerpoint, faChartPie, faTable, faCog, faUpload, faCheckSquare, faBars, faCaretSquareLeft,
-	faFileContract, faChartBar
+	faFileContract, faChartBar, faFileInvoiceDollar
 } from '@fortawesome/free-solid-svg-icons';
 import '../asserts/css/subMenu.css';
 import store from './redux/store';
@@ -259,6 +259,9 @@ class SubMenu extends Component {
 														</ListGroup.Item>
 														<ListGroup.Item style={this.state.hover.search("6") !== -1 ? subMenuHover : subMenu} onMouseEnter={this.toggleHover.bind(this,"社員・BP-6")} onMouseLeave={this.toggleHover.bind(this,"社員・BP")} onClick={this.shuseiTo.bind(this,{ pathname: '/subMenuManager/salaryDetailSend'})} block>
 															<div><Link className={this.state.hover.search("6") !== -1 ? "my-tabcolor-font-hover" : "my-tabcolor-font"} to="/subMenuManager/salaryDetailSend"><FontAwesomeIcon className="fa-fw" size="lg" icon={faPaperPlane} /> 給料明細送信</Link></div>
+														</ListGroup.Item>
+														<ListGroup.Item style={this.state.hover.search("7") !== -1 ? subMenuHover : subMenu} onMouseEnter={this.toggleHover.bind(this,"社員・BP-7")} onMouseLeave={this.toggleHover.bind(this,"社員・BP")} onClick={this.shuseiTo.bind(this,{ pathname: '/subMenuManager/sendInvoice'})} block>
+															<div><Link className={this.state.hover.search("7") !== -1 ? "my-tabcolor-font-hover" : "my-tabcolor-font"} to="/subMenuManager/sendInvoice"><FontAwesomeIcon className="fa-fw" size="lg" icon={faFileInvoiceDollar} /> 請求書一覧</Link></div>
 														</ListGroup.Item>
 													</Accordion>
 												</ListGroup>
