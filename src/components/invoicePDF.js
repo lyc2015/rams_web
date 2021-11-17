@@ -9,7 +9,7 @@ import DatePicker, { registerLocale } from "react-datepicker";
 import ja from "date-fns/locale/ja";
 import "react-datepicker/dist/react-datepicker.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faUpload, faSearch, faDownload } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faUpload, faSearch, faDownload, faSave } from '@fortawesome/free-solid-svg-icons';
 import * as publicUtils from './utils/publicUtils.js';
 import MyToast from './myToast';
 import Autocomplete from '@material-ui/lab/Autocomplete';
@@ -28,49 +28,50 @@ class invoicePDF extends React.Component {
 		this.valueChange = this.valueChange.bind(this);
 	};
 	componentDidMount(){
-        this.setState({
-            customerNo: this.props.location.state.customerNo,
-            customerName: this.state.customerNameList.find(v => v.code === this.props.location.state.customerNo).text,
-            customerAbbreviation: this.state.customerAbbreviationList.find(v => v.code === this.props.location.state.customerNo).text,
-        }, () => {
-    		axios.post(this.state.serverIP + "sendLettersConfirm/getLoginUserInfo")
-    		.then(result => {
-    			this.setState({
-    				authorityCode: result.data[0].authorityCode,
-    			})
-    		})
-    		.catch(function(error) {
-    			//alert(error);
-    		});
-    		
-    		axios.post(this.state.serverIP + "subMenu/getCompanyDate")
-    		.then(response => {
-    				this.setState({
-    					taxRate: response.data.taxRate,
-    				})
-    		}).catch((error) => {
-    			console.error("Error - " + error);
-    		});
-
-    		this.searchSendInvoiceList();
-        })
+		axios.post(this.state.serverIP + "sendLettersConfirm/getLoginUserInfo")
+		.then(result => {
+			this.setState({
+				authorityCode: result.data[0].authorityCode,
+			})
+		})
+		.catch(function(error) {
+			//alert(error);
+		});
+		
+		axios.post(this.state.serverIP + "subMenu/getCompanyDate")
+		.then(response => {
+				this.setState({
+					taxRate: response.data.taxRate,
+					consumptionTax: response.data.taxRate * 100 + "%",
+				}, () => {
+			        this.setState({
+			            customerNo: this.props.location.state.customerNo,
+			            customerName: this.state.customerNameList.find(v => v.code === this.props.location.state.customerNo).text,
+			            customerAbbreviation: this.state.customerAbbreviationList.find(v => v.code === this.props.location.state.customerNo).text,
+			        }, () => {
+			    		this.searchSendInvoiceList();
+			        })
+				})
+		}).catch((error) => {
+			console.error("Error - " + error);
+		});
 	}
 	//　初期化データ
 	initialState = {
 		yearAndMonth: new Date(),
 		yearAndMonthFormat: String(new Date().getFullYear()) + ((new Date().getMonth() + 1) < 10 ? "0" + (new Date().getMonth() + 1) : (new Date().getMonth() + 1)),
 		sendInvoiceList: [],
-		rowCustomerNo: "",
+		rowRowNo: "",
 		invoiceNo: "",
 		workTimeFlag: false,
+		employeeNameFlag: false,
 		loading: true,
-		bankInfoDetail: `振込先銀行　りそな銀行　秋葉原支店
-普通預金
-店番 　２７５
-口座番号 ２０６８５０５
-口座名　エルワイシー（カ）`,
+		addDisabledFlag: false,
+		counts: [1,2,3,4,5,6,7,8,9,10],
+		manMonths: [{code: "0",name: "人月"},{code: "1",name :"件"}],
         customerNameList: store.getState().dropDown[53].slice(1),
         customerAbbreviationList: store.getState().dropDown[73].slice(1),
+		employeeInfo: store.getState().dropDown[9].slice(1),
 		serverIP: store.getState().dropDown[store.getState().dropDown.length - 1],
 	};
 	
@@ -92,13 +93,17 @@ class invoicePDF extends React.Component {
 			if(result.data.length > 0){
 				let subTotalAmount = 0;
 				for(let i in result.data[0].sendInvoiceWorkTimeModel){
-					subTotalAmount += Number(result.data[0].sendInvoiceWorkTimeModel[i].unitPrice) * 1 + Number(result.data[0].sendInvoiceWorkTimeModel[i].deductionsAndOvertimePayOfUnitPrice);
+					let count = result.data[0].sendInvoiceWorkTimeModel[i].count === undefined || result.data[0].sendInvoiceWorkTimeModel[i].count === null || result.data[0].sendInvoiceWorkTimeModel[i].count === "" ? 1 : result.data[0].sendInvoiceWorkTimeModel[i].count;
+					result.data[0].sendInvoiceWorkTimeModel[i].manMonth = result.data[0].sendInvoiceWorkTimeModel[i].manMonth === undefined || result.data[0].sendInvoiceWorkTimeModel[i].manMonth === null || result.data[0].sendInvoiceWorkTimeModel[i].manMonth === "" ? "0" : result.data[0].sendInvoiceWorkTimeModel[i].manMonth;
+					result.data[0].sendInvoiceWorkTimeModel[i].count = count;
+					result.data[0].sendInvoiceWorkTimeModel[i].updateFlag = false;
+					result.data[0].sendInvoiceWorkTimeModel[i].workDate = this.state.yearAndMonthFormat + "01~" + this.state.yearAndMonthFormat + new Date(this.state.yearAndMonthFormat.substring(0,4),this.state.yearAndMonthFormat.substring(4,6),0).getDate();
+					subTotalAmount += Number(result.data[0].sendInvoiceWorkTimeModel[i].unitPrice) * count + Number(result.data[0].sendInvoiceWorkTimeModel[i].deductionsAndOvertimePayOfUnitPrice);
 				}
 				this.setState({
 					sendInvoiceList: result.data[0].sendInvoiceWorkTimeModel,
-					rowCustomerNo: "",
+					rowRowNo: "",
 					subTotalAmount: publicUtils.addComma(subTotalAmount),
-					consumptionTax: publicUtils.addComma(subTotalAmount * this.state.taxRate),
 					totalAmount: publicUtils.addComma(subTotalAmount + subTotalAmount * this.state.taxRate),
 				})
 			}
@@ -132,44 +137,13 @@ class invoicePDF extends React.Component {
 	handleRowSelect = (row, isSelected, e) => {
 		if (isSelected) {
 			this.setState({
-				rowCustomerNo: row.customerNo,
+				rowRowNo: row.rowNo,
 			});
 		} else {
 			this.setState({
-				rowCustomerNo: "",
+				rowRowNo: "",
 			});
 		}	
-	}
-	
-	shuseiTo = (actionType) => {
-		var path = {};
-		const sendValue = {
-
-		};
-		switch (actionType) {
-			case "dutyManagement":
-				path = {
-					pathname: '/subMenuManager/dutyManagement',
-					state: {
-						backPage: "sendInvoice",
-						sendValue: sendValue,
-					},
-				}
-				break;
-            case "customer":
-                path = {
-                    pathname: '/subMenuManager/customerInfo',
-                    state: {
-                        actionType: 'update',
-                        customerNo: this.state.rowCustomerNo,
-                        backPage: "sendInvoice", 
-                        sendValue: sendValue,
-                    },
-                }
-                break;
-			default:
-		}
-		this.props.history.push(path);
 	}
 
 	renderShowsTotal(start, to, total) {
@@ -180,24 +154,131 @@ class invoicePDF extends React.Component {
 		);
 	}
 	
-	employeeNameFormat = (cell,row) => {
-		return (<div><Row><font>{row.systemName === null || row.systemName === "" ? cell : row.systemName + "(" + cell + ")"}</font></Row><Row><div><font>{this.state.yearAndMonthFormat + "01~" + this.state.yearAndMonthFormat + "31"}</font><font style={{ "float": "right" }}>{(this.state.workTimeFlag ? row.sumWorkTime + "H" : "")}</font></div></Row></div>);
+	getEmployeeName = (event, values, cell, row) => {
+		if(values != null){
+			let sendInvoiceList = this.state.sendInvoiceList;
+			for(let i in sendInvoiceList){
+				if(row.employeeNo === sendInvoiceList[i].employeeNo){
+					sendInvoiceList[i]["employeeName"] = values.text;
+					sendInvoiceList[i]["employeeNo"] = values.code;
+					break;
+				}
+			}
+
+			this.setState({
+				sendInvoiceList: sendInvoiceList,
+				rowRowNo: row.rowNo,
+			})
+		}
 	}
 	
-	manMonthFormat  = () => {
-		return "人月";
+	employeeNameFormat = (cell,row) => {
+		if(row.updateFlag){
+			return (
+				<div>
+					<Row>
+						<Col style={{margin: "0px",padding: "0px"}} sm={7}>
+							<span class={"dutyRegistration-DataTableEditingCell"}><input type="text" class=" form-control editor edit-text" name="systemName" 
+							value={row.systemName} onChange={(event) => this.tableValueChange(event, cell, row)} onBlur={(event) => this.tableValueChangeAfter(event, cell, row)} /></span>
+						</Col>
+						<Col style={{margin: "0px",padding: "0px"}} sm={5}>
+							<span class={"dutyRegistration-DataTableEditingCell"}>
+							<Autocomplete
+								id="employeeName"
+								name="employeeName"
+								value={this.state.employeeInfo.find(v => v.text === row.employeeName) || {}}
+								options={this.state.employeeInfo}
+								getOptionLabel={(option) => option.text ? option.text : ""}
+								onChange={(event, values) => this.getEmployeeName(event, values, cell, row)}
+								renderOption={(option) => {
+									return (
+										<React.Fragment>
+											{option.text}
+										</React.Fragment>
+									)
+								}}
+								renderInput={(params) => (
+									<div ref={params.InputProps.ref}>
+										<input type="text" {...params.inputProps} className="auto"
+											className="auto form-control Autocompletestyle-siteInfoSearch-employeeNo"
+										/>
+									</div>
+								)}
+							/>
+							</span>
+						</Col>
+					</Row>
+					<Row>
+						<Col style={{margin: "0px",padding: "0px"}} sm={7}>
+							<span class={"dutyRegistration-DataTableEditingCell"}><input type="text" class=" form-control editor edit-text" name="workDate" 
+							value={row.workDate} onChange={(event) => this.tableValueChange(event, cell, row)} onBlur={(event) => this.tableValueChangeAfter(event, cell, row)} /></span>
+						</Col>
+						<Col style={{margin: "0px",padding: "0px"}} sm={5}>
+							<span class={"dutyRegistration-DataTableEditingCell"}><input type="text" class=" form-control editor edit-text" name="sumWorkTime" 
+							value={row.sumWorkTime} onChange={(event) => this.tableValueChange(event, cell, row)} onBlur={(event) => this.tableValueChangeAfter(event, cell, row)} /></span>
+						</Col>
+					</Row>
+				</div>
+			);
+		}else{
+			return (<div><Row><font>{row.systemName === null || row.systemName === "" ? (this.state.employeeNameFlag ? cell : "") : row.systemName + (this.state.employeeNameFlag ? "(" + cell + ")" : "")}</font></Row><Row><Col style={{margin: "0px",padding: "0px"}} sm={9}>{row.workDate}</Col><Col sm={3}>{(this.state.workTimeFlag ? row.sumWorkTime + "H" : "")}</Col></Row></div>);
+		}
+	}
+	
+	manMonthFormat  = (cell,row) => {
+		let returnItem = cell === undefined || cell === null || cell === "" ? "" : this.state.manMonths.find(v => v.code === cell).name ;
+		if(row.updateFlag){
+			returnItem = (
+					<span class={"dutyRegistration-DataTableEditingCell"} >
+					<select class=" form-control editor edit-select" name="manMonth" value={cell} onChange={(event) => { this.tableValueChange(event, cell, row); this.tableValueChangeAfter(event, cell, row) }} >
+						{this.state.manMonths.map(date =>
+						<option key={date.code} value={date.code}>
+							{date.name}
+						</option>)}
+					</select>
+				</span>
+			);
+		}
+		return returnItem;
+	}
+	
+	countFormat = (cell,row) => {
+		let returnItem = cell;
+		if(row.updateFlag){
+			returnItem = (
+					<span class={"dutyRegistration-DataTableEditingCell"} >
+					<select class=" form-control editor edit-select" name="count" value={cell} onChange={(event) => { this.tableValueChange(event, cell, row); this.tableValueChangeAfter(event, cell, row) }} >
+						{this.state.counts.map(date =>
+						<option key={date} value={date}>
+							{date}
+						</option>)}
+					</select>
+				</span>
+			);
+		}
+		return returnItem;
 	}
 	
 	unitPriceFormat = (cell,row) => {
-		if(row.unitPrice === null || row.unitPrice === "" || row.unitPrice === "0")
-    		return "";
-    	else	
-    		return ("￥" + publicUtils.addComma(row.unitPrice));
+		let returnItem = cell;
+		if(row.updateFlag){
+			returnItem = (
+					<span class={"dutyRegistration-DataTableEditingCell"}><input type="text" class=" form-control editor edit-text" name="unitPrice" value={cell} onChange={(event) => this.tableValueChange(event, cell, row)} onBlur={(event) => this.tableValueChangeAfter(event, cell, row)} /></span>
+			);
+		}else {
+			if(cell === null || cell === "" || cell === "0")
+	    		return "";
+	    	else	
+	    		return ("￥" + publicUtils.addComma(row.unitPrice));
+		}
+		return returnItem;
 	}
 	
 	lowerLimitFormat = (cell,row) => {
 		let payOffRange = "";
-    	if(row.payOffRange1 == 0 || row.payOffRange1 == 1)
+		if(row.payOffRange1 == undefined || row.payOffRange1 == null)
+			return payOffRange;
+		else if(row.payOffRange1 == 0 || row.payOffRange1 == 1)
     		payOffRange = row.payOffRange1 == 0 ? "固定" : "出勤日";
     	else
     		payOffRange = row.payOffRange1 + "H";
@@ -206,7 +287,9 @@ class invoicePDF extends React.Component {
 	
 	upperLimitFormat = (cell,row) => {
 		let payOffRange = "";
-    	if(row.payOffRange2 == 0 || row.payOffRange2 == 1)
+		if(row.payOffRange2 == undefined || row.payOffRange2 == null)
+			return payOffRange;
+		else if(row.payOffRange2 == 0 || row.payOffRange2 == 1)
     		payOffRange = row.payOffRange2 == 0 ? "固定" : "出勤日";
     	else
     		payOffRange = row.payOffRange2 + "H";
@@ -214,14 +297,113 @@ class invoicePDF extends React.Component {
 	}
 	
 	billingAmountFormat = (cell,row) => {
-		let billingAmount = Number(row.unitPrice) * 1 + Number(row.deductionsAndOvertimePayOfUnitPrice);
-		return ("￥" + publicUtils.addComma(billingAmount));
+		let billingAmount = Number(row.unitPrice) * row.count + Number(row.deductionsAndOvertimePayOfUnitPrice);
+		if(billingAmount != "NaN")
+			return ("￥" + publicUtils.addComma(billingAmount));
 	}
 	
 	workTimeFlagChange = () => {
 		this.setState({
 			workTimeFlag: !this.state.workTimeFlag,
 		});
+	}
+	
+	employeeNameFlagChange = () => {
+		this.setState({
+			employeeNameFlag: !this.state.employeeNameFlag,
+		});
+	}
+	
+	addRow = () => {
+		let sendInvoiceList = this.state.sendInvoiceList;
+		var newRow = {};
+		if(sendInvoiceList.length > 0){
+			newRow["rowNo"] = sendInvoiceList.length + 1;
+		}else{
+			newRow["rowNo"] = 1;
+		}
+		
+		newRow["updateFlag"] = true;
+		newRow["deductionsAndOvertimePayOfUnitPrice"] = 0;
+		newRow["manMonth"] = "0";
+		newRow["count"] = 1;
+		newRow["unitPrice"] = "";
+		newRow["systemName"] = "";
+		newRow["workDate"] = "";
+		newRow["sumWorkTime"] = "";
+
+		sendInvoiceList.push(newRow);
+		this.setState({
+			sendInvoiceList: sendInvoiceList,
+			addDisabledFlag: true,
+			rowRowNo: "",
+		});
+	}
+	
+	deleteRow = () => {
+		let sendInvoiceList = this.state.sendInvoiceList;
+		for(let i in sendInvoiceList){
+			if(sendInvoiceList[i].rowNo === this.state.rowRowNo){
+				sendInvoiceList.splice(i,1);
+				break;
+			}
+		}
+		this.setState({
+			sendInvoiceList: sendInvoiceList,
+			rowRowNo: "",
+		});
+		if(!sendInvoiceList[sendInvoiceList.length - 1].updateFlag){
+			this.setState({
+				addDisabledFlag: false,
+			});
+		}
+	}
+	
+	updateRow = () => {
+		let sendInvoiceList = this.state.sendInvoiceList;
+		for(let i in sendInvoiceList){
+			if(sendInvoiceList[i].rowNo === this.state.rowRowNo){
+				sendInvoiceList[i].updateFlag = !sendInvoiceList[i].updateFlag;
+				break;
+			}
+		}
+		this.setState({
+			sendInvoiceList: sendInvoiceList,
+		});
+		if(!sendInvoiceList[sendInvoiceList.length - 1].updateFlag){
+			this.setState({
+				addDisabledFlag: false,
+			});
+		}
+	}
+	
+	// onChange
+	tableValueChange = (event, cell, row) => {
+		let sendInvoiceList = this.state.sendInvoiceList;
+		for(let i in sendInvoiceList){
+			if(row.employeeNo === sendInvoiceList[i].employeeNo){
+				sendInvoiceList[i][event.target.name] = event.target.value;
+				break;
+			}
+		}
+
+		this.setState({
+			sendInvoiceList: sendInvoiceList
+		})
+	}
+	// onChangeAfter
+	tableValueChangeAfter = (event, cell, row) => {
+		let sendInvoiceList = this.state.sendInvoiceList;
+		let subTotalAmount = 0;
+		for(let i in sendInvoiceList){
+			subTotalAmount += Number(sendInvoiceList[i].unitPrice) * sendInvoiceList[i].count + Number(sendInvoiceList[i].deductionsAndOvertimePayOfUnitPrice);
+		}
+
+		this.setState({
+			sendInvoiceList: sendInvoiceList,
+			subTotalAmount: publicUtils.addComma(subTotalAmount),
+			totalAmount: publicUtils.addComma(subTotalAmount + subTotalAmount * this.state.taxRate),
+		})
 	}
 	
 	render() {
@@ -239,7 +421,7 @@ class invoicePDF extends React.Component {
 		//　 テーブルの定義
 		const options = {
 			page: 1, 
-			sizePerPage: 3,  // which size per page you want to locate as default
+			sizePerPage: 5,  // which size per page you want to locate as default
 			pageStartIndex: 1, // where to start counting the pages
 			paginationSize: 3,  // the pagination bar size.
 			prePage: '<', // Previous page button text
@@ -273,18 +455,26 @@ class invoicePDF extends React.Component {
 						</Form.Group>
 						<Form.Group>
 							<Row>
-								<Col sm={12}>
+								<Col sm={3}>
+									<InputGroup size="sm" className="mb-2">
+										<InputGroup.Prepend>
+											<InputGroup.Text id="twoKanji">御中</InputGroup.Text>
+										</InputGroup.Prepend>
+										<Form.Control type="text" value={this.state.customerName} name="customerName" autoComplete="off" size="sm" />
+					                </InputGroup>
+								</Col>
+								<Col sm={9}>
 	                            <div style={{ "float": "right" }}>
 									<InputGroup size="sm" className="mb-2">
 										<InputGroup.Prepend>
-											<InputGroup.Text id="fourKanji">請求日</InputGroup.Text>
+											<InputGroup.Text id="fiveKanji">請求日</InputGroup.Text>
 											<DatePicker
 												selected={this.state.yearAndMonth}
 												onChange={this.inactiveYearAndMonth}
 												autoComplete="off"
 												locale="ja"
 												dateFormat="yyyy/MM/dd"
-												id="datePicker-invoice"
+												id="datePicker"
 												className="form-control form-control-sm"
 											/>
 										</InputGroup.Prepend>
@@ -293,53 +483,26 @@ class invoicePDF extends React.Component {
 								</Col>
 	                        </Row>
 	                        <Row>
-							<Col sm={2}>
+	                        <Col sm={3}>
 								<InputGroup size="sm" className="mb-2">
-									<Form.Control type="text" value={this.state.customerName} name="customerName" autoComplete="off" size="sm" />
-									<InputGroup.Prepend>
-										<InputGroup.Text id="twoKanji">御中</InputGroup.Text>
-									</InputGroup.Prepend>
-				                </InputGroup>
+								<InputGroup.Prepend>
+									<InputGroup.Text id="fiveKanji">請求金額</InputGroup.Text>
+								</InputGroup.Prepend>
+								<Form.Control type="text" value={this.state.totalAmount} name="totalAmount" autoComplete="off" size="sm" disabled />
+			                </InputGroup>
+			                </Col>
+			                <Col sm={1}>
 							</Col>
-							<Col sm={10}>
-                            <div style={{ "float": "right" }}>
+							<Col sm={3}>
 								<InputGroup size="sm" className="mb-2">
 									<InputGroup.Prepend>
 										<InputGroup.Text id="fourKanji">請求番号</InputGroup.Text>
 									</InputGroup.Prepend>
-									<Form.Control type="text" style={{width:"12rem"}} value={this.state.invoiceNo} name="invoiceNo" autoComplete="off" size="sm" onChange={this.valueChange} />
+									<Form.Control type="text" value={this.state.invoiceNo} name="invoiceNo" autoComplete="off" size="sm" onChange={this.valueChange} />
 				                </InputGroup>
-							</div>
 							</Col>
-							</Row>
-							<Row>
-								<Col sm={9}>
-								</Col>
-								<Col>
-								<InputGroup size="sm" className="mb-2">
-									<InputGroup.Prepend>
-										<font>ＬＹＣ株式会社 〒101-0032</font>
-									</InputGroup.Prepend>
-				                </InputGroup>
-								</Col>
-							</Row>
-							<Row>
-								<Col sm={2}>
-									<InputGroup size="sm" className="mb-2">
-									<InputGroup.Prepend>
-										<InputGroup.Text id="fiveKanji">請求金額</InputGroup.Text>
-									</InputGroup.Prepend>
-									<Form.Control type="text" value={this.state.totalAmount} name="totalAmount" autoComplete="off" size="sm" disabled />
-				                </InputGroup>
-								</Col>
-								<Col sm={7}>
-								</Col>
-								<Col style={{marginTop :"5px"}}>
-									<font>東京都千代田区岩本町3-3-3 サザンビル3階</font>
-								</Col>
-							</Row>
-							<Row>
-								<Col sm={3}>
+							<Col sm={5}>
+	                            <div style={{ "float": "right" }}>
 									<InputGroup size="sm" className="mb-2">
 									<InputGroup.Prepend>
 										<InputGroup.Text id="fiveKanji">お支払期限</InputGroup.Text>
@@ -353,13 +516,9 @@ class invoicePDF extends React.Component {
 										id="datePicker"
 										className="form-control form-control-sm"
 									/>
-				                </InputGroup>
-								</Col>
-								<Col sm={6}>
-								</Col>
-								<Col>
-									<font>TEL:03-6908-5796 　 FAX: 03-6908-5741</font>
-								</Col>
+									</InputGroup>
+								</div>
+							</Col>
 							</Row>
 						</Form.Group>
 					</div>
@@ -368,11 +527,12 @@ class invoicePDF extends React.Component {
                     <Row>
 						<Col sm={12}>
                             <Button size="sm" variant="info" onClick={this.workTimeFlagChange} >{"作業時間"+ (this.state.workTimeFlag ? "非" : "") +"表示"}</Button>{' '}
+                            <Button size="sm" variant="info" onClick={this.employeeNameFlagChange} >{"作業者"+ (this.state.employeeNameFlag ? "非" : "") +"表示"}</Button>{' '}
 
                             <div style={{ "float": "right" }}>
-                            	<Button variant="info" size="sm" >追加</Button>{' '}
-                            	<Button variant="info" size="sm" >削除</Button>{' '}
-		                        <Button variant="info" size="sm" >更新</Button>{' '}
+                            	<Button variant="info" size="sm" onClick={this.addRow} disabled={this.state.addDisabledFlag}>追加</Button>{' '}
+                            	<Button variant="info" size="sm" onClick={this.deleteRow} disabled={this.state.rowRowNo === ""}>削除</Button>{' '}
+		                        <Button variant="info" size="sm" onClick={this.updateRow} disabled={this.state.rowRowNo === ""}>修正</Button>{' '}
 	                            <Button variant="info" size="sm" >PDF</Button>{' '}
 	 						</div>
 						</Col>  
@@ -382,7 +542,7 @@ class invoicePDF extends React.Component {
 							<TableHeaderColumn dataField='rowNo' isKey hidden>番号</TableHeaderColumn>
 							<TableHeaderColumn width='20%'　tdStyle={ { padding: '.45em' } } dataField='employeeName' dataFormat={this.employeeNameFormat}>{<div><Row><font>作業内容(作業者)</font></Row><Row><font>作業期間</font></Row></div>}</TableHeaderColumn>
 							<TableHeaderColumn width='8%'　tdStyle={ { padding: '.45em' } } dataField='manMonth' dataFormat={this.manMonthFormat}>単位</TableHeaderColumn>
-							<TableHeaderColumn width='14%'　tdStyle={ { padding: '.45em' } } dataField='count'>数量</TableHeaderColumn>
+							<TableHeaderColumn width='14%'　tdStyle={ { padding: '.45em' } } dataField='count' dataFormat={this.countFormat}>数量</TableHeaderColumn>
 							<TableHeaderColumn width='14%'　tdStyle={ { padding: '.45em' } } dataField='unitPrice' dataFormat={this.unitPriceFormat}>単価</TableHeaderColumn>
 							<TableHeaderColumn width='14%'　tdStyle={ { padding: '.45em' } } dataField='lowerLimit' dataFormat={this.lowerLimitFormat}>{<div><Row><font>下限時間</font></Row><Row><font>単価</font></Row></div>}</TableHeaderColumn>
 							<TableHeaderColumn width='14%'　tdStyle={ { padding: '.45em' } } dataField='upperLimit' dataFormat={this.upperLimitFormat}>{<div><Row><font>上限時間</font></Row><Row><font>単価</font></Row></div>}</TableHeaderColumn>
@@ -391,23 +551,26 @@ class invoicePDF extends React.Component {
 					</Col>
 				</div>
 				<Row>
-					<Col sm={3}>
-					<InputGroup size="sm">
+					<Col sm={4}>
+					<InputGroup size="sm" className="mb-2">
 						<InputGroup.Prepend>
 							<InputGroup.Text id="fourKanji">銀行情報</InputGroup.Text>
 						</InputGroup.Prepend>
 		            </InputGroup>
-		            <InputGroup size="sm" className="mb-2">
-			            <FormControl
-		                    rows="5"
-		                    value={this.state.bankInfoDetail}
-							disabled
-		                    name="bankInfoDetail"
-		                    as="textarea">
-						</FormControl>
+					<InputGroup size="sm" className="mb-2">
+						<InputGroup.Prepend>
+							<InputGroup.Text id="twoKanji">備考</InputGroup.Text>
+						</InputGroup.Prepend>
+							<FormControl
+			                    rows="3"
+			                    value={this.state.remark}
+			                    onChange={this.valueChange}
+			                    name="remark"
+			                    as="textarea">
+							</FormControl>
 		            </InputGroup>
 					</Col>
-					<Col sm={7}>
+					<Col sm={6}>
 					</Col>
 					<Col sm={2}>
 					<InputGroup size="sm" className="mb-2">
@@ -430,24 +593,13 @@ class invoicePDF extends React.Component {
 		            </InputGroup>
 					</Col>
 				</Row>
-				<Row>
-					<Col>
-						<InputGroup size="sm" className="mb-3">
-							<InputGroup.Prepend>
-								<InputGroup.Text id="twoKanji">備考</InputGroup.Text>
-							</InputGroup.Prepend>
-							<FormControl
-			                    rows="2"
-			                    value={this.state.remark}
-			                    onChange={this.valueChange}
-			                    name="remark"
-			                    as="textarea">
-							</FormControl>
-			            </InputGroup>
-					</Col>
-				</Row>
-
+				<div style={{ "textAlign": "center" }}>
+					<Button size="sm" variant="info" type="button" >
+						<FontAwesomeIcon icon={faSave} /> 登録
+					</Button>
+				</div>
 		         <div className='loadingImage' hidden={this.state.loading} style = {{"position": "absolute","top":"60%","left":"60%","margin-left":"-200px", "margin-top":"-150px",}}></div>
+		         <br />
 			</div >
 		);
 	}
