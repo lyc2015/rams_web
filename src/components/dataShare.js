@@ -353,7 +353,7 @@ class dataShare extends React.Component {
 	}
 	
 	dataDelete = () => {
-        var a = window.confirm("削除していただきますか？");
+        var a = window.confirm("削除してよろしいでしょうか？");
         if(a){
 			if(this.dataStatus === "0"){
 				var model = {};
