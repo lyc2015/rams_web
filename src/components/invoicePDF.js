@@ -105,18 +105,22 @@ class invoicePDF extends React.Component {
 		.then(result => {
 			if(result.data.length > 0){
 				let subTotalAmount = 0;
+				let subTotalAmountNoTax = 0;
 				for(let i in result.data){
 					let quantity = result.data[i].quantity === undefined || result.data[i].quantity === null || result.data[i].quantity === "" ? 1 : Number(result.data[i].quantity);
 					result.data[i].quantity = quantity;
 					result.data[i].updateFlag = false;
 					result.data[i].workPeriod = result.data[i].workPeriod === null || result.data[i].workPeriod === "" ? (this.state.yearAndMonthFormat + "01~" + this.state.yearAndMonthFormat + new Date(this.state.yearAndMonthFormat.substring(0,4),this.state.yearAndMonthFormat.substring(4,6),0).getDate()) : result.data[i].workPeriod;
-					subTotalAmount += Number(result.data[i].unitPrice) * quantity + Number(result.data[i].deductionsAndOvertimePayOfUnitPrice);
+					if(result.data[i].requestUnitCode === "0")
+						subTotalAmount += Number(result.data[i].unitPrice) * quantity + Number(result.data[i].deductionsAndOvertimePayOfUnitPrice);
+					if(result.data[i].requestUnitCode === "1")
+						subTotalAmountNoTax += Number(result.data[i].unitPrice) * quantity + Number(result.data[i].deductionsAndOvertimePayOfUnitPrice);
 				}
 				this.setState({
 					sendInvoiceList: result.data,
 					rowRowNo: "",
-					subTotalAmount: publicUtils.addComma(subTotalAmount),
-					totalAmount: publicUtils.addComma(parseInt(subTotalAmount + subTotalAmount * this.state.taxRate)),
+					subTotalAmount: publicUtils.addComma(subTotalAmount + subTotalAmountNoTax),
+					totalAmount: publicUtils.addComma(parseInt(subTotalAmount + subTotalAmount * this.state.taxRate + subTotalAmountNoTax)),
 					customerName: result.data[0].customerName,
 					remark: result.data[0].remark,
 					yearAndMonth: publicUtils.converToLocalTime(result.data[0].invoiceDate, true),
@@ -319,8 +323,12 @@ class invoicePDF extends React.Component {
 	
 	billingAmountFormat = (cell,row) => {
 		let billingAmount = Number(row.unitPrice) * row.quantity + Number(row.deductionsAndOvertimePayOfUnitPrice);
-		if(billingAmount != "NaN")
-			return ("￥" + publicUtils.addComma(billingAmount));
+		if(billingAmount != "NaN"){
+			if(row.requestUnitCode === "0")
+				return ("￥" + publicUtils.addComma(billingAmount));
+			else 
+				return ("￥" + publicUtils.addComma(billingAmount) + "(税込)");
+		}
 	}
 	
 	workTimeFlagChange = () => {
@@ -493,14 +501,18 @@ class invoicePDF extends React.Component {
 	tableValueChangeAfter = (event, cell, row) => {
 		let sendInvoiceList = this.state.sendInvoiceList;
 		let subTotalAmount = 0;
+		let subTotalAmountNoTax = 0;
 		for(let i in sendInvoiceList){
-			subTotalAmount += Number(sendInvoiceList[i].unitPrice) * sendInvoiceList[i].quantity + Number(sendInvoiceList[i].deductionsAndOvertimePayOfUnitPrice);
+			if(sendInvoiceList[i].requestUnitCode=== "0")
+				subTotalAmount += Number(sendInvoiceList[i].unitPrice) * sendInvoiceList[i].quantity + Number(sendInvoiceList[i].deductionsAndOvertimePayOfUnitPrice);
+			if(sendInvoiceList[i].requestUnitCode=== "1")
+				subTotalAmountNoTax += Number(sendInvoiceList[i].unitPrice) * sendInvoiceList[i].quantity + Number(sendInvoiceList[i].deductionsAndOvertimePayOfUnitPrice);
 		}
 
 		this.setState({
 			sendInvoiceList: sendInvoiceList,
-			subTotalAmount: publicUtils.addComma(subTotalAmount),
-			totalAmount: publicUtils.addComma(parseInt(subTotalAmount + subTotalAmount * this.state.taxRate)),
+			subTotalAmount: publicUtils.addComma(subTotalAmount + subTotalAmountNoTax),
+			totalAmount: publicUtils.addComma(parseInt(subTotalAmount + subTotalAmount * this.state.taxRate + subTotalAmountNoTax)),
 		})
 	}
 	
