@@ -60,6 +60,7 @@ class invoicePDF extends React.Component {
 			            customerName: this.state.customerNameList.find(v => v.code === this.props.location.state.customerNo).text,
 			            customerAbbreviation: this.state.customerAbbreviationList.find(v => v.code === this.props.location.state.customerNo).text,
 			        }, () => {
+			    		this.setState({ loading: false, });
 			    		this.searchSendInvoiceList();
 			        })
 				})
@@ -126,7 +127,7 @@ class invoicePDF extends React.Component {
 					yearAndMonth: publicUtils.converToLocalTime(result.data[0].invoiceDate, true),
 					deadLine: publicUtils.converToLocalTime(result.data[0].deadLine, true),
 					bankAccountInfo: result.data[0].bankCode,
-
+					loading: true,
 				})
 				this.refs.table.setState({
 					selectedRowKeys: []
@@ -134,7 +135,7 @@ class invoicePDF extends React.Component {
 			}
 		})
 		.catch(function(error) {
-			//alert(error);
+			this.setState({ loading: true, });
 		});	
 		
 		let month = this.state.yearAndMonth.getMonth() + 1;
@@ -147,8 +148,6 @@ class invoicePDF extends React.Component {
 	inactiveYearAndMonth = (date) => {
 		this.setState({
 			yearAndMonth: date,
-		}, () => {
-
 		});
 	};
 	
@@ -533,6 +532,32 @@ class invoicePDF extends React.Component {
             })
         })
     }
+    
+    downloadPDF = () => {
+		this.setState({ loading: false, });
+		let model = {
+				yearAndMonth: publicUtils.formateDate(this.state.yearAndMonth, false),
+				customerNo: this.state.customerNo,
+				invoiceNo: this.state.invoiceNo,
+				taxRate: this.state.taxRate * 100,
+		}
+		axios.post(this.state.serverIP + "sendInvoice/downloadPDF",model)
+		.then(result => {
+			if (result.data) {
+				var a = document.createElement("a");
+				a.setAttribute("href",this.state.serverIP + this.state.customerNo + "-請求書.pdf");
+				a.setAttribute("target","_blank");
+				document.body.appendChild(a);
+				a.click();
+				this.setState({ loading: true, });
+			} else {
+				alert("更新失败");
+				this.setState({ loading: true, });
+			}
+		})
+		.catch(function(error) {
+		});
+    }
 	
 	render() {
 		const {sendInvoiceList} = this.state;
@@ -661,7 +686,7 @@ class invoicePDF extends React.Component {
                             	<Button variant="info" size="sm" onClick={this.addRow} disabled={this.state.addDisabledFlag}>追加</Button>{' '}
                             	<Button variant="info" size="sm" onClick={this.deleteRow} disabled={this.state.rowRowNo === ""}>削除</Button>{' '}
 		                        <Button variant="info" size="sm" onClick={this.updateRow} disabled={this.state.rowRowNo === ""}>修正</Button>{' '}
-	                            <Button variant="info" size="sm" >PDF</Button>{' '}
+	                            <Button variant="info" size="sm" onClick={this.downloadPDF} >PDF</Button>{' '}
 	 						</div>
 						</Col>  
                     </Row>
