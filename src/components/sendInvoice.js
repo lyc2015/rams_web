@@ -44,6 +44,7 @@ class sendInvoice extends React.Component {
 		month: new Date().getMonth() + 1,
 		sendInvoiceList: [],
 		rowCustomerNo: "",
+		sendFlag: false,
 		loading: true,
         customerAbbreviationList: store.getState().dropDown[73].slice(1),
 		serverIP: store.getState().dropDown[store.getState().dropDown.length - 1],
@@ -88,10 +89,12 @@ class sendInvoice extends React.Component {
 		if (isSelected) {
 			this.setState({
 				rowCustomerNo: row.customerNo,
+				sendFlag: row.havePDF === "false",
 			});
 		} else {
 			this.setState({
 				rowCustomerNo: "",
+				sendFlag: true,
 			});
 		}	
 	}
@@ -187,6 +190,32 @@ class sendInvoice extends React.Component {
     		return "";
     	else	
     		return ("￥" + publicUtils.addComma(row.deductionsAndOvertimePayOfUnitPrice));
+    }
+    
+    sendLetter = () => {
+        var a = window.confirm("送信してよろしいでしょうか？");
+
+        if(a){
+        	let model;
+        	let sendInvoiceList = this.state.sendInvoiceList;
+        	for(let i in sendInvoiceList){
+        		if(sendInvoiceList[i].customerNo === this.state.rowCustomerNo){
+        			model = {
+        					yearAndMonth: publicUtils.formateDate($("#datePicker").val(), false),
+        					customerAbbreviation: sendInvoiceList[i].customerAbbreviation,
+        					mail: sendInvoiceList[i].purchasingManagersMail,
+        					purchasingManagers: sendInvoiceList[i].purchasingManagers,
+        					customerNo: sendInvoiceList[i].customerNo,
+        					customerName: sendInvoiceList[i].customerName,
+        			}
+        		}
+        	}
+
+    		axios.post(this.state.serverIP + "sendInvoice/sendLetter",model)
+    		.then(result => {
+
+    		})
+        }
     }
 	
     employeeListFormat = (cell,row) => {
@@ -360,17 +389,17 @@ class sendInvoice extends React.Component {
 
                             <div style={{ "float": "right" }}>
 		                        <Button variant="info" size="sm" onClick={this.shuseiTo.bind(this, "invoicePDF")} disabled={this.state.rowCustomerNo === ""}>請求書確認</Button>{' '}
-	                            <Button variant="info" size="sm" disabled={this.state.rowCustomerNo === "" || Number(String(this.state.yearAndMonth.getFullYear()) + (this.state.yearAndMonth.getMonth() + 1)) < Number(String(new Date().getFullYear()) + new Date().getMonth())}>送信</Button>{' '}
+	                            <Button variant="info" size="sm" onClick={this.sendLetter} disabled={this.state.sendFlag || this.state.rowCustomerNo === "" || Number(String(this.state.yearAndMonth.getFullYear()) + (this.state.yearAndMonth.getMonth() + 1)) < Number(String(new Date().getFullYear()) + new Date().getMonth())}>送信</Button>{' '}
 	 						</div>
 						</Col>  
                     </Row>
                     <Col>
 						<BootstrapTable data={sendInvoiceList} ref='table' selectRow={selectRow} pagination={true} options={options} approvalRow headerStyle={ { background: '#5599FF'} } striped hover condensed >
 							<TableHeaderColumn width='5%'　tdStyle={ { padding: '.45em' } } dataField='rowNo' isKey>番号</TableHeaderColumn>
-							<TableHeaderColumn width='15%' tdStyle={ { padding: '.45em' } } dataField='customerNo' >お客様番号</TableHeaderColumn>
-							<TableHeaderColumn width='18%' tdStyle={ { padding: '.45em' } } dataField='customerName' >お客様</TableHeaderColumn>
-							<TableHeaderColumn width='13%' tdStyle={ { padding: '.45em' } } dataField='purchasingManagers' >担当者</TableHeaderColumn>
-							<TableHeaderColumn width='20%' tdStyle={ { padding: '.45em' } } dataField='purchasingManagersMail' >メール</TableHeaderColumn>
+							<TableHeaderColumn width='10%' tdStyle={ { padding: '.45em' } } dataField='customerNo' >お客様番号</TableHeaderColumn>
+							<TableHeaderColumn width='24%' tdStyle={ { padding: '.45em' } } dataField='customerName' >お客様</TableHeaderColumn>
+							<TableHeaderColumn width='10%' tdStyle={ { padding: '.45em' } } dataField='purchasingManagers' >担当者</TableHeaderColumn>
+							<TableHeaderColumn width='22%' tdStyle={ { padding: '.45em' } } dataField='purchasingManagersMail' >メール</TableHeaderColumn>
 							<TableHeaderColumn width='7%' tdStyle={ { padding: '.45em' } }  dataField='employeeList' dataFormat={this.employeeListFormat.bind(this)} >関連要員</TableHeaderColumn>
 							<TableHeaderColumn width='18%' tdStyle={ { padding: '.45em' } }  dataField='sendDate' >送信日付</TableHeaderColumn>
 							<TableHeaderColumn width='12%' tdStyle={ { padding: '.45em' } }  dataField='sendState' >送信ステータス</TableHeaderColumn>

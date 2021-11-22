@@ -1139,7 +1139,7 @@ class manageSituation extends React.Component {
 	}
 	
 	fromCodeToNameLanguage = (code) => {
-		if (code === "" || code === null) {
+		if (this.state.developLanguages.find((v) => (v.code === code)) === undefined || this.state.developLanguages.find((v) => (v.code === code)) === null) {
 			return;
 		} else {
 			return this.state.developLanguages.find((v) => (v.code === code)).name;

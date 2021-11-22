@@ -258,6 +258,10 @@ class BankInfo extends Component {
         $("#bankBranchCode").val("");
         $("#accountNo").val("");
         $("#accountName").val("");
+        this.setState({
+            accountNo: '',
+            accountName: '',
+        })
         $("#futsu").attr("checked", true);
         
         let bankBranchDrop = [];
@@ -417,8 +421,6 @@ class BankInfo extends Component {
 	    	                                </div>
 	    	                            )}
 	    							/>
-                                    {/*<Form.Control placeholder="例：010" onBlur={this.getBankBranchInfo.bind(this, "bankBranchCode")} readOnly
-                                        id="bankBranchCode" maxLength="3" name="bankBranchCode" value={bankBranchCode} onChange={this.valueChange} />*/ }
                               </InputGroup>
                             </Col>
                         </Row>

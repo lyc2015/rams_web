@@ -105,8 +105,11 @@ class dutyManagement extends React.Component {
 	    let approvalStatuss = this.state.approvalStatuslist;
 	        for (var i in approvalStatuss) {
 	            if (code === approvalStatuss[i].code) {
-	                return approvalStatuss[i].name;
-	            }
+					if(code === "0")
+	                	return approvalStatuss[i].name;
+	            	else
+						return approvalStatuss[i].name + (row.approvalUser === null ? "" : "(" + row.approvalUser + ")");
+				}
 	        }
     };
 

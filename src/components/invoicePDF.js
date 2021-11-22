@@ -71,6 +71,7 @@ class invoicePDF extends React.Component {
 	//　初期化データ
 	initialState = {
 		yearAndMonth: new Date(),
+		invoiceDate: new Date(),
 		yearAndMonthFormat: String(new Date().getFullYear()) + ((new Date().getMonth() + 1) < 10 ? "0" + (new Date().getMonth() + 1) : (new Date().getMonth() + 1)),
 		sendInvoiceList: [],
 		currentPage: 1,
@@ -121,10 +122,11 @@ class invoicePDF extends React.Component {
 					sendInvoiceList: result.data,
 					rowRowNo: "",
 					subTotalAmount: publicUtils.addComma(subTotalAmount + subTotalAmountNoTax),
+					subTotalAmountTax: publicUtils.addComma(parseInt(subTotalAmount * this.state.taxRate)),
 					totalAmount: publicUtils.addComma(parseInt(subTotalAmount + subTotalAmount * this.state.taxRate + subTotalAmountNoTax)),
 					customerName: result.data[0].customerName,
 					remark: result.data[0].remark,
-					yearAndMonth: publicUtils.converToLocalTime(result.data[0].invoiceDate, true),
+					invoiceDate: publicUtils.converToLocalTime(result.data[0].invoiceDate, true),
 					deadLine: publicUtils.converToLocalTime(result.data[0].deadLine, true),
 					bankAccountInfo: result.data[0].bankCode,
 					loading: true,
@@ -147,7 +149,7 @@ class invoicePDF extends React.Component {
 	//　年月
 	inactiveYearAndMonth = (date) => {
 		this.setState({
-			yearAndMonth: date,
+			invoiceDate: date,
 		});
 	};
 	
@@ -245,7 +247,7 @@ class invoicePDF extends React.Component {
 				</div>
 			);
 		}else{
-			return (<div><Row><font>{row.systemName === null || row.systemName === "" ? (this.state.employeeNameFlag ? cell : "") : row.systemName + (this.state.employeeNameFlag ? "(" + cell + ")" : "")}</font></Row><Row><Col style={{margin: "0px",padding: "0px"}} sm={9}>{row.workPeriod}</Col><Col sm={3}>{(this.state.workTimeFlag ? (row.sumWorkTime === null || row.sumWorkTime === "" ? "" : row.sumWorkTime + "H") : "")}</Col></Row></div>);
+			return (<div><Row><font>{row.systemName === null || row.systemName === "" ? (this.state.employeeNameFlag ? (cell === null ? "" : cell) : "") : row.systemName + (this.state.employeeNameFlag ? (cell === null ? "" : "(" + cell + ")") : "")}</font></Row><Row><Col style={{margin: "0px",padding: "0px"}} sm={9}>{row.workPeriod}</Col><Col sm={3}>{(this.state.workTimeFlag ? (row.sumWorkTime === null || row.sumWorkTime === "" ? "" : row.sumWorkTime + "H") : "")}</Col></Row></div>);
 		}
 	}
 	
@@ -511,6 +513,7 @@ class invoicePDF extends React.Component {
 		this.setState({
 			sendInvoiceList: sendInvoiceList,
 			subTotalAmount: publicUtils.addComma(subTotalAmount + subTotalAmountNoTax),
+			subTotalAmountTax: publicUtils.addComma(parseInt(subTotalAmount * this.state.taxRate)),
 			totalAmount: publicUtils.addComma(parseInt(subTotalAmount + subTotalAmount * this.state.taxRate + subTotalAmountNoTax)),
 		})
 	}
@@ -540,12 +543,15 @@ class invoicePDF extends React.Component {
 				customerNo: this.state.customerNo,
 				invoiceNo: this.state.invoiceNo,
 				taxRate: this.state.taxRate * 100,
+				workTimeFlag: this.state.workTimeFlag,
+				employeeNameFlag: this.state.employeeNameFlag,
+				customerAbbreviation: this.state.customerAbbreviation,
 		}
 		axios.post(this.state.serverIP + "sendInvoice/downloadPDF",model)
 		.then(result => {
 			if (result.data) {
 				var a = document.createElement("a");
-				a.setAttribute("href",this.state.serverIP + this.state.customerNo + "-請求書.pdf");
+				a.setAttribute("href",this.state.serverIP + publicUtils.formateDate(this.state.yearAndMonth, false) + "_" + this.state.customerNo + "_" + this.state.customerAbbreviation + ".pdf");
 				a.setAttribute("target","_blank");
 				document.body.appendChild(a);
 				a.click();
@@ -622,7 +628,7 @@ class invoicePDF extends React.Component {
 										<InputGroup.Prepend>
 											<InputGroup.Text id="fiveKanji">請求日</InputGroup.Text>
 											<DatePicker
-												selected={this.state.yearAndMonth}
+												selected={this.state.invoiceDate}
 												onChange={this.inactiveYearAndMonth}
 												autoComplete="off"
 												locale="ja"
@@ -692,10 +698,11 @@ class invoicePDF extends React.Component {
                     </Row>
                     <Col>
 						<BootstrapTable data={sendInvoiceList} ref='table' selectRow={selectRow} pagination={true} options={options} approvalRow headerStyle={ { background: '#5599FF'} } striped hover condensed >
-							<TableHeaderColumn dataField='rowNo' isKey hidden>番号</TableHeaderColumn>
-							<TableHeaderColumn width='20%'　tdStyle={ { padding: '.45em' } } dataField='employeeName' dataFormat={this.employeeNameFormat}>{<div><Row><font>作業内容(作業者)</font></Row><Row><font>作業期間</font></Row></div>}</TableHeaderColumn>
-							<TableHeaderColumn width='8%'　tdStyle={ { padding: '.45em' } } dataField='requestUnitCode' dataFormat={this.requestUnitCodeFormat}>単位</TableHeaderColumn>
-							<TableHeaderColumn width='14%'　tdStyle={ { padding: '.45em' } } dataField='quantity' dataFormat={this.quantityFormat}>数量</TableHeaderColumn>
+							<TableHeaderColumn dataField='rowNo' isKey hidden></TableHeaderColumn>
+							<TableHeaderColumn width='5%'　tdStyle={ { padding: '.45em' } } dataField='showNo' >番号</TableHeaderColumn>
+							<TableHeaderColumn width='18%'　tdStyle={ { padding: '.45em' } } dataField='employeeName' dataFormat={this.employeeNameFormat}>{<div><Row><font>作業内容(作業者)</font></Row><Row><font>作業期間</font></Row></div>}</TableHeaderColumn>
+							<TableHeaderColumn width='7%'　tdStyle={ { padding: '.45em' } } dataField='requestUnitCode' dataFormat={this.requestUnitCodeFormat}>単位</TableHeaderColumn>
+							<TableHeaderColumn width='10%'　tdStyle={ { padding: '.45em' } } dataField='quantity' dataFormat={this.quantityFormat}>数量</TableHeaderColumn>
 							<TableHeaderColumn width='14%'　tdStyle={ { padding: '.45em' } } dataField='unitPrice' dataFormat={this.unitPriceFormat}>単価</TableHeaderColumn>
 							<TableHeaderColumn width='14%'　tdStyle={ { padding: '.45em' } } dataField='lowerLimit' dataFormat={this.lowerLimitFormat}>{<div><Row><font>下限時間</font></Row><Row><font>単価</font></Row></div>}</TableHeaderColumn>
 							<TableHeaderColumn width='14%'　tdStyle={ { padding: '.45em' } } dataField='upperLimit' dataFormat={this.upperLimitFormat}>{<div><Row><font>上限時間</font></Row><Row><font>単価</font></Row></div>}</TableHeaderColumn>
@@ -704,7 +711,7 @@ class invoicePDF extends React.Component {
 					</Col>
 				</div>
 				<Row>
-					<Col sm={4}>
+					<Col sm={3}>
 					<InputGroup size="sm" className="mb-2">
 						<InputGroup.Prepend>
 							<InputGroup.Text id="fourKanji">銀行情報</InputGroup.Text>
@@ -733,7 +740,7 @@ class invoicePDF extends React.Component {
 		            </InputGroup>
 					<InputGroup size="sm" className="mb-2">
 						<InputGroup.Prepend>
-							<InputGroup.Text id="twoKanji">備考</InputGroup.Text>
+							<InputGroup.Text id="fourKanji">備考</InputGroup.Text>
 						</InputGroup.Prepend>
 							<FormControl
 			                    rows="3"
@@ -744,7 +751,7 @@ class invoicePDF extends React.Component {
 							</FormControl>
 		            </InputGroup>
 					</Col>
-					<Col sm={6}>
+					<Col sm={7}>
 					</Col>
 					<Col sm={2}>
 					<InputGroup size="sm" className="mb-2">
@@ -755,9 +762,15 @@ class invoicePDF extends React.Component {
 		            </InputGroup>
 		            <InputGroup size="sm" className="mb-2">
 						<InputGroup.Prepend>
-							<InputGroup.Text id="sanKanji">消費税</InputGroup.Text>
+							<InputGroup.Text id="sanKanji">消費税率</InputGroup.Text>
 						</InputGroup.Prepend>
 						<Form.Control type="text" value={this.state.consumptionTax} name="consumptionTax" autoComplete="off" size="sm" disabled />
+		            </InputGroup>
+		            <InputGroup size="sm" className="mb-2">
+						<InputGroup.Prepend>
+							<InputGroup.Text id="sanKanji">消費税</InputGroup.Text>
+						</InputGroup.Prepend>
+						<Form.Control type="text" value={this.state.subTotalAmountTax} name="subTotalAmountTax" autoComplete="off" size="sm" disabled />
 		            </InputGroup>
 		            <InputGroup size="sm" className="mb-2">
 						<InputGroup.Prepend>

@@ -60,6 +60,7 @@ class salaryDetailSend extends Component {// 状況変動一覧
 		myToastShow: false,
 		sendOver: false,
 		employeeNo: null,
+		employeeFristName: null,
 		employeeMail: null,
 		employeeNameDrop: store.getState().dropDown[38].slice(1),
     }
@@ -538,12 +539,14 @@ P-mark：第21004525(02)号
                 employeeNo: values.code,
                 employeeName: values.text,
                 employeeMail: values.mail,
+                employeeFristName: values.value,
             })
         }else{
         	this.setState({
                 employeeNo: null,
                 employeeName: null,
                 employeeMail: null,
+                employeeFristName: null,
             })
         }
 	}
@@ -565,6 +568,7 @@ P-mark：第21004525(02)号
 			newData["employeeNo"] = this.state.employeeNo;
 			newData["employeeName"] = this.state.employeeName;
 			newData["companyMail"] = this.state.employeeMail;
+			newData["employeeFristName"] = this.state.employeeFristName;
 
 			employeeList.push(newData);
 			
