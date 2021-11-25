@@ -26,7 +26,22 @@ class sendInvoice extends React.Component {
 		this.state = this.initialState;//初期化
 		this.searchEmployee = this.searchSendInvoiceList.bind(this);
 	};
+	
+	getLoginUserInfo = () => {
+		axios.post(this.state.serverIP + "sendLettersConfirm/getLoginUserInfo")
+			.then(result => {
+				this.setState({
+					loginUserInfo: result.data,
+				})
+			})
+			.catch(function(error) {
+				//alert(error);
+			});
+	}
+	
 	componentDidMount(){
+    	this.getLoginUserInfo();
+
 		axios.post(this.state.serverIP + "sendLettersConfirm/getLoginUserInfo")
 		.then(result => {
 			this.setState({
@@ -42,8 +57,12 @@ class sendInvoice extends React.Component {
 	initialState = {
 		yearAndMonth: new Date(),//new Date(new Date().getMonth() === 0 ? (new Date().getFullYear() - 1) + "/12" : new Date().getFullYear() + "/" + new Date().getMonth()).getTime(),
 		month: new Date().getMonth() + 1,
+		loginUserInfo: [],
 		sendInvoiceList: [],
 		rowCustomerNo: "",
+		rowCustomerName: "",
+		rowPurchasingManagers: "",
+		rowEmployeeList: [],
 		sendFlag: false,
 		loading: true,
         customerAbbreviationList: store.getState().dropDown[73].slice(1),
@@ -89,11 +108,17 @@ class sendInvoice extends React.Component {
 		if (isSelected) {
 			this.setState({
 				rowCustomerNo: row.customerNo,
+				rowCustomerName: row.customerName,
+				rowPurchasingManagers: row.purchasingManagers,
+				rowEmployeeList: row.sendInvoiceWorkTimeModel,
 				sendFlag: row.havePDF === "false",
 			});
 		} else {
 			this.setState({
 				rowCustomerNo: "",
+				rowCustomerName: "",
+				rowPurchasingManagers: "",
+				rowEmployeeList: [],
 				sendFlag: true,
 			});
 		}	
@@ -198,8 +223,38 @@ class sendInvoice extends React.Component {
         if(a){
         	let model;
         	let sendInvoiceList = this.state.sendInvoiceList;
+        	let employeeList = this.state.rowEmployeeList;
+        	let employee = "";
+        	for(let i in employeeList){
+        		employee += employeeList[i].employeeName + "、";
+        	}
+        	if(employee.length > 0)
+        		employee = employee.substring(0,employee.length - 1);
+        	let mailConfirmContont = this.state.rowCustomerName + `株式会社` + `
+` + (this.state.rowPurchasingManagers === "" ? "" : this.state.rowPurchasingManagers + `様`) + `
+
+いつもお世話になっております。ＬＹＣの` + this.state.loginUserInfo[0].employeeFristName + `でございます。
+
+弊社` + employee + (this.state.yearAndMonth.getMonth() + 1) + `月分請求書類（見積書と注文書）を添付にてご送付致します。
+
+お手数ですが、ご確認お願い致します。
+＊ファイルの解凍パスワードは弊社の略称（3小文字）と現在の西暦4文字です。
+
+引き続き何卒よろしくお願い申し上げます。
+----------------------------------------
+LYC株式会社　
+事務担当　宋（ソウ）/唐（トウ）/莫（バク）
+〒101-0032　東京都千代田区岩本町3-3-3　サザンビル3階
+URL:http://www.lyc.co.jp/
+TEL:03-6908-5796 
+E-mail: zoeywu@lyc.co.jp 　共通mail：eigyou@lyc.co.jp
+P-mark:第21004525(02)号
+労働者派遣事業許可番号　派13-306371
+`;
+        	
         	for(let i in sendInvoiceList){
         		if(sendInvoiceList[i].customerNo === this.state.rowCustomerNo){
+        			
         			model = {
         					yearAndMonth: publicUtils.formateDate($("#datePicker").val(), false),
         					customerAbbreviation: sendInvoiceList[i].customerAbbreviation,
@@ -207,6 +262,9 @@ class sendInvoice extends React.Component {
         					purchasingManagers: sendInvoiceList[i].purchasingManagers,
         					customerNo: sendInvoiceList[i].customerNo,
         					customerName: sendInvoiceList[i].customerName,
+        					mailFrom: this.state.loginUserInfo[0].companyMail,
+        					mailConfirmContont: mailConfirmContont,
+        					mailTitle: (this.state.yearAndMonth.getMonth() + 1) + "月分請求書類"
         			}
         		}
         	}
