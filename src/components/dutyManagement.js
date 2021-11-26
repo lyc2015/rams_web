@@ -231,7 +231,7 @@ class dutyManagement extends React.Component {
 			.then(result => {
 				if (result.data == true) {
 					this.searchDutyManagement(this.state.rowNo);
-					this.setState({ "myToastShow": true, message:(approvalStatus === 2 ? "更新成功!":"承認成功!") });
+					this.setState({ "myToastShow": true, message:(approvalStatus === 2 ? "更新成功!":( approvalStatus === 0 ? "取消成功!" : "承認成功!")) });
 					setTimeout(() => this.setState({ "myToastShow": false }), 3000);
 				} else if (result.data == false) {
 					this.setState({ "myToastShow": false });
