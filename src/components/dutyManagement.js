@@ -443,6 +443,13 @@ class dutyManagement extends React.Component {
 		return row.costClassificationCode === "0" ? "transportationExpenses" : "otherCost";
 	}
 	
+	updateTimeFormat = (cell,row) => {
+		if(row.workTime === "" || row.workTime === null)
+			return "";
+		else
+			return cell;
+	}
+	
 	downloadTest = () => {
 		if(this.state.rowSelectWorkingTimeReport === undefined || this.state.rowSelectWorkingTimeReport === null || this.state.rowSelectWorkingTimeReport === ""){
 			this.setState({ loading: false, });
@@ -745,7 +752,7 @@ class dutyManagement extends React.Component {
 							<TableHeaderColumn width='110' tdStyle={{ padding: '.45em' }} dataField='deductionsAndOvertimePayOfUnitPrice' editable={!(this.state.rowWorkTime === "" || this.state.rowWorkTime === null) && this.state.rowApprovalStatus !== "1"} editColumnClassName="dutyRegistration-DataTableEditingCell" dataFormat={this.overtimePayFormat.bind(this)}>残業/控除(客)</TableHeaderColumn>
 							<TableHeaderColumn width='110' tdStyle={ { padding: '.45em' } }  dataFormat={this.checkSection.bind(this)} hidden dataField='checkSection' editable={false}>確認区分</TableHeaderColumn>
 							<TableHeaderColumn width='120' tdStyle={ { padding: '.45em' } }  dataField='cost' dataFormat={this.costFormat.bind(this)}  editable={false}>費用</TableHeaderColumn>
-							<TableHeaderColumn width='160' tdStyle={ { padding: '.45em' } }  dataField='updateTime' editable={false}>更新日付</TableHeaderColumn>
+							<TableHeaderColumn width='160' tdStyle={ { padding: '.45em' } }  dataField='updateTime' dataFormat={this.updateTimeFormat.bind(this)} editable={false}>更新日付</TableHeaderColumn>
 							<TableHeaderColumn width='110' tdStyle={ { padding: '.45em' } }  dataFormat={this.approvalStatus.bind(this)} dataField='approvalStatus' editable={false}>ステータス</TableHeaderColumn>
 						</BootstrapTable>
 					</Col>  
