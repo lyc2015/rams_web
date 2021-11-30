@@ -245,7 +245,7 @@ class salesContent extends React.Component {
 	};
 
 	fromCodeToNameLanguage = (code) => {
-		if (code === "" || code === null) {
+		if (code === "" || code === null || this.state.developLanguagesShow.find((v) => (v.code === code)) === undefined) {
 			return;
 		} else {
 			return this.state.developLanguagesShow.find((v) => (v.code === code)).name;
@@ -308,8 +308,8 @@ class salesContent extends React.Component {
 					nearestStation: result.data[0].nearestStation,
 					stationCode: result.data[0].nearestStation,
 					employeeStatus: result.data[0].employeeStatus,
-					japaneseLevelCode: this.state.japaneseLevels.find((v) => (v.code === result.data[0].japaneseLevelCode)).name,
-					englishLevelCode: this.state.englishLevels.find((v) => (v.code === result.data[0].englishLevelCode)).name,
+					japaneseLevelCode: this.state.japaneseLevels.find((v) => (v.code === result.data[0].japaneseLevelCode)) === undefined ? "" : this.state.japaneseLevels.find((v) => (v.code === result.data[0].japaneseLevelCode)).name,
+					englishLevelCode: this.state.englishLevels.find((v) => (v.code === result.data[0].englishLevelCode)) === undefined ? "" : this.state.englishLevels.find((v) => (v.code === result.data[0].englishLevelCode)).name,
 					siteRoleCode: result.data[0].siteRoleCode,
 					unitPrice: result.data[0].unitPrice === null || result.data[0].unitPrice=== "" || result.data[0].unitPrice=== undefined ? this.state.unitPrice : result.data[0].unitPrice,
 					unitPriceShow: result.data[0].unitPrice === null || result.data[0].unitPrice=== "" || result.data[0].unitPrice=== undefined ? utils.addComma(this.state.unitPrice) : utils.addComma(result.data[0].unitPrice),
