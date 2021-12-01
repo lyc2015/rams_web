@@ -210,9 +210,13 @@ class masterUpdate extends Component {
 			
 			axios.post(this.state.serverIP + "masterUpdate/delete", masterModel)
 				.then(result => {
-					this.setState({ "myToastShow": true, "method": "post", "errorsMessageShow": false });
-					setTimeout(() => this.setState({ "myToastShow": false }), 3000);
-					this.refreshReducer();
+					if(result.data){
+						this.setState({ "myToastShow": true, "method": "post", "errorsMessageShow": false });
+						setTimeout(() => this.setState({ "myToastShow": false }), 3000);
+						this.refreshReducer();
+					}else{
+						alert("対象データが使う済みでした、削除できないです");
+					}
 					axios.post(this.state.serverIP + "masterUpdate/getMasterInfo", { master: publicUtils.labelGetValue($("#master").val(), this.state.masterStatus),bankCode: this.state.bankCode })
 						.then(response => {
 							if (response.data != null) {

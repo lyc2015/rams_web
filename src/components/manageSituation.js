@@ -35,7 +35,7 @@ class manageSituation extends React.Component {
 		selectRow: '',
 		employeeNo: '',// 社員NO
 		lastEmpNo: '',
-		yearMonth: new Date(new Date().getFullYear() + '/' + (new Date().getMonth() + 1 < 10 ? '0' + (new Date().getMonth() + 2) : (new Date().getMonth() + 2))).getTime(),
+		yearMonth: new Date(new Date().getMonth() + 1 === 12 ? ((new Date().getFullYear() + 1) + '/01') : (new Date().getFullYear() + '/' + (new Date().getMonth() + 1 < 10 ? '0' + (new Date().getMonth() + 2) : (new Date().getMonth() + 2)))).getTime(),
 		interviewDate1Show: '',　// 面接1日付
 		interviewDate1: '',　// 面接1日付
 		interviewDate2Show: '',　// 面接1日付
