@@ -366,7 +366,7 @@ class EnterPeriodSearch extends React.Component {
                                     scrollableYearDropdown
                                     showMonthYearPicker
                                     showFullMonthYearPicker
-                                    minDate={new Date(new Date().getFullYear(), new Date().getMonth())}
+                                    minDate={new Date(new Date().getFullYear(), new Date().getMonth() - 1)}
                                     showDisabledMonthNavigation
                                     className="form-control form-control-sm"
                                     id="enterPeriodSearchDatePicker"
