@@ -699,8 +699,6 @@ class manageSituation extends React.Component {
 			yearMonth: date,
 			salesYearAndMonth: publicUtils.formateDate(date, false),
 		});
-		// let searchYearMonth = date.getFullYear() + '' + (date.getMonth() + 1
-		// < 10 ? '0' + (date.getMonth() + 1) : (date.getMonth() + 1));
 		this.getSalesSituation(this.getNextMonth(date, 0))
 	}
 
