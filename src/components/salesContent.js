@@ -501,7 +501,7 @@ class salesContent extends React.Component {
 						style={{ width: "80px" }} onChange={this.valueChangeMoney} className="inputWithoutBorder" />円</ListGroup.Item></span>
 					<span style={{ flexFlow: "nowrap" }}><ListGroup.Item style={{padding:".3rem 1.25rem"}}>【稼働開始】：
 					{	
-					(Number(this.state.admissionEndDate) + 1) < Number(this.getNextMonth(new Date(),1).replace("/","")) ? "即日":
+					(this.state.admissionEndDate === undefined || this.state.admissionEndDate === null || this.state.admissionEndDate === "" ? 0 : (this.state.admissionEndDate.substring(4,6) === "12" ? Number((Number(this.state.admissionEndDate.substring(0,4)) + 1) + "01") : Number(this.state.admissionEndDate) + 1)) < Number(this.getNextMonth(new Date(),1).replace("/","")) ? "即日":
 					<DatePicker
 							selected={this.state.beginMonth}
 							onChange={this.setEndDate}
