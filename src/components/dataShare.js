@@ -166,9 +166,15 @@ class dataShare extends React.Component {
 					}
 				}
 			}
-			this.refs.table.setState({
-				selectedRowKeys: [String(rowNo)]
-			});
+			if(rowNo.length > 1){
+				this.refs.table.setState({
+					selectedRowKeys: rowNo
+				});
+			}else{
+				this.refs.table.setState({
+					selectedRowKeys: [String(rowNo)]
+				});
+			}
 		});
     }
     
@@ -319,21 +325,35 @@ class dataShare extends React.Component {
 		});
 	}
 	
-	dataApproval = () => {
+	dataApproval = (shareStatus) => {
 		let fileNoList = [];
 		for(let i in this.state.fileNo){
 			fileNoList.push(this.state.fileNo[i]);
 		}
-		axios.post(this.state.serverIP + "dataShare/updateDataShares",fileNoList)
-		.then(response => {
-			if (response.data != null) {
-				this.searchData(this.state.fileNo);
-				this.setState({ "myToastShow": true, message: "承認成功！"  });
-				setTimeout(() => this.setState({ "myToastShow": false }), 3000);
-			} else {
-				alert("err")
-			}
-		});
+		if(shareStatus === "2"){
+			axios.post(this.state.serverIP + "dataShare/updateDataSharesTo2",fileNoList)
+			.then(response => {
+				if (response.data != null) {
+					this.searchData(this.state.fileNo);
+					this.setState({ "myToastShow": true, message: "承認成功！"  });
+					setTimeout(() => this.setState({ "myToastShow": false }), 3000);
+				} else {
+					alert("err")
+				}
+			});
+		}else if(shareStatus === "3"){
+			axios.post(this.state.serverIP + "dataShare/updateDataSharesTo3",fileNoList)
+			.then(response => {
+				if (response.data != null) {
+					this.searchData(this.state.fileNo);
+					this.setState({ "myToastShow": true, message: "承認成功！"  });
+					setTimeout(() => this.setState({ "myToastShow": false }), 3000);
+				} else {
+					alert("err")
+				}
+			});
+		}
+
 	}
 	
 	dataShare = () => {
@@ -615,14 +635,15 @@ class dataShare extends React.Component {
 								<Button variant="info" size="sm" onClick={this.state.dataStatus === "0" ? publicUtils.handleDownload.bind(this, this.state.rowFilePath, this.state.serverIP) : this.downLoad} id="workRepotDownload" disabled={this.state.rowShareStatus === "" || this.state.rowShareStatus.length === 0}>
 	                          		 <FontAwesomeIcon icon={faDownload} /> Download
 		                        </Button>{' '}
-								<Button variant="info" size="sm" onClick={this.state.rowChangeFlag ? this.fileNameReset : this.fileNameChange} disabled={this.state.rowClickFlag}>
+								<Button variant="info" size="sm" onClick={this.state.rowChangeFlag ? this.fileNameReset : this.fileNameChange} disabled={this.state.rowClickFlag} hidden={this.state.dataStatus === "1"}>
 									<FontAwesomeIcon icon={faUpload} />{this.state.rowChangeFlag ? "ファイル名更新" : "ファイル名修正"}
 								</Button>
 	 						</div>
 						</Col>
                         <Col sm={8}>
                         <div style={{ "float": "right" }}>
-							<Button variant="info" size="sm" id="revise" onClick={this.dataApproval} disabled={this.state.rowClickFlag || this.state.dataStatus === "0"} hidden={this.state.dataStatus === "0"}><FontAwesomeIcon icon={faSave}/> 承認</Button>{' '}
+							<Button variant="info" size="sm" id="revise" onClick={this.dataApproval.bind(this,"3")} disabled={this.state.rowClickFlag || this.state.dataStatus === "0"} hidden={this.state.dataStatus === "0"}><FontAwesomeIcon icon={faSave}/> 承認</Button>{' '}
+							<Button variant="info" size="sm" id="revise" onClick={this.dataApproval.bind(this,"2")} disabled={this.state.rowClickFlag || this.state.dataStatus === "0"} hidden={this.state.dataStatus === "0"}><FontAwesomeIcon icon={faSave}/> 解除</Button>{' '}
 							<Button variant="info" size="sm" id="revise" onClick={this.state.rowClickFlag ? this.insertRow : this.dataShare} disabled={(this.state.rowClickFlag ? false : this.state.rowShareStatus === "") || this.state.dataStatus === "1"} hidden={this.state.dataStatus === "1"}><FontAwesomeIcon icon={faSave}/> {this.state.rowClickFlag || this.state.dataStatus === "1" ? "追加" : this.state.rowShareStatus === "1" ? "解除" : "共有"}</Button>{' '}
 							<Button variant="info" size="sm" id="revise" onClick={this.dataDelete} disabled={this.state.rowClickFlag || this.state.rowShareStatus === "1"}><FontAwesomeIcon icon={faTrash} /> 削除</Button>{' '}
  						</div>
