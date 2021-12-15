@@ -42,13 +42,17 @@ class employeeUpdateNew extends React.Component {
 		bpInfoModel: null,// pb情報
 		myToastShow: false,
 		errorsMessageShow: false,
-		developLanguage1: '',
-		developLanguage2: '',
-		developLanguage3: '',
-		developLanguage4: '',
-		developLanguage5: '',
-		frameWork1: '',
-		frameWork2: '',
+		englishLevelCode: "0",
+		japaneseLevelCode: "0",
+		developLanguage1: "0",
+		developLanguage2: "0",
+		developLanguage3: "0",
+		developLanguage4: "0",
+		developLanguage5: "0",
+		certification1: "0",
+		certification2: "0",
+		frameWork1: "0",
+		frameWork2: "0",
 		stationCode: '',
 		sendValue:{},
 		loading:true,
@@ -61,7 +65,7 @@ class employeeUpdateNew extends React.Component {
 		employeeFormCodesAll: store.getState().dropDown[2],
 		siteMaster: store.getState().dropDown[34],
 		employeeStatusS: store.getState().dropDown[4].slice(1),
-		japaneaseLevelCodes: store.getState().dropDown[5],
+		japaneaseLevelCodes: store.getState().dropDown[5].slice(1),
 		residenceCodes: store.getState().dropDown[6],
 		nationalityCodes: store.getState().dropDown[7],
 		developLanguageMaster: store.getState().dropDown[8].slice(1),
@@ -70,10 +74,10 @@ class employeeUpdateNew extends React.Component {
 		occupationCodes: store.getState().dropDown[10],
 		departmentCodes: store.getState().dropDown[11],
 		authorityCodes: store.getState().dropDown[12].slice(1),
-		englishLeveCodes: store.getState().dropDown[13],
+		englishLeveCodes: store.getState().dropDown[13].slice(1),
 		station: store.getState().dropDown[14].slice(1),
 		customer: store.getState().dropDown[15].slice(1),
-		qualification: store.getState().dropDown[54],
+		qualification: store.getState().dropDown[54].slice(1),
 		retirementResonClassificationCodes: store.getState().dropDown[66],
 		employmentInsuranceStatus: store.getState().dropDown[67],
 		socialInsuranceStatus: store.getState().dropDown[68],
@@ -264,6 +268,7 @@ class employeeUpdateNew extends React.Component {
 				console.error("Error - " + error);
 				this.setState({ "errorsMessageShow": true, errorsMessageValue: "ファイルアップデートエラー発生" });
 				setTimeout(() => this.setState({ "errorsMessageShow": false }), 3000);
+				window.location.reload();
 			});
 		/*}*/	
 	};

@@ -578,16 +578,17 @@ class employeeSearch extends React.Component {
 		let downLoadPath = "";
 		if(resumeInfo !== null && resumeInfo.split("file/").length > 1){
 			fileKey = resumeInfo.split("file/")[1];
-			downLoadPath = (resumeInfo.substring(0, resumeInfo.lastIndexOf("_") + 1) + ( no === 1 ? this.state.resumeName1 : this.state.resumeName2 ) + "." + resumeInfo.split(".")[resumeInfo.split(".").length - 1]).replaceAll("/","//");
+			alert(this.state.resumeName1.split("_").length > 1)
+			downLoadPath = (resumeInfo.substring(0, resumeInfo.lastIndexOf("_") + 1) + ( no === 1 ? (this.state.resumeName1.split("_").length > 1 ? this.state.resumeName1.split("_")[1] : this.state.resumeName1) : (this.state.resumeName2.split("_").length > 1 ? this.state.resumeName2.split("_")[1] : this.state.resumeName2) ) + "." + resumeInfo.split(".")[resumeInfo.split(".").length - 1]).replaceAll("/","//");
 		}
 		axios.post(this.state.serverIP + "s3Controller/downloadFile", {fileKey:fileKey , downLoadPath:downLoadPath})
 		.then(result => {
 			let path = downLoadPath.replaceAll("//","/");
 			if(no === 1){
-				publicUtils.resumeDownload(path, this.state.serverIP, this.state.resumeName1);
+				publicUtils.resumeDownload(path, this.state.serverIP, (this.state.resumeName1.split("_").length > 1 ? this.state.resumeName1.split("_")[1] : this.state.resumeName1));
 			}
 			else if(no === 2){
-				publicUtils.resumeDownload(path, this.state.serverIP, this.state.resumeName2);
+				publicUtils.resumeDownload(path, this.state.serverIP, (this.state.resumeName2.split("_").length > 1 ? this.state.resumeName2.split("_")[1] : this.state.resumeName2));
 			}
 		}).catch(function (error) {
 			alert("ファイルが存在しません。");
