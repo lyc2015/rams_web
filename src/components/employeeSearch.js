@@ -76,7 +76,7 @@ class employeeSearch extends React.Component {
 		employeeFormCodes: store.getState().dropDown[2],
 		siteMaster: store.getState().dropDown[3],
 		employeeStatuss: store.getState().dropDown[4],
-		japaneaseLevelCodes: store.getState().dropDown[5],
+		japaneaseLevelCodes: store.getState().dropDown[5].slice(1),
 		residenceCodes: store.getState().dropDown[6],
 		nationalityCodes: store.getState().dropDown[7],
 		developLanguageMaster: store.getState().dropDown[8].slice(1),
@@ -221,10 +221,10 @@ class employeeSearch extends React.Component {
 			nationalityCode: this.state.nationalityCode === "" ? undefined : this.state.nationalityCode,
 			customer: this.props.location.state !== undefined?this.state.customerNo:publicUtils.labelGetValue($("#customerNo").val(), this.state.customerMaster),
 			intoCompanyCode: this.state.intoCompanyCode === "" ? undefined : this.state.intoCompanyCode,
-			japaneseLevelCode: this.state.japaneseLevelCode === "" ? undefined : this.state.japaneseLevelCode,
+			japaneseLevelCode: this.state.japaneseLevelCode === "" || this.state.japaneseLevelCode === "0" ? undefined : this.state.japaneseLevelCode,
 			siteRoleCode: this.state.siteRoleCode === "" ? undefined : this.state.siteRoleCode,
-			developLanguage1: this.props.location.state !== undefined?this.state.developLanguage1:($("#developLanguage1").val() === "" ? null : publicUtils.labelGetValue($("#developLanguage1").val(), this.state.developLanguageMaster)),
-			developLanguage2: this.props.location.state !== undefined?this.state.developLanguage2:($("#developLanguage2").val() === "" ? null : publicUtils.labelGetValue($("#developLanguage2").val(), this.state.developLanguageMaster)),
+			developLanguage1: this.props.location.state !== undefined?this.state.developLanguage1:($("#developLanguage1").val() === "" || $("#developLanguage1").val() === "0" ? null : publicUtils.labelGetValue($("#developLanguage1").val(), this.state.developLanguageMaster)),
+			developLanguage2: this.props.location.state !== undefined?this.state.developLanguage2:($("#developLanguage2").val() === "" || $("#developLanguage2").val() === "0" ? null : publicUtils.labelGetValue($("#developLanguage2").val(), this.state.developLanguageMaster)),
 			intoCompanyYearAndMonthFrom: this.state.intoCompanyYearAndMonthFrom === "" || this.state.intoCompanyYearAndMonthFrom === null || this.state.intoCompanyYearAndMonthFrom === undefined ? undefined : publicUtils.formateDate(this.state.intoCompanyYearAndMonthFrom, false),
 			intoCompanyYearAndMonthTo: this.state.intoCompanyYearAndMonthTo === "" || this.state.intoCompanyYearAndMonthTo === null || this.state.intoCompanyYearAndMonthTo === undefined ? undefined : publicUtils.formateDate(this.state.intoCompanyYearAndMonthTo, false),
 			kadou: this.state.kadou === "" ? undefined : this.state.kadou,
@@ -578,7 +578,6 @@ class employeeSearch extends React.Component {
 		let downLoadPath = "";
 		if(resumeInfo !== null && resumeInfo.split("file/").length > 1){
 			fileKey = resumeInfo.split("file/")[1];
-			alert(this.state.resumeName1.split("_").length > 1)
 			downLoadPath = (resumeInfo.substring(0, resumeInfo.lastIndexOf("_") + 1) + ( no === 1 ? (this.state.resumeName1.split("_").length > 1 ? this.state.resumeName1.split("_")[1] : this.state.resumeName1) : (this.state.resumeName2.split("_").length > 1 ? this.state.resumeName2.split("_")[1] : this.state.resumeName2) ) + "." + resumeInfo.split(".")[resumeInfo.split(".").length - 1]).replaceAll("/","//");
 		}
 		axios.post(this.state.serverIP + "s3Controller/downloadFile", {fileKey:fileKey , downLoadPath:downLoadPath})
