@@ -181,7 +181,7 @@ class Login extends Component {
 						<img className="mb-4" alt="title" src={this.state.pic} style={{ "width": "65px"}} />{"   "}<a className="loginMark">{this.state.companyName}</a>
 					</div>
 					<Form className="form-signin" id="loginForm">
-						<Form.Group controlId="formBasicEmail" >
+						<Form.Group /*controlId="formBasicEmail"*/ >
 							<Form.Control id="employeeNo" name="employeeNo" maxLength="6" type="text" placeholder="社员番号" onChange={this.setReadOnly} required />
 							<Form.Control id="password" name="password" maxLength="12" type="password" placeholder="Password" onChange={this.setReadOnly} required />
 						</Form.Group>
