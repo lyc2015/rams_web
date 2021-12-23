@@ -433,8 +433,42 @@ class dataShare extends React.Component {
     };
 
 	downLoad = () => {
+		let fileKey = "";
+		let downLoadPath = "";
+		if(this.state.rowFilePath !== null){
+			let path = this.state.rowFilePath.replace(/\\/g,"/");
+			if(path.split("file/").length > 1){
+				fileKey = path.split("file/")[1];
+				downLoadPath = path.replaceAll("/","//");
+			}
+		}
+		axios.post(this.state.serverIP + "s3Controller/downloadFile", {fileKey:fileKey , downLoadPath:downLoadPath})
+		.then(result => {
+			let path = downLoadPath.replaceAll("//","/");
+			publicUtils.handleDownload(path, this.state.serverIP);
+		}).catch(function (error) {
+			alert("ファイルが存在しません。");
+		});
+	}
+	
+	downLoads = () => {
 		for(let i in this.state.rowFilePath){
-			publicUtils.handleDownload(this.state.rowFilePath[i], this.state.serverIP);
+			let fileKey = "";
+			let downLoadPath = "";
+			if(this.state.rowFilePath[i] !== null){
+				let path = this.state.rowFilePath[i].replace(/\\/g,"/");
+				if(path.split("file/").length > 1){
+					fileKey = path.split("file/")[1];
+					downLoadPath = path.replaceAll("/","//");
+				}
+			}
+			axios.post(this.state.serverIP + "s3Controller/downloadFile", {fileKey:fileKey , downLoadPath:downLoadPath})
+			.then(result => {
+				let path = downLoadPath.replaceAll("//","/");
+				publicUtils.handleDownload(path, this.state.serverIP);
+			}).catch(function (error) {
+				alert("ファイルが存在しません。");
+			});
 		}
 	}
 	
@@ -632,7 +666,7 @@ class dataShare extends React.Component {
 									<FontAwesomeIcon icon={faUpload} /> Upload
 								</Button>{' '}
 								<Button variant="info" size="sm" onClick={this.selectAll} disabled={this.state.dataStatus === "0"} hidden={this.state.dataStatus === "0"}>すべて選択</Button>{' '}
-								<Button variant="info" size="sm" onClick={this.state.dataStatus === "0" ? publicUtils.handleDownload.bind(this, this.state.rowFilePath, this.state.serverIP) : this.downLoad} id="workRepotDownload" disabled={this.state.rowShareStatus === "" || this.state.rowShareStatus.length === 0}>
+								<Button variant="info" size="sm" onClick={this.state.dataStatus === "0" ? this.downLoad : this.downLoads} id="workRepotDownload" disabled={this.state.rowShareStatus === "" || this.state.rowShareStatus.length === 0}>
 	                          		 <FontAwesomeIcon icon={faDownload} /> Download
 		                        </Button>{' '}
 								<Button variant="info" size="sm" onClick={this.state.rowChangeFlag ? this.fileNameReset : this.fileNameChange} disabled={this.state.rowClickFlag} hidden={this.state.dataStatus === "1"}>
