@@ -32,6 +32,7 @@ class sendInvoice extends React.Component {
 			.then(result => {
 				this.setState({
 					loginUserInfo: result.data,
+					authorityCode: result.data[0].authorityCode,
 				})
 			})
 			.catch(function(error) {
@@ -42,15 +43,15 @@ class sendInvoice extends React.Component {
 	componentDidMount(){
     	this.getLoginUserInfo();
 
-		axios.post(this.state.serverIP + "sendLettersConfirm/getLoginUserInfo")
+		/*axios.post(this.state.serverIP + "sendLettersConfirm/getLoginUserInfo")
 		.then(result => {
 			this.setState({
-				authorityCode: result.data[0].authorityCode,
+				
 			})
 		})
 		.catch(function(error) {
 			//alert(error);
-		});	
+		});	*/
 		this.searchSendInvoiceList();
 	}
 	//　初期化データ
@@ -264,16 +265,25 @@ P-mark:第21004525(02)号
         					customerName: sendInvoiceList[i].customerName,
         					mailFrom: this.state.loginUserInfo[0].companyMail,
         					mailConfirmContont: mailConfirmContont,
-        					mailTitle: (this.state.yearAndMonth.getMonth() + 1) + "月分請求書類"
+        					mailTitle: (this.state.yearAndMonth.getMonth() + 1) + "月分請求書類",
+        					nowDate: String(new Date().getFullYear()) + String(new Date().getMonth() + 1) + String(new Date().getDate())
         			}
         		}
         	}
 
     		axios.post(this.state.serverIP + "sendInvoice/sendLetter",model)
     		.then(result => {
-
+    			this.searchSendInvoiceList();
     		})
         }
+    }
+    
+    sendLetterStatusFormat = (cell) => {
+    	if(cell === "1"){
+    		return "送信済み";
+    	}else{
+    		return "未送信";
+    	}
     }
 	
     employeeListFormat = (cell,row) => {
@@ -459,8 +469,8 @@ P-mark:第21004525(02)号
 							<TableHeaderColumn width='10%' tdStyle={ { padding: '.45em' } } dataField='purchasingManagers' >担当者</TableHeaderColumn>
 							<TableHeaderColumn width='22%' tdStyle={ { padding: '.45em' } } dataField='purchasingManagersMail' >メール</TableHeaderColumn>
 							<TableHeaderColumn width='7%' tdStyle={ { padding: '.45em' } }  dataField='employeeList' dataFormat={this.employeeListFormat.bind(this)} >関連要員</TableHeaderColumn>
-							<TableHeaderColumn width='18%' tdStyle={ { padding: '.45em' } }  dataField='sendDate' >送信日付</TableHeaderColumn>
-							<TableHeaderColumn width='12%' tdStyle={ { padding: '.45em' } }  dataField='sendState' >送信ステータス</TableHeaderColumn>
+							<TableHeaderColumn width='18%' tdStyle={ { padding: '.45em' } }  dataField='sendLetterDate' >送信日付</TableHeaderColumn>
+							<TableHeaderColumn width='12%' tdStyle={ { padding: '.45em' } }  dataField='sendLetterStatus' dataFormat={this.sendLetterStatusFormat.bind(this)}>送信ステータス</TableHeaderColumn>
 						</BootstrapTable>
 					</Col>  
 				</div>

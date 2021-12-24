@@ -633,7 +633,7 @@ class invoicePDF extends React.Component {
 												autoComplete="off"
 												locale="ja"
 												dateFormat="yyyy/MM/dd"
-												id="datePicker"
+												id="datePicker-invoicePDF"
 												className="form-control form-control-sm"
 											/>
 										</InputGroup.Prepend>
@@ -650,8 +650,6 @@ class invoicePDF extends React.Component {
 								<Form.Control type="text" value={this.state.totalAmount} name="totalAmount" autoComplete="off" size="sm" disabled />
 			                </InputGroup>
 			                </Col>
-			                <Col sm={1}>
-							</Col>
 							<Col sm={3}>
 								<InputGroup size="sm" className="mb-2">
 									<InputGroup.Prepend>
@@ -659,6 +657,8 @@ class invoicePDF extends React.Component {
 									</InputGroup.Prepend>
 									<Form.Control type="text" value={this.state.invoiceNo} name="invoiceNo" autoComplete="off" size="sm" disabled />
 				                </InputGroup>
+							</Col>
+			                <Col sm={1}>
 							</Col>
 							<Col sm={5}>
 	                            <div style={{ "float": "right" }}>
@@ -672,7 +672,7 @@ class invoicePDF extends React.Component {
 										autoComplete="off"
 										locale="ja"
 										dateFormat="yyyy/MM/dd"
-										id="datePicker"
+										id="datePicker-invoicePDF"
 										className="form-control form-control-sm"
 									/>
 									</InputGroup>
@@ -711,7 +711,7 @@ class invoicePDF extends React.Component {
 					</Col>
 				</div>
 				<Row>
-					<Col sm={3}>
+					<Col sm={4}>
 					<InputGroup size="sm" className="mb-2">
 						<InputGroup.Prepend>
 							<InputGroup.Text id="fourKanji">銀行情報</InputGroup.Text>
@@ -751,7 +751,7 @@ class invoicePDF extends React.Component {
 							</FormControl>
 		            </InputGroup>
 					</Col>
-					<Col sm={7}>
+					<Col sm={6}>
 					</Col>
 					<Col sm={2}>
 					<InputGroup size="sm" className="mb-2">
