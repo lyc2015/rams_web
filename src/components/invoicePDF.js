@@ -9,7 +9,7 @@ import DatePicker, { registerLocale } from "react-datepicker";
 import ja from "date-fns/locale/ja";
 import "react-datepicker/dist/react-datepicker.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faUpload, faSearch, faDownload, faSave } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faUpload, faSearch, faDownload, faSave, faLevelUpAlt } from '@fortawesome/free-solid-svg-icons';
 import * as publicUtils from './utils/publicUtils.js';
 import MyToast from './myToast';
 import Autocomplete from '@material-ui/lab/Autocomplete';
@@ -49,6 +49,9 @@ class invoicePDF extends React.Component {
 	}
 	
 	componentDidMount(){
+        this.setState({
+            backPage: this.props.location.state.backPage,
+        })
 		axios.post(this.state.serverIP + "subMenu/getCompanyDate")
 		.then(response => {
 				this.setState({
@@ -99,9 +102,15 @@ class invoicePDF extends React.Component {
 
 	//　検索
 	searchSendInvoiceList = () => {
+		let month = this.state.yearAndMonth.getMonth() + 1;
+		let invoiceNo = this.state.customerAbbreviation + "-LYC " + this.state.yearAndMonth.getFullYear() + (Number(month) < 10 ? "0" + month : month);
+    	this.setState({
+    		invoiceNo: invoiceNo,
+    	})
 		const emp = {
 				yearAndMonth: publicUtils.formateDate(this.state.yearAndMonth, false),
 				customerNo: this.state.customerNo,
+				invoiceNo: invoiceNo,
 			};
 		axios.post(this.state.serverIP + "sendInvoice/selectSendInvoiceByCustomerNo",emp)
 		.then(result => {
@@ -125,6 +134,7 @@ class invoicePDF extends React.Component {
 					subTotalAmountTax: publicUtils.addComma(parseInt(subTotalAmount * this.state.taxRate)),
 					totalAmount: publicUtils.addComma(parseInt(subTotalAmount + subTotalAmount * this.state.taxRate + subTotalAmountNoTax)),
 					customerName: result.data[0].customerName,
+					invoiceNo: result.data[0].invoiceNo,
 					remark: result.data[0].remark,
 					invoiceDate: publicUtils.converToLocalTime(result.data[0].invoiceDate, true),
 					deadLine: publicUtils.converToLocalTime(result.data[0].deadLine, true),
@@ -139,11 +149,6 @@ class invoicePDF extends React.Component {
 		.catch(function(error) {
 			this.setState({ loading: true, });
 		});	
-		
-		let month = this.state.yearAndMonth.getMonth() + 1;
-    	this.setState({
-    		invoiceNo: this.state.customerAbbreviation + "-LYC " + this.state.yearAndMonth.getFullYear() + (Number(month) < 10 ? "0" + month : month),
-    	})
 	}
     
 	//　年月
@@ -171,6 +176,19 @@ class invoicePDF extends React.Component {
 			});
 		}	
 	}
+	
+    /**
+     * 戻るボタン
+     */
+    back = () => {
+        var path = {};
+        path = {
+            pathname: this.state.backPage,
+            state: {
+            },
+        }
+        this.props.history.push(path);
+    }
 
 	renderShowsTotal(start, to, total) {
 		return (
@@ -302,24 +320,34 @@ class invoicePDF extends React.Component {
 	
 	lowerLimitFormat = (cell,row) => {
 		let payOffRange = "";
+		let deductionsAndOvertimePayOfUnitPrice = "";
 		if(row.payOffRange1 == undefined || row.payOffRange1 == null || row.payOffRange1 == "" || row.requestUnitCode === "1")
 			return payOffRange;
 		else if(row.payOffRange1 == 0 || row.payOffRange1 == 1)
     		payOffRange = row.payOffRange1 == 0 ? "固定" : "出勤日";
-    	else
+    	else{
     		payOffRange = row.payOffRange1 + "H";
-		return (<div><Row><font>{payOffRange}</font></Row><Row><font>{Number(row.deductionsAndOvertimePayOfUnitPrice) < 0 ? ("￥" + publicUtils.addComma(row.deductionsAndOvertimePayOfUnitPrice)) : ""}</font></Row></div>);
+    		deductionsAndOvertimePayOfUnitPrice = (Number(row.unitPrice) / Number(row.payOffRange1)).toFixed(0);
+    		deductionsAndOvertimePayOfUnitPrice = deductionsAndOvertimePayOfUnitPrice.substring(0,deductionsAndOvertimePayOfUnitPrice.length - 1) + "0";
+    	}
+		//return (<div><Row><font>{payOffRange}</font></Row><Row><font>{Number(row.deductionsAndOvertimePayOfUnitPrice) < 0 ? ("￥" + publicUtils.addComma(row.deductionsAndOvertimePayOfUnitPrice)) : ""}</font></Row></div>);
+		return (<div><Row><font>{payOffRange}</font></Row><Row><font>{"￥" + publicUtils.addComma(deductionsAndOvertimePayOfUnitPrice) + "/H"}</font></Row></div>);
 	}
 	
 	upperLimitFormat = (cell,row) => {
 		let payOffRange = "";
+		let deductionsAndOvertimePayOfUnitPrice = "";
 		if(row.payOffRange2 == undefined || row.payOffRange2 == null || row.payOffRange2 == "" || row.requestUnitCode === "1")
 			return payOffRange;
 		else if(row.payOffRange2 == 0 || row.payOffRange2 == 1)
     		payOffRange = row.payOffRange2 == 0 ? "固定" : "出勤日";
-    	else
+    	else{
     		payOffRange = row.payOffRange2 + "H";
-		return (<div><Row><font>{payOffRange}</font></Row><Row><font>{Number(row.deductionsAndOvertimePayOfUnitPrice) > 0 ? ("￥" + publicUtils.addComma(row.deductionsAndOvertimePayOfUnitPrice)) : ""}</font></Row></div>);
+    		deductionsAndOvertimePayOfUnitPrice = (Number(row.unitPrice) / Number(row.payOffRange2)).toFixed(0);
+    		deductionsAndOvertimePayOfUnitPrice = deductionsAndOvertimePayOfUnitPrice.substring(0,deductionsAndOvertimePayOfUnitPrice.length - 1) + "0";
+    	}
+		//return (<div><Row><font>{payOffRange}</font></Row><Row><font>{Number(row.deductionsAndOvertimePayOfUnitPrice) > 0 ? ("￥" + publicUtils.addComma(row.deductionsAndOvertimePayOfUnitPrice)) : ""}</font></Row></div>);
+		return (<div><Row><font>{payOffRange}</font></Row><Row><font>{"￥" + publicUtils.addComma(deductionsAndOvertimePayOfUnitPrice) + "/H"}</font></Row></div>);
 	}
 	
 	billingAmountFormat = (cell,row) => {
@@ -372,6 +400,29 @@ class invoicePDF extends React.Component {
 			rowRowNo: "",
 		});
 	}
+	
+    deleteAll = () => {
+        var a = window.confirm("すべて削除してよろしいでしょうか？");
+        if(a){
+			this.setState({ sendInvoiceList: []  });
+
+        	let model = {
+					yearAndMonth: publicUtils.formateDate(this.state.yearAndMonth, false),
+					customerNo: this.state.customerNo,
+			}
+        	
+        	axios.post(this.state.serverIP + "sendInvoice/deleteInvoiceDataAll",model)
+			.then(result => {
+				if(result.data){
+					this.setState({ "myToastShow": true, message: "削除成功！"  });
+					setTimeout(() => this.setState({ "myToastShow": false }), 3000);
+		    		this.searchSendInvoiceList();
+				}
+			})
+			.catch(function(error) {
+			});
+        }
+    }
 	
 	deleteRow = () => {
         var a = window.confirm("削除してよろしいでしょうか？");
@@ -468,6 +519,7 @@ class invoicePDF extends React.Component {
 				yearAndMonth: publicUtils.formateDate(this.state.yearAndMonth, false),
 				customerNo: this.state.customerNo,
 				customerName: this.state.customerName,
+				invoiceNo: this.state.invoiceNo,
 				invoiceDate: publicUtils.formateDate(this.state.yearAndMonth, true),
 				deadLine: publicUtils.formateDate(this.state.deadLine, true),
 				bankCode: this.state.bankAccountInfo,
@@ -655,7 +707,7 @@ class invoicePDF extends React.Component {
 									<InputGroup.Prepend>
 										<InputGroup.Text id="fourKanji">請求番号</InputGroup.Text>
 									</InputGroup.Prepend>
-									<Form.Control type="text" value={this.state.invoiceNo} name="invoiceNo" autoComplete="off" size="sm" disabled />
+									<Form.Control type="text" value={this.state.invoiceNo} name="invoiceNo" autoComplete="off" size="sm"  onChange={this.valueChange}/>
 				                </InputGroup>
 							</Col>
 			                <Col sm={1}>
@@ -685,9 +737,10 @@ class invoicePDF extends React.Component {
 				<div >
                     <Row>
 						<Col sm={12}>
+		                   	<Button　size="sm"　variant="info" onClick={this.back}><FontAwesomeIcon icon={faLevelUpAlt} />戻る </Button>{' '}
                             <Button size="sm" variant="info" onClick={this.workTimeFlagChange} >{"作業時間"+ (this.state.workTimeFlag ? "非" : "") +"表示"}</Button>{' '}
                             <Button size="sm" variant="info" onClick={this.employeeNameFlagChange} >{"作業者"+ (this.state.employeeNameFlag ? "非" : "") +"表示"}</Button>{' '}
-
+                            <Button size="sm" variant="info" onClick={this.deleteAll} >{"すべて削除"}</Button>{' '}
                             <div style={{ "float": "right" }}>
                             	<Button variant="info" size="sm" onClick={this.addRow} disabled={this.state.addDisabledFlag}>追加</Button>{' '}
                             	<Button variant="info" size="sm" onClick={this.deleteRow} disabled={this.state.rowRowNo === ""}>削除</Button>{' '}
@@ -704,8 +757,8 @@ class invoicePDF extends React.Component {
 							<TableHeaderColumn width='7%'　tdStyle={ { padding: '.45em' } } dataField='requestUnitCode' dataFormat={this.requestUnitCodeFormat}>単位</TableHeaderColumn>
 							<TableHeaderColumn width='10%'　tdStyle={ { padding: '.45em' } } dataField='quantity' dataFormat={this.quantityFormat}>数量</TableHeaderColumn>
 							<TableHeaderColumn width='14%'　tdStyle={ { padding: '.45em' } } dataField='unitPrice' dataFormat={this.unitPriceFormat}>単価</TableHeaderColumn>
-							<TableHeaderColumn width='14%'　tdStyle={ { padding: '.45em' } } dataField='lowerLimit' dataFormat={this.lowerLimitFormat}>{<div><Row><font>下限時間</font></Row><Row><font>単価</font></Row></div>}</TableHeaderColumn>
-							<TableHeaderColumn width='14%'　tdStyle={ { padding: '.45em' } } dataField='upperLimit' dataFormat={this.upperLimitFormat}>{<div><Row><font>上限時間</font></Row><Row><font>単価</font></Row></div>}</TableHeaderColumn>
+							<TableHeaderColumn width='14%'　tdStyle={ { padding: '.45em' } } dataField='lowerLimit' dataFormat={this.lowerLimitFormat}>{<div><Row><font>下限時間</font></Row><Row><font>精算単価</font></Row></div>}</TableHeaderColumn>
+							<TableHeaderColumn width='14%'　tdStyle={ { padding: '.45em' } } dataField='upperLimit' dataFormat={this.upperLimitFormat}>{<div><Row><font>上限時間</font></Row><Row><font>精算単価</font></Row></div>}</TableHeaderColumn>
 							<TableHeaderColumn width='14%'　tdStyle={ { padding: '.45em' } } dataField='billingAmount' dataFormat={this.billingAmountFormat}>請求額</TableHeaderColumn>
 						</BootstrapTable>
 					</Col>

@@ -775,6 +775,16 @@ class employeeInsertNew extends React.Component {
 		}
 	};
 	
+	getStation = (event, values) => {
+		console.log(event.target.value);
+		let station = this.state.station.find(v => v.name === event.target.value);
+		if(station !== null && station !== undefined){
+			this.setState({
+				stationCode5: station.code,
+			})
+		}
+	}
+	
 	/**
 	 * 郵便番号API
 	 */
@@ -1554,6 +1564,7 @@ class employeeInsertNew extends React.Component {
 							value={stationCodeValue}
 							options={this.state.station}
 							getOptionLabel={(option) => option.name}
+							onInput={this.getStation}
 							renderInput={(params) => (
 								<div ref={params.InputProps.ref}>
 									<input placeholder="例：秋葉原駅" type="text" {...params.inputProps} className="auto form-control Autocompletestyle-emp-station"
