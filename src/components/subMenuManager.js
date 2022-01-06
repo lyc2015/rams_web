@@ -210,13 +210,17 @@ class SubMenu extends Component {
 			<div className="mainBody">
 				<div id="popu_div"></div>
 				<Row style={{ "backgroundColor": "#FFFAF0" }}>
-					<Navbar inline>
-						<img className="titleImg" alt="title" src={this.state.pic} style={{ "width": "65px"}} /><a className="loginMark" inline>{this.state.companyName}</a>{" "}
-					</Navbar>
-					<div style={{ "marginTop": "2%", "marginLeft": "auto", }}>
-						<font className="loginPeople">{this.state.nowDate}{" "}<FontAwesomeIcon className="fa-fw" size="lg" icon={faUser} /><a id="kanriSha"></a></font>{" "}
-						<Link as="button" className="logout" to="/" id="logout" onClick={this.logout}><FontAwesomeIcon className="fa-fw" size="lg" icon={faCaretSquareLeft} />sign out</Link>
-					</div>
+					<Col sm={8}>
+						<Navbar inline>
+							<img className="titleImg" alt="title" src={this.state.pic} style={{ "width": "65px"}} /><a className="loginMark" inline>{this.state.companyName}</a>{" "}
+						</Navbar>
+	                </Col>
+	                <Col sm={4}>
+						<div style={{ "marginTop": "8%", }}>
+							<font className="loginPeople">{this.state.nowDate}{" "}<FontAwesomeIcon className="fa-fw" size="lg" icon={faUser} /><a id="kanriSha"></a></font>{" "}
+							<Link as="button" className="loginPeople" to="/" id="logout" onClick={this.logout}><FontAwesomeIcon className="fa-fw" size="lg" icon={faCaretSquareLeft} />sign out</Link>
+						</div>
+					</Col>
 
 				</Row>
 				<Row onClick={() => this.checkSession()}>
