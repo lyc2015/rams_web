@@ -179,6 +179,53 @@ class SubMenu extends Component {
 		})
 	}
 	
+	changePage = (name) => {
+		switch (name) {
+		case "社員・BP":
+			this.setClassName("社員・BP");
+			this.shuseiTo({ pathname: '/subMenuManager/employeeInsertNew', state: { actionType: 'insert' }});
+			break;
+		case "現場":
+			this.setClassName("現場");
+			this.shuseiTo({ pathname: '/subMenuManager/siteInfo'});
+			break;
+		case "お客様":
+			this.setClassName("お客様");
+			this.shuseiTo({ pathname: '/subMenuManager/customerInfo', state: { actionType: 'insert' }});
+			break;
+		case "給料・売上":
+			this.setClassName("給料・売上");
+			this.shuseiTo({ pathname: '/subMenuManager/wagesInfo'});
+			break;
+		case "営業送信":
+			this.setClassName("営業送信");
+			this.shuseiTo({ pathname: '/subMenuManager/manageSituation'});
+			break;
+		case "営業管理":
+			this.setClassName("営業管理");
+			this.shuseiTo({ pathname: '/subMenuManager/salesPointSet'});
+			break;
+		case "勤務":
+			this.setClassName("勤務");
+			this.shuseiTo({ pathname: '/subMenuManager/dutyManagement'});
+			break;
+		case "期限確認":
+			this.setClassName("期限確認");
+			this.shuseiTo({ pathname: '/subMenuManager/situationChange'});
+			break;
+		case "マスター":
+			this.setClassName("マスター");
+			this.shuseiTo({ pathname: '/subMenuManager/masterInsert'});
+			break;
+		case "設定・共有":
+			this.setClassName("設定・共有");
+			this.shuseiTo({ pathname: '/subMenuManager/dataShare'});
+			break;
+		default:
+			break;
+		}
+	}
+	
 	render() {
 		// お客様情報画面の追加パラメータ
 		var customerInfoPath = {
@@ -210,18 +257,19 @@ class SubMenu extends Component {
 			<div className="mainBody">
 				<div id="popu_div"></div>
 				<Row style={{ "backgroundColor": "#FFFAF0" }}>
-					<Col sm={8}>
-						<Navbar inline>
-							<img className="titleImg" alt="title" src={this.state.pic} style={{ "width": "65px"}} /><a className="loginMark" inline>{this.state.companyName}</a>{" "}
-						</Navbar>
-	                </Col>
-	                <Col sm={4}>
-						<div style={{ "marginTop": "8%", }}>
+					<Col>
+                    	<div style={{  "float": "left" }}>
+							<Navbar inline>
+								<img className="titleImg" alt="title" src={this.state.pic} style={{ "width": "65px"}} /><a className="loginMark" inline>{this.state.companyName}</a>{" "}
+							</Navbar>
+						</div>
+	                    <div style={{ "marginTop": "50px", "float": "right" }}>
 							<font className="loginPeople">{this.state.nowDate}{" "}<FontAwesomeIcon className="fa-fw" size="lg" icon={faUser} /><a id="kanriSha"></a></font>{" "}
 							<Link as="button" className="loginPeople" to="/" id="logout" onClick={this.logout}><FontAwesomeIcon className="fa-fw" size="lg" icon={faCaretSquareLeft} />sign out</Link>
 						</div>
 					</Col>
-
+					<Col sm={1}>
+                    </Col>
 				</Row>
 				<Row onClick={() => this.checkSession()}>
 					<Col sm={2}>
@@ -240,7 +288,7 @@ class SubMenu extends Component {
 									<Accordion className="menuCol">
 										<ListGroup.Item style={this.state.hover.search("社員・BP") !== -1 ? menuStyleHover : menuStyle} block data-place="right" data-type="info" data-tip="" data-for="社員・BP" data-class="my-tabcolor" data-effect="solid"
 											onMouseEnter={this.toggleHover.bind(this,"社員・BP")} onMouseLeave={this.toggleHover.bind(this,"")}>
-											<Accordion.Toggle as={Button} variant="link" eventKey="0"><font
+											<Accordion.Toggle as={Button} variant="link" eventKey="0" onClick={this.changePage.bind(this,"社員・BP")}><font
 											className={this.state.hover.search("社員・BP") !== -1 || this.state.className.search("社員・BP") !== -1 ? "linkFont-click":"linkFont"} ><FontAwesomeIcon className="fa-fw" size="lg" icon={faAddressBook} /> 社員・BP</font></Accordion.Toggle>
 											<ReactTooltip id="社員・BP"  delayUpdate={1000} getContent={() => {
 												return <div onClick={this.setClassName.bind(this,"社員・BP")}>
@@ -287,7 +335,7 @@ class SubMenu extends Component {
 										</ListGroup.Item>
 										<ListGroup.Item style={this.state.hover.search("現場") !== -1 ? menuStyleHover : menuStyle} block data-place="right" data-type="info" data-tip="" data-for="現場" data-class="my-tabcolor"  data-effect="solid"
 											 onMouseEnter={this.toggleHover.bind(this,"現場")} onMouseLeave={this.toggleHover.bind(this,"")}>
-											<Accordion.Toggle as={Button} variant="link" eventKey="1"><font
+											<Accordion.Toggle as={Button} variant="link" eventKey="1" onClick={this.changePage.bind(this,"現場")}><font
 											className={this.state.hover.search("現場") !== -1 || this.state.className.search("現場") !== -1 ? "linkFont-click":"linkFont"} onClick={() => this.click('現場')}><FontAwesomeIcon className="fa-fw" size="lg" icon={faHome} /> 現場</font></Accordion.Toggle>
 											<ReactTooltip id="現場"  delayUpdate={1000} getContent={() => {
 												return <div onClick={this.setClassName.bind(this,"現場")}>
@@ -314,7 +362,7 @@ class SubMenu extends Component {
 										</ListGroup.Item>
 										<ListGroup.Item style={this.state.hover.search("お客様") !== -1 ? menuStyleHover : menuStyle} data-place="right" data-type="info" data-tip="" data-for="お客様" data-class="my-tabcolor"  data-effect="solid"
 											 onMouseEnter={this.toggleHover.bind(this,"お客様")} onMouseLeave={this.toggleHover.bind(this,"")}>
-											<Accordion.Toggle as={Button} variant="link" eventKey="2"><font
+											<Accordion.Toggle as={Button} variant="link" eventKey="2" onClick={this.changePage.bind(this,"お客様")}><font
 												className={this.state.hover.search("お客様") !== -1 || this.state.className.search("お客様") !== -1 ? "linkFont-click":"linkFont"} onClick={() => this.click('お客様')}><FontAwesomeIcon className="fa-fw" size="lg" icon={faUsers} /> お客様</font></Accordion.Toggle>
 												<ReactTooltip id="お客様"  delayUpdate={1000} getContent={() => {
 													return <div onClick={this.setClassName.bind(this,"お客様")}>
@@ -343,7 +391,7 @@ class SubMenu extends Component {
 											authorityCode !== "2" ? authorityCode !== "3" ?
 												<ListGroup.Item style={this.state.hover.search("給料・売上") !== -1 ? menuStyleHover : menuStyle} data-place="right" data-type="info" data-tip="" data-for="給料・売上" data-class="my-tabcolor"  data-effect="solid"
 													 onMouseEnter={this.toggleHover.bind(this,"給料・売上")} onMouseLeave={this.toggleHover.bind(this,"")}>
-													<Accordion.Toggle as={Button} variant="link" eventKey="3"><font
+													<Accordion.Toggle as={Button} variant="link" eventKey="3" onClick={this.changePage.bind(this,"給料・売上")}><font
 													
 													className={this.state.hover.search("給料・売上") !== -1 || this.state.className.search("給料・売上") !== -1 ? "linkFont-click":"linkFont"} onClick={() => this.click('給料・売上')}><FontAwesomeIcon className="fa-fw" size="lg" icon={faYenSign} /> 給料・売上</font></Accordion.Toggle>
 													<ReactTooltip id="給料・売上"  delayUpdate={1000} getContent={() => {
@@ -396,7 +444,7 @@ class SubMenu extends Component {
 											authorityCode !== "2" ?
 												<ListGroup.Item style={this.state.hover.search("営業送信") !== -1 ? menuStyleHover : menuStyle} data-place="right" data-type="info" data-tip="" data-for="営業送信" data-class="my-tabcolor"  data-effect="solid"
 													 onMouseEnter={this.toggleHover.bind(this,"営業送信")} onMouseLeave={this.toggleHover.bind(this,"")}>
-													<Accordion.Toggle as={Button} variant="link" eventKey="4"><font
+													<Accordion.Toggle as={Button} variant="link" eventKey="4" onClick={this.changePage.bind(this,"営業送信")}><font
 													className={this.state.hover.search("営業送信") !== -1 || this.state.className.search("営業送信") !== -1 ? "linkFont-click":"linkFont"} onClick={() => this.click('営業送信')}><FontAwesomeIcon className="fa-fw" size="lg" icon={faPaperPlane} /> 営業送信</font></Accordion.Toggle>
 													<ReactTooltip id="営業送信"  delayUpdate={1000} getContent={() => {
 														return <div onClick={this.setClassName.bind(this,"営業送信")}>
@@ -438,7 +486,7 @@ class SubMenu extends Component {
 											authorityCode !== "2" ?
 												<ListGroup.Item style={this.state.hover.search("営業管理") !== -1 ? menuStyleHover : menuStyle} data-place="right" data-type="info" data-tip="" data-for="営業管理" data-class="my-tabcolor"  data-effect="solid"
 													 onMouseEnter={this.toggleHover.bind(this,"営業管理")} onMouseLeave={this.toggleHover.bind(this,"")}>
-													<Accordion.Toggle as={Button} variant="link" eventKey="5"><font
+													<Accordion.Toggle as={Button} variant="link" eventKey="5" onClick={this.changePage.bind(this,"営業管理")}><font
 													className={this.state.hover.search("営業管理") !== -1 || this.state.className.search("営業管理") !== -1 ? "linkFont-click":"linkFont"} onClick={() => this.click('営業管理')}><FontAwesomeIcon className="fa-fw" size="lg" icon={faBuilding} /> 営業管理</font></Accordion.Toggle>
 													<ReactTooltip id="営業管理"  delayUpdate={1000} getContent={() => {
 														return <div onClick={this.setClassName.bind(this,"営業管理")}>
@@ -474,7 +522,7 @@ class SubMenu extends Component {
 											authorityCode !== "2" ?
 												<ListGroup.Item style={this.state.hover.search("勤務") !== -1 ? menuStyleHover : menuStyle} data-place="right" data-type="info" data-tip="" data-for="勤務" data-class="my-tabcolor"  data-effect="solid"
 													 onMouseEnter={this.toggleHover.bind(this,"勤務")} onMouseLeave={this.toggleHover.bind(this,"")}>
-													<Accordion.Toggle as={Button} variant="link" eventKey="6"><font
+													<Accordion.Toggle as={Button} variant="link" eventKey="6" onClick={this.changePage.bind(this,"勤務")}><font
 													className={this.state.hover.search("勤務") !== -1 || this.state.className.search("勤務") !== -1 ? "linkFont-click":"linkFont"} onClick={() => this.click('勤務')}><FontAwesomeIcon className="fa-fw" size="lg" icon={faCalendar} /> 勤務</font></Accordion.Toggle>
 													<ReactTooltip id="勤務"  delayUpdate={1000} getContent={() => {
 														return <div onClick={this.setClassName.bind(this,"勤務")}>
@@ -506,7 +554,7 @@ class SubMenu extends Component {
 											authorityCode !== "2" ? authorityCode !== "3" ?
 												<ListGroup.Item style={this.state.hover.search("期限確認") !== -1 ? menuStyleHover : menuStyle} data-place="right" data-type="info" data-tip="" data-for="期限確認" data-class="my-tabcolor"  data-effect="solid"
 													 onMouseEnter={this.toggleHover.bind(this,"期限確認")} onMouseLeave={this.toggleHover.bind(this,"")}>
-													<Accordion.Toggle as={Button} variant="link" eventKey="7"><font
+													<Accordion.Toggle as={Button} variant="link" eventKey="7" onClick={this.changePage.bind(this,"期限確認")}><font
 													className={this.state.hover.search("期限確認") !== -1 || this.state.className.search("期限確認") !== -1 ? "linkFont-click":"linkFont"} onClick={() => this.click('期限確認')}><FontAwesomeIcon className="fa-fw" size="lg" icon={faCalendarAlt} /> 期限確認</font></Accordion.Toggle>
 													<ReactTooltip id="期限確認"  delayUpdate={1000} getContent={() => {
 														return <div onClick={this.setClassName.bind(this,"期限確認")}>
@@ -540,7 +588,7 @@ class SubMenu extends Component {
 											authorityCode !== "2" ?
 												<ListGroup.Item style={this.state.hover.search("マスター") !== -1 ? menuStyleHover : menuStyle} data-place="right" data-type="info" data-tip="" data-for="マスター" data-class="my-tabcolor"  data-effect="solid"
 													 onMouseEnter={this.toggleHover.bind(this,"マスター")} onMouseLeave={this.toggleHover.bind(this,"")}>
-													<Accordion.Toggle as={Button} variant="link" eventKey="8"><font
+													<Accordion.Toggle as={Button} variant="link" eventKey="8" onClick={this.changePage.bind(this,"マスター")}><font
 													className={this.state.hover.search("マスター") !== -1 || this.state.className.search("マスター") !== -1 ? "linkFont-click":"linkFont"} onClick={() => this.click('マスター')}><FontAwesomeIcon className="fa-fw" size="lg" icon={faThList} /> マスター</font></Accordion.Toggle>
 													<ReactTooltip id="マスター"  delayUpdate={1000} getContent={() => {
 														return <div onClick={this.setClassName.bind(this,"マスター")}>
@@ -572,7 +620,7 @@ class SubMenu extends Component {
 											authorityCode !== "2" ?
 												<ListGroup.Item style={this.state.hover.search("設定・共有") !== -1 ? menuStyleHover : menuStyle} data-place="right" data-type="info" data-tip="" data-for="設定・共有" data-class="my-tabcolor"  data-effect="solid"
 													 onMouseEnter={this.toggleHover.bind(this,"設定・共有")} onMouseLeave={this.toggleHover.bind(this,"")}>
-													<Accordion.Toggle as={Button} variant="link" eventKey="9"><font
+													<Accordion.Toggle as={Button} variant="link" eventKey="9" onClick={this.changePage.bind(this,"設定・共有")}><font
 													className={this.state.hover.search("設定・共有") !== -1 || this.state.className.search("設定・共有") !== -1 ? "linkFont-click":"linkFont"} onClick={() => this.click('設定・共有')}><FontAwesomeIcon className="fa-fw" size="lg" icon={faCogs} /> 設定・共有</font></Accordion.Toggle>
 													<ReactTooltip id="設定・共有"  delayUpdate={1000} getContent={() => {
 														return <div onClick={this.setClassName.bind(this,"設定・共有")}>

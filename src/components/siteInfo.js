@@ -356,6 +356,12 @@ class siteInfo extends Component {
 							employeeName: employeeNo,
 							disabledFlag: false,
 						});
+						let key = response.data.siteList[response.data.siteList.length - 1].workDate;
+						this.refs.table.store.selected = [key];
+						this.refs.table.setState({
+							selectedRowKeys: [key]
+						});
+						this.getRowData(response.data.siteList[response.data.siteList.length - 1]);
 					} else {
 						this.setState({ errorsMessageShow: true, errorsMessageValue: response.data.errorsMessage });
 						this.setState({
@@ -439,6 +445,12 @@ class siteInfo extends Component {
 								workStateFlag: true,
 								updateFlag: true,
 							});
+							let key = response.data.siteList[response.data.siteList.length - 1].workDate;
+							this.refs.table.store.selected = [key];
+							this.refs.table.setState({
+								selectedRowKeys: [key]
+							});
+							this.getRowData(response.data.siteList[response.data.siteList.length - 1]);
 						} else {
 							this.setState({ errorsMessageShow: true, errorsMessageValue: response.data.errorsMessage });
 							this.setState({
@@ -557,6 +569,82 @@ class siteInfo extends Component {
 			})
 		})
 	}
+	
+	getRowData = (row) => {
+		this.setState({
+			admissionStartDate: row.admissionStartDate === null ? '' : new Date(publicUtils.converToLocalTime(row.admissionStartDate, true)),
+			time: publicUtils.getFullYearMonth(new Date(publicUtils.converToLocalTime(row.admissionStartDate, true)), new Date()),
+			admissionEndDate: row.admissionEndDate === null ? '' : new Date(publicUtils.converToLocalTime(row.admissionEndDate, true)),
+			workState: row.workState === null ? '' : row.workState,
+			dailyCalculationStatus: row.dailyCalculationStatus === '0' ? true : false,
+			systemName: row.systemName === null ? '' : row.systemName,
+			location: row.stationCode === null ? '' : row.stationCode,
+			customerNo: row.customerNo === null ? '' : row.customerNo,
+			topCustomerNo: row.topCustomerNo === null ? '' : row.topCustomerNo,
+			developLanguageCode: row.developLanguageCode === null ? '' : row.developLanguageCode,
+			developLanguageCode2: row.developLanguageCode2 === null ? '' : row.developLanguageCode2,
+			unitPrice: row.unitPrice === null ? '' : utils.addComma(row.unitPrice),
+			payOffRange1: row.payOffRange1 === null ? '' : row.payOffRange1,
+			payOffRange2: row.payOffRange2 === null ? '' : row.payOffRange2,
+			siteRoleCode: row.siteRoleName === null ? '' : row.siteRoleCode,
+			levelCode: row.levelName === null ? '' : row.levelCode,
+			siteManager: row.siteManager === null ? '' : row.siteManager,
+			typeOfIndustryCode: row.typeOfIndustryCode === null ? '' : row.typeOfIndustryCode,
+			typteOfContract: row.typteOfContractCode === null ? '' : row.typteOfContractCode,
+			remark: row.remark === null ? '' : row.remark,
+			scheduledEndDate:row.scheduledEndDate === null ? '' : publicUtils.converToLocalTime(row.scheduledEndDate,false),
+			scheduledEndDateForSave:row.scheduledEndDate === null ? '' : publicUtils.converToLocalTime(row.scheduledEndDate,false),
+			related1Employees: (row.relatedEmployees === null ? '' : publicUtils.textGetValue(row.relatedEmployees.split(",")[0], this.state.employeeInfoAll)),
+			related2Employees: (row.relatedEmployees === null ? '' : row.relatedEmployees.split(",")[1] === undefined ? '' : publicUtils.textGetValue(row.relatedEmployees.split(",")[1], this.state.employeeInfoAll)),
+			related3Employees: (row.relatedEmployees === null ? '' : row.relatedEmployees.split(",")[2] === undefined ? '' : publicUtils.textGetValue(row.relatedEmployees.split(",")[2], this.state.employeeInfoAll)),
+			related4Employees: (row.relatedEmployees === null ? '' : row.relatedEmployees.split(",")[3] === undefined ? '' : publicUtils.textGetValue(row.relatedEmployees.split(",")[3], this.state.employeeInfoAll)),
+			updateFlag: false,
+			relatedEmployeesFlag: row.siteRoleCode === "0" ? true : row.siteRoleCode === "1" ? true : false,
+			workDate: row.workDate,
+		});
+		if (publicUtils.converToLocalTime(row.admissionStartDate, true).getDate() > 2) {
+			this.setState({
+				dailyCalculationStatusFlag: false,
+				deleteFlag: false,
+			});
+		} else if (row.admissionEndDate !== null && row.admissionEndDate !== undefined) {
+			if (new Date(publicUtils.converToLocalTime(row.admissionEndDate, true).getFullYear(), publicUtils.converToLocalTime(row.admissionEndDate, true).getMonth() + 1, 0).getDate() - publicUtils.converToLocalTime(row.admissionEndDate, true).getDate() > 2) {
+				this.setState({
+					dailyCalculationStatusFlag: false,
+					deleteFlag: false,
+				});
+			}
+		}
+		if (row.workState === "1") {
+			this.setState({
+				workStateFlag: false,
+			})
+		}else if(row.workState === "2"){
+			this.setState({
+				workStateFlag: false,
+			})
+		} else {
+			this.setState({
+				workStateFlag: true,
+			})
+		}
+		if (row.workDate === this.state.siteData[this.state.siteData.length - 1].workDate) {
+			this.setState({
+				pageDisabledFlag: false,
+				disabledFlag: false,
+				deleteFlag: false,
+			})
+			$('button[name="button"]').attr('disabled', false);
+		} else {
+			this.setState({
+				updateFlag: true,
+				disabledFlag: false,
+				pageDisabledFlag: true,
+			})
+			$('button[name="button"]').attr('disabled', true);
+		}
+	}
+	
 	// レコードselect事件
 	handleRowSelect = (row, isSelected) => {
 		if (isSelected) {
