@@ -41,6 +41,13 @@ class sendInvoice extends React.Component {
 	}
 	
 	componentDidMount(){
+		const { location } = this.props
+		if(!(location.state === undefined || location.state.yearAndMonth === undefined || location.state.yearAndMonth === null)){
+
+			$("#datePicker").val(location.state.yearAndMonth)
+			this.setState({yearAndMonth: location.state.yearAndMonth,});
+		}
+
     	this.getLoginUserInfo();
 
 		/*axios.post(this.state.serverIP + "sendLettersConfirm/getLoginUserInfo")
@@ -231,24 +238,23 @@ class sendInvoice extends React.Component {
         	}
         	if(employee.length > 0)
         		employee = employee.substring(0,employee.length - 1);
-        	let mailConfirmContont = this.state.rowCustomerName + `株式会社` + `
-` + (this.state.rowPurchasingManagers === "" ? "" : this.state.rowPurchasingManagers + `様`) + `
+        	let mailConfirmContont = (this.state.rowCustomerName.search("会社") === -1 ? this.state.rowCustomerName + `株式会社` : this.state.rowCustomerName) + `
+` + (this.state.rowPurchasingManagers === "" ? "" : (this.state.rowPurchasingManagers.search(" ") !== -1 || this.state.rowPurchasingManagers.search("　") !== -1 ? 
+	(this.state.rowPurchasingManagers.search(" ") !== -1 ? this.state.rowPurchasingManagers.split(" ")[0] : this.state.rowPurchasingManagers.split("　")[0]) : this.state.rowPurchasingManagers) + `様`) + `
 
 いつもお世話になっております。ＬＹＣの` + this.state.loginUserInfo[0].employeeFristName + `でございます。
 
-弊社` + employee + (this.state.yearAndMonth.getMonth() + 1) + `月分請求書類（見積書と注文書）を添付にてご送付致します。
+弊社` + employee + (this.state.yearAndMonth.getMonth() + 1) + `月分請求書類（注文書）を添付にてご送付致します。
 
 お手数ですが、ご確認お願い致します。
-＊ファイルの解凍パスワードは弊社の略称（3小文字）と現在の西暦4文字です。
 
 引き続き何卒よろしくお願い申し上げます。
 ----------------------------------------
 LYC株式会社　
-事務担当　宋（ソウ）/唐（トウ）/莫（バク）
+事務担当　宋（ソウ）/莫（バク）
 〒101-0032　東京都千代田区岩本町3-3-3　サザンビル3階
-URL:http://www.lyc.co.jp/
-TEL:03-6908-5796 
-E-mail: zoeywu@lyc.co.jp 　共通mail：eigyou@lyc.co.jp
+URL:http://www.lyc.co.jp/　TEL:03-6908-5796 
+E-mail: zoeywu@lyc.co.jp  事務共通:jimu@lyc.co.jp
 P-mark:第21004525(02)号
 労働者派遣事業許可番号　派13-306371
 `;
@@ -265,8 +271,8 @@ P-mark:第21004525(02)号
         					customerName: sendInvoiceList[i].customerName,
         					mailFrom: this.state.loginUserInfo[0].companyMail,
         					mailConfirmContont: mailConfirmContont,
-        					mailTitle: (this.state.yearAndMonth.getMonth() + 1) + "月分請求書類",
-        					nowDate: String(new Date().getFullYear()) + String(new Date().getMonth() + 1) + String(new Date().getDate())
+        					mailTitle: "請求書_" + (this.state.yearAndMonth.getFullYear()) + "年" + (this.state.yearAndMonth.getMonth() + 1) + "月分_" + (this.state.rowCustomerName.search("会社") === -1 ? this.state.rowCustomerName + `株式会社` : this.state.rowCustomerName),
+        					nowDate: String(new Date().getFullYear()) + (new Date().getMonth() + 1 < 10 ? "0" + String(new Date().getMonth() + 1) : String(new Date().getMonth() + 1)) + String(new Date().getDate())
         			}
         		}
         	}
@@ -276,6 +282,14 @@ P-mark:第21004525(02)号
     			this.searchSendInvoiceList();
     		})
         }
+    }
+    
+    sendLetterDateFormat = (cell) => {
+    	if(cell === null || cell === undefined || cell.length < 8){
+    		return "";
+    	}else{
+    		return cell.substring(0,4) + "/" + cell.substring(4,6) + "/" + cell.substring(6,8)
+    	}
     }
     
     sendLetterStatusFormat = (cell) => {
@@ -457,7 +471,7 @@ P-mark:第21004525(02)号
 
                             <div style={{ "float": "right" }}>
 		                        <Button variant="info" size="sm" onClick={this.shuseiTo.bind(this, "invoicePDF")} disabled={this.state.rowCustomerNo === ""}>請求書確認</Button>{' '}
-	                            <Button variant="info" size="sm" onClick={this.sendLetter} disabled={this.state.sendFlag || this.state.rowCustomerNo === "" || Number(String(this.state.yearAndMonth.getFullYear()) + (this.state.yearAndMonth.getMonth() + 1)) < Number(String(new Date().getFullYear()) + new Date().getMonth())}>送信</Button>{' '}
+	                            <Button variant="info" size="sm" onClick={this.sendLetter} title={"PDFの請求書を確認出来たら送信ボタンが押せます。"} disabled={this.state.sendFlag || this.state.rowCustomerNo === "" || Number(String(this.state.yearAndMonth.getFullYear()) + (this.state.yearAndMonth.getMonth() + 1)) < Number(String(new Date().getFullYear()) + new Date().getMonth())}>送信</Button>{' '}
 	 						</div>
 						</Col>  
                     </Row>
@@ -469,7 +483,7 @@ P-mark:第21004525(02)号
 							<TableHeaderColumn width='10%' tdStyle={ { padding: '.45em' } } dataField='purchasingManagers' >担当者</TableHeaderColumn>
 							<TableHeaderColumn width='22%' tdStyle={ { padding: '.45em' } } dataField='purchasingManagersMail' >メール</TableHeaderColumn>
 							<TableHeaderColumn width='7%' tdStyle={ { padding: '.45em' } }  dataField='employeeList' dataFormat={this.employeeListFormat.bind(this)} >関連要員</TableHeaderColumn>
-							<TableHeaderColumn width='18%' tdStyle={ { padding: '.45em' } }  dataField='sendLetterDate' >送信日付</TableHeaderColumn>
+							<TableHeaderColumn width='18%' tdStyle={ { padding: '.45em' } }  dataField='sendLetterDate' dataFormat={this.sendLetterDateFormat.bind(this)}>送信日付</TableHeaderColumn>
 							<TableHeaderColumn width='12%' tdStyle={ { padding: '.45em' } }  dataField='sendLetterStatus' dataFormat={this.sendLetterStatusFormat.bind(this)}>送信ステータス</TableHeaderColumn>
 						</BootstrapTable>
 					</Col>  

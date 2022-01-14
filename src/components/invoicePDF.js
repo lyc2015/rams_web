@@ -323,8 +323,10 @@ class invoicePDF extends React.Component {
 		let deductionsAndOvertimePayOfUnitPrice = "";
 		if(row.payOffRange1 == undefined || row.payOffRange1 == null || row.payOffRange1 == "" || row.requestUnitCode === "1")
 			return payOffRange;
-		else if(row.payOffRange1 == 0 || row.payOffRange1 == 1)
+		else if(row.payOffRange1 == 0 || row.payOffRange1 == 1){
     		payOffRange = row.payOffRange1 == 0 ? "固定" : "出勤日";
+    		return (<div><Row><font>{payOffRange}</font></Row></div>);
+		}
     	else{
     		payOffRange = row.payOffRange1 + "H";
     		deductionsAndOvertimePayOfUnitPrice = (Number(row.unitPrice) / Number(row.payOffRange1)).toFixed(0);
@@ -339,8 +341,10 @@ class invoicePDF extends React.Component {
 		let deductionsAndOvertimePayOfUnitPrice = "";
 		if(row.payOffRange2 == undefined || row.payOffRange2 == null || row.payOffRange2 == "" || row.requestUnitCode === "1")
 			return payOffRange;
-		else if(row.payOffRange2 == 0 || row.payOffRange2 == 1)
+		else if(row.payOffRange2 == 0 || row.payOffRange2 == 1){
     		payOffRange = row.payOffRange2 == 0 ? "固定" : "出勤日";
+    		return (<div><Row><font>{payOffRange}</font></Row></div>);
+		}
     	else{
     		payOffRange = row.payOffRange2 + "H";
     		deductionsAndOvertimePayOfUnitPrice = (Number(row.unitPrice) / Number(row.payOffRange2)).toFixed(0);
