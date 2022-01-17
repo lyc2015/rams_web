@@ -49,6 +49,12 @@ class invoicePDF extends React.Component {
 	}
 	
 	componentDidMount(){
+		const { location } = this.props
+		if(!(location.state === undefined || location.state.yearAndMonth === undefined || location.state.yearAndMonth === null)){
+
+			$("#datePicker").val(location.state.yearAndMonth)
+			this.setState({yearAndMonth: location.state.yearAndMonth,});
+		}
         this.setState({
             backPage: this.props.location.state.backPage,
         })
@@ -134,7 +140,7 @@ class invoicePDF extends React.Component {
 					subTotalAmountTax: publicUtils.addComma(parseInt(subTotalAmount * this.state.taxRate)),
 					totalAmount: publicUtils.addComma(parseInt(subTotalAmount + subTotalAmount * this.state.taxRate + subTotalAmountNoTax)),
 					customerName: result.data[0].customerName,
-					invoiceNo: result.data[0].invoiceNo,
+					invoiceNo: result.data[0].invoiceNo === null ? this.state.invoiceNo : result.data[0].invoiceNo,
 					remark: result.data[0].remark,
 					invoiceDate: publicUtils.converToLocalTime(result.data[0].invoiceDate, true),
 					deadLine: publicUtils.converToLocalTime(result.data[0].deadLine, true),
@@ -144,6 +150,10 @@ class invoicePDF extends React.Component {
 				this.refs.table.setState({
 					selectedRowKeys: []
 				});
+			}
+			else{
+				alert("データ存在していません。")
+				this.setState({ loading: true, });
 			}
 		})
 		.catch(function(error) {
@@ -185,6 +195,7 @@ class invoicePDF extends React.Component {
         path = {
             pathname: this.state.backPage,
             state: {
+            	yearAndMonth: this.state.yearAndMonth,
             },
         }
         this.props.history.push(path);

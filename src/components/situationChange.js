@@ -112,6 +112,11 @@ selectSituationChange =() => {
 
 }
 
+remarkFormat = (cell) => {
+	if(cell !== "")
+		return (<div title={cell}>{cell}</div>);
+}
+
 bonusAmount(cell, row) {
     if (row.scheduleOfBonusAmount === null || row.scheduleOfBonusAmount === "") {
         return
@@ -271,7 +276,7 @@ shuseiTo = (actionType) => {
 							<TableHeaderColumn tdStyle={{ padding: '.45em' }} dataField='salary'>給料</TableHeaderColumn>
 							<TableHeaderColumn tdStyle={{ padding: '.45em' }} dataField='socialInsuranceFlag'>社会保険</TableHeaderColumn>
 							<TableHeaderColumn tdStyle={{ padding: '.45em' }} dataField='scheduleOfBonusAmount' dataFormat={this.bonusAmount} >ボーナス</TableHeaderColumn>
-							<TableHeaderColumn tdStyle={{ padding: '.45em' }} width='125' dataField='remark' >備考</TableHeaderColumn>
+							<TableHeaderColumn tdStyle={{ padding: '.45em' }} width='125' dataField='remark' dataFormat={this.remarkFormat}>備考</TableHeaderColumn>
 					</BootstrapTable>
                     </div>
                  </Col>

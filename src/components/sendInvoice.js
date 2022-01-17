@@ -120,6 +120,7 @@ class sendInvoice extends React.Component {
 				rowPurchasingManagers: row.purchasingManagers,
 				rowEmployeeList: row.sendInvoiceWorkTimeModel,
 				sendFlag: row.havePDF === "false",
+				reportRowNo: row.rowNo,
 			});
 		} else {
 			this.setState({
@@ -142,6 +143,7 @@ class sendInvoice extends React.Component {
 				path = {
 					pathname: '/subMenuManager/dutyManagement',
 					state: {
+						yearAndMonth: this.state.yearAndMonth,
 						backPage: "sendInvoice",
 						sendValue: sendValue,
 					},
@@ -163,6 +165,7 @@ class sendInvoice extends React.Component {
                     pathname: '/subMenuManager/invoicePDF',
                     state: {
                         backPage: "sendInvoice", 
+                        yearAndMonth: this.state.yearAndMonth,
                         customerNo: this.state.rowCustomerNo,
                         sendValue: sendValue,
                     },
@@ -223,6 +226,22 @@ class sendInvoice extends React.Component {
     		return "";
     	else	
     		return ("￥" + publicUtils.addComma(row.deductionsAndOvertimePayOfUnitPrice));
+    }
+    
+    reportFormat = (cell,row) => {
+    	if(cell)
+    		return (<div><font>あり</font><input type="checkbox" onChange={(event) => {this.setReport(row)}} checked /></div>)
+    	else
+    		return (<div><font>あり</font><input type="checkbox" onChange={(event) => {this.setReport(row)}} /></div>)
+    }
+    
+    setReport = (row) => {
+    	let sendInvoiceList = this.state.sendInvoiceList;
+    	let sendInvoiceWorkTimeModel = sendInvoiceList[this.state.reportRowNo - 1].sendInvoiceWorkTimeModel;
+    	sendInvoiceWorkTimeModel[row.rowNo - 1].report = !sendInvoiceWorkTimeModel[row.rowNo - 1].report;
+    	this.setState({
+    		sendInvoiceList: sendInvoiceList,
+        })
     }
     
     sendLetter = () => {
@@ -339,14 +358,16 @@ P-mark:第21004525(02)号
 		                        番号</TableHeaderColumn>
 		                        <TableHeaderColumn dataField='employeeName' width='18%' tdStyle={{ padding: '.45em' }}>
 		                        氏名</TableHeaderColumn>
-		                        <TableHeaderColumn dataField='payOffRange' width='18%' dataFormat={this.payOffRangeFormat} tdStyle={{ padding: '.45em' }}>
+		                        <TableHeaderColumn dataField='payOffRange' width='14%' dataFormat={this.payOffRangeFormat} tdStyle={{ padding: '.45em' }}>
 		                        基準時間</TableHeaderColumn>
-		                        <TableHeaderColumn dataField='sumWorkTime' width='18%' tdStyle={{ padding: '.45em' }}>
+		                        <TableHeaderColumn dataField='sumWorkTime' width='14%' tdStyle={{ padding: '.45em' }}>
 		                        稼働時間</TableHeaderColumn>
-		                        <TableHeaderColumn dataField='unitPrice' dataFormat={this.unitPriceFormat} width='18%' tdStyle={{ padding: '.45em' }}>
+		                        <TableHeaderColumn dataField='unitPrice' dataFormat={this.unitPriceFormat} width='16%' tdStyle={{ padding: '.45em' }}>
 		                        単価</TableHeaderColumn>
-		                        <TableHeaderColumn dataField='cost' dataFormat={this.costFormat} width='18%' tdStyle={{ padding: '.45em' }}>
+		                        <TableHeaderColumn dataField='cost' dataFormat={this.costFormat} width='16%' tdStyle={{ padding: '.45em' }}>
 		                        残業・控除</TableHeaderColumn>
+		                        <TableHeaderColumn dataField='report' dataFormat={this.reportFormat} width='12%' tdStyle={{ padding: '.45em' }}>
+		                        報告書</TableHeaderColumn>
 		                    </BootstrapTable>
 					</Row>
                 </div>
