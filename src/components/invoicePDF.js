@@ -23,7 +23,7 @@ axios.defaults.withCredentials = true;
 class invoicePDF extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = this.initialState;//初期化
+		this.state = this.initialState;// 初期化
 		this.searchEmployee = this.searchSendInvoiceList.bind(this);
 		this.valueChange = this.valueChange.bind(this);
 	};
@@ -53,11 +53,21 @@ class invoicePDF extends React.Component {
 		if(!(location.state === undefined || location.state.yearAndMonth === undefined || location.state.yearAndMonth === null)){
 
 			$("#datePicker").val(location.state.yearAndMonth)
-			this.setState({yearAndMonth: location.state.yearAndMonth,});
+			this.setState({
+				yearAndMonth: location.state.yearAndMonth,
+				}, () => {
+					this.getCompanyDate();
+				});
+		}else{
+			this.getCompanyDate();
 		}
         this.setState({
             backPage: this.props.location.state.backPage,
         })
+		
+	}
+	
+	getCompanyDate = () => {
 		axios.post(this.state.serverIP + "subMenu/getCompanyDate")
 		.then(response => {
 				this.setState({
@@ -77,7 +87,7 @@ class invoicePDF extends React.Component {
 			console.error("Error - " + error);
 		});
 	}
-	//　初期化データ
+	// 初期化データ
 	initialState = {
 		yearAndMonth: new Date(),
 		invoiceDate: new Date(),
@@ -106,7 +116,7 @@ class invoicePDF extends React.Component {
 		})
 	}
 
-	//　検索
+	// 検索
 	searchSendInvoiceList = () => {
 		let month = this.state.yearAndMonth.getMonth() + 1;
 		let invoiceNo = this.state.customerAbbreviation + "-LYC " + this.state.yearAndMonth.getFullYear() + (Number(month) < 10 ? "0" + month : month);
@@ -161,7 +171,7 @@ class invoicePDF extends React.Component {
 		});	
 	}
     
-	//　年月
+	// 年月
 	inactiveYearAndMonth = (date) => {
 		this.setState({
 			invoiceDate: date,
@@ -174,7 +184,7 @@ class invoicePDF extends React.Component {
 		});
 	};
 	
-	//行Selectファンクション
+	// 行Selectファンクション
 	handleRowSelect = (row, isSelected, e) => {
 		if (isSelected) {
 			this.setState({
@@ -188,8 +198,8 @@ class invoicePDF extends React.Component {
 	}
 	
     /**
-     * 戻るボタン
-     */
+	 * 戻るボタン
+	 */
     back = () => {
         var path = {};
         path = {
@@ -343,7 +353,11 @@ class invoicePDF extends React.Component {
     		deductionsAndOvertimePayOfUnitPrice = (Number(row.unitPrice) / Number(row.payOffRange1)).toFixed(0);
     		deductionsAndOvertimePayOfUnitPrice = deductionsAndOvertimePayOfUnitPrice.substring(0,deductionsAndOvertimePayOfUnitPrice.length - 1) + "0";
     	}
-		//return (<div><Row><font>{payOffRange}</font></Row><Row><font>{Number(row.deductionsAndOvertimePayOfUnitPrice) < 0 ? ("￥" + publicUtils.addComma(row.deductionsAndOvertimePayOfUnitPrice)) : ""}</font></Row></div>);
+		// return
+		// (<div><Row><font>{payOffRange}</font></Row><Row><font>{Number(row.deductionsAndOvertimePayOfUnitPrice)
+		// < 0 ? ("￥" +
+		// publicUtils.addComma(row.deductionsAndOvertimePayOfUnitPrice)) :
+		// ""}</font></Row></div>);
 		return (<div><Row><font>{payOffRange}</font></Row><Row><font>{"￥" + publicUtils.addComma(deductionsAndOvertimePayOfUnitPrice) + "/H"}</font></Row></div>);
 	}
 	
@@ -361,7 +375,11 @@ class invoicePDF extends React.Component {
     		deductionsAndOvertimePayOfUnitPrice = (Number(row.unitPrice) / Number(row.payOffRange2)).toFixed(0);
     		deductionsAndOvertimePayOfUnitPrice = deductionsAndOvertimePayOfUnitPrice.substring(0,deductionsAndOvertimePayOfUnitPrice.length - 1) + "0";
     	}
-		//return (<div><Row><font>{payOffRange}</font></Row><Row><font>{Number(row.deductionsAndOvertimePayOfUnitPrice) > 0 ? ("￥" + publicUtils.addComma(row.deductionsAndOvertimePayOfUnitPrice)) : ""}</font></Row></div>);
+		// return
+		// (<div><Row><font>{payOffRange}</font></Row><Row><font>{Number(row.deductionsAndOvertimePayOfUnitPrice)
+		// > 0 ? ("￥" +
+		// publicUtils.addComma(row.deductionsAndOvertimePayOfUnitPrice)) :
+		// ""}</font></Row></div>);
 		return (<div><Row><font>{payOffRange}</font></Row><Row><font>{"￥" + publicUtils.addComma(deductionsAndOvertimePayOfUnitPrice) + "/H"}</font></Row></div>);
 	}
 	
@@ -586,9 +604,11 @@ class invoicePDF extends React.Component {
 	}
 	
     /**
-     * 社員名連想
-     * @param {} event 
-     */
+	 * 社員名連想
+	 * 
+	 * @param {}
+	 *            event
+	 */
     getBankAccountInfo = (event, values) => {
         this.setState({
             [event.target.name]: event.target.value,
@@ -634,7 +654,7 @@ class invoicePDF extends React.Component {
 	
 	render() {
 		const {sendInvoiceList} = this.state;
-		//　テーブルの行の選択
+		// テーブルの行の選択
 		const selectRow = {
 			mode: 'radio',
 			bgColor: 'pink',
@@ -644,18 +664,21 @@ class invoicePDF extends React.Component {
 			clickToExpand: true,// click to expand row, default is false
 			onSelect: this.handleRowSelect,
 		};
-		//　 テーブルの定義
+		// テーブルの定義
 		const options = {
 			page: this.state.currentPage, 
-			sizePerPage: 5,  // which size per page you want to locate as default
+			sizePerPage: 5,  // which size per page you want to locate as
+								// default
 			pageStartIndex: 1, // where to start quantitying the pages
 			paginationSize: 3,  // the pagination bar size.
 			prePage: '<', // Previous page button text
             nextPage: '>', // Next page button text
             firstPage: '<<', // First page button text
             lastPage: '>>', // Last page button text
-			paginationShowsTotal: this.renderShowsTotal,  // Accept bool or function
-			hideSizePerPage: true, //> You can hide the dropdown for sizePerPage
+			paginationShowsTotal: this.renderShowsTotal,  // Accept bool or
+															// function
+			hideSizePerPage: true, // > You can hide the dropdown for
+									// sizePerPage
 			expandRowBgColor: 'rgb(165, 165, 165)',
 			approvalBtn: this.createCustomApprovalButton,
 			onApprovalRow: this.onApprovalRow,

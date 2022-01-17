@@ -23,7 +23,7 @@ axios.defaults.withCredentials = true;
 class sendInvoice extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = this.initialState;//初期化
+		this.state = this.initialState;// 初期化
 		this.searchEmployee = this.searchSendInvoiceList.bind(this);
 	};
 	
@@ -36,34 +36,32 @@ class sendInvoice extends React.Component {
 				})
 			})
 			.catch(function(error) {
-				//alert(error);
+				// alert(error);
 			});
 	}
 	
 	componentDidMount(){
+    	this.getLoginUserInfo();
+
 		const { location } = this.props
 		if(!(location.state === undefined || location.state.yearAndMonth === undefined || location.state.yearAndMonth === null)){
 
 			$("#datePicker").val(location.state.yearAndMonth)
-			this.setState({yearAndMonth: location.state.yearAndMonth,});
-		}
-
-    	this.getLoginUserInfo();
-
-		/*axios.post(this.state.serverIP + "sendLettersConfirm/getLoginUserInfo")
-		.then(result => {
 			this.setState({
-				
-			})
-		})
-		.catch(function(error) {
-			//alert(error);
-		});	*/
-		this.searchSendInvoiceList();
+				yearAndMonth: location.state.yearAndMonth,
+				}, () => {
+					this.searchSendInvoiceList();
+				});
+		}else{
+			this.searchSendInvoiceList();
+		}
 	}
-	//　初期化データ
+	// 初期化データ
 	initialState = {
-		yearAndMonth: new Date(),//new Date(new Date().getMonth() === 0 ? (new Date().getFullYear() - 1) + "/12" : new Date().getFullYear() + "/" + new Date().getMonth()).getTime(),
+		yearAndMonth: new Date(),// new Date(new Date().getMonth() === 0 ?
+									// (new Date().getFullYear() - 1) + "/12" :
+									// new Date().getFullYear() + "/" + new
+									// Date().getMonth()).getTime(),
 		month: new Date().getMonth() + 1,
 		loginUserInfo: [],
 		sendInvoiceList: [],
@@ -77,7 +75,7 @@ class sendInvoice extends React.Component {
 		serverIP: store.getState().dropDown[store.getState().dropDown.length - 1],
 	};
 
-	//　検索
+	// 検索
 	searchSendInvoiceList = () => {
 		const emp = {
 				yearAndMonth: publicUtils.formateDate($("#datePicker").val(), false),
@@ -94,11 +92,11 @@ class sendInvoice extends React.Component {
 			});
 		})
 		.catch(function(error) {
-			//alert(error);
+			// alert(error);
 		});	
 	}
     
-	//　年月
+	// 年月
 	inactiveYearAndMonth = (date) => {
 		this.setState({
 			yearAndMonth: date,
@@ -111,7 +109,7 @@ class sendInvoice extends React.Component {
 		this.searchSendInvoiceList();
 	};
 	
-	//行Selectファンクション
+	// 行Selectファンクション
 	handleRowSelect = (row, isSelected, e) => {
 		if (isSelected) {
 			this.setState({
@@ -185,9 +183,11 @@ class sendInvoice extends React.Component {
 	}
 	
     /**
-     * 社員名連想
-     * @param {} event 
-     */
+	 * 社員名連想
+	 * 
+	 * @param {}
+	 *            event
+	 */
     getCustomer = (event, values) => {
         this.setState({
             [event.target.name]: event.target.value,
@@ -229,10 +229,14 @@ class sendInvoice extends React.Component {
     }
     
     reportFormat = (cell,row) => {
-    	if(cell)
-    		return (<div><font>あり</font><input type="checkbox" onChange={(event) => {this.setReport(row)}} checked /></div>)
-    	else
-    		return (<div><font>あり</font><input type="checkbox" onChange={(event) => {this.setReport(row)}} /></div>)
+    	if(row.workingTimeReport === undefined || row.workingTimeReport === null || row.workingTimeReport === ""){
+    		return "";
+    	}else{
+        	if(cell)
+        		return (<div><font>あり</font><input type="checkbox" onChange={(event) => {this.setReport(row)}} checked /></div>)
+        	else
+        		return (<div><font>あり</font><input type="checkbox" onChange={(event) => {this.setReport(row)}} /></div>)
+    	}
     }
     
     setReport = (row) => {
@@ -242,6 +246,7 @@ class sendInvoice extends React.Component {
     	this.setState({
     		sendInvoiceList: sendInvoiceList,
         })
+		this.reportDownload(sendInvoiceWorkTimeModel[row.rowNo - 1].workingTimeReport,sendInvoiceWorkTimeModel[row.rowNo - 1].employeeName);
     }
     
     sendLetter = () => {
@@ -280,7 +285,13 @@ P-mark:第21004525(02)号
         	
         	for(let i in sendInvoiceList){
         		if(sendInvoiceList[i].customerNo === this.state.rowCustomerNo){
-        			
+                	let reportFile = "";
+                	for(let j in this.state.sendInvoiceList[i].sendInvoiceWorkTimeModel){
+                		if(this.state.sendInvoiceList[i].sendInvoiceWorkTimeModel[j].report){
+                			reportFile += this.state.sendInvoiceList[i].sendInvoiceWorkTimeModel[j].workingTimeReport + ";;";
+                		}
+                	}
+
         			model = {
         					yearAndMonth: publicUtils.formateDate($("#datePicker").val(), false),
         					customerAbbreviation: sendInvoiceList[i].customerAbbreviation,
@@ -291,7 +302,8 @@ P-mark:第21004525(02)号
         					mailFrom: this.state.loginUserInfo[0].companyMail,
         					mailConfirmContont: mailConfirmContont,
         					mailTitle: "請求書_" + (this.state.yearAndMonth.getFullYear()) + "年" + (this.state.yearAndMonth.getMonth() + 1) + "月分_" + (this.state.rowCustomerName.search("会社") === -1 ? this.state.rowCustomerName + `株式会社` : this.state.rowCustomerName),
-        					nowDate: String(new Date().getFullYear()) + (new Date().getMonth() + 1 < 10 ? "0" + String(new Date().getMonth() + 1) : String(new Date().getMonth() + 1)) + String(new Date().getDate())
+        					nowDate: String(new Date().getFullYear()) + (new Date().getMonth() + 1 < 10 ? "0" + String(new Date().getMonth() + 1) : String(new Date().getMonth() + 1)) + String(new Date().getDate()),
+        					reportFile: reportFile,
         			}
         		}
         	}
@@ -302,6 +314,38 @@ P-mark:第21004525(02)号
     		})
         }
     }
+    
+	reportDownload = (report,employeeName) => {
+		if(report === undefined || report === null || report === ""){
+			let dataInfo = {};
+			dataInfo["yearMonth"] = String(this.state.yearAndMonth.getFullYear()) + (this.state.yearAndMonth.getMonth() + 1 < 10 ? "0" + String(this.state.yearAndMonth.getMonth() + 1) : String(this.state.yearAndMonth.getMonth() + 1));
+			dataInfo["employeeName"] = employeeName;
+			axios.post(this.state.serverIP + "dutyRegistration/downloadPDF", dataInfo)
+				.then(resultMap => {
+
+				})
+				.catch(function () {
+					alert("送信错误，请检查程序");
+				});
+		}else{
+			let fileKey = "";
+			let downLoadPath = "";
+			if(report !== null){
+				let path = report.replace(/\\/g,"/");
+				if(path.split("file/").length > 1){
+					fileKey = path.split("file/")[1];
+					downLoadPath = path.replaceAll("/","//");
+				}
+			}
+			axios.post(this.state.serverIP + "s3Controller/downloadFile", {fileKey:fileKey , downLoadPath:downLoadPath})
+			.then(result => {
+				//let path = downLoadPath.replaceAll("//","/");
+				//publicUtils.handleDownload(path, this.state.serverIP);
+			}).catch(function (error) {
+				alert("ファイルが存在しません。");
+			});
+		}
+	}
     
     sendLetterDateFormat = (cell) => {
     	if(cell === null || cell === undefined || cell.length < 8){
@@ -324,7 +368,8 @@ P-mark:第21004525(02)号
         const options = {
             noDataText: (<i className="" style={{ 'fontSize': '20px' }}>データなし</i>),
             expandRowBgColor: 'rgb(165, 165, 165)',
-            hideSizePerPage: true, //> You can hide the dropdown for sizePerPage
+            hideSizePerPage: true, // > You can hide the dropdown for
+									// sizePerPage
         };
         const selectRow = {
                 mode: 'radio',
@@ -387,7 +432,7 @@ P-mark:第21004525(02)号
 
 	render() {
 		const {sendInvoiceList} = this.state;
-		//　テーブルの行の選択
+		// テーブルの行の選択
 		const selectRow = {
 			mode: 'radio',
 			bgColor: 'pink',
@@ -397,18 +442,21 @@ P-mark:第21004525(02)号
 			clickToExpand: true,// click to expand row, default is false
 			onSelect: this.handleRowSelect,
 		};
-		//　 テーブルの定義
+		// テーブルの定義
 		const options = {
 			page: 1, 
-			sizePerPage: 12,  // which size per page you want to locate as default
+			sizePerPage: 12,  // which size per page you want to locate as
+								// default
 			pageStartIndex: 1, // where to start counting the pages
 			paginationSize: 3,  // the pagination bar size.
 			prePage: '<', // Previous page button text
             nextPage: '>', // Next page button text
             firstPage: '<<', // First page button text
             lastPage: '>>', // Last page button text
-			paginationShowsTotal: this.renderShowsTotal,  // Accept bool or function
-			hideSizePerPage: true, //> You can hide the dropdown for sizePerPage
+			paginationShowsTotal: this.renderShowsTotal,  // Accept bool or
+															// function
+			hideSizePerPage: true, // > You can hide the dropdown for
+									// sizePerPage
 			expandRowBgColor: 'rgb(165, 165, 165)',
 			approvalBtn: this.createCustomApprovalButton,
 			onApprovalRow: this.onApprovalRow,
