@@ -87,8 +87,22 @@ class salesSendLetter extends React.Component {
 				sendValue: this.props.location.state.sendValue,
 				projectNo: this.props.location.state.projectNo,
 				proposeClassificationCode: this.props.location.state.sendValue.proposeClassificationCode,
+			}, () => {
+				this.setStorageList(this.props.location.state.sendValue.proposeClassificationCode);
+				switch (this.props.location.state.sendValue.proposeClassificationCode) {
+				case "0":
+					this.getCustomers("all");
+					break;
+				case "1":
+					this.getCustomers("projectInfoSearch");
+					break;
+				case "2":
+					this.getCustomers("manageSituation");	
+					break;
+				default:
+					break;
+				}
 			})
-			this.setStorageList(this.props.location.state.sendValue.proposeClassificationCode);
 		
 			if(this.props.location.state.salesPersons === null || this.props.location.state.salesPersons === undefined || this.props.location.state.salesPersons === '' ||
 				this.props.location.state.targetCusInfos === null || this.props.location.state.targetCusInfos === undefined || this.props.location.state.targetCusInfos === ''){
@@ -113,16 +127,7 @@ class salesSendLetter extends React.Component {
 					isHidden:true,
 				})
 			}
-			switch (this.props.location.state.sendValue.proposeClassificationCode) {
-			case "1":
-				this.getCustomers("projectInfoSearch");
-				break;
-			case "2":
-				this.getCustomers("manageSituation");	
-				break;
-			default:
-				break;
-		}
+			
 		}else{
 			this.setStorageList("0");
 			this.getCustomers("all");
@@ -281,16 +286,17 @@ class salesSendLetter extends React.Component {
 						storageListNameChange: values.name,
 						selectedCustomers: values.code,
 					})
+
 					axios.post(this.state.serverIP + "salesSendLetters/getCustomersByNos", { ctmNos: values.code.split(','),storageListName:values.name,})
 					.then(result => {
 						let dataArray = new Array();
 						for (let i in result.data) {
-							switch (this.state.backPage) {
-							case "manageSituation":
+							switch (this.state.proposeClassificationCode) {
+							case "1":
 								if(result.data[i].proposeClassificationCode === null || result.data[i].proposeClassificationCode === "2" || result.data[i].proposeClassificationCode === "3")
 									dataArray.push(result.data[i]);
 								break;
-							case "projectInfoSearch":
+							case "2":
 								if(result.data[i].proposeClassificationCode === null || result.data[i].proposeClassificationCode === "1" || result.data[i].proposeClassificationCode === "3")
 									dataArray.push(result.data[i]);
 								break;
@@ -921,7 +927,9 @@ class salesSendLetter extends React.Component {
 						backbackPage: this.state.backPage,
                         searchFlag: this.state.searchFlag,
 						projectNo: this.state.projectNo,
-						sendValue: sendValue,
+						sendValue: {
+							proposeClassificationCode: this.state.proposeClassificationCode,
+							},
                     },
                 }
                 break;
