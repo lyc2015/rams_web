@@ -46,10 +46,12 @@ class employeeInsertNew extends React.Component {
 		myToastShow: false,
 		errorsMessageShow: false,
 		disabledFalg: true,
+		occupationChangeFlag: false,
 		accountInfo: null,// 口座情報のデータ
 		bpInfoModel: null,// pb情報
 		employeeFristName: '',
 		employeeLastName: '',
+		occupationCode: "0",
 		englishLevelCode: "0",
 		japaneseLevelCode: "0",
 		developLanguage1: "0",
@@ -79,7 +81,7 @@ class employeeInsertNew extends React.Component {
 		developLanguageMaster: store.getState().dropDown[8].slice(1),
 		frameWorkMaster: store.getState().dropDown[71].slice(1),
 		employeeInfo: store.getState().dropDown[9].slice(1),
-		occupationCodes: store.getState().dropDown[10],
+		occupationCodes: store.getState().dropDown[10].slice(1),
 		departmentCodes: store.getState().dropDown[11],
 		authorityCodes: store.getState().dropDown[12].slice(1),
 		englishLeveCodes: store.getState().dropDown[13].slice(1),
@@ -300,6 +302,7 @@ class employeeInsertNew extends React.Component {
 					}
 					this.setState({
 						authorityCodes:authorityCodes,
+						occupationChangeFlag: true,
 					})
 				}
 			})
@@ -551,7 +554,7 @@ class employeeInsertNew extends React.Component {
 			this.setState({ companyMail: '', intoCompanyCode: '', departmentCode: '', authorityCode: "1",
 				retirementYearAndMonth: '',retirementResonClassificationCode: '',occupationCode: '3',employeeFormCodes: employeeFormCodes,
 				employeeFormCode: (this.state.employeeFormCode === "4" || this.state.employeeFormCode === "5" ? this.state.employeeFormCode : ''),temporary_retirementYearAndMonth:'',retirementYearAndMonthDisabled:false, 
-				occupationCode: '',socialInsuranceDate: '',employmentInsurance: '',residenceTimeDisabled: true,employmentInsuranceNo: '',socialInsuranceNo: '',socialInsurance: "0",});
+				occupationCode: '0',socialInsuranceDate: '',employmentInsurance: '',residenceTimeDisabled: true,employmentInsuranceNo: '',socialInsuranceNo: '',socialInsurance: "0",});
 			this.getNO("SP");
 		}
 		else if(value === '3'){
@@ -1050,7 +1053,7 @@ class employeeInsertNew extends React.Component {
 										 * disabled={occupationCode === "3" ?
 										 * true : false}
 										 */
-									disabled={departmentCode === "0" || employeeStatus === "2" ? true : false}
+									disabled={departmentCode === "0" || employeeStatus === "2" || this.state.occupationChangeFlag ? true : false}
 										>
 										autoComplete="off" >
 										{this.state.occupationCodes.map(date =>

@@ -34,6 +34,7 @@ class EmployeeDetailNew extends React.Component {
 		bpInfoModel: null,// pb情報
 		myToastShow: false,
 		errorsMessageShow: false,
+		occupationCode: "0",
 		englishLevelCode: "0",
 		japaneseLevelCode: "0",
 		developLanguage1: "0",

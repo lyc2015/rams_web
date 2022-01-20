@@ -42,6 +42,8 @@ class employeeUpdateNew extends React.Component {
 		bpInfoModel: null,// pb情報
 		myToastShow: false,
 		errorsMessageShow: false,
+		occupationChangeFlag: false,
+		occupationCode: "0",
 		englishLevelCode: "0",
 		japaneseLevelCode: "0",
 		developLanguage1: "0",
@@ -71,7 +73,7 @@ class employeeUpdateNew extends React.Component {
 		developLanguageMaster: store.getState().dropDown[8].slice(1),
 		frameWorkMaster: store.getState().dropDown[71].slice(1),
 		employeeInfo: store.getState().dropDown[9].slice(1),
-		occupationCodes: store.getState().dropDown[10],
+		occupationCodes: store.getState().dropDown[10].slice(1),
 		departmentCodes: store.getState().dropDown[11],
 		authorityCodes: store.getState().dropDown[12].slice(1),
 		englishLeveCodes: store.getState().dropDown[13].slice(1),
@@ -325,16 +327,19 @@ class employeeUpdateNew extends React.Component {
 		axios.post(this.state.serverIP + "sendLettersConfirm/getLoginUserInfo")
 		.then(result => {
 			let authorityCodes = this.state.authorityCodes;
+			let occupationChangeFlag = this.state.occupationChangeFlag;
 			if(result.data[0].authorityCode !== "4"){
 				authorityCodes = new Array();
 				for(let i = 0; i < this.state.authorityCodes.length; i++){
 					if(this.state.authorityCodes[i].code !== "4"){
 						authorityCodes.push({code:this.state.authorityCodes[i].code,name:this.state.authorityCodes[i].name})
+						occupationChangeFlag = true;
 					}
 				}
 			}
 			this.setState({
 				authorityCodes:authorityCodes,
+				occupationChangeFlag: occupationChangeFlag,
 			},()=>{
 				const { location } = this.props
 				let employeeInfo = [];
@@ -1273,7 +1278,7 @@ class employeeUpdateNew extends React.Component {
 									onChange={this.valueChange}
 									name="occupationCode" value={occupationCode}
 									autoComplete="off" 
-									disabled={departmentCode === "0" || employeeStatus === "1" ? true : false}
+									disabled={departmentCode === "0" || employeeStatus === "1" || this.state.occupationChangeFlag ? true : false}
 									>
 									{this.state.occupationCodes.map(date =>
 										<option key={date.code} value={date.code}>

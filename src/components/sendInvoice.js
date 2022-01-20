@@ -287,7 +287,7 @@ P-mark:第21004525(02)号
         		if(sendInvoiceList[i].customerNo === this.state.rowCustomerNo){
                 	let reportFile = "";
                 	for(let j in this.state.sendInvoiceList[i].sendInvoiceWorkTimeModel){
-                		if(this.state.sendInvoiceList[i].sendInvoiceWorkTimeModel[j].report){
+                		if(this.state.selectAllFlag || this.state.sendInvoiceList[i].sendInvoiceWorkTimeModel[j].report){
                 			reportFile += this.state.sendInvoiceList[i].sendInvoiceWorkTimeModel[j].workingTimeReport + ";;";
                 		}
                 	}
@@ -362,6 +362,23 @@ P-mark:第21004525(02)号
     		return "未送信";
     	}
     }
+    
+    selectAll = (flag) => {
+        let sendInvoiceList = this.state.sendInvoiceList;
+        let sendInvoiceWorkTimeModel = sendInvoiceList[this.state.reportRowNo - 1].sendInvoiceWorkTimeModel;
+    	for(let i in sendInvoiceWorkTimeModel){
+            if(flag){
+            	this.reportDownload(sendInvoiceWorkTimeModel[i].workingTimeReport,sendInvoiceWorkTimeModel[i].employeeName);
+            }
+        	sendInvoiceWorkTimeModel[i].report = flag;
+    	}
+
+        
+    	this.setState({
+    		selectAllFlag: flag,
+    		sendInvoiceList: sendInvoiceList,
+        })
+    }
 	
     employeeListFormat = (cell,row) => {
         let returnItem = cell;
@@ -389,6 +406,14 @@ P-mark:第21004525(02)号
                     <Row>
 						<Col style={{"padding": "0px","marginTop": "10px"}}>
 							<h2>要員確認</h2>
+						</Col>
+					</Row>
+                    <Row>
+						<Col style={{"padding": "0px",}}>
+							<div style={{ "float": "right" }}>
+		                        <Button variant="info" size="sm" onClick={this.selectAll.bind(this,true)}>選択</Button>{' '}
+		                        <Button variant="info" size="sm" onClick={this.selectAll.bind(this,false)}>取消</Button>
+		                	</div>
 						</Col>
 					</Row>
 					<Row>

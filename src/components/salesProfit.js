@@ -418,6 +418,7 @@ class salesProfit extends React.Component {
 											<option value="">選択ください</option>
 											<option value="0">社員</option>
 											<option value="1">協力</option>
+											<option value="2">個人事業主</option>
 										</Form.Control>
 									</InputGroup>
 								</Col>
@@ -479,8 +480,7 @@ class salesProfit extends React.Component {
 						                    disabled/>
 					                    </InputGroup>
 				                    </Col>
-									<Col sm={1}>
-									</Col>
+									
 				                    <Col>
 						                <InputGroup size="sm">
 						                    <InputGroup.Prepend>
@@ -491,7 +491,18 @@ class salesProfit extends React.Component {
 						                    disabled/>
 					                    </InputGroup>
 				                    </Col>
-									<Col sm={3}>
+				                    
+				                    <Col>
+						                <InputGroup size="sm" hidden>
+						                    <InputGroup.Prepend>
+						                        <InputGroup.Text id="fiveKanji" className="input-group-indiv">担当者粗利</InputGroup.Text>
+						                    </InputGroup.Prepend>
+						                    <FormControl
+						                    value={this.state.siteRoleNameAll}
+						                    disabled/>
+					                    </InputGroup>
+				                    </Col>
+									<Col sm={2}>
 										<div style={{ "float": "right" }}>
 											<Button size="sm" className="individualSalesButtom" name="clickButton" variant="info" id="syounin" onClick={this.shuseiTo.bind(this,"salesPoint")} disabled={this.state.customerNo === null ? true : false} className="btn btn-primary btn-sm">
 												営業ポイント明細
