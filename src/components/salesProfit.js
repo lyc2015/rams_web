@@ -32,6 +32,7 @@ class salesProfit extends React.Component {
 		customerNo: null,// 選択した列のお客様番号
 		customerContract: '',
 		siteRoleNameAll: '',
+		bpSiteRoleNameAll: '',
 		profitAll: '',
 		updateFlag: true,
 		insertFlag: false,
@@ -39,6 +40,7 @@ class salesProfit extends React.Component {
 		insertNo: '',
 		salesPointData: [],
 		authorityCode: '',
+		occupationCode: '',
 		employeeStatus: store.getState().dropDown[4].slice(1),
 		newMemberStatus: store.getState().dropDown[23].slice(1),
 		customerContractStatus: store.getState().dropDown[24].slice(1),
@@ -56,10 +58,11 @@ class salesProfit extends React.Component {
 		.then(result => {
 			this.setState({
 				authorityCode: result.data[0].authorityCode,
+				occupationCode: result.data[0].occupationCode,
 			})
 		})
 		.catch(function(error) {
-			//alert(error);
+			// alert(error);
 		});	
 		if (this.props.location.state !== undefined) {
             var sendValue = this.props.location.state.sendValue;
@@ -116,6 +119,7 @@ class salesProfit extends React.Component {
 		admissionEndDate: new Date(),
 		no: 0,
 		siteRoleNameAll: 0,
+		bpSiteRoleNameAll: 0,
 		profitAll: 0,
 	}
 	// 入場年月
@@ -179,6 +183,7 @@ class salesProfit extends React.Component {
 							salesPointData: salesPointData,
 							no: response.data.length,
 							siteRoleNameAll: utils.addComma(siteRoleNameAll),
+							bpSiteRoleNameAll: response.data[0].bpSiteRoleNameAll,
 							profitAll: response.data[0].profitAll,
 						});
 					} else {
@@ -186,6 +191,7 @@ class salesProfit extends React.Component {
 							salesPointData: response.data,
 							no: '',
 							siteRoleNameAll: '',
+							bpSiteRoleNameAll: '',
 							profitAll: '',
 						});
 					}
@@ -269,6 +275,7 @@ class salesProfit extends React.Component {
 							salesPointData: response.data,
 							no: response.data.length,
 							siteRoleNameAll: response.data[0].siteRoleNameAll,
+							bpSiteRoleNameAll: response.data[0].bpSiteRoleNameAll,
 							profitAll: response.data[0].profitAll,
 						});
 					} else {
@@ -276,6 +283,7 @@ class salesProfit extends React.Component {
 							salesPointData: response.data,
 							no: '',
 							siteRoleNameAll: '',
+							bpSiteRoleNameAll: '',
 							profitAll: '',
 						});
 					}
@@ -493,12 +501,12 @@ class salesProfit extends React.Component {
 				                    </Col>
 				                    
 				                    <Col>
-						                <InputGroup size="sm" hidden>
+						                <InputGroup size="sm" hidden={!(this.state.occupationCode === "5")}>
 						                    <InputGroup.Prepend>
 						                        <InputGroup.Text id="fiveKanji" className="input-group-indiv">担当者粗利</InputGroup.Text>
 						                    </InputGroup.Prepend>
 						                    <FormControl
-						                    value={this.state.siteRoleNameAll}
+						                    value={this.state.bpSiteRoleNameAll}
 						                    disabled/>
 					                    </InputGroup>
 				                    </Col>
@@ -515,7 +523,7 @@ class salesProfit extends React.Component {
 										<BootstrapTable selectRow={selectRow} data={this.state.salesPointData} ref='table' pagination={true} options={this.options} headerStyle={{ background: '#5599FF' }} striped hover condensed>
 											<TableHeaderColumn dataField='rowNo' width='57' tdStyle={{ padding: '.45em' }} isKey>番号</TableHeaderColumn>
 											<TableHeaderColumn dataField='yearAndMonth' width='100' tdStyle={{ padding: '.45em' }}>年月</TableHeaderColumn>
-											<TableHeaderColumn dataField='employeeStatus' width='90' tdStyle={{ padding: '.45em' }} hidden >社員区分</TableHeaderColumn>
+											<TableHeaderColumn dataField='employeeStatus' width='90' tdStyle={{ padding: '.45em' }}  >社員区分</TableHeaderColumn>
 											<TableHeaderColumn dataField='employeeName' tdStyle={{ padding: '.45em' }} width='260' dataFormat={this.employeeNameFormat}>氏名</TableHeaderColumn>
 											<TableHeaderColumn dataField='employeeFrom' tdStyle={{ padding: '.45em' }} hidden >所属</TableHeaderColumn>
 											<TableHeaderColumn dataField='customerName' tdStyle={{ padding: '.45em' }} >お客様</TableHeaderColumn>
