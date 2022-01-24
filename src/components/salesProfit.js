@@ -56,6 +56,18 @@ class salesProfit extends React.Component {
 	componentDidMount() {
 		axios.post(this.state.serverIP + "sendLettersConfirm/getLoginUserInfo")
 		.then(result => {
+			if(result.data[0].occupationCode === "5"){
+				let customerDrop = this.state.customerDrop;
+				let newCustomerDrop = [];
+				for(let i in customerDrop){
+					if(customerDrop[i].name === (result.data[0].employeeFristName + result.data[0].employeeLastName)){
+						newCustomerDrop.push(customerDrop[i])
+					}
+				}
+				this.setState({
+					customerDrop: newCustomerDrop,
+				})
+			}
 			this.setState({
 				authorityCode: result.data[0].authorityCode,
 				occupationCode: result.data[0].occupationCode,
