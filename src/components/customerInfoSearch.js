@@ -50,6 +50,7 @@ class CustomerInfoSearch extends Component {
         basicContractStatus: store.getState().dropDown[72],
         responseStatus: store.getState().dropDown[72].slice(1),
         listedCompanyFlag: store.getState().dropDown[17],
+        salesStaffDrop: store.getState().dropDown[56].slice(1),
         searchFlag: false,//検索ボタン押下フラグ
     	contactDateFlag: false,
         sendValue: {},
@@ -142,6 +143,8 @@ class CustomerInfoSearch extends Component {
         customerInfoMod["capitalStockBack"] = utils.deleteComma($("#capitalStockBack").val());
         customerInfoMod["topCustomerNo"] = this.state.topCustomerCode;
         customerInfoMod["stationCode"] = this.state.stationCode;
+        customerInfoMod["salesStaff"] = this.state.salesStaff;
+        
         if(this.state.contactDateFlag){
             customerInfoMod["contactDate"] = utils.formateDate(this.state.businessStartDate, false);
             customerInfoMod["businessStartDate"] = "";  
@@ -418,6 +421,28 @@ class CustomerInfoSearch extends Component {
     	}
     }
     
+	/**
+	 * 社員名連想
+	 * 
+	 * @param {}
+	 *            event
+	 */
+    getSalesStaff = (event, values) => {
+		this.setState({
+			[event.target.name]: event.target.value,
+		}, () => {
+			let salesStaff = null;
+			if (values !== null) {
+				salesStaff = values.code;
+			}else{
+				salesStaff = "";
+			}
+			this.setState({
+				salesStaff: salesStaff,
+			})
+		})
+	}
+    
     reset = () => {
         $("#traderPersonFront").val("");
         $("#traderPersonBack").val("");
@@ -546,6 +571,34 @@ class CustomerInfoSearch extends Component {
                             />
                         </InputGroup>
                         </Col>
+                        <Col sm={3}>
+                        <InputGroup size="sm" className="mb-3">
+                            <InputGroup.Prepend>
+                                <InputGroup.Text id="fiveKanji">LYC担当</InputGroup.Text>
+                            </InputGroup.Prepend>
+								<Autocomplete
+								id="salesStaff"
+								name="salesStaff"
+								value={this.state.salesStaffDrop.find(v => v.code === this.state.salesStaff) || {}}
+								options={this.state.salesStaffDrop}
+								getOptionLabel={(option) => option.text ? option.text : ""}
+								onChange={(event, values) => this.getSalesStaff(event, values)}
+								renderOption={(option) => {
+									return (
+										<React.Fragment>
+											{option.name}
+										</React.Fragment>
+									)
+								}}
+								renderInput={(params) => (
+									<div ref={params.InputProps.ref}>
+										<input type="text" {...params.inputProps} className="auto form-control Autocompletestyle-customerInfoSearch"
+										/>
+									</div>
+								)}
+							/>
+                        </InputGroup>
+                    </Col>
                     </Row>
                     <Row>
 	                    <Col sm={3}>
