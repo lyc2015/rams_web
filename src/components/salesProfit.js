@@ -59,13 +59,16 @@ class salesProfit extends React.Component {
 			if(result.data[0].occupationCode === "5"){
 				let customerDrop = this.state.customerDrop;
 				let newCustomerDrop = [];
+				let customerNo = "";
 				for(let i in customerDrop){
 					if(customerDrop[i].name === (result.data[0].employeeFristName + result.data[0].employeeLastName)){
-						newCustomerDrop.push(customerDrop[i])
+						newCustomerDrop.push(customerDrop[i]);
+						customerNo = customerDrop[i].code;
 					}
 				}
 				this.setState({
 					customerDrop: newCustomerDrop,
+					customerNo: customerNo,
 				})
 			}
 			this.setState({
@@ -189,6 +192,9 @@ class salesProfit extends React.Component {
 								salesPointData[i].siteRoleName = "";
 							}else{
 								siteRoleNameAll += Number(utils.deleteComma(salesPointData[i].siteRoleName));
+							}
+							if((salesPointData[i].employeeNo.search("BP") === -1 && salesPointData[i].employeeNo.search("SP") === -1) && (this.state.occupationCode === "1" || this.state.occupationCode === "5")){
+								salesPointData[i].salary = "";
 							}
 						}
 						this.setState({
@@ -513,7 +519,7 @@ class salesProfit extends React.Component {
 				                    </Col>
 				                    
 				                    <Col>
-						                <InputGroup size="sm" hidden={!(this.state.occupationCode === "5")}>
+						                <InputGroup size="sm" hidden={this.state.occupationCode !== "5" && this.state.authorityCode !== "4"}>
 						                    <InputGroup.Prepend>
 						                        <InputGroup.Text id="fiveKanji" className="input-group-indiv">担当者粗利</InputGroup.Text>
 						                    </InputGroup.Prepend>
