@@ -74,6 +74,7 @@ class salesProfit extends React.Component {
 			this.setState({
 				authorityCode: result.data[0].authorityCode,
 				occupationCode: result.data[0].occupationCode,
+				loginEmpNo: result.data[0].employeeNo,
 			})
 		})
 		.catch(function(error) {
@@ -142,18 +143,20 @@ class salesProfit extends React.Component {
 		this.setState(
 			{
 				admissionStartDate: date,
+			}, () => {
+				this.getAdmissionDate("start", date);
 			}
 		);
-		this.getAdmissionDate("start", date);
 	};
 	// 退場年月
 	admissionEndDate = (date) => {
 		this.setState(
 			{
 				admissionEndDate: date,
+			}, () => {
+				this.getAdmissionDate("end", date);
 			}
 		);
-		this.getAdmissionDate("end", date);
 	};
 
 	// 年月を取得する
@@ -189,9 +192,19 @@ class salesProfit extends React.Component {
 						let siteRoleNameAll = 0;
 						for(let i in salesPointData){
 							if(salesPointData[i].employeeNo.search("BP") === -1 && this.state.authorityCode !== "4"){
-								salesPointData[i].siteRoleName = "";
+								if(salesPointData[i].employeeNo.search("SP") !== -1){
+									if(this.state.loginEmpNo === salesPointData[i].introducer){
+										siteRoleNameAll += Number(utils.deleteComma(salesPointData[i].siteRoleName));
+									}
+									else{
+										salesPointData[i].siteRoleName = "";
+									}
+								}else{
+									salesPointData[i].siteRoleName = "";
+								}
 							}else{
 								siteRoleNameAll += Number(utils.deleteComma(salesPointData[i].siteRoleName));
+
 							}
 							if((salesPointData[i].employeeNo.search("BP") === -1 && salesPointData[i].employeeNo.search("SP") === -1) && (this.state.occupationCode === "1" || this.state.occupationCode === "5")){
 								salesPointData[i].salary = "";

@@ -92,6 +92,7 @@ class CustomerInfoSearch extends Component {
                 businessStartDate: utils.converToLocalTime(sendValue.businessStartDate, false),
                 responseFlag: sendValue.basicContract !== "1" ? true : false,
                 contactDateFlag: sendValue.response === "1" ? true : false,
+                salesStaff: sendValue.salesStaff,
             }, () => {
                 if (searchFlag) {
                     this.search();
@@ -324,6 +325,8 @@ class CustomerInfoSearch extends Component {
         sendValue["topCustomerNo"] = this.state.topCustomerCode;
         sendValue["stationCode"] = this.state.stationCode;
         sendValue["businessStartDate"] = utils.formateDate(this.state.businessStartDate, false);
+        sendValue["salesStaff"] = this.state.salesStaff;
+
         switch (actionType) {
             case "update":
                 path = {
