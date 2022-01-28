@@ -140,6 +140,7 @@ class salesProfit extends React.Component {
 	}
 	// 入場年月
 	admissionStartDate = (date) => {
+		alert(date)
 		this.setState(
 			{
 				admissionStartDate: date,
@@ -150,6 +151,7 @@ class salesProfit extends React.Component {
 	};
 	// 退場年月
 	admissionEndDate = (date) => {
+		alert(date)
 		this.setState(
 			{
 				admissionEndDate: date,
