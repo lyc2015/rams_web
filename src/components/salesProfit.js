@@ -9,6 +9,7 @@ import DatePicker, { registerLocale } from "react-datepicker"
 import store from './redux/store';
 import * as utils from './utils/publicUtils.js';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import * as publicUtils from './utils/publicUtils.js';
 axios.defaults.withCredentials = true;
 
 registerLocale('ja', ja);
@@ -140,7 +141,6 @@ class salesProfit extends React.Component {
 	}
 	// 入場年月
 	admissionStartDate = (date) => {
-		alert(date)
 		this.setState(
 			{
 				admissionStartDate: date,
@@ -151,7 +151,6 @@ class salesProfit extends React.Component {
 	};
 	// 退場年月
 	admissionEndDate = (date) => {
-		alert(date)
 		this.setState(
 			{
 				admissionEndDate: date,
@@ -186,6 +185,8 @@ class salesProfit extends React.Component {
 		salesPointSetModel["employeeStatus"] = this.state.employeeSearch
 		salesPointSetModel["startDate"] = start;
 		salesPointSetModel["endDate"] = end;
+		salesPointSetModel["startTime"] = publicUtils.formateDate(start, false);
+		salesPointSetModel["endTime"] = publicUtils.formateDate(end, false);
 		axios.post(this.state.serverIP + "getSalesInfo", salesPointSetModel)
 			.then(response => {
 				if (response.data != null) {
