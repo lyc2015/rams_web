@@ -301,6 +301,8 @@ class salesProfit extends React.Component {
 		}
 		salesPointSetModel["startDate"] = this.state.admissionStartDate
 		salesPointSetModel["endDate"] = this.state.admissionEndDate
+		salesPointSetModel["startTime"] = publicUtils.formateDate(this.state.admissionStartDate, false);
+		salesPointSetModel["endTime"] = publicUtils.formateDate(this.state.admissionEndDate, false);
 		axios.post(this.state.serverIP + "getSalesInfo", salesPointSetModel)
 			.then(response => {
 				if (response.data != null) {
@@ -557,7 +559,7 @@ class salesProfit extends React.Component {
 										<BootstrapTable selectRow={selectRow} data={this.state.salesPointData} ref='table' pagination={true} options={this.options} headerStyle={{ background: '#5599FF' }} striped hover condensed>
 											<TableHeaderColumn dataField='rowNo' width='57' tdStyle={{ padding: '.45em' }} isKey>番号</TableHeaderColumn>
 											<TableHeaderColumn dataField='yearAndMonth' width='100' tdStyle={{ padding: '.45em' }}>年月</TableHeaderColumn>
-											<TableHeaderColumn dataField='employeeStatus' width='90' tdStyle={{ padding: '.45em' }}  >社員区分</TableHeaderColumn>
+											<TableHeaderColumn dataField='employeeStatus' width='90' tdStyle={{ padding: '.45em' }} hidden >社員区分</TableHeaderColumn>
 											<TableHeaderColumn dataField='employeeName' tdStyle={{ padding: '.45em' }} width='260' dataFormat={this.employeeNameFormat}>氏名</TableHeaderColumn>
 											<TableHeaderColumn dataField='employeeFrom' tdStyle={{ padding: '.45em' }} hidden >所属</TableHeaderColumn>
 											<TableHeaderColumn dataField='customerName' tdStyle={{ padding: '.45em' }} >お客様</TableHeaderColumn>
