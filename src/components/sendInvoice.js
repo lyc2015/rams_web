@@ -268,7 +268,7 @@ class sendInvoice extends React.Component {
 
 いつもお世話になっております。ＬＹＣの` + this.state.loginUserInfo[0].employeeFristName + `でございます。
 
-弊社` + employee + (this.state.yearAndMonth.getMonth() + 1) + `月分請求書類（注文書）を添付にてご送付致します。
+弊社` + employee + (this.state.yearAndMonth.getMonth() + 1) + `月分請求書類を添付にてご送付致します。
 
 お手数ですが、ご確認お願い致します。
 
@@ -565,6 +565,7 @@ P-mark:第21004525(02)号
 
                             <div style={{ "float": "right" }}>
 		                        <Button variant="info" size="sm" onClick={this.shuseiTo.bind(this, "invoicePDF")} disabled={this.state.rowCustomerNo === ""}>請求書確認</Button>{' '}
+		                        <Button variant="info" size="sm" disabled={this.state.rowCustomerNo === ""}>メール確認</Button>{' '}
 	                            <Button variant="info" size="sm" onClick={this.sendLetter} title={"PDFの請求書を確認出来たら送信ボタンが押せます。"} disabled={this.state.sendFlag || this.state.rowCustomerNo === "" || Number(String(this.state.yearAndMonth.getFullYear()) + (this.state.yearAndMonth.getMonth() + 1)) < Number(String(new Date().getFullYear()) + new Date().getMonth())}>送信</Button>{' '}
 	 						</div>
 						</Col>  

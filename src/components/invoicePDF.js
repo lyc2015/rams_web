@@ -96,6 +96,7 @@ class invoicePDF extends React.Component {
 		currentPage: 1,
 		rowRowNo: "",
 		invoiceNo: "",
+		systemNameFlag: false,
 		workTimeFlag: false,
 		employeeNameFlag: false,
 		loading: true,
@@ -286,7 +287,7 @@ class invoicePDF extends React.Component {
 				</div>
 			);
 		}else{
-			return (<div><Row><font>{row.systemName === null || row.systemName === "" ? (this.state.employeeNameFlag ? (cell === null ? "" : cell) : "") : row.systemName + (this.state.employeeNameFlag ? (cell === null ? "" : "(" + cell + ")") : "")}</font></Row><Row><Col style={{margin: "0px",padding: "0px"}} sm={9}>{row.workPeriod}</Col><Col sm={3}>{(this.state.workTimeFlag ? (row.sumWorkTime === null || row.sumWorkTime === "" ? "" : row.sumWorkTime + "H") : "")}</Col></Row></div>);
+			return (<div><Row><font>{row.systemName === null || row.systemName === "" ? (this.state.employeeNameFlag ? (cell === null ? "" : cell) : "") : (this.state.systemNameFlag ? row.systemName : "技術支援" ) + (this.state.employeeNameFlag ? (cell === null ? "" : "(" + cell + ")") : "")}</font></Row><Row><Col style={{margin: "0px",padding: "0px"}} sm={9}>{row.workPeriod}</Col><Col sm={3}>{(this.state.workTimeFlag ? (row.sumWorkTime === null || row.sumWorkTime === "" ? "" : row.sumWorkTime + "H") : "")}</Col></Row></div>);
 		}
 	}
 	
@@ -391,6 +392,12 @@ class invoicePDF extends React.Component {
 			else 
 				return ("￥" + publicUtils.addComma(billingAmount) + "(税込)");
 		}
+	}
+	
+	systemNameFlagChange = () => {
+		this.setState({
+			systemNameFlag: !this.state.systemNameFlag,
+		});
 	}
 	
 	workTimeFlagChange = () => {
@@ -776,6 +783,7 @@ class invoicePDF extends React.Component {
                     <Row>
 						<Col sm={12}>
 		                   	<Button　size="sm"　variant="info" onClick={this.back}><FontAwesomeIcon icon={faLevelUpAlt} />戻る </Button>{' '}
+                            <Button size="sm" variant="info" onClick={this.systemNameFlagChange} >{"システム名"+ (this.state.systemNameFlag ? "非" : "") +"表示"}</Button>{' '}
                             <Button size="sm" variant="info" onClick={this.workTimeFlagChange} >{"作業時間"+ (this.state.workTimeFlag ? "非" : "") +"表示"}</Button>{' '}
                             <Button size="sm" variant="info" onClick={this.employeeNameFlagChange} >{"作業者"+ (this.state.employeeNameFlag ? "非" : "") +"表示"}</Button>{' '}
                             <Button size="sm" variant="info" onClick={this.deleteAll} >{"すべて削除"}</Button>{' '}
