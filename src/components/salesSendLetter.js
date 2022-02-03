@@ -293,11 +293,11 @@ class salesSendLetter extends React.Component {
 						for (let i in result.data) {
 							switch (this.state.proposeClassificationCode) {
 							case "1":
-								if(result.data[i].proposeClassificationCode === null || result.data[i].proposeClassificationCode === "2" || result.data[i].proposeClassificationCode === "3")
+								if(result.data[i].proposeClassificationCode === null || result.data[i].proposeClassificationCode === "1" || result.data[i].proposeClassificationCode === "3")
 									dataArray.push(result.data[i]);
 								break;
 							case "2":
-								if(result.data[i].proposeClassificationCode === null || result.data[i].proposeClassificationCode === "1" || result.data[i].proposeClassificationCode === "3")
+								if(result.data[i].proposeClassificationCode === null || result.data[i].proposeClassificationCode === "2" || result.data[i].proposeClassificationCode === "3")
 									dataArray.push(result.data[i]);
 								break;
 							default:
@@ -621,7 +621,6 @@ class salesSendLetter extends React.Component {
 					}
 					else{
 						newStorageListArray.push(this.state.storageList[i]);
-
 					}
 				}
 				this.setState({
@@ -656,15 +655,35 @@ class salesSendLetter extends React.Component {
 						}
 						else{
 							newStorageListArray.push(this.state.storageList[i]);
-
 						}
 					}
+					
+					let dataArray = new Array();
+					for (let i in result.data) {
+						switch (this.state.proposeClassificationCode) {
+						case "1":
+							if(result.data[i].proposeClassificationCode === null || result.data[i].proposeClassificationCode === "1" || result.data[i].proposeClassificationCode === "3")
+								dataArray.push(result.data[i]);
+							break;
+						case "2":
+							if(result.data[i].proposeClassificationCode === null || result.data[i].proposeClassificationCode === "2" || result.data[i].proposeClassificationCode === "3")
+								dataArray.push(result.data[i]);
+							break;
+						default:
+							dataArray.push(result.data[i]);
+							break;
+						}
+					}
+					for (let i in dataArray) {
+						dataArray[i].rowId = i;
+					}
+					
 					this.setState({
 						storageList: newStorageListArray,
 						storageListName: this.state.storageListNameChange,
-						allCustomer: result.data,
-						allCustomerTemp: result.data,
-						customerTemp: result.data,
+						allCustomer: dataArray,
+						allCustomerTemp: dataArray,
+						customerTemp: dataArray,
 					});
 				    this.setState({ "myToastShow": true, "type": "success", message: "処理成功" });
 			        setTimeout(() => this.setState({ "myToastShow": false }), 3000);
