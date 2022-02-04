@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Form, Col, Row, InputGroup, FormControl, OverlayTrigger, Popover } from 'react-bootstrap';
+import { Button, Form, Col, Row, InputGroup, FormControl, OverlayTrigger, Popover, Modal } from 'react-bootstrap';
 import axios from 'axios';
 import '../asserts/css/development.css';
 import '../asserts/css/style.css';
@@ -14,6 +14,7 @@ import * as publicUtils from './utils/publicUtils.js';
 import MyToast from './myToast';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import store from './redux/store';
+import SendInvoiceLetter from './sendInvoiceLetter';
 registerLocale("ja", ja);
 axios.defaults.withCredentials = true;
 
@@ -71,6 +72,7 @@ class sendInvoice extends React.Component {
 		rowEmployeeList: [],
 		sendFlag: false,
 		loading: true,
+		showSendInvoiceLetter: false,
         customerAbbreviationList: store.getState().dropDown[73].slice(1),
 		serverIP: store.getState().dropDown[store.getState().dropDown.length - 1],
 	};
@@ -249,6 +251,42 @@ class sendInvoice extends React.Component {
 		this.reportDownload(sendInvoiceWorkTimeModel[row.rowNo - 1].workingTimeReport,sendInvoiceWorkTimeModel[row.rowNo - 1].employeeName);
     }
     
+    checkMail = () => {
+    	let employeeList = this.state.rowEmployeeList;
+    	let employee = "";
+    	for(let i in employeeList){
+    		employee += employeeList[i].employeeName + "、";
+    	}
+    	if(employee.length > 0)
+    		employee = employee.substring(0,employee.length - 1);
+    	let mailConfirmContont = (this.state.rowCustomerName.search("会社") === -1 ? this.state.rowCustomerName + `株式会社` : this.state.rowCustomerName) + `
+` + (this.state.rowPurchasingManagers === "" ? "" : (this.state.rowPurchasingManagers.search(" ") !== -1 || this.state.rowPurchasingManagers.search("　") !== -1 ? 
+(this.state.rowPurchasingManagers.search(" ") !== -1 ? this.state.rowPurchasingManagers.split(" ")[0] : this.state.rowPurchasingManagers.split("　")[0]) : this.state.rowPurchasingManagers) + `様`) + `
+
+いつもお世話になっております。ＬＹＣの` + this.state.loginUserInfo[0].employeeFristName + `でございます。
+
+弊社` + employee + (this.state.yearAndMonth.getMonth() + 1) + `月分請求書類、作業報告書を添付にてご送付致します。
+
+お手数ですが、ご確認お願い致します。
+
+引き続き何卒よろしくお願い申し上げます。
+----------------------------------------
+LYC株式会社　
+事務担当　宋（ソウ）/莫（バク）
+〒101-0032　東京都千代田区岩本町3-3-3　サザンビル3階
+URL:http://www.lyc.co.jp/　TEL:03-6908-5796 
+E-mail: zoeywu@lyc.co.jp  事務共通:jimu@lyc.co.jp
+P-mark:第21004525(02)号
+労働者派遣事業許可番号　派13-306371
+`;
+    	
+    	this.setState({
+    		mailConfirmContont: mailConfirmContont,
+        },() => {
+        	this.handleShowModal();
+        })
+    }
+    
     sendLetter = () => {
         var a = window.confirm("送信してよろしいでしょうか？");
 
@@ -268,7 +306,7 @@ class sendInvoice extends React.Component {
 
 いつもお世話になっております。ＬＹＣの` + this.state.loginUserInfo[0].employeeFristName + `でございます。
 
-弊社` + employee + (this.state.yearAndMonth.getMonth() + 1) + `月分請求書類を添付にてご送付致します。
+弊社` + employee + (this.state.yearAndMonth.getMonth() + 1) + `月分請求書類、作業報告書を添付にてご送付致します。
 
 お手数ですが、ご確認お願い致します。
 
@@ -454,6 +492,19 @@ P-mark:第21004525(02)号
       else 
     	  return "";
 	}
+    
+    /**
+     * 小さい画面の閉め 
+     */
+    handleHideModal = (Kbn) => {
+     this.setState({ showSendInvoiceLetter: false })
+     }
+     /**
+     *  小さい画面の開き
+     */
+     handleShowModal = (Kbn) => {
+         this.setState({ showSendInvoiceLetter: true })
+     }
 
 	render() {
 		const {sendInvoiceList} = this.state;
@@ -498,6 +549,15 @@ P-mark:第21004525(02)号
 				</div>
 				<Form >
 					<div>
+					<Modal aria-labelledby="contained-modal-title-vcenter" centered backdrop="static" dialogClassName="modal-projectContent"
+                        onHide={this.handleHideModal.bind(this)} show={this.state.showSendInvoiceLetter}>
+                        <Modal.Header closeButton>
+                        <h2>メール確認</h2>
+                        </Modal.Header>
+                        <Modal.Body >
+                            <SendInvoiceLetter mailConfirmContont={this.state.mailConfirmContont} />
+                        </Modal.Body>
+                    </Modal>
 						<Form.Group>
 							<Row inline="true">
 								<Col className="text-center">
@@ -565,7 +625,7 @@ P-mark:第21004525(02)号
 
                             <div style={{ "float": "right" }}>
 		                        <Button variant="info" size="sm" onClick={this.shuseiTo.bind(this, "invoicePDF")} disabled={this.state.rowCustomerNo === ""}>請求書確認</Button>{' '}
-		                        <Button variant="info" size="sm" disabled={this.state.rowCustomerNo === ""}>メール確認</Button>{' '}
+		                        <Button variant="info" size="sm" onClick={this.checkMail} disabled={this.state.rowCustomerNo === ""}>メール確認</Button>{' '}
 	                            <Button variant="info" size="sm" onClick={this.sendLetter} title={"PDFの請求書を確認出来たら送信ボタンが押せます。"} disabled={this.state.sendFlag || this.state.rowCustomerNo === "" || Number(String(this.state.yearAndMonth.getFullYear()) + (this.state.yearAndMonth.getMonth() + 1)) < Number(String(new Date().getFullYear()) + new Date().getMonth())}>送信</Button>{' '}
 	 						</div>
 						</Col>  
