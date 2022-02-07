@@ -252,14 +252,27 @@ class sendInvoice extends React.Component {
     }
     
     checkMail = () => {
-    	let employeeList = this.state.rowEmployeeList;
-    	let employee = "";
-    	for(let i in employeeList){
-    		employee += employeeList[i].employeeName + "、";
+    	let flag = true;
+    	let mailConfirmContont;
+    	let sendInvoiceList = this.state.sendInvoiceList;
+    	for(let i in sendInvoiceList){
+    		if(sendInvoiceList[i].customerName === this.state.rowCustomerName){
+    			if(!(sendInvoiceList[i].mailConfirmContont === undefined || sendInvoiceList[i].mailConfirmContont === null || sendInvoiceList[i].mailConfirmContont === "")){
+    				flag = false;
+    				mailConfirmContont = sendInvoiceList[i].mailConfirmContont;
+    			}
+    		}
     	}
-    	if(employee.length > 0)
-    		employee = employee.substring(0,employee.length - 1);
-    	let mailConfirmContont = (this.state.rowCustomerName.search("会社") === -1 ? this.state.rowCustomerName + `株式会社` : this.state.rowCustomerName) + `
+    	
+    	if(flag){
+    		let employeeList = this.state.rowEmployeeList;
+    		let employee = "";
+    		for(let i in employeeList){
+    			employee += employeeList[i].employeeName + "、";
+    		}
+    		if(employee.length > 0)
+    			employee = employee.substring(0,employee.length - 1);
+    		mailConfirmContont = (this.state.rowCustomerName.search("会社") === -1 ? this.state.rowCustomerName + `株式会社` : this.state.rowCustomerName) + `
 ` + (this.state.rowPurchasingManagers === "" ? "" : (this.state.rowPurchasingManagers.search(" ") !== -1 || this.state.rowPurchasingManagers.search("　") !== -1 ? 
 (this.state.rowPurchasingManagers.search(" ") !== -1 ? this.state.rowPurchasingManagers.split(" ")[0] : this.state.rowPurchasingManagers.split("　")[0]) : this.state.rowPurchasingManagers) + `様`) + `
 
@@ -279,7 +292,7 @@ E-mail: zoeywu@lyc.co.jp  事務共通:jimu@lyc.co.jp
 P-mark:第21004525(02)号
 労働者派遣事業許可番号　派13-306371
 `;
-    	
+}
     	this.setState({
     		mailConfirmContont: mailConfirmContont,
         },() => {
@@ -300,7 +313,19 @@ P-mark:第21004525(02)号
         	}
         	if(employee.length > 0)
         		employee = employee.substring(0,employee.length - 1);
-        	let mailConfirmContont = (this.state.rowCustomerName.search("会社") === -1 ? this.state.rowCustomerName + `株式会社` : this.state.rowCustomerName) + `
+        	
+        	let mailConfirmContont;
+        	let flag = true;
+        	for(let i in sendInvoiceList){
+        		if(sendInvoiceList[i].customerName === this.state.rowCustomerName){
+        			if(!(sendInvoiceList[i].mailConfirmContont === undefined || sendInvoiceList[i].mailConfirmContont === null || sendInvoiceList[i].mailConfirmContont === "")){
+        				flag = false;
+        				mailConfirmContont = sendInvoiceList[i].mailConfirmContont;
+        			}
+        		}
+        	}
+        	if(flag){
+        		mailConfirmContont = (this.state.rowCustomerName.search("会社") === -1 ? this.state.rowCustomerName + `株式会社` : this.state.rowCustomerName) + `
 ` + (this.state.rowPurchasingManagers === "" ? "" : (this.state.rowPurchasingManagers.search(" ") !== -1 || this.state.rowPurchasingManagers.search("　") !== -1 ? 
 	(this.state.rowPurchasingManagers.search(" ") !== -1 ? this.state.rowPurchasingManagers.split(" ")[0] : this.state.rowPurchasingManagers.split("　")[0]) : this.state.rowPurchasingManagers) + `様`) + `
 
@@ -320,7 +345,7 @@ E-mail: zoeywu@lyc.co.jp  事務共通:jimu@lyc.co.jp
 P-mark:第21004525(02)号
 労働者派遣事業許可番号　派13-306371
 `;
-        	
+}	
         	for(let i in sendInvoiceList){
         		if(sendInvoiceList[i].customerNo === this.state.rowCustomerNo){
                 	let reportFile = "";
@@ -505,6 +530,20 @@ P-mark:第21004525(02)号
      handleShowModal = (Kbn) => {
          this.setState({ showSendInvoiceLetter: true })
      }
+     
+     setNewMail = (mailConfirmContont) => {
+    	 let sendInvoiceList = this.state.sendInvoiceList;
+    	 for(let i in sendInvoiceList){
+    		 if(sendInvoiceList[i].customerName === this.state.rowCustomerName){
+    			 sendInvoiceList[i].mailConfirmContont = mailConfirmContont;
+    		 }
+    	 }
+    	 this.setState(
+    		{ 
+    	 		showSendInvoiceLetter: false,
+    	 		sendInvoiceList: sendInvoiceList,
+    		})
+     }
 
 	render() {
 		const {sendInvoiceList} = this.state;
@@ -551,11 +590,11 @@ P-mark:第21004525(02)号
 					<div>
 					<Modal aria-labelledby="contained-modal-title-vcenter" centered backdrop="static" dialogClassName="modal-projectContent"
                         onHide={this.handleHideModal.bind(this)} show={this.state.showSendInvoiceLetter}>
-                        <Modal.Header closeButton>
-                        <h2>メール確認</h2>
-                        </Modal.Header>
+					<Modal.Header closeButton><Col className="text-center">
+							<h2>メール確認</h2>
+						</Col></Modal.Header>
                         <Modal.Body >
-                            <SendInvoiceLetter mailConfirmContont={this.state.mailConfirmContont} />
+                            <SendInvoiceLetter returnMail={this} mailConfirmContont={this.state.mailConfirmContont} />
                         </Modal.Body>
                     </Modal>
 						<Form.Group>

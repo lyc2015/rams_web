@@ -27,6 +27,11 @@ class sendInvoiceLetter extends Component {
         	mailConfirmContont: this.props.mailConfirmContont
         })
     }
+    
+    setMail = () => {
+    	this.props.returnMail.setNewMail(this.state.mailConfirmContont);
+    }
+    
     render() {
         return (
             <div>
@@ -34,11 +39,15 @@ class sendInvoiceLetter extends Component {
                     <MyToast myToastShow={this.state.myToastShow} message={"更新成功！"} type={"danger"} />
                 </div>
                 <div>
-	                <textarea ref={(textarea) => this.textArea = textarea} value = {this.state.mailConfirmContont}  id="mail" name="mail" 
+	                <textarea ref={(textarea) => this.textArea = textarea} value = {this.state.mailConfirmContont}  id="mailConfirmContont" name="mailConfirmContont" 
 						onChange={this.valueChange}
 						className="auto form-control Autocompletestyle-interview-text"
 						style={{ height: '800px', resize: 'none', overflow: 'hidden' }}
 					/>
+				</div>
+	            <div>
+					<div style={{ "textAlign": "center" }}>
+						<Button id='copyUrl' size="sm" variant="info" onClick={this.setMail}> 確認</Button></div>
 				</div>
             </div>
         );
