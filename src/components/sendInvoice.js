@@ -235,9 +235,9 @@ class sendInvoice extends React.Component {
     		return "";
     	}else{
         	if(cell)
-        		return (<div><font>あり</font><input type="checkbox" onChange={(event) => {this.setReport(row)}} checked /></div>)
+        		return (<div><font onClick={(event) => {this.setReport(row)}}>あり</font><input type="checkbox" onChange={(event) => {this.setReport(row)}} checked /></div>)
         	else
-        		return (<div><font>あり</font><input type="checkbox" onChange={(event) => {this.setReport(row)}} /></div>)
+        		return (<div><font onClick={(event) => {this.setReport(row)}}>あり</font><input type="checkbox" onChange={(event) => {this.setReport(row)}} /></div>)
     	}
     }
     
@@ -365,7 +365,7 @@ P-mark:第21004525(02)号
         					mailFrom: this.state.loginUserInfo[0].companyMail,
         					mailConfirmContont: mailConfirmContont,
         					mailTitle: "請求書_" + (this.state.yearAndMonth.getFullYear()) + "年" + (this.state.yearAndMonth.getMonth() + 1) + "月分_" + (this.state.rowCustomerName.search("会社") === -1 ? this.state.rowCustomerName + `株式会社` : this.state.rowCustomerName),
-        					nowDate: String(new Date().getFullYear()) + (new Date().getMonth() + 1 < 10 ? "0" + String(new Date().getMonth() + 1) : String(new Date().getMonth() + 1)) + String(new Date().getDate()),
+        					nowDate: String(new Date().getFullYear()) + (new Date().getMonth() + 1 < 10 ? "0" + String(new Date().getMonth() + 1) : String(new Date().getMonth() + 1)) + (new Date().getDate() < 10 ? "0" + String(new Date().getDate()) : String(new Date().getDate())),
         					reportFile: reportFile,
         			}
         		}
