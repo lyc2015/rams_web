@@ -253,6 +253,7 @@ class sendInvoice extends React.Component {
     
     checkMail = () => {
     	let flag = true;
+		let reportFlag = false;
     	let mailConfirmContont;
     	let sendInvoiceList = this.state.sendInvoiceList;
     	for(let i in sendInvoiceList){
@@ -261,6 +262,11 @@ class sendInvoice extends React.Component {
     				flag = false;
     				mailConfirmContont = sendInvoiceList[i].mailConfirmContont;
     			}
+            	for(let j in this.state.sendInvoiceList[i].sendInvoiceWorkTimeModel){
+            		if(this.state.selectAllFlag || this.state.sendInvoiceList[i].sendInvoiceWorkTimeModel[j].report){
+            			reportFlag = true;
+            		}
+            	}
     		}
     	}
     	
@@ -278,7 +284,7 @@ class sendInvoice extends React.Component {
 
 いつもお世話になっております。ＬＹＣの` + this.state.loginUserInfo[0].employeeFristName + `でございます。
 
-弊社` + employee + (this.state.yearAndMonth.getMonth() + 1) + `月分請求書類、作業報告書を添付にてご送付致します。
+弊社` + employee + (this.state.yearAndMonth.getMonth() + 1) + `月分請求書類` + (reportFlag ? `、作業報告書` : "") + `を添付にてご送付致します。
 
 お手数ですが、ご確認お願い致します。
 
@@ -315,6 +321,7 @@ P-mark:第21004525(02)号
         		employee = employee.substring(0,employee.length - 1);
         	
         	let mailConfirmContont;
+    		let reportFlag = false;
         	let flag = true;
         	for(let i in sendInvoiceList){
         		if(sendInvoiceList[i].customerName === this.state.rowCustomerName){
@@ -322,6 +329,11 @@ P-mark:第21004525(02)号
         				flag = false;
         				mailConfirmContont = sendInvoiceList[i].mailConfirmContont;
         			}
+                	for(let j in this.state.sendInvoiceList[i].sendInvoiceWorkTimeModel){
+                		if(this.state.selectAllFlag || this.state.sendInvoiceList[i].sendInvoiceWorkTimeModel[j].report){
+                			reportFlag = true;
+                		}
+                	}
         		}
         	}
         	if(flag){
@@ -331,7 +343,7 @@ P-mark:第21004525(02)号
 
 いつもお世話になっております。ＬＹＣの` + this.state.loginUserInfo[0].employeeFristName + `でございます。
 
-弊社` + employee + (this.state.yearAndMonth.getMonth() + 1) + `月分請求書類、作業報告書を添付にてご送付致します。
+弊社` + employee + (this.state.yearAndMonth.getMonth() + 1) + `月分請求書類` + (reportFlag ? `、作業報告書` : "") + `を添付にてご送付致します。
 
 お手数ですが、ご確認お願い致します。
 
@@ -365,7 +377,7 @@ P-mark:第21004525(02)号
         					mailFrom: this.state.loginUserInfo[0].companyMail,
         					mailConfirmContont: mailConfirmContont,
         					mailTitle: "請求書_" + (this.state.yearAndMonth.getFullYear()) + "年" + (this.state.yearAndMonth.getMonth() + 1) + "月分_" + (this.state.rowCustomerName.search("会社") === -1 ? this.state.rowCustomerName + `株式会社` : this.state.rowCustomerName),
-        					nowDate: String(new Date().getFullYear()) + (new Date().getMonth() + 1 < 10 ? "0" + String(new Date().getMonth() + 1) : String(new Date().getMonth() + 1)) + (new Date().getDate() < 10 ? "0" + String(new Date().getDate()) : String(new Date().getDate())),
+        					nowDate: String(new Date().getFullYear()) + "/" + (new Date().getMonth() + 1 < 10 ? "0" + String(new Date().getMonth() + 1) : String(new Date().getMonth() + 1)) + "/" + (new Date().getDate() < 10 ? "0" + String(new Date().getDate()) : String(new Date().getDate())) + " " + new Date().getHours() + ":" + new Date().getMinutes(),
         					reportFile: reportFile,
         			}
         		}
@@ -411,11 +423,15 @@ P-mark:第21004525(02)号
 	}
     
     sendLetterDateFormat = (cell) => {
-    	if(cell === null || cell === undefined || cell.length < 8){
+    	/*if(cell === null || cell === undefined || cell.length < 8){
     		return "";
     	}else{
     		return cell.substring(0,4) + "/" + cell.substring(4,6) + "/" + cell.substring(6,8)
-    	}
+    	}*/
+    	if(cell !== null)
+    		return cell;
+    	else
+    		return "";
     }
     
     sendLetterStatusFormat = (cell) => {
