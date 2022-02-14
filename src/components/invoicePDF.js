@@ -287,7 +287,7 @@ class invoicePDF extends React.Component {
 				</div>
 			);
 		}else{
-			return (<div><Row><font>{row.systemName === null || row.systemName === "" ? (this.state.employeeNameFlag ? (cell === null ? "" : cell) : "") : (this.state.systemNameFlag ? row.systemName : "技術支援" ) + (this.state.employeeNameFlag ? (cell === null ? "" : "(" + cell + ")") : "")}</font></Row><Row><Col style={{margin: "0px",padding: "0px"}} sm={9}>{row.workPeriod}</Col><Col sm={3}>{(this.state.workTimeFlag ? (row.sumWorkTime === null || row.sumWorkTime === "" ? "" : row.sumWorkTime + "H") : "")}</Col></Row></div>);
+			return (<div><Row><font>{row.systemName === null || row.systemName === "" ? (this.state.employeeNameFlag ? (cell === null ? "" : cell) : "") : (this.state.systemNameFlag || row.systemName.search("出張") !== -1 || row.systemName.search("食事") !== -1 || row.systemName.search("宿泊") !== -1 ? row.systemName : "技術支援" ) + (this.state.employeeNameFlag ? (cell === null ? "" : "(" + cell + ")") : "")}</font></Row><Row><Col style={{margin: "0px",padding: "0px"}} sm={9}>{row.workPeriod}</Col><Col sm={3}>{(this.state.workTimeFlag ? (row.sumWorkTime === null || row.sumWorkTime === "" ? "" : row.sumWorkTime + "H") : "")}</Col></Row></div>);
 		}
 	}
 	
@@ -477,7 +477,8 @@ class invoicePDF extends React.Component {
 						model = {
 								yearAndMonth: publicUtils.formateDate(this.state.yearAndMonth, false),
 								customerNo: this.state.customerNo,
-								oldWorkContents: sendInvoiceList[i].oldWorkContents,	
+								oldWorkContents: sendInvoiceList[i].oldWorkContents,
+								employeeNo: sendInvoiceList[i].employeeNo,
 						}
 					}
 					sendInvoiceList.splice(i,1);

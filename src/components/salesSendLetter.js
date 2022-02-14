@@ -87,7 +87,11 @@ class salesSendLetter extends React.Component {
 				sendValue: this.props.location.state.sendValue,
 				projectNo: this.props.location.state.projectNo,
 				proposeClassificationCode: this.props.location.state.sendValue.proposeClassificationCode,
+				//storageListName: this.props.location.state.sendValue.storageListName,
 			}, () => {
+				this.refs.customersTable.setState({
+					selectedRowKeys: this.props.location.state.sendValue.customerNo,
+				});
 				this.setStorageList(this.props.location.state.sendValue.proposeClassificationCode);
 				switch (this.props.location.state.sendValue.proposeClassificationCode) {
 				case "0":
@@ -325,7 +329,7 @@ class salesSendLetter extends React.Component {
 					break;	
 				case 'personInCharge':
 					this.setState({
-						purchasingManagers: values.text,
+						purchasingManagers: values.value,
 						customerCode: '',
 						addCustomerCode: values.code,
 					})
@@ -948,6 +952,8 @@ class salesSendLetter extends React.Component {
 						projectNo: this.state.projectNo,
 						sendValue: {
 							proposeClassificationCode: this.state.proposeClassificationCode,
+							storageListName: this.state.storageListName,
+							customerNo: this.state.customerNo,
 							},
                     },
                 }
@@ -1010,7 +1016,7 @@ class salesSendLetter extends React.Component {
 				<br />
 				<Form onSubmit={this.savealesSituation}>
 					<Row>
-					<Col sm={3}>
+					<Col sm={4}>
 						<InputGroup size="sm" className="mb-3">
 		                    <InputGroup.Prepend>
 		                        <InputGroup.Text>提案区分</InputGroup.Text>
@@ -1024,11 +1030,14 @@ class salesSendLetter extends React.Component {
 		                            </option>
 		                        )}
 		                    </Form.Control>
+		                    <font style={{ marginLeft: "25px", marginRight: "0px" }}></font>
 	                    </InputGroup>
 					</Col>
 					</Row>
 						<Row>
 							<Col sm={6}>
+							<Row style={{margin:'0px', padding:'0px'}}>
+							<Col sm={8}  style={{margin:'0px', padding:'0px'}}>
 							<InputGroup size="sm" className="mb-3">
 								<InputGroup.Prepend>
 									<InputGroup.Text id="inputGroup-sizing-sm">お客様名</InputGroup.Text>
@@ -1047,15 +1056,18 @@ class salesSendLetter extends React.Component {
 										</div>
 									)}
 								/>
-									
+							</InputGroup>
+							</Col>
+							<Col sm={4} style={{margin:'0px', padding:'0px'}}>
+							<InputGroup size="sm" className="mb-3">
 								<InputGroup.Prepend>
 									<InputGroup.Text id="sanKanji">担当者</InputGroup.Text>
 								</InputGroup.Prepend>
 								<Autocomplete
 								disabled={this.state.allCustomer.length === this.state.allCustomerNum ? true : false}
 								options={this.state.personInCharge}
-								getOptionLabel={(option) => option.text ? option.text : ""}
-								value={this.state.personInCharge.find(v => v.text === this.state.purchasingManagers) || ""}
+								getOptionLabel={(option) => option.value ? option.value : ""}
+								value={this.state.personInCharge.find(v => v.value === this.state.purchasingManagers) || ""}
 								onChange={(event, values) => this.onTagsChange(event, values, 'personInCharge')}
 								renderInput={(params) => (
 									<div ref={params.InputProps.ref}>
@@ -1067,6 +1079,8 @@ class salesSendLetter extends React.Component {
 							/>
 								
 							</InputGroup>
+							</Col>
+							</Row>
 							</Col>
 
 							<Col sm={3}>
