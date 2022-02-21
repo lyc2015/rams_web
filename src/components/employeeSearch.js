@@ -263,6 +263,7 @@ class employeeSearch extends React.Component {
     				$('#update').attr('disabled', false);
     				$('#detail').attr('disabled', false);
     				$('#wagesInfo').attr('disabled', false);
+    				$('#workRepot').attr('disabled', false);
     				$('#siteInfo').attr('disabled', false);
                 } else {
                     this.refs.siteSearchTable.setState({
@@ -276,6 +277,7 @@ class employeeSearch extends React.Component {
 					$('#update').attr('disabled', true);
 					$('#detail').attr('disabled', true);
 					$('#wagesInfo').attr('disabled', true);
+					$('#workRepot').attr('disabled', true);
 					$('#siteInfo').attr('disabled', true);
                 }
 
@@ -392,6 +394,7 @@ class employeeSearch extends React.Component {
 				{
 					rowSelectEmployeeNoForPageChange: row.employeeNo,
 					rowSelectEmployeeNo: row.employeeNo,
+					rowSelectEmployeeName: row.employeeName,
 					residentCardInfo: row.residentCardInfo,
 					passportInfo:row.passportInfo,
 					resumeInfo1: row.resumeInfo1,
@@ -408,12 +411,14 @@ class employeeSearch extends React.Component {
 			$('#update').attr('disabled', false);
 			$('#detail').attr('disabled', false);
 			$('#wagesInfo').attr('disabled', false);
+			$('#workRepot').attr('disabled', false);
 			$('#siteInfo').attr('disabled', false);
 		} else {
 			this.setState(
 				{
 					rowSelectEmployeeNoForPageChange: '',
 					rowSelectEmployeeNo: '',
+					rowSelectEmployeeName: '',
 					linkDisableFlag: true,// linkDisableFlag
 	                currPage:'',
 				}
@@ -424,6 +429,7 @@ class employeeSearch extends React.Component {
 			$('#update').attr('disabled', true);
 			$('#detail').attr('disabled', true);
 			$('#wagesInfo').attr('disabled', true);
+			$('#workRepot').attr('disabled', true);
 			$('#siteInfo').attr('disabled', true);
 		}
 	}
@@ -767,6 +773,18 @@ class employeeSearch extends React.Component {
 					pathname: '/subMenuManager/siteInfo',
 					state: {
 						employeeNo: this.state.rowSelectEmployeeNo,
+						backPage: "employeeSearch",
+						sendValue: sendValue,
+						searchFlag: this.state.searchFlag
+					},
+				}
+				break;
+			case "workRepot":
+				path = {
+					pathname: '/subMenuManager/workRepot',
+					state: {
+						employeeNo: this.state.rowSelectEmployeeNo,
+						employeeName: this.state.rowSelectEmployeeName,
 						backPage: "employeeSearch",
 						sendValue: sendValue,
 						searchFlag: this.state.searchFlag
@@ -1163,6 +1181,7 @@ class employeeSearch extends React.Component {
 								</Button>{' '}
 								<Button size="sm" variant="info" name="clickButton" id="residentCardInfo" onClick={publicUtils.handleDownload.bind(this, this.state.residentCardInfo, this.state.serverIP)} ><FontAwesomeIcon icon={faDownload} /> 在留カード</Button>{' '}
 								<Button size="sm" variant="info" name="clickButton" id="passportInfo" onClick={publicUtils.handleDownload.bind(this, this.state.passportInfo, this.state.serverIP)} ><FontAwesomeIcon icon={faDownload} /> パスポート</Button>{' '}
+								<Button size="sm" onClick={this.shuseiTo.bind(this, "workRepot")} hidden={this.state.authorityCode==="4" ? false : true} name="clickButton" variant="info" id="workRepot">勤務管理</Button>{' '}
 							</div>
 						</Col>
 						<Col sm={4}>
