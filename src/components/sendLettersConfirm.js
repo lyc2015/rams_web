@@ -1206,6 +1206,10 @@ Email：`+ this.state.loginUserInfo[0].companyMail + ` 営業共通：eigyou@lyc
 	}
 	
 	titleValueChange = event => {
+		if(event.target.value === "input"){
+			this.titleChange();
+			return
+		}
 		this.setState({
 			[event.target.name]: event.target.value,
 		})
@@ -1376,6 +1380,7 @@ Email：`+ this.state.loginUserInfo[0].companyMail + ` 営業共通：eigyou@lyc
 								<option>{this.getNextMonth(1)}の要員提案に関して</option>
 								<option>即日要員提案に関して</option>
 								<option>{this.getNextMonth(2)}の要員提案に関して</option>
+								<option value="input">手動入力</option>
 							</Form.Control>
 							}
 						</InputGroup>
