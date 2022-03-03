@@ -348,7 +348,7 @@ Math.ceil((new Date().getTime() - publicUtils.converToLocalTime(result.data[0].b
 	sendMailWithFile = (mailText,resumeInfo1,resumeInfo2,resumeName1,resumeName2) => {
 		for(let i = 0; i < this.state.selectedCusInfos.length; i++){
 			let selectedCustomer = this.state.selectedCusInfos[i].customerNo;
-			const mailConfirmContont = this.state.selectedCusInfos[i].customerName.split("(")[0].replace("株式会社","") + ` 株式会社
+			const mailConfirmContont = (this.state.selectedCusInfos[i].customerName.split("(")[0].search("株式会社") === -1　?　this.state.selectedCusInfos[i].customerName.split("(")[0] + `株式会社` : this.state.selectedCusInfos[i].customerName.split("(")[0]) + ` 
 `+ (this.state.selectedCusInfos[i].purchasingManagers === "" ? "ご担当者" : this.state.selectedCusInfos[i].purchasingManagers.split("　")[0]) + ` 様
 
 お世話になっております、LYC`+ this.state.loginUserInfo[0].employeeFristName + `です。

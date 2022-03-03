@@ -1318,10 +1318,10 @@ class CustomerInfo extends Component {
                                     dataFormat={this.formatCustomerDepartment.bind(this)} customEditor={{ getElement: tableSelect1 }}>部門</TableHeaderColumn>
                                 <TableHeaderColumn dataField='positionCode'  tdStyle={{ padding: '.45em' }}  
                                     dataFormat={this.formatPosition.bind(this)} customEditor={{ getElement: tableSelect2 }} width="10%">職位</TableHeaderColumn>
-                                <TableHeaderColumn dataField='customerDepartmentMail'  tdStyle={{ padding: '.45em' }} width="15%">メール</TableHeaderColumn>
+                                <TableHeaderColumn dataField='customerDepartmentMail'  tdStyle={{ padding: '.45em' }} width="25%">メール</TableHeaderColumn>
                                 <TableHeaderColumn dataField='typeOfIndustryCode'  tdStyle={{ padding: '.45em' }}  
                                     dataFormat={this.formatIndustry.bind(this)} customEditor={{ getElement: tableSelect3 }} width="10%">業種</TableHeaderColumn>
-                                <TableHeaderColumn dataField='topCustomerCode'  tdStyle={{ padding: '.45em' }}  width="11%"
+                                <TableHeaderColumn dataField='topCustomerCode'  tdStyle={{ padding: '.45em' }}  width="11%" hidden
                                     dataFormat={this.formatTopCustomer.bind(this)} customEditor={{ getElement: tableSelect11 }}>Top客様</TableHeaderColumn>
                                 <TableHeaderColumn dataField='stationCode'  tdStyle={{ padding: '.45em' }}
                                     dataFormat={this.formatStation.bind(this)} customEditor={{ getElement: tableSelect4 }} width="12%">拠点</TableHeaderColumn>

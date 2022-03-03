@@ -119,8 +119,10 @@ class sendInvoice extends React.Component {
 				rowCustomerName: row.customerName,
 				rowPurchasingManagers: row.purchasingManagers,
 				rowEmployeeList: row.sendInvoiceWorkTimeModel,
+				rowPurchasingManagersMail: row.purchasingManagersMail,
 				sendFlag: row.havePDF === "false",
 				reportRowNo: row.rowNo,
+	        	mailTitle: "請求書_" + (this.state.yearAndMonth.getFullYear()) + "年" + (this.state.yearAndMonth.getMonth() + 1) + "月分_" + (row.customerName.search("会社") === -1 ? row.customerName + `株式会社` : row.customerName),
 			});
 		} else {
 			this.setState({
@@ -128,7 +130,9 @@ class sendInvoice extends React.Component {
 				rowCustomerName: "",
 				rowPurchasingManagers: "",
 				rowEmployeeList: [],
+				rowPurchasingManagersMail: "",
 				sendFlag: true,
+				mailTitle: "",
 			});
 		}	
 	}
@@ -610,7 +614,7 @@ P-mark:第21004525(02)号
 							<h2>メール確認</h2>
 						</Col></Modal.Header>
                         <Modal.Body >
-                            <SendInvoiceLetter returnMail={this} mailConfirmContont={this.state.mailConfirmContont} />
+                            <SendInvoiceLetter returnMail={this} mailConfirmContont={this.state.mailConfirmContont} mailTO={this.state.rowPurchasingManagersMail} mailTitle={this.state.mailTitle} />
                         </Modal.Body>
                     </Modal>
 						<Form.Group>

@@ -418,8 +418,10 @@ class siteInfo extends Component {
 			[event.target.name]: event.target.value,
 		}, () => {
 			let employeeName = null;
+			let employeeAllName = null;
 			if (values !== null) {
 				employeeName = values.code;
+				employeeAllName = values.text;
 				this.setState({
 					pageDisabledFlag: false,
 				})
@@ -434,6 +436,7 @@ class siteInfo extends Component {
 			}
 			this.setState({
 				employeeName: employeeName,
+				employeeAllName: employeeAllName,
 			}, () => {
 				axios.post(this.state.serverIP + "getSiteInfo", { employeeName: this.state.employeeName })
 					.then(response => {
@@ -1091,7 +1094,7 @@ class siteInfo extends Component {
 					</Col>
 					</Modal.Header>
 					<Modal.Body >
-						<BpInfoModel /*bpInfoModel={bpInfoModel}*/ customer={this.state.customer} actionType={"update"} employeeNo={this.state.employeeName} employeeFristName={this.state.employeeFristName} employeeLastName={this.state.employeeLastName} pbInfoTokuro={this.pbInfoGet} /></Modal.Body>
+						<BpInfoModel /*bpInfoModel={bpInfoModel}*/ customer={this.state.customer} actionType={"update"} employeeNo={this.state.employeeName} employeeName={this.state.employeeAllName} employeeLastName={this.state.employeeLastName} pbInfoTokuro={this.pbInfoGet} /></Modal.Body>
 				</Modal>
 				<div>
 					<Form id="siteForm">

@@ -130,13 +130,13 @@ class bpInfo extends React.Component {
 	}
 
 	setEmployeeName = () => {
-		if (this.props.employeeFristName === undefined || this.props.employeeLastName === undefined) {
+		if (this.props.employeeName === undefined) {
 			this.setState({
 				pbInfoEmployeeName: '',
 			})
 		} else {
 			this.setState({
-				pbInfoEmployeeName: this.props.employeeFristName + this.props.employeeLastName,
+				pbInfoEmployeeName: this.props.employeeName,
 			})
 		}
 	}
