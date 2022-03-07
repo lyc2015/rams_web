@@ -394,7 +394,7 @@ class employeeSearch extends React.Component {
 				{
 					rowSelectEmployeeNoForPageChange: row.employeeNo,
 					rowSelectEmployeeNo: row.employeeNo,
-					rowSelectEmployeeName: row.employeeName,
+					rowSelectEmployeeName: row.employeeName.replaceAll(" ",""),
 					residentCardInfo: row.residentCardInfo,
 					passportInfo:row.passportInfo,
 					resumeInfo1: row.resumeInfo1,
