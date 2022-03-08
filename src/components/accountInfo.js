@@ -89,16 +89,19 @@ class BankInfo extends Component {
                 //画面データの検索
                 axios.post(this.state.serverIP + "bankInfo/init", onloadMol)
                     .then(resultMap => {
-                        if (resultMap.data.accountInfoMod !== null) {
-                            this.giveValue(resultMap.data.accountInfoMod);
-                            if (resultMap.data.accountInfoMod["accountTypeStatus"] === '0') {
+                        if (resultMap.data.accountInfoMod.length > 0) {
+                            this.giveValue(resultMap.data.accountInfoMod[0]);
+                            if (resultMap.data.accountInfoMod[0]["accountTypeStatus"] === '0') {
                                 $("#futsu").attr("checked", true);
-                            } else if (resultMap.data.accountInfoMod["accountTypeStatus"] === '1') {
+                            } else if (resultMap.data.accountInfoMod[0]["accountTypeStatus"] === '1') {
                                 $("#toza").attr("checked", true);
                             }
+                            this.setState({
+                            	accountInfoMod: resultMap.data.accountInfoMod,
+                            })
                         }
                         //修正の場合
-                        if (actionType === 'update' && resultMap.data.accountInfoMod !== null) {
+                        if (actionType === 'update' && resultMap.data.accountInfoMod.length > 0) {
                             $("#bankBranchName").attr("readonly", false);
                             $("#bankBranchCode").attr("readonly", false);
                             $("#accountNo").attr("readonly", false);
