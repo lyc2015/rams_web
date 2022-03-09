@@ -273,11 +273,21 @@ class BankInfo extends Component {
         		bankBranchDrop.push(this.state.bankBranchDropAll[i]);
         	}
         }
-
         this.setState({
             [event.target.name]: event.target.value,
             bankBranchDrop: bankBranchDrop,
         })
+        
+        for(let i in this.state.accountInfoMod){
+        	if(this.state.accountInfoMod[i].bankCode === val){
+                this.setState({
+                	bankBranchName: this.state.accountInfoMod[i].bankBranchName,
+                	bankBranchCode: this.state.accountInfoMod[i].bankBranchCode,
+                	accountNo: this.state.accountInfoMod[i].accountNo,
+                	accountName: this.state.accountInfoMod[i].accountName,
+                })
+        	}
+        }
     }
     resetValue = () => {
         this.setState({
