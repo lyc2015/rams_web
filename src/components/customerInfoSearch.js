@@ -237,10 +237,13 @@ class CustomerInfoSearch extends Component {
                         this.setState({
                             customerInfoData: customerInfoList,
                             rowNo: '',
+                            customerNo:'',
+                            customerAbbreviation:'',
                         })
                         this.setState({ "myToastShow": true, "type": "success", "errorsMessageShow": false, message: "削除成功" });
                         setTimeout(() => this.setState({ "myToastShow": false }), 3000);
                         store.dispatch({type:"UPDATE_STATE",dropName:"getCustomerName"});
+                        store.dispatch({type:"UPDATE_STATE",dropName:"getCustomerAbbreviation"});
                     } else if (result.data === 1) {
                         this.setState({ "myToastShow": true, "type": "fail", "errorsMessageShow": false, message: "削除失败" });
                         setTimeout(() => this.setState({ "myToastShow": false }), 3000);
@@ -554,8 +557,8 @@ class CustomerInfoSearch extends Component {
                             <Autocomplete
                                 id="customerAbbreviation"
                                 name="customerAbbreviation"
-                                value={this.state.customerAbbreviationList.find(v => v.code === this.state.customerAbbreviation) || ""}
-                                options={this.state.customerAbbreviationList}
+                                value={store.getState().dropDown[73].slice(1).find(v => v.code === this.state.customerAbbreviation) || ""}
+                                options={store.getState().dropDown[73].slice(1)}
                                 getOptionLabel={(option) => option.text ? option.text : ""}
                                 onChange={(event, values) => this.getCustomer(event, values)}
                                 renderOption={(option) => {

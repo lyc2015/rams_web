@@ -89,9 +89,12 @@ class salesSendLetter extends React.Component {
 				proposeClassificationCode: this.props.location.state.sendValue.proposeClassificationCode,
 				//storageListName: this.props.location.state.sendValue.storageListName,
 			}, () => {
-				this.refs.customersTable.setState({
-					selectedRowKeys: this.props.location.state.sendValue.customerNo,
-				});
+				if(this.props.location.state.sendValue.customerNo !== undefined){
+					this.refs.customersTable.setState({
+						selectedRowKeys: this.props.location.state.sendValue.customerNo,
+					});
+				}
+
 				this.setStorageList(this.props.location.state.sendValue.proposeClassificationCode);
 				switch (this.props.location.state.sendValue.proposeClassificationCode) {
 				case "0":
@@ -924,7 +927,11 @@ class salesSendLetter extends React.Component {
 						backPage: 'salesSendLetter',
 						projectNo: this.state.projectNo,
 						backbackPage: this.state.backPage,
-						sendValue: sendValue,
+						sendValue:  {
+							proposeClassificationCode: this.state.proposeClassificationCode,
+							storageListName: this.state.storageListName,
+							customerNo: this.state.customerNo,
+							},
 					},
 				}
 				break;
@@ -936,7 +943,11 @@ class salesSendLetter extends React.Component {
 						backPage: 'salesSendLetter',
 						projectNo: this.state.projectNo,
 						backbackPage: this.state.backPage,
-						sendValue: sendValue,
+						sendValue:  {
+							proposeClassificationCode: this.state.proposeClassificationCode,
+							storageListName: this.state.storageListName,
+							customerNo: this.state.customerNo,
+							},
 					},
 				}
 				break;
