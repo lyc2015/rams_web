@@ -777,7 +777,7 @@ Email：`+ this.state.loginUserInfo[0].companyMail + ` 営業共通：eigyou@lyc
 			(this.state.developLanguage !=="" && this.state.developLanguage !==null ?`
 【得意言語】：`:"")+ (this.state.developLanguage !=="" && this.state.developLanguage !==null ?this.state.developLanguage:"") +
 			(this.state.unitPrice !== "" && this.state.unitPrice !== null? `
-【単　　価】：`:"")+ (this.state.unitPrice !== "" && this.state.unitPrice !== null?(this.state.unitPrice.length>3?this.state.unitPrice.substring(0,3) : this.state.unitPrice):"") +
+【単　　価】：`:"")+ (this.state.unitPrice !== "" && this.state.unitPrice !== null?(this.state.unitPrice.length>3 ? (this.state.unitPrice / 10000).toFixed(0) : this.state.unitPrice):"") +
 			(this.state.unitPrice !== "" && this.state.unitPrice !== null? `万円`:"") + (this.state.theMonthOfStartWork !== "" && this.state.theMonthOfStartWork !== null ? `
 【稼働開始】：`:"") + (this.state.theMonthOfStartWork !== "" && this.state.theMonthOfStartWork !== null ? this.state.theMonthOfStartWork:"") + (this.state.salesProgressCode === "" || this.state.salesProgressCode === null || this.state.salesProgressCode === undefined ? "":`
 【営業状況】：`)+ (this.state.salesProgressCode !== "" && this.state.salesProgressCode !== null ? this.state.salesProgresss.find((v) => (v.code === this.state.salesProgressCode)).name : '') +
