@@ -214,8 +214,17 @@ class sendLettersConfirm extends React.Component {
 		for(let i = 0; i < this.state.frameWorks.length; i++){
 			developLanguagesTemp.push({code:String((Number(this.state.frameWorks[i].code) + 1) * -1),name:this.state.frameWorks[i].name});
 		}
+		let employees = [];
+		for(let i in this.state.employees){
+			if(this.state.employees[i].name === "協力"){
+				employees.push({code:this.state.employees[i].code,name:"1社先の社員"});
+			}else{
+				employees.push(this.state.employees[i]);
+			}
+		}
 		this.setState({
 			developLanguages: developLanguagesTemp,
+			employees:employees,
 		});
     }
 

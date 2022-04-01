@@ -172,9 +172,12 @@ class manageSituation extends React.Component {
 		}
 		let employees = [];
 		for(let i in this.state.employees){
-			employees.push(this.state.employees[i]);
+			if(this.state.employees[i].name === "協力"){
+				employees.push({code:this.state.employees[i].code,name:"1社先の社員"});
+			}else{
+				employees.push(this.state.employees[i]);
+			}
 		}
-		employees.push({code:String(this.state.employees.length),name:"1社先の社員"});
 		this.setState({
 			developLanguages: developLanguagesTemp,
 			employees:employees,
