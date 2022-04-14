@@ -831,7 +831,7 @@ Email：`+ this.state.loginUserInfo[0].companyMail + ` 営業共通：eigyou@lyc
 	}
 		
 	formatEmpStatus = (cell, row, enumObject, index) => {
-		return cell !== null && cell!== "" ? this.state.employees.find((v) => (v.code === cell)).name:"";
+		return cell !== null && cell!== "" ? (this.state.employees.find((v) => (v.code === cell)).name === "1社先の社員" ? "協力" : this.state.employees.find((v) => (v.code === cell)).name) : "";
 	}
 	/* 要員追加機能の新規 20201216 張棟 END */
 	// formatResume(cell, row, enumObject, index) {
