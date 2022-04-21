@@ -235,8 +235,9 @@ class sendLettersConfirm extends React.Component {
 				// 全部要員名前集合
 				let arr = [];
 				if (result.data.length !== 0) {
+					arr[0] = "入力";
 					for (var i=0 ; i < result.data.length ; i++) {
-						arr[i] = result.data[i].employeeName;
+						arr[i + 1] = result.data[i].employeeName;
 					}
 				}
 				this.setState({
@@ -882,10 +883,18 @@ Email：`+ this.state.loginUserInfo[0].companyMail + ` 営業共通：eigyou@lyc
 				name = this.state.employeeInfo[v].employeeName;
 			}
 		}
-
 		if (flg) {
 			return (<div>&nbsp;&nbsp;{name}</div>);
 		} else {
+			if(cell === "入力"){
+				return (<div>
+					<FormControl
+		                value={this.state.employeeName}
+		                name="employeeName"
+                        onChange={this.valueChange}
+					></FormControl>
+				</div>); 
+			}
 			if (cell === "" || cell === null) {
 				return (<div>
 					<Form.Control as="select" size="sm"
@@ -931,7 +940,7 @@ Email：`+ this.state.loginUserInfo[0].companyMail + ` 営業共通：eigyou@lyc
 	
 	// 要員名前触発されるイベント
 	employeeNameChange = (row, event) => {
-		if(event.target.value !== ""){
+		if(event.target.value !== "" && event.target.value !== "入力"){
 			var employeeInfo = this.state.employeeInfo;
 			var employeeNoTemp;
 
@@ -994,7 +1003,14 @@ Email：`+ this.state.loginUserInfo[0].companyMail + ` 営業共通：eigyou@lyc
 			}
 		}
 		else{
-			
+			if(event.target.value === "入力"){
+				var employeeInfo = this.state.employeeInfo;
+				employeeInfo[row.index-1].employeeName  = event.target.value;
+				this.setState({
+					employeeInfo : employeeInfo,
+					employeeFlag: true,
+				});
+			}
 		}
 	};
 	/* 要員追加機能の新規 20201216 張棟 END */
