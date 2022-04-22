@@ -871,6 +871,16 @@ Email：`+ this.state.loginUserInfo[0].companyMail + ` 営業共通：eigyou@lyc
 		}
 	}
 	
+	//onChange
+	tableValueChange = (event, cell, row) => {
+		let employeeInfo = this.state.employeeInfo;
+		employeeInfo[row.index-1][event.target.name] = event.target.value;
+
+		this.setState({
+			employeeInfo: employeeInfo
+		})
+	}
+	
 	/* 要員追加機能の新規 20201216 張棟 START */
 	// 要員名前処理
 	formatEmployeeName(cell, row, enumObject, index) {
@@ -886,13 +896,14 @@ Email：`+ this.state.loginUserInfo[0].companyMail + ` 営業共通：eigyou@lyc
 		if (flg) {
 			return (<div>&nbsp;&nbsp;{name}</div>);
 		} else {
-			if(cell === "入力"){
+			if(cell === "入力" || row.inputFlag){
 				return (<div>
-					<FormControl
-		                value={this.state.employeeName}
+				<input type="text" class=" form-control editor edit-text" name="employeeName" value={cell} onChange={(event) => this.tableValueChange(event, cell, row)} />
+					{/*<FormControl
+		                value={row.employeeName}
 		                name="employeeName"
-                        onChange={this.valueChange}
-					></FormControl>
+                        onChange={(event) => this.tableValueChange(event, cell, row)}
+					></FormControl>*/}
 				</div>); 
 			}
 			if (cell === "" || cell === null) {
@@ -938,9 +949,22 @@ Email：`+ this.state.loginUserInfo[0].companyMail + ` 営業共通：eigyou@lyc
 		})
 	}
 	
+	employeeNameInputChange = (row, event) => {
+		var employeeInfo = this.state.employeeInfo;
+		employeeInfo[row.index-1].employeeName  = event.target.value;
+	}
+	employeeNameInputBlur = (row, event) => {
+		var employeeInfo = this.state.employeeInfo;
+		employeeInfo[row.index-1].employeeName  = event.target.value;
+		this.setState({
+			employeeInfo : employeeInfo,
+			employeeFlag: true,
+		});
+	}
+	
 	// 要員名前触発されるイベント
 	employeeNameChange = (row, event) => {
-		if(event.target.value !== "" && event.target.value !== "入力"){
+		if(event.target.value !== "" && event.target.value !== "入力" && !row.inputFlag){
 			var employeeInfo = this.state.employeeInfo;
 			var employeeNoTemp;
 
@@ -1006,10 +1030,14 @@ Email：`+ this.state.loginUserInfo[0].companyMail + ` 営業共通：eigyou@lyc
 			if(event.target.value === "入力"){
 				var employeeInfo = this.state.employeeInfo;
 				employeeInfo[row.index-1].employeeName  = event.target.value;
+				employeeInfo[row.index-1].inputFlag = true;
+				employeeInfo[row.index-1].employeeStatus = "";
+				employeeInfo[row.index-1].hopeHighestPrice = "";
 				this.setState({
 					employeeInfo : employeeInfo,
 					employeeFlag: true,
 				});
+				$("#addButton").attr("disabled",false);
 			}
 		}
 	};
@@ -1189,6 +1217,9 @@ Email：`+ this.state.loginUserInfo[0].companyMail + ` 営業共通：eigyou@lyc
 			
 			var resumeInfoListTemp = employeeInfo1[this.state.selectedColumnId-1].resumeInfoList;
 			if(!(fileName === null || fileName === "" || fileName === undefined)){
+				if(resumeInfoListTemp === undefined || resumeInfoListTemp === null){
+					resumeInfoListTemp = [];
+				}
 				resumeInfoListTemp.push(fileName);
 			}
 			
