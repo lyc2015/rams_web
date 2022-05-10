@@ -1,15 +1,6 @@
 // 営業送信画面
 import React from "react";
-import {
-  Form,
-  Button,
-  Col,
-  Row,
-  InputGroup,
-  Modal,
-  FormControl,
-  ListGroup,
-} from "react-bootstrap";
+import { Form, Button, Col, Row, InputGroup, Modal } from "react-bootstrap";
 import axios from "axios";
 import "react-datepicker/dist/react-datepicker.css";
 import "../asserts/css/style.css";
@@ -18,18 +9,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import SalesAppend from "./salesAppend";
 import MyToast from "./myToast";
-import { Link } from "react-router-dom";
 import ErrorsMessageToast from "./errorsMessageToast";
 import store from "./redux/store";
 import {
   faPlusCircle,
   faEnvelope,
   faMinusCircle,
-  faBroom,
   faListOl,
   faEdit,
   faPencilAlt,
-  faBookmark,
   faLevelUpAlt,
 } from "@fortawesome/free-solid-svg-icons";
 axios.defaults.withCredentials = true;
@@ -76,12 +64,7 @@ class salesSendLetter extends React.Component {
     selectedCustomer: {},
     daiologShowFlag: false,
     positions: store.getState().dropDown[20],
-    selectedEmpNos:
-      this.props.location.state !== null &&
-      this.props.location.state !== undefined &&
-      this.props.location.state !== ""
-        ? this.props.location.state.selectetRowIds
-        : [],
+    selectedEmpNos: this.props.location.state?.selectetRowIds || [],
     selectedCusInfos: [],
     listName: 1,
     salesLists: [],
@@ -110,11 +93,7 @@ class salesSendLetter extends React.Component {
   };
 
   componentDidMount() {
-    if (
-      this.props.location.state !== null &&
-      this.props.location.state !== undefined &&
-      this.props.location.state !== ""
-    ) {
+    if (this.props.location.state) {
       this.setState(
         {
           sendValue: this.props.location.state.sendValue,
@@ -164,20 +143,12 @@ class salesSendLetter extends React.Component {
           isHidden: false,
         });
       }
-      if (
-        this.props.location.state.salesPersons !== null &&
-        this.props.location.state.salesPersons !== undefined &&
-        this.props.location.state.salesPersons !== ""
-      ) {
+      if (this.props.location.state.salesPersons) {
         this.setState({
           selectedEmpNos: this.props.location.state.salesPersons,
         });
       }
-      if (
-        this.props.location.state.targetCusInfos !== null &&
-        this.props.location.state.targetCusInfos !== undefined &&
-        this.props.location.state.targetCusInfos !== ""
-      ) {
+      if (this.props.location.state.targetCusInfos) {
         this.setState({
           selectedCusInfos: this.props.location.state.targetCusInfos,
         });
@@ -248,8 +219,8 @@ class salesSendLetter extends React.Component {
     axios
       .post(this.state.serverIP + "salesSendLetters/getCustomers")
       .then((result) => {
-        let customerNoArray = new Array();
-        let dataArray = new Array();
+        let customerNoArray = [];
+        let dataArray = [];
         for (let i in result.data) {
           customerNoArray.push(result.data[i].customerNo);
           switch (backPage) {
@@ -286,16 +257,8 @@ class salesSendLetter extends React.Component {
             allCustomerNum: dataArray.length,
           },
           () => {
-            if (
-              this.props.location.state !== null &&
-              this.props.location.state !== undefined &&
-              this.props.location.state !== ""
-            ) {
-              if (
-                this.props.location.state.targetCusInfos !== null &&
-                this.props.location.state.targetCusInfos !== undefined &&
-                this.props.location.state.targetCusInfos !== ""
-              ) {
+            if (this.props.location.state) {
+              if (this.props.location.state.targetCusInfos) {
                 this.refs.customersTable.setState({
                   selectedRowKeys: this.props.location.state.targetCusInfos,
                 });
@@ -385,7 +348,7 @@ class salesSendLetter extends React.Component {
               storageListName: values.name,
             })
             .then((result) => {
-              let dataArray = new Array();
+              let dataArray = [];
               for (let i in result.data) {
                 switch (this.state.proposeClassificationCode) {
                   case "1":
@@ -467,7 +430,9 @@ class salesSendLetter extends React.Component {
               autoComplete="off"
             >
               {cell.map((data) => (
-                <option value={data}>{data}</option>
+                <option key={data} value={data}>
+                  {data}
+                </option>
               ))}
             </Form.Control>
           </div>
@@ -510,7 +475,7 @@ class salesSendLetter extends React.Component {
             storageListName: this.state.storageListName,
           })
           .then((result) => {
-            let newStorageListArray = new Array();
+            let newStorageListArray = [];
             for (let i in this.state.storageList) {
               if (
                 this.state.storageList[i].name === this.state.storageListName
@@ -702,7 +667,7 @@ class salesSendLetter extends React.Component {
             }
           )
           .then((result) => {
-            let newStorageListArray = new Array();
+            let newStorageListArray = [];
             for (let i in this.state.storageList) {
               if (
                 this.state.storageList[i].name === this.state.storageListName
@@ -759,11 +724,11 @@ class salesSendLetter extends React.Component {
           ? this.state.allCustomerNo
           : [],
     });
-    let customerRowIdArray = new Array();
+    let customerRowIdArray = [];
     for (let i in this.state.allCustomer) {
       customerRowIdArray.push(this.state.allCustomer[i].rowId);
     }
-    let targetCustomer = new Array();
+    let targetCustomer = [];
     for (let i in customerRowIdArray) {
       let rowNo = customerRowIdArray[i];
       targetCustomer.push(this.state.customerTemp[rowNo]);
@@ -804,7 +769,7 @@ class salesSendLetter extends React.Component {
           storageListName: this.state.storageListName,
         })
         .then((result) => {
-          let newStorageListArray = new Array();
+          let newStorageListArray = [];
           for (let i in this.state.storageList) {
             if (this.state.storageList[i].name === this.state.storageListName) {
               let storageListTemp = {
@@ -853,7 +818,7 @@ class salesSendLetter extends React.Component {
               storageListName: this.state.storageListName,
             })
             .then((result) => {
-              let newStorageListArray = new Array();
+              let newStorageListArray = [];
               for (let i in this.state.storageList) {
                 if (
                   this.state.storageList[i].name === this.state.storageListName
@@ -871,7 +836,7 @@ class salesSendLetter extends React.Component {
                 }
               }
 
-              let dataArray = new Array();
+              let dataArray = [];
               for (let i in result.data) {
                 switch (this.state.proposeClassificationCode) {
                   case "1":
@@ -977,25 +942,15 @@ class salesSendLetter extends React.Component {
   };
 
   CellFormatter(cell, row) {
-    if (cell !== "" && cell !== null) {
-      return (
-        <a
-          href="javascript:void(0);"
-          onClick={this.getSalesPersons.bind(this, row)}
-        >
-          {cell}
-        </a>
-      );
-    } else {
-      return (
-        <a
-          href="javascript:void(0);"
-          onClick={this.getSalesPersons.bind(this, row)}
-        >
-          {this.state.linkDetail}
-        </a>
-      );
-    }
+    return (
+      <Button
+        style={{ padding: 0 }}
+        onClick={this.getSalesPersons.bind(this, row)}
+        variant="link"
+      >
+        {cell !== "" && cell !== null ? cell : this.state.linkDetail}
+      </Button>
+    );
   }
 
   getSalesPersons = (selectedCustomer) => {
@@ -1013,13 +968,15 @@ class salesSendLetter extends React.Component {
   };
 
   saveSalesPersons = (row, appendPersonMsg) => {
+    const { customerTemp } = this.state;
     /*		this.state.customerTemp[row.rowId].purchasingManagers2 = appendPersonMsg.purchasingManagers2;
 		this.state.customerTemp[row.rowId].positionCode2 = appendPersonMsg.positionCode2;
 		this.state.customerTemp[row.rowId].purchasingManagersMail2 = appendPersonMsg.purchasingManagersMail2;*/
-    this.state.customerTemp[row.rowId].purchasingManagersOthers =
+    customerTemp[row.rowId].purchasingManagersOthers =
       appendPersonMsg.purchasingManagersOthers;
     this.setState({
       daiologShowFlag: false,
+      customerTemp,
     });
     this.CellFormatter(row.salesPersonsAppend, row);
   };
@@ -1061,7 +1018,7 @@ class salesSendLetter extends React.Component {
             dropName: "getStorageListName",
           });
 
-          let newStorageListArray = new Array();
+          let newStorageListArray = [];
           for (let i in this.state.storageList) {
             if (this.state.storageList[i].name === this.state.storageListName) {
               let storageListTemp = {
@@ -1105,7 +1062,7 @@ class salesSendLetter extends React.Component {
             result.data.errorsMessage === null ||
             result.data.errorsMessage === undefined
           ) {
-            let newStorageListArray = new Array();
+            let newStorageListArray = [];
             for (let i in this.state.storageList) {
               if (
                 this.state.storageList[i].name === this.state.storageListName
@@ -1114,7 +1071,7 @@ class salesSendLetter extends React.Component {
                 newStorageListArray.push(this.state.storageList[i]);
               }
             }
-            let newStorageListAllArray = new Array();
+            let newStorageListAllArray = [];
             for (let i in this.state.storageListAll) {
               if (
                 this.state.storageListAll[i].name === this.state.storageListName
@@ -1219,12 +1176,9 @@ class salesSendLetter extends React.Component {
         path = {
           pathname: "/subMenuManager/sendLettersConfirm",
           state: {
-            salesPersons:
-              this.props.location.state !== null &&
-              this.props.location.state !== undefined &&
-              this.props.location.state !== ""
-                ? this.state.selectedEmpNos
-                : null,
+            salesPersons: this.props.location.state
+              ? this.state.selectedEmpNos
+              : null,
             targetCusInfos: this.state.selectedCusInfos,
             backPage: "salesSendLetter",
             projectNo: this.state.projectNo,
@@ -1260,11 +1214,11 @@ class salesSendLetter extends React.Component {
             actionType: "update",
             customerNo: this.state.customerNo,
             backPage: "salesSendLetter",
-            sendValue: sendValue,
             backbackPage: this.state.backPage,
             searchFlag: this.state.searchFlag,
             projectNo: this.state.projectNo,
             sendValue: {
+              ...sendValue,
               proposeClassificationCode: this.state.proposeClassificationCode,
               storageListName: this.state.storageListName,
               customerNo: this.state.customerNo,
@@ -1277,7 +1231,7 @@ class salesSendLetter extends React.Component {
     this.props.history.push(path);
   };
   render() {
-    const { backPage, message, type } = this.state;
+    const { message, type } = this.state;
 
     const selectRow = {
       mode: "checkbox",
