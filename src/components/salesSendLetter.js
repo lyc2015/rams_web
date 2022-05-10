@@ -53,6 +53,7 @@ class salesSendLetter extends React.Component {
     storageListAll: store.getState().dropDown[63].slice(1),
     personInCharge: store.getState().dropDown[78].slice(1),
     proposeClassification: [
+      // 提案区分
       { code: "0", name: "すべて" },
       { code: "1", name: "案件" },
       { code: "2", name: "要員" },
@@ -63,10 +64,10 @@ class salesSendLetter extends React.Component {
     customerCode: "",
     customerDepartmentName: "",
     allCustomerNo: [],
-    currentPage: 1, // 該当page番号
+    currentPage: 1, // 当前page
     selectetRowIds: [],
     customerTemp: [],
-    sendLetterBtnFlag: true,
+    sendLetterBtnFlag: true, // 送信按钮disable状态
     myToastShow: false,
     tableClickColumn: "0",
     message: "",
@@ -105,7 +106,7 @@ class salesSendLetter extends React.Component {
     isHidden: true,
     addCustomerCode: "",
     backbackPage: "",
-    proposeClassificationCode: "0",
+    proposeClassificationCode: "0", // 提案区分
   };
 
   componentDidMount() {

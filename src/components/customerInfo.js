@@ -1,13 +1,5 @@
 import React, { Component } from "react";
-import {
-  Row,
-  Form,
-  Col,
-  InputGroup,
-  Button,
-  Modal,
-  Card,
-} from "react-bootstrap";
+import { Row, Form, Col, InputGroup, Button, Modal } from "react-bootstrap";
 import * as customerInfoJs from "../components/customerInfoJs.js";
 import $ from "jquery";
 import BankInfo from "./accountInfo";
@@ -169,6 +161,10 @@ class CustomerInfo extends Component {
   async componentDidMount() {
     console.log(this.props.history);
     $("#response").val("");
+    console.log(
+      this.props.location.state,
+      "CustomerInfo-this.props.location.state"
+    );
     this.setState({
       actionType: this.props.location.state.actionType,
       backPage: this.props.location.state.backPage,
@@ -908,6 +904,7 @@ class CustomerInfo extends Component {
    * 戻るボタン
    */
   back = () => {
+    console.log(this.state, "CustomerInfo-this.state");
     var path = {};
     path = {
       pathname: this.state.backPage,
