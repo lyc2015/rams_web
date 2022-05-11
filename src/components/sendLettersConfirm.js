@@ -337,7 +337,7 @@ class sendLettersConfirm extends React.Component {
     let resumeName1 = [];
     let resumeName2 = [];
     for (let i = 0; i < this.state.employeeInfo.length; i++) {
-      if (this.state.employeeInfo[i].employeeNo !== "") {
+      if (this.state.employeeInfo[i].employeeNo) {
         // alert(this.state.employeeInfo[i].resumeInfo1Name)
         axios
           .post(this.state.serverIP + "salesSituation/getPersonalSalesInfo", {
@@ -802,6 +802,9 @@ Email：` +
     mailContent
   ) => {
     var employeeInfo = this.state.employeeInfo;
+    if (!employeeNo) {
+      return;
+    }
     axios
       .post(this.state.serverIP + "salesSituation/getPersonalSalesInfo", {
         employeeNo: employeeNo,
@@ -1886,6 +1889,7 @@ Email：` +
         targetCusInfos: this.props.location.state.targetCusInfos,
         backbackPage: this.state.backbackPage,
         projectNo: this.state.projectNo,
+        currPage: this.props.location.state.currPage,
       },
     };
     this.props.history.push(path);

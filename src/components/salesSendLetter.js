@@ -578,7 +578,9 @@ class salesSendLetter extends React.Component {
 
   // clearボタン事件
   handleClearLists = () => {
-    let a = window.confirm("deleteCustomerList--削除していただきますか？");
+    let a = window.confirm(
+      `${this.state.storageListName}をクリアしていただきますか？`
+    );
     if (a) {
       if (this.state.storageListName !== "") {
         axios
@@ -640,8 +642,11 @@ class salesSendLetter extends React.Component {
 
   // deleteボタン事件
   handleDeleteLists = () => {
-    let a = window.confirm("deleteCustomerListByNo--削除していただきますか？");
+    let a = window.confirm(
+      `${this.state.storageListName}から選んだお客様を削除していただきますか？`
+    );
     if (a) {
+      // TODO: 删除操作后调整表格数据。这段代码位置为何放在删除接口调用前？
       let selectedIndex = this.state.selectetRowIds;
       let newCustomer = this.state.allCustomer;
       for (let i in selectedIndex) {
@@ -900,10 +905,7 @@ class salesSendLetter extends React.Component {
   handleRowSelect = (row, isSelected, e) => {
     // When allSelected, select any item to cancel the allSelected
     if (this.state.selected.length === this.state.allCustomer.length) {
-      this.setState({
-        selected: [],
-        selectetRowIds: [],
-      });
+      this.handleSelectAllLists();
       return;
     }
 
@@ -1019,7 +1021,7 @@ class salesSendLetter extends React.Component {
   // 选中list后，删除当前选中的list
   handleDeleteList = () => {
     let a = window.confirm(
-      `${this.state.storageListName}リストを削除していただきますか？`
+      `${this.state.storageListName}を削除していただきますか？`
     );
     if (a) {
       axios
@@ -1144,7 +1146,7 @@ class salesSendLetter extends React.Component {
           state: {
             currPage: this.state.currentPage,
             actionType: "update",
-            customerNo: this.state.customerNo,
+            customerNo: this.state.selected.join(""),
             backPage: "salesSendLetter",
             backbackPage: this.state.backPage,
             searchFlag: this.state.searchFlag,
@@ -1705,11 +1707,14 @@ class salesSendLetter extends React.Component {
                   name="clickButton"
                   // TODO:此处业务待确认
                   onClick={
-                    this.state.selected.length !== 0
+                    this.state.selected.length === 0
                       ? this.handleClearLists
                       : this.handleDeleteLists
                   }
-                  disabled={this.state.selectetRowIds.length === 0}
+                  disabled={
+                    !this.state.storageListName === null ||
+                    this.state.storageListName === ""
+                  }
                 >
                   <FontAwesomeIcon icon={faMinusCircle} />
                   削除
