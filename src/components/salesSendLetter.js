@@ -100,21 +100,25 @@ class salesSendLetter extends React.Component {
     const { state: prePropsState } = prevProps.location;
     const { state: propsState } = this.props.location;
 
-    // 从其他页面返回时，表格的data更新后(如果在表格data更新前设置会出现不可预计的bug)，设置对应的已选项和分页
+    if (!propsState) return;
 
+    // 从其他页面返回的场景下，表格的data更新后，再设置对应的已选项和分页。(如果在表格data更新前设置会出现不可预计的bug)
     // 表格的data更新
     if (allCustomer.length && allCustomer !== prevAllCustomer) {
-      if (!propsState) return;
-
       // 设置table的currentPage
-      if (propsState.currPage && propsState.currPage !== this.state.currentPage)
+      if (
+        propsState.currPage &&
+        propsState.currPage !== this.state.currentPage
+      ) {
         this.setState({
           currentPage: propsState.currPage,
         });
+      }
 
       // お客様情報から戻るばい
       if (
         propsState.customerNo &&
+        // propsState.customerNo !== prePropsState.customerNo &&
         !this.state.selected.includes(propsState.customerNo)
       ) {
         let targetRecord = this.getRecordFromAllCusByCusNo(
@@ -129,6 +133,7 @@ class salesSendLetter extends React.Component {
       }
 
       // 要员送信と案件送信から戻るばい
+      // TODO: if条件需要完善
       if (propsState.targetCusInfos) {
         const { targetCusInfos: selectedCusInfos } = propsState;
         let selectetRowIds = [],
@@ -454,13 +459,20 @@ class salesSendLetter extends React.Component {
               for (let i in dataArray) {
                 dataArray[i].rowId = i;
               }
-              this.setState({
-                allCustomer: dataArray,
-                allCustomerTemp: dataArray,
-                customerTemp: [...dataArray],
-                selectetRowIds: [],
-                selectedCusInfos: [],
-              });
+              this.setState(
+                {
+                  allCustomer: dataArray,
+                  allCustomerTemp: dataArray,
+                  customerTemp: [...dataArray],
+                  selectetRowIds: [],
+                  selectedCusInfos: [],
+                },
+                () => {
+                  this.setState({
+                    currentPage: 1,
+                  });
+                }
+              );
             })
             .catch(function (err) {
               alert(err);
