@@ -20,16 +20,19 @@ import {
   faPencilAlt,
   faLevelUpAlt,
 } from "@fortawesome/free-solid-svg-icons";
+import { array } from "prop-types";
 axios.defaults.withCredentials = true;
 
 class salesSendLetter extends React.Component {
   constructor(props) {
     super(props);
     this.state = this.initialState; // 初期化
-    this.valueChange = this.valueChange.bind(this);
+    this.handleListNameChange = this.handleListNameChange.bind(this);
   }
   // 初期化
   initialState = {
+    storageListName: "", // 已选中的list的name
+    selected: [], // selected when table loading
     serverIP: store.getState().dropDown[store.getState().dropDown.length - 1],
     allCustomer: [], // お客様レコード用
     allCustomerTemp: [], // お客様レコード用
@@ -55,7 +58,6 @@ class salesSendLetter extends React.Component {
     currentPage: 1, // 当前page
     selectetRowIds: [],
     customerTemp: [],
-    sendLetterBtnFlag: true, // 送信按钮disable状态
     myToastShow: false,
     tableClickColumn: "0",
     message: "",
@@ -92,95 +94,138 @@ class salesSendLetter extends React.Component {
     proposeClassificationCode: "0", // 提案区分
   };
 
-  componentDidMount() {
-    if (this.props.location.state) {
-      this.setState(
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    const { allCustomer } = this.state;
+    const { allCustomer: prevAllCustomer } = prevState;
+    const { state: prePropsState } = prevProps.location;
+    const { state: propsState } = this.props.location;
+
+    // 从其他页面返回时，表格的data更新后(如果在表格data更新前设置会出现不可预计的bug)，设置对应的已选项和分页
+
+    // 表格的data更新
+    if (allCustomer.length && allCustomer !== prevAllCustomer) {
+      if (!propsState) return;
+
+      // 设置table的currentPage
+      if (propsState.currPage && propsState.currPage !== this.state.currentPage)
+        this.setState({
+          currentPage: propsState.currPage,
+        });
+
+      // お客様情報から戻るばい
+      if (
+        propsState.customerNo &&
+        !this.state.selected.includes(propsState.customerNo)
+      ) {
+        let targetRecord = this.getRecordFromAllCusByCusNo(
+          propsState.customerNo
+        );
+        this.setState({
+          selectetRowIds: [targetRecord.rowId],
+          selectedCusInfos: [targetRecord],
+          customerNo: propsState.customerNo,
+          selected: [propsState.customerNo],
+        });
+      }
+
+      // 要员送信と案件送信から戻るばい
+      if (propsState.targetCusInfos) {
+        const { targetCusInfos: selectedCusInfos } = propsState;
+        let selectetRowIds = [],
+          selected = [];
+        selectedCusInfos.forEach((item, index) => {
+          selectetRowIds.push(item.rowId);
+          selected.push(item.customerNo);
+        });
+
+        this.setState({
+          selectetRowIds,
+          selectedCusInfos,
+          selected,
+        });
+      }
+
+      console.log(
         {
-          sendValue: this.props.location.state.sendValue,
-          projectNo: this.props.location.state.projectNo,
-          proposeClassificationCode:
-            this.props.location.state.sendValue.proposeClassificationCode,
-          //storageListName: this.props.location.state.sendValue.storageListName,
+          propsState,
+          prePropsState,
+          state: this.state,
+          prevState,
+          prevAllCustomer: prevState.allCustomer,
+          allCustomer: this.state.allCustomer,
         },
-        () => {
-          if (this.props.location.state.sendValue.customerNo !== undefined) {
-            this.refs.customersTable.setState({
-              selectedRowKeys: this.props.location.state.sendValue.customerNo,
-            });
-          }
-
-          this.setStorageList(
-            this.props.location.state.sendValue.proposeClassificationCode
-          );
-          switch (
-            this.props.location.state.sendValue.proposeClassificationCode
-          ) {
-            case "0":
-              this.getCustomers("all");
-              break;
-            case "1":
-              this.getCustomers("projectInfoSearch");
-              break;
-            case "2":
-              this.getCustomers("manageSituation");
-              break;
-            default:
-              break;
-          }
-        }
+        "componentDidUpdate"
       );
-
-      if (
-        this.props.location.state.salesPersons === null ||
-        this.props.location.state.salesPersons === undefined ||
-        this.props.location.state.salesPersons === "" ||
-        this.props.location.state.targetCusInfos === null ||
-        this.props.location.state.targetCusInfos === undefined ||
-        this.props.location.state.targetCusInfos === ""
-      ) {
-        this.setState({
-          backPage: this.props.location.state.backPage,
-          isHidden: false,
-        });
-      }
-      if (this.props.location.state.salesPersons) {
-        this.setState({
-          selectedEmpNos: this.props.location.state.salesPersons,
-        });
-      }
-      if (this.props.location.state.targetCusInfos) {
-        this.setState({
-          selectedCusInfos: this.props.location.state.targetCusInfos,
-        });
-      }
-      if (
-        this.props.location.state.backbackPage !== null &&
-        this.props.location.state.backbackPage !== undefined
-      ) {
-        this.setState({
-          backPage: this.props.location.state.backbackPage,
-          isHidden: true,
-        });
-      }
-    } else {
+    }
+  }
+  componentDidMount() {
+    // 初期化
+    if (!this.props.location.state) {
       this.setStorageList("0");
       this.getCustomers("all");
+      this.getLists();
+      return;
     }
-    this.getLists();
-  }
 
-  setStorageList = (proposeClassificationCode) => {
-    let newStorageList = [];
-    let storageList = this.state.storageListAll;
-    for (let i in storageList) {
-      if (storageList[i].text === proposeClassificationCode) {
-        newStorageList.push(storageList[i]);
+    //　戻る時の初期化
+    this.setState(
+      {
+        sendValue: this.props.location.state.sendValue,
+        projectNo: this.props.location.state.projectNo,
+        proposeClassificationCode:
+          this.props.location.state.sendValue.proposeClassificationCode,
+        //storageListName: this.props.location.state.sendValue.storageListName,
+      },
+      () => {
+        this.setStorageList(
+          this.props.location.state.sendValue.proposeClassificationCode
+        );
+        switch (this.props.location.state.sendValue.proposeClassificationCode) {
+          case "0":
+            this.getCustomers("all");
+            break;
+          case "1":
+            this.getCustomers("projectInfoSearch");
+            break;
+          case "2":
+            this.getCustomers("manageSituation");
+            break;
+          default:
+            break;
+        }
       }
+    );
+
+    // TODO:如果在此时设置selected会因为table的data还没有数据，导致显示出现bug
+    if (
+      !this.props.location.state.salesPersons ||
+      !this.props.location.state.targetCusInfos
+    ) {
+      this.setState({
+        backPage: this.props.location.state.backPage,
+        isHidden: false,
+      });
     }
-    this.setState({
-      storageList: newStorageList,
-    });
-  };
+    if (this.props.location.state.salesPersons) {
+      this.setState({
+        selectedEmpNos: this.props.location.state.salesPersons,
+      });
+    }
+    if (this.props.location.state.targetCusInfos) {
+      this.setState({
+        selectedCusInfos: this.props.location.state.targetCusInfos,
+      });
+    }
+    if (
+      this.props.location.state.backbackPage !== null &&
+      this.props.location.state.backbackPage !== undefined
+    ) {
+      this.setState({
+        backPage: this.props.location.state.backbackPage,
+        isHidden: true,
+      });
+    }
+  }
 
   getLists = () => {
     axios
@@ -257,13 +302,7 @@ class salesSendLetter extends React.Component {
             allCustomerNum: dataArray.length,
           },
           () => {
-            if (this.props.location.state) {
-              if (this.props.location.state.targetCusInfos) {
-                this.refs.customersTable.setState({
-                  selectedRowKeys: this.props.location.state.targetCusInfos,
-                });
-              }
-            }
+            // TODO: 修改分页
           }
         );
       })
@@ -272,13 +311,53 @@ class salesSendLetter extends React.Component {
       });
   };
 
-  // 行番号
-  indexN = (cell, row, enumObject, index) => {
-    let rowNumber = (this.state.currentPage - 1) * 10 + (index + 1);
-    return <div>{rowNumber}</div>;
+  /**
+   * 根据CusNo从allCustomer中查找对应的record
+   * @param {*} CusNo 目标customerNo(arr或string)
+   * @returns
+   */
+  getRecordFromAllCusByCusNo = (CusNo = "") => {
+    if (!CusNo) return undefined;
+
+    if (CusNo instanceof array) {
+      let records = [];
+      CusNo.forEach((no, index) => {
+        for (let index = 0; index < this.state.allCustomer.length; index++) {
+          const item = this.state.allCustomer[index];
+          if (item.customerNo === no) {
+            records.push(item);
+            break;
+          }
+        }
+      });
+      return records;
+    } else {
+      let records = {};
+      for (let index = 0; index < this.state.allCustomer.length; index++) {
+        const item = this.state.allCustomer[index];
+        if (item.customerNo === CusNo) {
+          records = item;
+          break;
+        }
+      }
+      return records;
+    }
   };
 
-  onTagsChange = (event, values, fieldName) => {
+  setStorageList = (proposeClassificationCode) => {
+    let newStorageList = [];
+    let storageList = this.state.storageListAll;
+    for (let i in storageList) {
+      if (storageList[i].text === proposeClassificationCode) {
+        newStorageList.push(storageList[i]);
+      }
+    }
+    this.setState({
+      storageList: newStorageList,
+    });
+  };
+
+  handleTagsChange = (event, values, fieldName) => {
     if (values === null) {
       switch (fieldName) {
         case "customerCode":
@@ -382,9 +461,6 @@ class salesSendLetter extends React.Component {
                 selectetRowIds: [],
                 selectedCusInfos: [],
               });
-              this.refs.customersTable.setState({
-                selectedRowKeys: [],
-              });
             })
             .catch(function (err) {
               alert(err);
@@ -402,72 +478,107 @@ class salesSendLetter extends React.Component {
     }
   };
 
-  // customerDepartmentNameFormat
-  positionNameFormat = (cell) => {
-    let positionsTem = this.state.positions;
-    for (var i in positionsTem) {
-      if (cell === positionsTem[i].code) {
-        return positionsTem[i].name;
-      }
-    }
-  };
-
-  businessCountFormat = (cell) => {
-    if (cell === "0") return "";
-    else return cell;
-  };
-
-  mailListFormat = (cell, row, enumObject, index) => {
-    if (cell !== null) {
-      if (cell.length > 1) {
-        return (
-          <div>
-            <Form.Control
-              as="select"
-              size="sm"
-              onChange={this.mailChange.bind(this, row)}
-              name="mail"
-              autoComplete="off"
-            >
-              {cell.map((data) => (
-                <option key={data} value={data}>
-                  {data}
-                </option>
-              ))}
-            </Form.Control>
-          </div>
-        );
-      } else {
-        return cell;
-      }
-    }
-  };
-
-  mailChange = (row, event) => {
-    var allCustomer = this.state.allCustomer;
+  handleMailChange = (row, event) => {
+    let allCustomer = this.state.allCustomer;
     allCustomer[row.rowId].purchasingManagersMail = event.target.value;
     this.setState({
       allCustomer: allCustomer,
     });
   };
 
-  // 鼠标悬停显示全文
-  customerNameFormat = (cell) => {
-    return <span title={cell}>{cell}</span>;
+  // storageListNameChange onchange
+  handleListNameChange = (event) => {
+    this.setState({
+      [event.target.name]: event.target.value,
+    });
   };
 
-  customerDepartmentNameFormat = (cell) => {
-    let customerDepartmentNameDropTem = this.state.customerDepartmentNameDrop;
-    for (var i in customerDepartmentNameDropTem) {
-      if (cell === customerDepartmentNameDropTem[i].code) {
-        return customerDepartmentNameDropTem[i].name;
-      }
+  // 提案区分onChange
+  handleProposeClassificationCodeChange = (event) => {
+    this.setState({
+      [event.target.name]: event.target.value,
+      storageListName: "",
+      storageListNameChange: "",
+    });
+    this.setStorageList(event.target.value);
+    switch (event.target.value) {
+      case "0":
+        this.getCustomers("all");
+        break;
+      case "1":
+        this.getCustomers("projectInfoSearch");
+        break;
+      case "2":
+        this.getCustomers("manageSituation");
+        break;
+      default:
+        break;
     }
   };
 
+  // リスト作成
+  handleNewCustomerList = () => {
+    let newAllCtmNos = this.state.allCustomer
+      .map((item) => item.customerNo)
+      .join(",");
+
+    axios
+      .post(this.state.serverIP + "salesSendLetters/addNewList", {
+        proposeClassificationCode: this.state.proposeClassificationCode,
+        code: this.state.selected.length
+          ? this.state.selected.join(",")
+          : newAllCtmNos,
+      })
+      .then((result) => {
+        let newStorageListArray = this.state.storageList;
+        let storageListTemp = {
+          name: result.data,
+          code: this.state.selected.length
+            ? this.state.selected.join(",")
+            : newAllCtmNos,
+        };
+        newStorageListArray.push(storageListTemp);
+        this.setState({
+          storageList: newStorageListArray,
+          storageListName: result.data,
+          storageListNameChange: result.data,
+          selectedCustomers: this.state.selected.length
+            ? this.state.selected.join(",")
+            : newAllCtmNos,
+          currentPage: 1,
+        });
+        axios
+          .post(this.state.serverIP + "salesSendLetters/getCustomersByNos", {
+            ctmNos: this.state.selected.length
+              ? this.state.selected
+              : newAllCtmNos.split(","),
+            storageListName: result.data,
+          })
+          .then((result) => {
+            this.setState({
+              allCustomer: result.data,
+              allCustomerTemp: result.data,
+            });
+            this.setState({
+              myToastShow: true,
+              type: "success",
+              message: "処理成功",
+            });
+            setTimeout(() => this.setState({ myToastShow: false }), 3000);
+            store.dispatch({
+              type: "UPDATE_STATE",
+              dropName: "getStorageListName",
+            });
+          })
+          .catch(function (err) {
+            alert(err);
+          });
+      });
+  };
+
   // clearボタン事件
-  clearLists = () => {
-    var a = window.confirm("削除していただきますか？");
+  handleClearLists = () => {
+    let a = window.confirm("deleteCustomerList--削除していただきますか？");
     if (a) {
       if (this.state.storageListName !== "") {
         axios
@@ -494,13 +605,8 @@ class salesSendLetter extends React.Component {
               allCustomer: [],
               customerTemp: [],
               selectedCusInfos: [],
-              sendLetterBtnFlag: true,
-            });
-            this.refs.customersTable.store.selected = [];
-            this.refs.customersTable.setState({
-              selectedRowKeys: [],
-            });
-            this.setState({
+              selected: [],
+              selectetRowIds: [],
               myToastShow: true,
               type: "success",
               message: "処理成功",
@@ -516,17 +622,13 @@ class salesSendLetter extends React.Component {
           allCustomer: [],
           customerTemp: [],
           selectedCusInfos: [],
-          sendLetterBtnFlag: true,
-        });
-        this.refs.customersTable.store.selected = [];
-        this.refs.customersTable.setState({
-          selectedRowKeys: [],
-        });
-        this.setState({
+          selected: [],
+          selectetRowIds: [],
           myToastShow: true,
           type: "success",
           message: "処理成功",
         });
+
         setTimeout(() => this.setState({ myToastShow: false }), 3000);
         store.dispatch({
           type: "UPDATE_STATE",
@@ -536,99 +638,9 @@ class salesSendLetter extends React.Component {
     }
   };
 
-  valueChange = (event) => {
-    this.setState({
-      [event.target.name]: event.target.value,
-    });
-  };
-
-  proposeClassificationCodeChange = (event) => {
-    this.setState({
-      [event.target.name]: event.target.value,
-      storageListName: "",
-      storageListNameChange: "",
-    });
-    this.setStorageList(event.target.value);
-    switch (event.target.value) {
-      case "0":
-        this.getCustomers("all");
-        break;
-      case "1":
-        this.getCustomers("projectInfoSearch");
-        break;
-      case "2":
-        this.getCustomers("manageSituation");
-        break;
-      default:
-        break;
-    }
-  };
-
-  addNewList = () => {
-    let newAllCtmNos = "";
-    for (let i in this.state.allCustomer) {
-      newAllCtmNos += this.state.allCustomer[i].customerNo + ",";
-    }
-    newAllCtmNos = newAllCtmNos.substring(0, newAllCtmNos.lastIndexOf(","));
-    axios
-      .post(this.state.serverIP + "salesSendLetters/addNewList", {
-        proposeClassificationCode: this.state.proposeClassificationCode,
-        code: this.state.sendLetterBtnFlag
-          ? String(this.refs.customersTable.state.selectedRowKeys)
-          : newAllCtmNos,
-      })
-      .then((result) => {
-        let newStorageListArray = this.state.storageList;
-        let storageListTemp = {
-          name: result.data,
-          code: this.state.sendLetterBtnFlag
-            ? String(this.refs.customersTable.state.selectedRowKeys)
-            : newAllCtmNos,
-        };
-        newStorageListArray.push(storageListTemp);
-        this.setState({
-          storageList: newStorageListArray,
-          storageListName: result.data,
-          storageListNameChange: result.data,
-          selectedCustomers: this.state.sendLetterBtnFlag
-            ? String(this.refs.customersTable.state.selectedRowKeys)
-            : newAllCtmNos,
-          currentPage: 1,
-        });
-        axios
-          .post(this.state.serverIP + "salesSendLetters/getCustomersByNos", {
-            ctmNos: this.state.sendLetterBtnFlag
-              ? String(this.refs.customersTable.state.selectedRowKeys).split(
-                  ","
-                )
-              : newAllCtmNos.split(","),
-            storageListName: result.data,
-          })
-          .then((result) => {
-            this.setState({
-              allCustomer: result.data,
-              allCustomerTemp: result.data,
-            });
-            this.setState({
-              myToastShow: true,
-              type: "success",
-              message: "処理成功",
-            });
-            setTimeout(() => this.setState({ myToastShow: false }), 3000);
-            store.dispatch({
-              type: "UPDATE_STATE",
-              dropName: "getStorageListName",
-            });
-          })
-          .catch(function (err) {
-            alert(err);
-          });
-      });
-  };
-
   // deleteボタン事件
-  deleteLists = () => {
-    var a = window.confirm("削除していただきますか？");
+  handleDeleteLists = () => {
+    let a = window.confirm("deleteCustomerListByNo--削除していただきますか？");
     if (a) {
       let selectedIndex = this.state.selectetRowIds;
       let newCustomer = this.state.allCustomer;
@@ -643,26 +655,22 @@ class salesSendLetter extends React.Component {
       for (let i in newCustomer) {
         newCustomer[i].rowId = i;
       }
-      this.refs.customersTable.store.selected = [];
       this.setState({
         selectedCusInfos: [],
         allCustomer: newCustomer,
         allCustomerTemp: newCustomer,
         customerTemp: newCustomer,
         selectetRowIds: [],
+        selected: [],
       });
-      this.refs.customersTable.setState({
-        selectedRowKeys: [],
-      });
+
       if (this.state.storageListName !== "") {
         axios
           .post(
             this.state.serverIP + "salesSendLetters/deleteCustomerListByNo",
             {
               oldCtmNos: String(this.state.selectedCustomers).split(","),
-              deleteCtmNos: String(
-                this.refs.customersTable.state.selectedRowKeys
-              ).split(","),
+              deleteCtmNos: this.state.selected,
               storageListName: this.state.storageListName,
             }
           )
@@ -714,36 +722,10 @@ class salesSendLetter extends React.Component {
     }
   };
 
-  // 全て選択ボタン事件
-  selectAllLists = () => {
-    this.refs.customersTable.store.selected = [];
-    this.refs.customersTable.setState({
-      selectedRowKeys:
-        this.refs.customersTable.state.selectedRowKeys.length !==
-        this.state.allCustomerNo.length
-          ? this.state.allCustomerNo
-          : [],
-    });
-    let customerRowIdArray = [];
-    for (let i in this.state.allCustomer) {
-      customerRowIdArray.push(this.state.allCustomer[i].rowId);
-    }
-    let targetCustomer = [];
-    for (let i in customerRowIdArray) {
-      let rowNo = customerRowIdArray[i];
-      targetCustomer.push(this.state.customerTemp[rowNo]);
-    }
-    this.setState({
-      selectedCusInfos: targetCustomer,
-      sendLetterBtnFlag: !this.state.sendLetterBtnFlag,
-      selectetRowIds: [],
-      currentPage: 1, // 該当page番号
-    });
-  };
-  // addClick
-  addClick = () => {
+  // 追加customer到customerList
+  handleAddCustomerToList = () => {
     this.setState({ errorsMessageShow: false });
-    var allCustomerData = this.state.allCustomer;
+    let allCustomerData = this.state.allCustomer;
     for (let k in allCustomerData) {
       if (allCustomerData[k].customerNo === this.state.addCustomerCode) {
         this.setState({
@@ -892,95 +874,83 @@ class salesSendLetter extends React.Component {
     }
   };
 
-  renderShowsTotal = (start, to, total) => {
-    return (
-      <p
-        style={{
-          color: "dark",
-          float: "left",
-          display: total > 0 ? "block" : "none",
-        }}
-      >
-        {start}から {to}まで , 総計{total}
-      </p>
-    );
+  // 全て選択ボタン事件
+  handleSelectAllLists = () => {
+    let isAlreadyAllSelected =
+      this.state.selected.length === this.state.allCustomer.length;
+
+    let selected = [],
+      selectedCusInfos = [];
+
+    this.state.allCustomer.forEach((item, index) => {
+      selectedCusInfos.push(item);
+      selected.push(item.customerNo);
+    });
+    this.setState({
+      selectedCusInfos: isAlreadyAllSelected ? [] : selectedCusInfos,
+      selectetRowIds: isAlreadyAllSelected
+        ? []
+        : this.state.allCustomer.map((item, index) => item.rowId),
+      currentPage: 1, // 該当page番号
+      selected: isAlreadyAllSelected ? [] : selected,
+    });
   };
 
+  // tableのonSelect事件
   handleRowSelect = (row, isSelected, e) => {
-    if (
-      this.refs.customersTable.state.selectedRowKeys.length ===
-      this.state.allCustomer.length
-    ) {
-      this.refs.customersTable.setState({
-        selectedRowKeys: [],
-      });
-    }
-    let rowNo = row.rowId;
-    if (isSelected) {
+    // When allSelected, select any item to cancel the allSelected
+    if (this.state.selected.length === this.state.allCustomer.length) {
       this.setState({
-        sendLetterBtnFlag: true,
+        selected: [],
+        selectetRowIds: [],
+      });
+      return;
+    }
+
+    let { rowId: rowNo, customerNo } = row;
+    if (isSelected) {
+      // select
+      this.setState({
         selectetRowIds: this.state.selectetRowIds.concat([rowNo]),
         selectedCusInfos: this.state.selectedCusInfos.concat(
           this.state.customerTemp[rowNo]
         ),
         customerNo: row.customerNo,
+        selected: this.state.selected.concat(
+          this.state.customerTemp[rowNo].customerNo || []
+        ),
       });
     } else {
+      // cancel select
       let index = this.state.selectetRowIds.findIndex((item) => item === rowNo);
       this.state.selectetRowIds.splice(index, 1);
+
       let index2 = this.state.selectedCusInfos.findIndex(
         (item) => item.rowId === rowNo
       );
       this.state.selectedCusInfos.splice(index2, 1);
+
+      let index3 = this.state.selected.findIndex((item) => item === customerNo);
+      this.state.selected.splice(index3, 1);
+
       this.setState({
         selectedCusInfos: this.state.selectedCusInfos,
-        sendLetterBtnFlag: true,
         selectetRowIds: this.state.selectetRowIds,
         customerNo: "",
+        selected: this.state.selected,
       });
     }
   };
 
-  CellFormatter(cell, row) {
-    return (
-      <Button
-        style={{ padding: 0 }}
-        onClick={this.getSalesPersons.bind(this, row)}
-        variant="link"
-      >
-        {cell !== "" && cell !== null ? cell : this.state.linkDetail}
-      </Button>
-    );
-  }
-
-  getSalesPersons = (selectedCustomer) => {
-    console.log(selectedCustomer.salesPersonsAppend !== null);
+  // 担当追加ボタンをクリック
+  handleGetSalesPersons = (selectedCustomer) => {
     this.setState({
       selectedCustomer: selectedCustomer,
       daiologShowFlag: true,
     });
   };
 
-  closeDaiolog = () => {
-    this.setState({
-      daiologShowFlag: false,
-    });
-  };
-
-  saveSalesPersons = (row, appendPersonMsg) => {
-    const { customerTemp } = this.state;
-    /*		this.state.customerTemp[row.rowId].purchasingManagers2 = appendPersonMsg.purchasingManagers2;
-		this.state.customerTemp[row.rowId].positionCode2 = appendPersonMsg.positionCode2;
-		this.state.customerTemp[row.rowId].purchasingManagersMail2 = appendPersonMsg.purchasingManagersMail2;*/
-    customerTemp[row.rowId].purchasingManagersOthers =
-      appendPersonMsg.purchasingManagersOthers;
-    this.setState({
-      daiologShowFlag: false,
-      customerTemp,
-    });
-    this.CellFormatter(row.salesPersonsAppend, row);
-  };
-  changeName = () => {
+  handleUpdateName = () => {
     for (let i in this.state.storageListAll) {
       if (
         this.state.storageListAll[i].name === this.state.storageListNameChange
@@ -993,7 +963,7 @@ class salesSendLetter extends React.Component {
         return;
       }
     }
-    var salesSendLettersListNames = {
+    let salesSendLettersListNames = {
       storageListName: this.state.storageListNameChange,
       oldStorageListName: this.state.storageListName,
     };
@@ -1046,17 +1016,16 @@ class salesSendLetter extends React.Component {
       });
   };
 
-  deleteList = () => {
-    var a = window.confirm("削除していただきますか？");
+  // 选中list后，删除当前选中的list
+  handleDeleteList = () => {
+    let a = window.confirm(
+      `${this.state.storageListName}リストを削除していただきますか？`
+    );
     if (a) {
-      var salesSendLettersListNames = {
-        storageListName: this.state.storageListNameChange,
-      };
       axios
-        .post(
-          this.state.serverIP + "salesSendLetters/deleteList",
-          salesSendLettersListNames
-        )
+        .post(this.state.serverIP + "salesSendLetters/deleteList", {
+          storageListName: this.state.storageListNameChange,
+        })
         .then((result) => {
           if (
             result.data.errorsMessage === null ||
@@ -1083,7 +1052,6 @@ class salesSendLetter extends React.Component {
             this.setState({
               storageList: newStorageListArray,
               storageListAll: newStorageListAllArray,
-              sendLetterBtnFlag: true,
               storageListNameChange: "",
               storageListName: "",
             });
@@ -1108,14 +1076,199 @@ class salesSendLetter extends React.Component {
     }
   };
 
+  /**
+   * 戻るボタン
+   */
+  handleBack = () => {
+    let path = {};
+    path = {
+      pathname: this.state.backPage,
+      state: {
+        searchFlag: this.state.searchFlag,
+        sendValue: this.state.sendValue,
+        selectedProjectNo: this.state.projectNo,
+        projectNo: this.state.projectNo,
+      },
+    };
+    this.props.history.push(path);
+  };
+
+  // 页面跳转
+  handleShuseiTo = (actionType) => {
+    let path = {};
+    const { sendValue } = this.state;
+    switch (actionType) {
+      // 要員送信
+      case "sendLettersConfirm":
+        path = {
+          pathname: "/subMenuManager/sendLettersConfirm",
+          state: {
+            currPage: this.state.currentPage,
+            salesPersons: this.props.location.state
+              ? this.state.selectedEmpNos
+              : null,
+            targetCusInfos: this.state.selectedCusInfos,
+            backPage: "salesSendLetter",
+            projectNo: this.state.projectNo,
+            backbackPage: this.state.backPage,
+            sendValue: {
+              proposeClassificationCode: this.state.proposeClassificationCode,
+              storageListName: this.state.storageListName,
+              customerNo: this.state.customerNo,
+            },
+          },
+        };
+        break;
+      // 案件送信
+      case "sendLettersMatter":
+        path = {
+          pathname: "/subMenuManager/sendLettersMatter",
+          state: {
+            currPage: this.state.currentPage,
+            targetCusInfos: this.state.selectedCusInfos,
+            backPage: "salesSendLetter",
+            projectNo: this.state.projectNo,
+            backbackPage: this.state.backPage,
+            sendValue: {
+              proposeClassificationCode: this.state.proposeClassificationCode,
+              storageListName: this.state.storageListName,
+              customerNo: this.state.customerNo,
+            },
+          },
+        };
+        break;
+      // お客様情報
+      case "update":
+        path = {
+          pathname: "/subMenuManager/customerInfo",
+          state: {
+            currPage: this.state.currentPage,
+            actionType: "update",
+            customerNo: this.state.customerNo,
+            backPage: "salesSendLetter",
+            backbackPage: this.state.backPage,
+            searchFlag: this.state.searchFlag,
+            projectNo: this.state.projectNo,
+            sendValue: {
+              ...sendValue,
+              proposeClassificationCode: this.state.proposeClassificationCode,
+              storageListName: this.state.storageListName,
+              customerNo: this.state.customerNo,
+            },
+          },
+        };
+        break;
+      default:
+    }
+    this.props.history.push(path);
+  };
+
+  // 行番号
+  renderIndexN = (cell, row, enumObject, index) => {
+    let rowNumber = (this.state.currentPage - 1) * 10 + (index + 1);
+    return <div>{rowNumber}</div>;
+  };
+
+  renderPositionName = (cell) => {
+    let positionsTem = this.state.positions;
+    for (let i in positionsTem) {
+      if (cell === positionsTem[i].code) {
+        return positionsTem[i].name;
+      }
+    }
+  };
+
+  renderBusinessCount = (cell) => {
+    if (cell === "0") return "";
+    else return cell;
+  };
+
+  renderMailList = (cell, row, enumObject, index) => {
+    if (cell !== null) {
+      if (cell.length > 1) {
+        return (
+          <div>
+            <Form.Control
+              as="select"
+              size="sm"
+              onChange={this.handleMailChange.bind(this, row)}
+              name="mail"
+              autoComplete="off"
+            >
+              {cell.map((data) => (
+                <option key={data} value={data}>
+                  {data}
+                </option>
+              ))}
+            </Form.Control>
+          </div>
+        );
+      } else {
+        return cell;
+      }
+    }
+  };
+
+  // 鼠标悬停显示全文
+  renderCustomerName = (cell) => {
+    return <span title={cell}>{cell}</span>;
+  };
+
+  renderCustomerDepartmentName = (cell) => {
+    let customerDepartmentNameDropTem = this.state.customerDepartmentNameDrop;
+    for (let i in customerDepartmentNameDropTem) {
+      if (cell === customerDepartmentNameDropTem[i].code) {
+        return customerDepartmentNameDropTem[i].name;
+      }
+    }
+  };
+
+  renderGetSalesPersons(cell, row) {
+    return (
+      <Button
+        style={{ padding: 0 }}
+        onClick={this.handleGetSalesPersons.bind(this, row)}
+        variant="link"
+      >
+        {cell !== "" && cell !== null ? cell : this.state.linkDetail}
+      </Button>
+    );
+  }
+
+  renderShowsTotal = (start, to, total) => {
+    return (
+      <p
+        style={{
+          color: "dark",
+          float: "left",
+          display: total > 0 ? "block" : "none",
+        }}
+      >
+        {start}から {to}まで , 総計{total}
+      </p>
+    );
+  };
+
+  saveSalesPersons = (row, appendPersonMsg) => {
+    const { customerTemp } = this.state;
+    /*		this.state.customerTemp[row.rowId].purchasingManagers2 = appendPersonMsg.purchasingManagers2;
+		this.state.customerTemp[row.rowId].positionCode2 = appendPersonMsg.positionCode2;
+		this.state.customerTemp[row.rowId].purchasingManagersMail2 = appendPersonMsg.purchasingManagersMail2;*/
+    customerTemp[row.rowId].purchasingManagersOthers =
+      appendPersonMsg.purchasingManagersOthers;
+    this.setState({
+      daiologShowFlag: false,
+      customerTemp,
+    });
+    this.renderGetSalesPersons(row.salesPersonsAppend, row);
+  };
+
   showSelectedCtms = (selectedNos, flag) => {
-    this.refs.customersTable.store.selected = [];
     this.setState({
       selectetRowIds: [],
+      selected: [],
     });
-    this.refs.customersTable.setState({
-      selectedRowKeys: [],
-    });
+
     if (flag === "1") {
       this.setState({
         selectedlistName: this.state.listName1,
@@ -1151,87 +1304,16 @@ class salesSendLetter extends React.Component {
     });
   };
 
-  /**
-   * 戻るボタン
-   */
-  back = () => {
-    var path = {};
-    path = {
-      pathname: this.state.backPage,
-      state: {
-        searchFlag: this.state.searchFlag,
-        sendValue: this.state.sendValue,
-        selectedProjectNo: this.state.projectNo,
-        projectNo: this.state.projectNo,
-      },
-    };
-    this.props.history.push(path);
-  };
-
-  shuseiTo = (actionType) => {
-    var path = {};
-    const sendValue = this.state.sendValue;
-    switch (actionType) {
-      case "sendLettersConfirm":
-        path = {
-          pathname: "/subMenuManager/sendLettersConfirm",
-          state: {
-            salesPersons: this.props.location.state
-              ? this.state.selectedEmpNos
-              : null,
-            targetCusInfos: this.state.selectedCusInfos,
-            backPage: "salesSendLetter",
-            projectNo: this.state.projectNo,
-            backbackPage: this.state.backPage,
-            sendValue: {
-              proposeClassificationCode: this.state.proposeClassificationCode,
-              storageListName: this.state.storageListName,
-              customerNo: this.state.customerNo,
-            },
-          },
-        };
-        break;
-      case "sendLettersMatter":
-        path = {
-          pathname: "/subMenuManager/sendLettersMatter",
-          state: {
-            targetCusInfos: this.state.selectedCusInfos,
-            backPage: "salesSendLetter",
-            projectNo: this.state.projectNo,
-            backbackPage: this.state.backPage,
-            sendValue: {
-              proposeClassificationCode: this.state.proposeClassificationCode,
-              storageListName: this.state.storageListName,
-              customerNo: this.state.customerNo,
-            },
-          },
-        };
-        break;
-      case "update":
-        path = {
-          pathname: "/subMenuManager/customerInfo",
-          state: {
-            actionType: "update",
-            customerNo: this.state.customerNo,
-            backPage: "salesSendLetter",
-            backbackPage: this.state.backPage,
-            searchFlag: this.state.searchFlag,
-            projectNo: this.state.projectNo,
-            sendValue: {
-              ...sendValue,
-              proposeClassificationCode: this.state.proposeClassificationCode,
-              storageListName: this.state.storageListName,
-              customerNo: this.state.customerNo,
-            },
-          },
-        };
-        break;
-      default:
-    }
-    this.props.history.push(path);
-  };
   render() {
     const { message, type } = this.state;
+    console.log(
+      {
+        state: this.state,
+        propsState: this.props.location.state,
+        customersTable: this.refs.customersTable,
+      },
+      "render"
+    );
 
     const selectRow = {
       mode: "checkbox",
@@ -1240,6 +1322,7 @@ class salesSendLetter extends React.Component {
       clickToSelect: true,
       clickToExpand: true,
       onSelect: this.handleRowSelect,
+      selected: this.state.selected,
     };
 
     const options = {
@@ -1262,6 +1345,7 @@ class salesSendLetter extends React.Component {
 
     return (
       <div>
+        {/* MyToast */}
         <div style={{ display: this.state.myToastShow ? "block" : "none" }}>
           <MyToast
             myToastShow={this.state.myToastShow}
@@ -1269,6 +1353,7 @@ class salesSendLetter extends React.Component {
             type={type}
           />
         </div>
+        {/* ErrorsMessageToast */}
         <div
           style={{ display: this.state.errorsMessageShow ? "block" : "none" }}
         >
@@ -1278,11 +1363,12 @@ class salesSendLetter extends React.Component {
             type={"danger"}
           />
         </div>
+        {/* Modal */}
         <Modal
           aria-labelledby="contained-modal-title-vcenter"
           centered
           backdrop="static"
-          onHide={this.closeDaiolog}
+          onHide={() => this.setState({ daiologShowFlag: false })}
           show={this.state.daiologShowFlag}
           dialogClassName="modal-purchasingManagersSet"
         >
@@ -1296,6 +1382,7 @@ class salesSendLetter extends React.Component {
             />
           </Modal.Body>
         </Modal>
+        {/* title */}
         <Row inline="true">
           <Col className="text-center">
             <h2>
@@ -1309,6 +1396,7 @@ class salesSendLetter extends React.Component {
           </Col>
         </Row>
         <br />
+        {/* Form */}
         <Form onSubmit={this.savealesSituation}>
           <Row>
             <Col sm={4}>
@@ -1321,7 +1409,7 @@ class salesSendLetter extends React.Component {
                   placeholder="提案区分"
                   id="proposeClassificationCode"
                   name="proposeClassificationCode"
-                  onChange={this.proposeClassificationCodeChange}
+                  onChange={this.handleProposeClassificationCodeChange}
                   disabled={this.state.backPage !== "" ? true : false}
                   value={this.state.proposeClassificationCode}
                 >
@@ -1362,7 +1450,7 @@ class salesSendLetter extends React.Component {
                         ) || ""
                       }
                       onChange={(event, values) =>
-                        this.onTagsChange(event, values, "customerName")
+                        this.handleTagsChange(event, values, "customerName")
                       }
                       renderInput={(params) => (
                         <div ref={params.InputProps.ref}>
@@ -1399,7 +1487,7 @@ class salesSendLetter extends React.Component {
                         ) || ""
                       }
                       onChange={(event, values) =>
-                        this.onTagsChange(event, values, "personInCharge")
+                        this.handleTagsChange(event, values, "personInCharge")
                       }
                       renderInput={(params) => (
                         <div ref={params.InputProps.ref}>
@@ -1428,7 +1516,7 @@ class salesSendLetter extends React.Component {
                 <Button
                   size="sm"
                   variant="info"
-                  onClick={this.addClick}
+                  onClick={this.handleAddCustomerToList}
                   /*
                    * disabled={this.state.allCustomer.length
                    * ===
@@ -1454,22 +1542,15 @@ class salesSendLetter extends React.Component {
                   </InputGroup.Prepend>
                   <Autocomplete
                     options={this.state.storageList}
-                    getOptionLabel={(option) =>
-                      option.name ? option.name : ""
-                    }
-                    disabled={
-                      this.state.selectetRowIds.length !== 0 ||
-                      !this.state.sendLetterBtnFlag
-                        ? true
-                        : false
-                    }
+                    getOptionLabel={(option) => option?.name || ""}
+                    disabled={this.state.selected.length !== 0}
                     value={
                       this.state.storageList.find(
                         (v) => v.name === this.state.storageListName
                       ) || ""
                     }
                     onChange={(event, values) =>
-                      this.onTagsChange(event, values, "storageList")
+                      this.handleTagsChange(event, values, "storageList")
                     }
                     renderInput={(params) => (
                       <div ref={params.InputProps.ref}>
@@ -1492,18 +1573,22 @@ class salesSendLetter extends React.Component {
                   id="storageListNameChange"
                   name="storageListNameChange"
                   value={this.state.storageListNameChange}
-                  onChange={this.valueChange}
+                  onChange={this.handleListNameChange}
                 />
                 <Button
                   style={{ marginLeft: "5px", marginRight: "5px" }}
                   size="sm"
                   variant="info"
-                  onClick={this.changeName}
+                  onClick={this.handleUpdateName}
                 >
                   <FontAwesomeIcon icon={faPencilAlt} />
                   更新
                 </Button>
-                <Button size="sm" variant="info" onClick={this.deleteList}>
+                <Button
+                  size="sm"
+                  variant="info"
+                  onClick={this.handleDeleteList}
+                >
                   <FontAwesomeIcon icon={faMinusCircle} />
                   削除
                 </Button>
@@ -1516,7 +1601,7 @@ class salesSendLetter extends React.Component {
                 size="sm"
                 variant="info"
                 name="clickButton"
-                onClick={this.selectAllLists}
+                onClick={this.handleSelectAllLists}
                 disabled={0 !== this.state.allCustomer.length ? false : true}
               >
                 <FontAwesomeIcon icon={faListOl} />
@@ -1524,7 +1609,7 @@ class salesSendLetter extends React.Component {
               </Button>{" "}
               <Button
                 size="sm"
-                onClick={this.shuseiTo.bind(this, "sendLettersConfirm")}
+                onClick={this.handleShuseiTo.bind(this, "sendLettersConfirm")}
                 variant="info"
                 name="clickButton"
                 hidden={
@@ -1534,10 +1619,7 @@ class salesSendLetter extends React.Component {
                     : false
                 }
                 disabled={
-                  (this.state.selectetRowIds.length !== 0 ||
-                  !this.state.sendLetterBtnFlag
-                    ? false
-                    : true) ||
+                  this.state.selected.length === 0 ||
                   (this.state.backPage !== "" &&
                     this.state.backPage !== "manageSituation")
                     ? true
@@ -1549,7 +1631,7 @@ class salesSendLetter extends React.Component {
               </Button>{" "}
               <Button
                 size="sm"
-                onClick={this.shuseiTo.bind(this, "sendLettersMatter")}
+                onClick={this.handleShuseiTo.bind(this, "sendLettersMatter")}
                 variant="info"
                 name="clickButton"
                 hidden={
@@ -1559,10 +1641,7 @@ class salesSendLetter extends React.Component {
                     : false
                 }
                 disabled={
-                  (this.state.selectetRowIds.length !== 0 ||
-                  !this.state.sendLetterBtnFlag
-                    ? false
-                    : true) ||
+                  this.state.selected.length === 0 ||
                   (this.state.backPage !== "" &&
                     this.state.backPage !== "projectInfoSearch")
                     ? true
@@ -1574,7 +1653,7 @@ class salesSendLetter extends React.Component {
               </Button>{" "}
               <Button
                 size="sm"
-                onClick={this.shuseiTo.bind(this, "update")}
+                onClick={this.handleShuseiTo.bind(this, "update")}
                 disabled={this.state.selectetRowIds.length !== 1 ? true : false}
                 variant="info"
               >
@@ -1589,7 +1668,7 @@ class salesSendLetter extends React.Component {
                     : false
                 }
                 variant="info"
-                onClick={this.back.bind(this)}
+                onClick={this.handleBack.bind(this)}
               >
                 <FontAwesomeIcon icon={faLevelUpAlt} />
                 戻る
@@ -1601,18 +1680,13 @@ class salesSendLetter extends React.Component {
                   size="sm"
                   variant="info"
                   name="clickButton"
-                  onClick={this.addNewList}
+                  onClick={this.handleNewCustomerList}
                   disabled={
-                    (this.state.selectetRowIds.length !== 0 ||
-                    !this.state.sendLetterBtnFlag
-                      ? false
-                      : true) ||
+                    this.state.selected.length === 0 ||
                     !(
                       this.state.storageListName === null ||
                       this.state.storageListName === ""
                     )
-                      ? true
-                      : false
                   }
                 >
                   <FontAwesomeIcon icon={faEdit} />
@@ -1621,26 +1695,21 @@ class salesSendLetter extends React.Component {
                 {/*
                  * <Button size="sm" variant="info"
                  * name="clickButton"
-                 * onClick={this.clearLists}
-                 * disabled={!this.state.sendLetterBtnFlag ?
-                 * false : true}><FontAwesomeIcon
+                 * onClick={this.handleClearLists}
+                 * disabled={this.state.selected.length===0}><FontAwesomeIcon
                  * icon={faBroom} />クリア</Button>{' '}
                  */}
                 <Button
                   size="sm"
                   variant="info"
                   name="clickButton"
+                  // TODO:此处业务待确认
                   onClick={
-                    !this.state.sendLetterBtnFlag
-                      ? this.clearLists
-                      : this.deleteLists
+                    this.state.selected.length !== 0
+                      ? this.handleClearLists
+                      : this.handleDeleteLists
                   }
-                  disabled={
-                    this.state.selectetRowIds.length !== 0 ||
-                    !this.state.sendLetterBtnFlag
-                      ? false
-                      : true
-                  }
+                  disabled={this.state.selectetRowIds.length === 0}
                 >
                   <FontAwesomeIcon icon={faMinusCircle} />
                   削除
@@ -1649,6 +1718,7 @@ class salesSendLetter extends React.Component {
             </Col>
           </Row>
         </Form>
+        {/* BootstrapTable */}
         <Row>
           <Col sm={12}>
             <BootstrapTable
@@ -1666,7 +1736,7 @@ class salesSendLetter extends React.Component {
               <TableHeaderColumn
                 width="6%"
                 dataField="any"
-                dataFormat={this.indexN}
+                dataFormat={this.renderIndexN}
                 autoValue
                 editable={false}
               >
@@ -1683,7 +1753,7 @@ class salesSendLetter extends React.Component {
               <TableHeaderColumn
                 width="22%"
                 dataField="customerName"
-                dataFormat={this.customerNameFormat.bind(this)}
+                dataFormat={this.renderCustomerName.bind(this)}
               >
                 お客様名
               </TableHeaderColumn>
@@ -1693,7 +1763,7 @@ class salesSendLetter extends React.Component {
               <TableHeaderColumn
                 width="10%"
                 dataField="customerDepartmentCode"
-                dataFormat={this.customerDepartmentNameFormat}
+                dataFormat={this.renderCustomerDepartmentName}
                 hidden
               >
                 部門
@@ -1701,14 +1771,14 @@ class salesSendLetter extends React.Component {
               <TableHeaderColumn
                 width="9%"
                 dataField="positionCode"
-                dataFormat={this.positionNameFormat}
+                dataFormat={this.renderPositionName}
               >
                 職位
               </TableHeaderColumn>
               <TableHeaderColumn
                 width="25%"
                 dataField="mailList"
-                dataFormat={this.mailListFormat.bind(this)}
+                dataFormat={this.renderMailList.bind(this)}
               >
                 メール
               </TableHeaderColumn>
@@ -1723,14 +1793,14 @@ class salesSendLetter extends React.Component {
               <TableHeaderColumn
                 width="8%"
                 dataField="businessCount"
-                dataFormat={this.businessCountFormat}
+                dataFormat={this.renderBusinessCount}
               >
                 取引数
               </TableHeaderColumn>
               <TableHeaderColumn
                 width="12%"
                 dataField="salesPersonsAppend"
-                dataFormat={this.CellFormatter.bind(this)}
+                dataFormat={this.renderGetSalesPersons.bind(this)}
               >
                 担当追加
               </TableHeaderColumn>

@@ -564,12 +564,12 @@ Email：` +
 ＩＳＭＳ：MSA-IS-385
 *****************************************************************`;
       const { resumeName, mailTitle, resumePath, selectedmail } = this.state;
-      selectedmail = this.state.selectedCusInfos[i].purchasingManagersMail
+      selectedmail = this.state.selectedCusInfos[i].purchasingManagersMail;
       /*
        * +
        * "," +
        * this.state.selectedCusInfos[i].purchasingManagersMail2
-       */;
+       */
       let selectedMailCC = [
         this.state.selectedMailCC.length >= 1
           ? this.state.selectedMailCC[0].companyMail
@@ -735,8 +735,10 @@ Email：` +
         sendValue: this.state.sendValue,
         salesPersons: this.state.selectedEmpNos,
         // targetCusInfos: this.state.selectedCusInfos,
+        targetCusInfos: this.props.location.state.targetCusInfos,
         backbackPage: this.state.backbackPage,
         projectNo: this.state.projectNo,
+        currPage: this.props.location.state.currPage,
       },
     };
     this.props.history.push(path);

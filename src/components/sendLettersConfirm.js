@@ -1883,6 +1883,7 @@ Email：` +
         sendValue: this.state.sendValue,
         salesPersons: this.state.selectedEmpNos,
         // targetCusInfos: this.state.selectedCusInfos,
+        targetCusInfos: this.props.location.state.targetCusInfos,
         backbackPage: this.state.backbackPage,
         projectNo: this.state.projectNo,
       },
