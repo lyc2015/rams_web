@@ -23,7 +23,7 @@ axios.defaults.withCredentials = true;
  */
 class WagesInfo extends Component {
 
-    constructor(props) {
+    constructor(props) { 
         super(props);
         this.state = this.initialState;//初期化
     }
