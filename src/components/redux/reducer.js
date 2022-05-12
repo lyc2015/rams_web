@@ -112,7 +112,7 @@ export function fetchDropDown() {
       }
     },
   });
-  outArray.push(outArray[outArray.length - 1].slice(1)[0].name);
+  outArray.push(outArray[outArray.length - 1]?.slice(1)[0].name);
   return outArray;
 }
 /**
