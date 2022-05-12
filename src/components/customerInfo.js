@@ -911,8 +911,12 @@ class CustomerInfo extends Component {
       state: {
         searchFlag: this.state.searchFlag,
         sendValue: this.state.sendValue,
-        customerNo: this.state.customerNoForPageChange,
-        currPage: this.state.currPage,
+        customerNo: this.props.location.state.storageListName
+          ? ""
+          : this.state.customerNoForPageChange,
+        currPage: this.props.location.state.storageListName
+          ? ""
+          : this.state.currPage,
         backbackPage: this.state.backbackPage,
         projectNo: this.state.projectNo,
       },

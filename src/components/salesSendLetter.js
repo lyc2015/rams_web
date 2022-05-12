@@ -113,6 +113,8 @@ class salesSendLetter extends React.Component {
         this.setState({
           currentPage: propsState.currPage,
         });
+        // 避免选择list后仍会进入该判断
+        this.props.location.state.currPage = "";
       }
 
       // お客様情報から戻るばい
@@ -130,6 +132,8 @@ class salesSendLetter extends React.Component {
           customerNo: propsState.customerNo,
           selected: [propsState.customerNo],
         });
+        // 避免选择list后仍会进入该判断
+        this.props.location.state.customerNo = "";
       }
 
       // 要员送信と案件送信から戻るばい
@@ -148,6 +152,8 @@ class salesSendLetter extends React.Component {
           selectedCusInfos,
           selected,
         });
+        // 避免选择list后仍会进入该判断
+        this.props.location.state.targetCusInfos = undefined;
       }
 
       console.log(
@@ -1125,6 +1131,7 @@ class salesSendLetter extends React.Component {
             backPage: "salesSendLetter",
             projectNo: this.state.projectNo,
             backbackPage: this.state.backPage,
+            storageListName: this.state.storageListName,
             sendValue: {
               proposeClassificationCode: this.state.proposeClassificationCode,
               storageListName: this.state.storageListName,
@@ -1143,6 +1150,7 @@ class salesSendLetter extends React.Component {
             backPage: "salesSendLetter",
             projectNo: this.state.projectNo,
             backbackPage: this.state.backPage,
+            storageListName: this.state.storageListName,
             sendValue: {
               proposeClassificationCode: this.state.proposeClassificationCode,
               storageListName: this.state.storageListName,
@@ -1163,6 +1171,7 @@ class salesSendLetter extends React.Component {
             backbackPage: this.state.backPage,
             searchFlag: this.state.searchFlag,
             projectNo: this.state.projectNo,
+            storageListName: this.state.storageListName,
             sendValue: {
               ...sendValue,
               proposeClassificationCode: this.state.proposeClassificationCode,
@@ -1439,9 +1448,13 @@ class salesSendLetter extends React.Component {
           </Row>
           <Row>
             <Col sm={6}>
-              <Row style={{ margin: "0px", padding: "0px" }}>
-                <Col sm={8} style={{ margin: "0px", padding: "0px" }}>
-                  <InputGroup size="sm" className="mb-3">
+              <Row style={{ display: "flex", flexWrap: "nowrap" }}>
+                <div style={{ marginRight: "10px" }}>
+                  <InputGroup
+                    style={{ flexWrap: "nowrap" }}
+                    size="sm"
+                    className="mb-3"
+                  >
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         お客様名
@@ -1478,9 +1491,13 @@ class salesSendLetter extends React.Component {
                       )}
                     />
                   </InputGroup>
-                </Col>
-                <Col sm={4} style={{ margin: "0px", padding: "0px" }}>
-                  <InputGroup size="sm" className="mb-3">
+                </div>
+                <div style={{ marginRight: "10px" }}>
+                  <InputGroup
+                    style={{ flexWrap: "nowrap" }}
+                    size="sm"
+                    className="mb-3"
+                  >
                     <InputGroup.Prepend>
                       <InputGroup.Text id="sanKanji">担当者</InputGroup.Text>
                     </InputGroup.Prepend>
@@ -1515,42 +1532,40 @@ class salesSendLetter extends React.Component {
                       )}
                     />
                   </InputGroup>
-                </Col>
+                </div>
+                <div style={{ flexShrink: 0 }}>
+                  <Button
+                    size="sm"
+                    variant="info"
+                    onClick={this.handleAddCustomerToList}
+                    /*
+                     * disabled={this.state.allCustomer.length
+                     * ===
+                     * this.state.customerTemp.length ?
+                     * true :
+                     * false}
+                     */
+                    disabled={
+                      this.state.customerCode !== "" ||
+                      this.state.purchasingManagers !== ""
+                        ? false
+                        : true
+                    }
+                  >
+                    <FontAwesomeIcon icon={faPlusCircle} />
+                    追加
+                  </Button>
+                </div>
               </Row>
             </Col>
 
-            <Col sm={3}>
-              <div
-                style={{
-                  position: "absolute",
-                  left: "0px",
-                  marginLeft: "-22px",
-                }}
-              >
-                <Button
+            <Col style={{ display: "flex", justifyContent: "flex-end" }} sm={6}>
+              <div style={{ marginRight: "10px" }}>
+                <InputGroup
+                  style={{ flexWrap: "nowrap" }}
                   size="sm"
-                  variant="info"
-                  onClick={this.handleAddCustomerToList}
-                  /*
-                   * disabled={this.state.allCustomer.length
-                   * ===
-                   * this.state.customerTemp.length ?
-                   * true :
-                   * false}
-                   */
-                  disabled={
-                    this.state.customerCode !== "" ||
-                    this.state.purchasingManagers !== ""
-                      ? false
-                      : true
-                  }
+                  className="mb-3"
                 >
-                  <FontAwesomeIcon icon={faPlusCircle} />
-                  追加
-                </Button>
-              </div>
-              <div style={{ position: "absolute", right: "0px" }}>
-                <InputGroup size="sm" className="mb-3">
                   <InputGroup.Prepend>
                     <InputGroup.Text id="fiveKanji">格納リスト</InputGroup.Text>
                   </InputGroup.Prepend>
@@ -1579,34 +1594,34 @@ class salesSendLetter extends React.Component {
                   />
                 </InputGroup>
               </div>
-            </Col>
-            <Col sm={3}>
-              <InputGroup size="sm" className="mb-3">
-                <Form.Control
-                  placeholder="データ修正"
-                  id="storageListNameChange"
-                  name="storageListNameChange"
-                  value={this.state.storageListNameChange}
-                  onChange={this.handleListNameChange}
-                />
-                <Button
-                  style={{ marginLeft: "5px", marginRight: "5px" }}
-                  size="sm"
-                  variant="info"
-                  onClick={this.handleUpdateName}
-                >
-                  <FontAwesomeIcon icon={faPencilAlt} />
-                  更新
-                </Button>
-                <Button
-                  size="sm"
-                  variant="info"
-                  onClick={this.handleDeleteList}
-                >
-                  <FontAwesomeIcon icon={faMinusCircle} />
-                  削除
-                </Button>
-              </InputGroup>
+              <div>
+                <InputGroup size="sm" className="mb-3">
+                  <Form.Control
+                    placeholder="データ修正"
+                    id="storageListNameChange"
+                    name="storageListNameChange"
+                    value={this.state.storageListNameChange}
+                    onChange={this.handleListNameChange}
+                  />
+                  <Button
+                    style={{ marginLeft: "5px", marginRight: "5px" }}
+                    size="sm"
+                    variant="info"
+                    onClick={this.handleUpdateName}
+                  >
+                    <FontAwesomeIcon icon={faPencilAlt} />
+                    更新
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="info"
+                    onClick={this.handleDeleteList}
+                  >
+                    <FontAwesomeIcon icon={faMinusCircle} />
+                    削除
+                  </Button>
+                </InputGroup>
+              </div>
             </Col>
           </Row>
           <Row>

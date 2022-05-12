@@ -53,8 +53,8 @@ class sendLettersConfirm extends React.Component {
     selectedEmps: "",
     mailTitle: "",
     serverIP: store.getState().dropDown[store.getState().dropDown.length - 1],
-    selectedEmpNos: this.props.location.state.salesPersons,
-    selectedCusInfos: this.props.location.state.targetCusInfos,
+    selectedEmpNos: this.props.location.state?.salesPersons,
+    selectedCusInfos: this.props.location.state?.targetCusInfos,
     employeeInfo: [],
     employeeInfoAdd: [],
     employeeName: "",
@@ -220,7 +220,7 @@ class sendLettersConfirm extends React.Component {
   }
 
   setSelectedCusInfos = (text) => {
-    let selectedCusInfos = this.props.location.state.targetCusInfos;
+    let selectedCusInfos = this.props.location.state?.targetCusInfos;
     for (let i = 0; i < selectedCusInfos.length; i++) {
       selectedCusInfos[i].rowNo = i + 1;
       selectedCusInfos[i].sendOver = text;
@@ -1392,7 +1392,7 @@ Email：` +
             autoComplete="off"
           >
             {cell.map((data) => (
-              <option value={data}>
+              <option key={data} value={data}>
                 {data.split("_").length > 1
                   ? data.split("_")[data.split("_").length - 1]
                   : data}
@@ -1885,11 +1885,14 @@ Email：` +
         searchFlag: this.state.searchFlag,
         sendValue: this.state.sendValue,
         salesPersons: this.state.selectedEmpNos,
-        // targetCusInfos: this.state.selectedCusInfos,
-        targetCusInfos: this.props.location.state.targetCusInfos,
+        targetCusInfos: this.props.location.state.storageListName
+          ? undefined
+          : this.props.location.state.targetCusInfos,
+        currPage: this.props.location.state.storageListName
+          ? ""
+          : this.props.location.state.currPage,
         backbackPage: this.state.backbackPage,
         projectNo: this.state.projectNo,
-        currPage: this.props.location.state.currPage,
       },
     };
     this.props.history.push(path);

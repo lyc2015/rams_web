@@ -312,16 +312,14 @@ class SubMenu extends Component {
         <Row style={{ backgroundColor: "#FFFAF0" }}>
           <Col>
             <div style={{ float: "left" }}>
-              <Navbar inline>
+              <Navbar>
                 <img
                   className="titleImg"
                   alt="title"
                   src={this.state.pic}
                   style={{ width: "65px" }}
                 />
-                <a className="loginMark" inline>
-                  {this.state.companyName}
-                </a>{" "}
+                <a className="loginMark">{this.state.companyName}</a>{" "}
               </Navbar>
             </div>
             <div style={{ marginTop: "50px", float: "right" }}>
