@@ -1464,8 +1464,6 @@ class salesSendLetter extends React.Component {
                       disabled={
                         this.state.allCustomer.length ===
                         this.state.allCustomerNum
-                          ? true
-                          : false
                       }
                       options={this.state.customers}
                       getOptionLabel={(option) =>

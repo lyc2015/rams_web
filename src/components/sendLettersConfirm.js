@@ -47,6 +47,8 @@ class sendLettersConfirm extends React.Component {
 
   // 初期化変数
   initialState = {
+    myCode: true,
+    inputEmployeeName: "",
     resumePath: "",
     resumeName: "",
     selectedmail: "",
@@ -268,7 +270,7 @@ class sendLettersConfirm extends React.Component {
         let arr = [];
         if (result.data.length !== 0) {
           arr[0] = "入力";
-          for (var i = 0; i < result.data.length; i++) {
+          for (let i = 0; i < result.data.length; i++) {
             arr[i + 1] = result.data[i].employeeName;
           }
         }
@@ -331,7 +333,7 @@ class sendLettersConfirm extends React.Component {
   beforeSendMailWithFile = () => {
     this.setSelectedCusInfos("○");
     let mailText = ``;
-    var time;
+    let time;
     let resumeInfo1 = [];
     let resumeInfo2 = [];
     let resumeName1 = [];
@@ -703,9 +705,9 @@ Email：` +
    *            传-1 上个月,传1 下个月
    */
   getNextMonth = (addMonths) => {
-    var dd = new Date();
-    var m = dd.getMonth() + 1;
-    var y =
+    let dd = new Date();
+    let m = dd.getMonth() + 1;
+    let y =
       dd.getMonth() + 1 + addMonths > 12
         ? dd.getFullYear() + 1
         : dd.getFullYear();
@@ -763,7 +765,7 @@ Email：` +
   };
 
   getHopeHighestPrice = (result) => {
-    var tempEmployeeInfo = this.state.employeeInfo;
+    let tempEmployeeInfo = this.state.employeeInfo;
     for (let i = 0; i < tempEmployeeInfo.length; i++) {
       tempEmployeeInfo[i].hopeHighestPrice = result.data[i].unitPrice;
     }
@@ -779,7 +781,7 @@ Email：` +
 
   positionNameFormat = (cell) => {
     let positionsTem = this.state.positions;
-    for (var i in positionsTem) {
+    for (let i in positionsTem) {
       if (cell === positionsTem[i].code) {
         return positionsTem[i].name;
       }
@@ -795,13 +797,14 @@ Email：` +
     return cell;
   };
 
+  // 根据employeeNo获取要员信息。
   searchPersonnalDetail = (
     employeeNo,
     hopeHighestPrice,
     index,
     mailContent
   ) => {
-    var employeeInfo = this.state.employeeInfo;
+    let employeeInfo = this.state.employeeInfo;
     if (!employeeNo) {
       return;
     }
@@ -1414,13 +1417,38 @@ Email：` +
     });
   };
 
+  onInputEmployeeNameBlur = (event, row) => {
+    let { employeeInfo } = this.state,
+      index = row.index - 1;
+    employeeInfo[index] = {
+      ...employeeInfo[index],
+      employeeName: event.target.value,
+      inputFlag: true,
+      employeeStatus: "",
+      hopeHighestPrice: "",
+    };
+    this.setState(
+      {
+        employeeInfo,
+        employeeFlag: true,
+      }
+      // () => {
+      //   console.log(this.state.employeeInfo);
+      //   debugger;
+      // }
+    );
+    $("#addButton").attr("disabled", false);
+  };
+
   /* 要員追加機能の新規 20201216 張棟 START */
   // 要員名前処理
   formatEmployeeName(cell, row, enumObject, index) {
-    var flg = true;
-    var name = cell;
+    let flg = true;
+    let name = cell;
 
-    for (var v = 0; v < this.state.employeeInfo.length; v++) {
+    console.log({ cell, row, enumObject, index }, "formatEmployeeName");
+
+    for (let v = 0; v < this.state.employeeInfo.length; v++) {
       if (this.state.employeeInfo[v].employeeName === cell) {
         flg =
           this.state.employeeInfo[v].initFlg === undefined
@@ -1431,6 +1459,33 @@ Email：` +
     }
     if (flg) {
       return <div>&nbsp;&nbsp;{name}</div>;
+    }
+
+    if (this.state.myCode) {
+      return (
+        <Autocomplete
+          disableClearable
+          freeSolo
+          size="small"
+          id="employeeName"
+          onChange={(event, value, reason, details) =>
+            this.myCodeEmployeeNameChange(event, value, reason, details, row)
+          }
+          options={this.state.allEmployeeNameInfo}
+          value={this.state.employeeInfo[row.index - 1] || {}}
+          getOptionLabel={(option) =>
+            option.employeeName ? option.employeeName : ""
+          }
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              onBlur={(event) => this.onInputEmployeeNameBlur(event, row)}
+              // variant="standard"
+              placeholder="名前"
+            />
+          )}
+        />
+      );
     } else {
       if (cell === "入力" || row.inputFlag) {
         return (
@@ -1443,10 +1498,10 @@ Email：` +
               onChange={(event) => this.tableValueChange(event, cell, row)}
             />
             {/*<FormControl
-		                value={row.employeeName}
-		                name="employeeName"
+                    value={row.employeeName}
+                    name="employeeName"
                         onChange={(event) => this.tableValueChange(event, cell, row)}
-					></FormControl>*/}
+      		></FormControl>*/}
           </div>
         );
       }
@@ -1461,8 +1516,10 @@ Email：` +
               autoComplete="off"
             >
               <option value=""></option>
-              {this.state.allEmployeeName.map((data) => (
-                <option value={data}>{data}</option>
+              {this.state.allEmployeeName.map((data, index) => (
+                <option key={index} value={data}>
+                  {data}
+                </option>
               ))}
             </Form.Control>
           </div>
@@ -1479,9 +1536,16 @@ Email：` +
               autoComplete="off"
             >
               <option value=""></option>
-              {this.state.allEmployeeName.map((data) => (
-                <option value={data}>{data}</option>
-              ))}
+              {[
+                <option key="ruri" value="入力">
+                  入力
+                </option>,
+                ...this.state.allEmployeeNameInfo.map((data) => (
+                  <option key={data.employeeNo} value={data.employeeName}>
+                    {data.employeeName}
+                  </option>
+                )),
+              ]}
             </Form.Control>
           </div>
         );
@@ -1490,7 +1554,7 @@ Email：` +
   }
 
   resumeInfoListChange = (row, event) => {
-    var employeeInfo = this.state.employeeInfo;
+    let employeeInfo = this.state.employeeInfo;
     employeeInfo[row.index - 1].resumeInfoName = event.target.value;
     this.setState({
       employeeInfo: employeeInfo,
@@ -1498,11 +1562,11 @@ Email：` +
   };
 
   employeeNameInputChange = (row, event) => {
-    var employeeInfo = this.state.employeeInfo;
+    let employeeInfo = this.state.employeeInfo;
     employeeInfo[row.index - 1].employeeName = event.target.value;
   };
   employeeNameInputBlur = (row, event) => {
-    var employeeInfo = this.state.employeeInfo;
+    let employeeInfo = this.state.employeeInfo;
     employeeInfo[row.index - 1].employeeName = event.target.value;
     this.setState({
       employeeInfo: employeeInfo,
@@ -1510,20 +1574,16 @@ Email：` +
     });
   };
 
-  // 要員名前触発されるイベント
-  employeeNameChange = (row, event) => {
-    if (
-      event.target.value !== "" &&
-      event.target.value !== "入力" &&
-      !row.inputFlag
-    ) {
-      var employeeInfo = this.state.employeeInfo;
-      var employeeNoTemp;
+  myCodeEmployeeNameChange = (event, value, reason, details, row) => {
+    if (reason === "select-option") {
+      // 选择
+      let { employeeInfo } = this.state;
 
-      for (let i = 0; i < this.state.employeeInfo.length; i++) {
+      // 看是否已经重复添加过了（下标不同但名字相同，证明已经选择过了）
+      for (let i = 0; i < employeeInfo.length; i++) {
         if (
-          row.index !== this.state.employeeInfo[i].index &&
-          event.target.value === this.state.employeeInfo[i].employeeName
+          employeeInfo[i].index !== row.index &&
+          employeeInfo[i].employeeName === value.employeeName
         ) {
           this.setState({
             myToastShow: true,
@@ -1537,12 +1597,118 @@ Email：` +
           return;
         }
       }
+      // 没重复
+      // 修改employeeName
+
+      employeeInfo[row.index - 1].employeeName = value.employeeName;
+      employeeInfo[row.index - 1].employeeNo = value.employeeNo;
+      if (value.employeeNo.match("LYC")) {
+        // 社員
+        employeeInfo[row.index - 1].employeeStatus = "0";
+      } else if (value.employeeNo.match("BP")) {
+        // 協力
+        employeeInfo[row.index - 1].employeeStatus = "1";
+      }
+      this.setState({
+        employeeInfo,
+        employeeFlag: true,
+      });
+      // this.setState({
+      // [event.target.name]: event.target.value,
+      // employeeInfo: employeeInfo,
+      // })
+
+      this.searchPersonnalDetail(
+        value.employeeNo,
+        employeeInfo[row.index - 1].hopeHighestPrice,
+        row.index
+      );
+
+      // 检查是否都选择了，如果没有都选择则禁用添加按钮
+      let disabledFlg = true;
+      for (let j = 0; j < this.state.employeeInfo.length; j++) {
+        if (
+          this.state.employeeInfo[j].employeeName === "" ||
+          this.state.employeeInfo[j].employeeName === null
+        ) {
+          disabledFlg = false;
+          break;
+        }
+      }
+      if (disabledFlg) {
+        // 全ての要員明細の名前を入力した後で、追加ボタンが活性になる
+        $("#addButton").attr("disabled", false);
+      }
+      if (this.state.mailTitle !== "") {
+        this.setState({
+          sendLetterButtonDisFlag: false,
+        });
+      }
+    }
+    // if (reason === "input") {
+    //   let { employeeInfo } = this.state,
+    //     index = row.index - 1;
+    //   employeeInfo[index] = {
+    //     ...employeeInfo[index],
+    //     employeeName: value,
+    //     inputFlag: true,
+    //     employeeStatus: "",
+    //     hopeHighestPrice: "",
+    //   };
+    //   this.setState({
+    //     inputEmployeeName: value,
+    //     employeeInfo,
+    //     employeeFlag: true,
+    //   });
+    //   $("#addButton").attr("disabled", false);
+    // } else if (reason === "select-option") {
+    // }
+    // this.setState({
+    //   selectedEmployeeName: value,
+    // });
+    // debugger;
+    console.log({ event, value, reason, details }, "myCodeEmployeeNameChange");
+  };
+
+  // 要員名前触発されるイベント
+  employeeNameChange = (row, event) => {
+    if (
+      event.target.value !== "" &&
+      event.target.value !== "入力" &&
+      !row.inputFlag
+    ) {
+      // 选择
+      let { employeeInfo } = this.state;
+      let employeeNoTemp;
+
+      // 看是否已经重复添加过了（下标不同但名字相同，证明已经选择过了）
+      for (let i = 0; i < employeeInfo.length; i++) {
+        if (
+          employeeInfo[i].index !== row.index &&
+          employeeInfo[i].employeeName === event.target.value
+        ) {
+          this.setState({
+            myToastShow: true,
+            type: false,
+            errorsMessageShow: false,
+            message: "同じ名前は選択されている。",
+            sendLetterButtonDisFlag: true,
+          });
+          setTimeout(() => this.setState({ myToastShow: false }), 3000);
+          // window.location.reload();
+          return;
+        }
+      }
+      // 没重复
+      // 修改employeeName
       employeeInfo[row.index - 1].employeeName = event.target.value;
       // this.setState({
       // [event.target.name]: event.target.value,
       // employeeInfo: employeeInfo,
       // })
-      for (var i = 0; i < this.state.allEmployeeNameInfo.length; i++) {
+
+      // 修改employeeNo，employeeStatus
+      for (let i = 0; i < this.state.allEmployeeNameInfo.length; i++) {
         if (
           event.target.value === this.state.allEmployeeNameInfo[i].employeeName
         ) {
@@ -1551,28 +1717,27 @@ Email：` +
           if (employeeNoTemp.match("LYC")) {
             // 社員
             employeeInfo[row.index - 1].employeeStatus = "0";
-            this.setState({
-              employeeInfo: employeeInfo,
-              employeeFlag: true,
-            });
           } else if (employeeNoTemp.match("BP")) {
             // 協力
             employeeInfo[row.index - 1].employeeStatus = "1";
-            this.setState({
-              employeeInfo: employeeInfo,
-              employeeFlag: true,
-            });
           }
+          this.setState({
+            employeeInfo,
+            employeeFlag: true,
+          });
           break;
         }
       }
+
       this.searchPersonnalDetail(
         employeeNoTemp,
         employeeInfo[row.index - 1].hopeHighestPrice,
         row.index
       );
-      var disabledFlg = true;
-      for (var j = 0; j < this.state.employeeInfo.length; j++) {
+
+      // 检查是否都选择了，如果没有都选择则禁用添加按钮
+      let disabledFlg = true;
+      for (let j = 0; j < this.state.employeeInfo.length; j++) {
         if (
           this.state.employeeInfo[j].employeeName === "" ||
           this.state.employeeInfo[j].employeeName === null
@@ -1592,19 +1757,25 @@ Email：` +
       }
     } else {
       if (event.target.value === "入力") {
-        var employeeInfo = this.state.employeeInfo;
-        employeeInfo[row.index - 1].employeeName = event.target.value;
-        employeeInfo[row.index - 1].inputFlag = true;
-        employeeInfo[row.index - 1].employeeStatus = "";
-        employeeInfo[row.index - 1].hopeHighestPrice = "";
+        let { employeeInfo } = this.state,
+          index = row.index - 1;
+        employeeInfo[index] = {
+          ...employeeInfo[index],
+          employeeName: event.target.value,
+          inputFlag: true,
+          employeeStatus: "",
+          hopeHighestPrice: "",
+        };
+
         this.setState({
-          employeeInfo: employeeInfo,
+          employeeInfo,
           employeeFlag: true,
         });
         $("#addButton").attr("disabled", false);
       }
     }
   };
+
   /* 要員追加機能の新規 20201216 張棟 END */
 
   resumeValueChange = (row, event) => {
@@ -1627,24 +1798,26 @@ Email：` +
    * 行追加処理
    */
   insertRow = () => {
-    var employeeInfo = this.state.employeeInfo;
-    var employeeInfoModel = {};
-    employeeInfoModel["employeeNo"] = "";
-    employeeInfoModel["employeeName"] = "";
-    employeeInfoModel["employeeStatus"] = "";
-    employeeInfoModel["hopeHighestPrice"] = "";
-    employeeInfoModel["resumeInfo1"] = "";
-    employeeInfoModel["resumeInfo1Name"] = "";
-    employeeInfoModel["resumeInfo2"] = "";
-    employeeInfoModel["resumeInfo2Name"] = "";
-    employeeInfoModel["resumeInfoName"] = "";
-    employeeInfoModel["initFlg"] = false;
-    employeeInfoModel["index"] = ++this.state.EmployeeNameIndex;
+    let { employeeInfo } = this.state;
+    let employeeInfoModel = {
+      employeeNo: "",
+      employeeName: "",
+      employeeStatus: "",
+      hopeHighestPrice: "",
+      resumeInfo1: "",
+      resumeInfo1Name: "",
+      resumeInfo2: "",
+      resumeInfo2Name: "",
+      resumeInfoName: "",
+      initFlg: false,
+      index: this.state.employeeInfo.length + 1,
+    };
+
     employeeInfo.push(employeeInfoModel);
-    var currentPage = Math.ceil(employeeInfo.length / 5);
+    let currentPage = Math.ceil(employeeInfo.length / 5);
     this.setState({
-      employeeInfo: employeeInfo,
-      currentPage: currentPage,
+      employeeInfo,
+      currentPage,
     });
     this.refs.table.setState({
       selectedRowKeys: [],
@@ -1696,7 +1869,7 @@ Email：` +
     next();
   }
   deleteRow = () => {
-    var deleteFlg = window.confirm("削除していただきますか？");
+    let deleteFlg = window.confirm("削除していただきますか？");
     if (deleteFlg) {
       $("#delectBtn").click();
     }
@@ -1713,8 +1886,8 @@ Email：` +
 
   // 隠した削除ボタンの実装
   onDeleteRow = (row) => {
-    var id = this.state.selectedColumnId;
-    var employeeInfoList = this.state.employeeInfo;
+    let id = this.state.selectedColumnId;
+    let employeeInfoList = this.state.employeeInfo;
     for (let i = employeeInfoList.length - 1; i >= 0; i--) {
       if (employeeInfoList[i].index === id) {
         employeeInfoList.splice(i, 1);
@@ -1744,8 +1917,8 @@ Email：` +
     });
     setTimeout(() => this.setState({ myToastShow: false }), 3000);
 
-    var disabledFlg = true;
-    for (var j = 0; j < this.state.employeeInfo.length; j++) {
+    let disabledFlg = true;
+    for (let j = 0; j < this.state.employeeInfo.length; j++) {
       if (
         this.state.employeeInfo[j].employeeName === "" ||
         this.state.employeeInfo[j].employeeName === null
@@ -1789,13 +1962,13 @@ Email：` +
   };
 
   changeFile = (event, name) => {
-    var filePath = event.target.value;
-    var arr = filePath.split("\\");
-    var fileName = arr[arr.length - 1];
+    let filePath = event.target.value;
+    let arr = filePath.split("\\");
+    let fileName = arr[arr.length - 1];
     if (name === "resumeInfo1") {
-      var employeeInfo1 = this.state.employeeInfo;
+      let employeeInfo1 = this.state.employeeInfo;
 
-      var resumeInfoListTemp =
+      let resumeInfoListTemp =
         employeeInfo1[this.state.selectedColumnId - 1].resumeInfoList;
       if (!(fileName === null || fileName === "" || fileName === undefined)) {
         if (resumeInfoListTemp === undefined || resumeInfoListTemp === null) {
@@ -1820,7 +1993,7 @@ Email：` +
       if (publicUtils.nullToEmpty($("#image").get(0).files[0]) === "") {
         return;
       }
-      var reader = new FileReader();
+      let reader = new FileReader();
       reader.readAsDataURL(
         publicUtils.nullToEmpty($("#image").get(0).files[0])
       );
@@ -1878,7 +2051,7 @@ Email：` +
    * 戻るボタン
    */
   back = () => {
-    var path = {};
+    let path = {};
     path = {
       pathname: this.state.backPage,
       state: {
@@ -1906,6 +2079,8 @@ Email：` +
       resumeInfo1,
       resumeInfo1Name,
     } = this.state;
+
+    console.log({ state: this.state }, "render");
 
     // ページネーション
     const options = {
@@ -2083,7 +2258,7 @@ Email：` +
               )}
             </InputGroup>
           </Col>
-          <Col sm={5}>
+          <Col sm={7}>
             <InputGroup size="sm" className="mb-3">
               {/*
                * <InputGroup.Prepend> <InputGroup.Text
@@ -2091,6 +2266,7 @@ Email：` +
                * </InputGroup.Prepend>
                */}
               <Autocomplete
+                style={{ width: "100%" }}
                 multiple
                 size="small"
                 id="tags-standard"
@@ -2107,17 +2283,21 @@ Email：` +
                     variant="standard"
                     /* label="共用CCメール" */
                     placeholder="共用CCメール"
-                    style={{ width: "680px", float: "right" }}
                   />
                 )}
               />
             </InputGroup>
           </Col>
+          <Col sm={1}></Col>
         </Row>
         <Row style={{ padding: "10px" }}>
           <Col sm={1}></Col>
           <Col sm={10}>
-            <InputGroup size="sm" className="mb-3">
+            <InputGroup
+              style={{ flexWrap: "noWrap" }}
+              size="sm"
+              className="mb-3"
+            >
               <InputGroup.Prepend>
                 <InputGroup.Text id="inputGroup-sizing-sm">
                   挨拶文章
@@ -2132,17 +2312,18 @@ Email：` +
                 onChange={this.valueChange}
                 style={{
                   height: "60px",
-                  width: "84%",
+                  width: "100%",
                   resize: "none",
                   overflow: "hidden",
                 }}
               />
             </InputGroup>
           </Col>
+          <Col sm={1}></Col>
         </Row>
         <Row>
           <Col sm={1}></Col>
-          <Col sm={1}>
+          <Col sm={6}>
             <Button
               size="sm"
               hidden={backPage === "" ? true : false}
@@ -2152,8 +2333,6 @@ Email：` +
               <FontAwesomeIcon icon={faLevelUpAlt} />
               戻る
             </Button>{" "}
-          </Col>
-          <Col sm={4}>
             <div style={{ float: "right" }}>
               <Button
                 size="sm"
@@ -2187,11 +2366,12 @@ Email：` +
               </Button>{" "}
             </div>
           </Col>
-          <Col sm={2}>{"　"}営業文章</Col>
+          <Col sm={4}>{"　"}営業文章</Col>
+          <Col sm={1}></Col>
         </Row>
         <Row>
           <Col sm={1}></Col>
-          <Col sm={5}>
+          <Col sm={6}>
             <BootstrapTable
               options={options}
               insertRow={true}
@@ -2201,7 +2381,6 @@ Email：` +
               ref="table"
               pagination={true}
               cellEdit={cellEdit}
-              data={this.state.employeeInfo}
               // className={"bg-white text-dark"}
               trClassName="customClass"
               headerStyle={{ background: "#5599FF" }}
@@ -2210,7 +2389,7 @@ Email：` +
               condensed
             >
               <TableHeaderColumn
-                width="12%"
+                width="15%"
                 tdStyle={{ padding: ".45em" }}
                 dataField="employeeName"
                 dataFormat={this.formatEmployeeName.bind(this)}
@@ -2295,14 +2474,15 @@ Email：` +
               }
             />
           </Col>
+          <Col sm={1}></Col>
         </Row>
         <Row style={{ padding: "10px" }}>
           <Col sm={12}></Col>
         </Row>
         <Row>
           <Col sm={1}></Col>
-          <Col sm={3}></Col>
-          <Col sm={6}>
+          <Col sm={5}></Col>
+          <Col sm={5}>
             <div style={{ float: "right" }}>
               <Button
                 onClick={this.openDaiolog}
@@ -2334,10 +2514,11 @@ Email：` +
               </Button>
             </div>
           </Col>
+          <Col sm={1}></Col>
         </Row>
         <Row>
           <Col sm={1}></Col>
-          <Col sm={9}>
+          <Col sm={10}>
             <BootstrapTable
               options={options2}
               selectRow={selectRow1}
@@ -2409,6 +2590,7 @@ Email：` +
               </TableHeaderColumn>
             </BootstrapTable>
           </Col>
+          <Col sm={1}></Col>
         </Row>
         <Row style={{ padding: "10px" }}>
           <Col sm={12}></Col>
