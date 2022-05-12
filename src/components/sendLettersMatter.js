@@ -735,10 +735,14 @@ Email：` +
         sendValue: this.state.sendValue,
         salesPersons: this.state.selectedEmpNos,
         // targetCusInfos: this.state.selectedCusInfos,
-        targetCusInfos: this.props.location.state.targetCusInfos,
+        targetCusInfos: this.props.location.state.storageListName
+          ? undefined
+          : this.props.location.state.targetCusInfos,
+        currPage: this.props.location.state.storageListName
+          ? ""
+          : this.props.location.state.currPage,
         backbackPage: this.state.backbackPage,
         projectNo: this.state.projectNo,
-        currPage: this.props.location.state.currPage,
       },
     };
     this.props.history.push(path);

@@ -14,7 +14,7 @@ html,
   bottom: 0px;
   background-size: cover;
   background-attachment: fixed;
-  min-width: 1500px;
+  min-width: 1400px;
 }
 
 .row {
@@ -246,7 +246,7 @@ h2 {
     text-decoration: none;
   }
 }
-
+/* 
 @media screen and (max-width: 1300px) {
   .linkFont {
     font-family: "黑体", Sans-serif;
@@ -275,4 +275,4 @@ h2 {
     color: rgb(0, 0, 0);
     margin-left: -1.6rem;
   }
-}
+} */
