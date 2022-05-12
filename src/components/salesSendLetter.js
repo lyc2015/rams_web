@@ -113,6 +113,8 @@ class salesSendLetter extends React.Component {
         this.setState({
           currentPage: propsState.currPage,
         });
+        // 避免选择list后仍会进入该判断
+        this.props.location.state.currPage = "";
       }
 
       // お客様情報から戻るばい
@@ -130,6 +132,8 @@ class salesSendLetter extends React.Component {
           customerNo: propsState.customerNo,
           selected: [propsState.customerNo],
         });
+        // 避免选择list后仍会进入该判断
+        this.props.location.state.customerNo = "";
       }
 
       // 要员送信と案件送信から戻るばい
@@ -148,6 +152,8 @@ class salesSendLetter extends React.Component {
           selectedCusInfos,
           selected,
         });
+        // 避免选择list后仍会进入该判断
+        this.props.location.state.targetCusInfos = undefined;
       }
 
       console.log(
@@ -1125,6 +1131,7 @@ class salesSendLetter extends React.Component {
             backPage: "salesSendLetter",
             projectNo: this.state.projectNo,
             backbackPage: this.state.backPage,
+            storageListName: this.state.storageListName,
             sendValue: {
               proposeClassificationCode: this.state.proposeClassificationCode,
               storageListName: this.state.storageListName,
@@ -1143,6 +1150,7 @@ class salesSendLetter extends React.Component {
             backPage: "salesSendLetter",
             projectNo: this.state.projectNo,
             backbackPage: this.state.backPage,
+            storageListName: this.state.storageListName,
             sendValue: {
               proposeClassificationCode: this.state.proposeClassificationCode,
               storageListName: this.state.storageListName,
@@ -1163,6 +1171,7 @@ class salesSendLetter extends React.Component {
             backbackPage: this.state.backPage,
             searchFlag: this.state.searchFlag,
             projectNo: this.state.projectNo,
+            storageListName: this.state.storageListName,
             sendValue: {
               ...sendValue,
               proposeClassificationCode: this.state.proposeClassificationCode,
