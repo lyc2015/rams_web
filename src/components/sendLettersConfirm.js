@@ -176,6 +176,12 @@ class sendLettersConfirm extends React.Component {
     titleFlag: false,
   };
 
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (prevState.resumeName !== this.state.resumeName) {
+      console.log(this.state.resumeName);
+    }
+  }
+
   componentDidMount() {
     console.log(this.props.location);
     this.setNewDevelopLanguagesShow();
@@ -1329,7 +1335,13 @@ Email：` +
         null,
         row.mailContent
       );
+    } else {
+      this.setState({
+        mailContent: "",
+        // resumeName: this.state.employeeInfo[row.index - 1].resumeInfoName,
+      });
     }
+
     if (isSelected) {
       this.setState({
         selectedColumnId: row.index,
@@ -1393,6 +1405,7 @@ Email：` +
             onChange={this.resumeInfoListChange.bind(this, row)}
             name="resumeInfoList"
             autoComplete="off"
+            value={this.state.employeeInfo[row.index - 1].resumeInfoName}
           >
             {cell.map((data) => (
               <option key={data} value={data}>
@@ -1420,23 +1433,38 @@ Email：` +
   onInputEmployeeNameBlur = (event, row) => {
     let { employeeInfo } = this.state,
       index = row.index - 1;
+    if (event.target.value === employeeInfo[index].employeeName) {
+      return;
+    }
     employeeInfo[index] = {
       ...employeeInfo[index],
       employeeName: event.target.value,
       inputFlag: true,
-      employeeStatus: "",
-      hopeHighestPrice: "",
     };
-    this.setState(
-      {
-        employeeInfo,
-        employeeFlag: true,
-      }
-      // () => {
-      //   console.log(this.state.employeeInfo);
-      //   debugger;
-      // }
-    );
+
+    if (row.employeeNo && row.employeeStatus) {
+      console.log(this.state, row);
+      employeeInfo[index] = {
+        ...employeeInfo[index],
+        employeeName: event.target.value,
+        inputFlag: true,
+        employeeStatus: "",
+        employeeNo: "",
+        hopeHighestPrice: "",
+        resumeInfo1: "",
+        resumeInfo1Name: "",
+        resumeInfo2: "",
+        resumeInfo2Name: "",
+        resumeInfoList: [],
+        resumeInfoName: "",
+      };
+    }
+
+    this.setState({
+      employeeInfo,
+      employeeFlag: true,
+      mailContent: "",
+    });
     $("#addButton").attr("disabled", false);
   };
 
@@ -1555,6 +1583,7 @@ Email：` +
 
   resumeInfoListChange = (row, event) => {
     let employeeInfo = this.state.employeeInfo;
+
     employeeInfo[row.index - 1].resumeInfoName = event.target.value;
     this.setState({
       employeeInfo: employeeInfo,
@@ -1666,7 +1695,6 @@ Email：` +
     // this.setState({
     //   selectedEmployeeName: value,
     // });
-    // debugger;
     console.log({ event, value, reason, details }, "myCodeEmployeeNameChange");
   };
 
@@ -1966,10 +1994,10 @@ Email：` +
     let arr = filePath.split("\\");
     let fileName = arr[arr.length - 1];
     if (name === "resumeInfo1") {
-      let employeeInfo1 = this.state.employeeInfo;
+      let { employeeInfo, selectedColumnId } = this.state;
 
       let resumeInfoListTemp =
-        employeeInfo1[this.state.selectedColumnId - 1].resumeInfoList;
+        employeeInfo[selectedColumnId - 1].resumeInfoList;
       if (!(fileName === null || fileName === "" || fileName === undefined)) {
         if (resumeInfoListTemp === undefined || resumeInfoListTemp === null) {
           resumeInfoListTemp = [];
@@ -1977,17 +2005,17 @@ Email：` +
         resumeInfoListTemp.push(fileName);
       }
 
-      employeeInfo1[this.state.selectedColumnId - 1].resumeInfo1 = filePath;
-      employeeInfo1[this.state.selectedColumnId - 1].resumeInfoList =
-        resumeInfoListTemp;
-      employeeInfo1[this.state.selectedColumnId - 1].resumeInfo1Name = fileName;
+      employeeInfo[selectedColumnId - 1].resumeInfo1 = filePath;
+      employeeInfo[selectedColumnId - 1].resumeInfoList = resumeInfoListTemp;
+      employeeInfo[selectedColumnId - 1].resumeInfo1Name = fileName;
+      employeeInfo[selectedColumnId - 1].resumeInfoName = fileName;
       this.setState({
-        employeeInfo: employeeInfo1,
+        employeeInfo,
         resumeInfo1: "",
         resumeInfo1Name: fileName,
         resumePath: filePath,
         resumeName: fileName,
-        selectedColumnId: this.state.selectedColumnId,
+        selectedColumnId,
       });
     } else if (name === "image") {
       if (publicUtils.nullToEmpty($("#image").get(0).files[0]) === "") {
@@ -2431,9 +2459,9 @@ Email：` +
                 placeholder="履歴書名"
                 width="19%"
                 dataField="resumeInfoList"
-                value={resumeInfo1}
                 dataFormat={this.formatResumeInfoList.bind(this)}
                 editable={false}
+                value={resumeInfo1}
                 onChange={this.valueChange}
               >
                 履歴書
