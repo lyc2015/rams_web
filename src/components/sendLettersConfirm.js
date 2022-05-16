@@ -47,7 +47,6 @@ class sendLettersConfirm extends React.Component {
 
   // 初期化変数
   initialState = {
-    myCode: true,
     inputEmployeeName: "",
     resumePath: "",
     resumeName: "",
@@ -176,14 +175,9 @@ class sendLettersConfirm extends React.Component {
     titleFlag: false,
   };
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    if (prevState.resumeName !== this.state.resumeName) {
-      console.log(this.state.resumeName);
-    }
-  }
+  componentDidUpdate(prevProps, prevState, snapshot) {}
 
   componentDidMount() {
-    console.log(this.props.location);
     this.setNewDevelopLanguagesShow();
     if (
       this.props.location.state !== null &&
@@ -335,261 +329,260 @@ class sendLettersConfirm extends React.Component {
       });
   };
 
-  // 送信処理
-  beforeSendMailWithFile = () => {
-    this.setSelectedCusInfos("○");
-    let mailText = ``;
-    let time;
-    let resumeInfo1 = [];
-    let resumeInfo2 = [];
-    let resumeName1 = [];
-    let resumeName2 = [];
-    for (let i = 0; i < this.state.employeeInfo.length; i++) {
-      if (this.state.employeeInfo[i].employeeNo) {
-        // alert(this.state.employeeInfo[i].resumeInfo1Name)
-        axios
-          .post(this.state.serverIP + "salesSituation/getPersonalSalesInfo", {
-            employeeNo: String(this.state.employeeInfo[i].employeeNo),
-          })
-          .then((result) => {
-            resumeInfo1.push(
-              result.data[0].resumeInfo1 === null
-                ? " "
-                : result.data[0].resumeInfo1
-            );
-            resumeInfo2.push(
-              result.data[0].resumeInfo2 === null
-                ? " "
-                : result.data[0].resumeInfo2
-            );
-            resumeName1.push(
-              result.data[0].resumeName1 === null
-                ? " "
-                : result.data[0].resumeName1
-            );
-            resumeName2.push(
-              result.data[0].resumeName2 === null
-                ? " "
-                : result.data[0].resumeName2
-            );
-            if (
-              this.state.employeeInfo[i].mailContent === undefined ||
-              this.state.employeeInfo[i].mailContent === null
-            ) {
-              mailText +=
-                `
-【名　　前】：` +
-                result.data[0].employeeFullName +
-                `　` +
-                result.data[0].nationalityName +
-                `　` +
-                this.state.genders.find(
-                  (v) => v.code === result.data[0].genderStatus
-                ).name +
-                `
-【所　　属】：` +
-                (result.data[0].employeeStatus === null ||
-                result.data[0].employeeStatus === ""
-                  ? ""
-                  : this.state.employees.find(
-                      (v) => v.code === result.data[0].employeeStatus
-                    ).name) +
-                (result.data[0].age === null || result.data[0].age === ""
-                  ? publicUtils.converToLocalTime(
-                      result.data[0].birthday,
-                      true
-                    ) === ""
-                    ? ""
-                    : `
-【年　　齢】：`
-                  : `
-【年　　齢】：`) +
-                (result.data[0].age === null || result.data[0].age === ""
-                  ? publicUtils.converToLocalTime(
-                      result.data[0].birthday,
-                      true
-                    ) === ""
-                    ? ""
-                    : Math.ceil(
-                        (new Date().getTime() -
-                          publicUtils
-                            .converToLocalTime(result.data[0].birthday, true)
-                            .getTime()) /
-                          31536000000
-                      ) + `歳`
-                  : result.data[0].age + `歳`) +
-                (result.data[0].nearestStation === null ||
-                result.data[0].nearestStation === ""
-                  ? ""
-                  : `
-【最寄り駅】：`) +
-                (result.data[0].nearestStation === null ||
-                result.data[0].nearestStation === ""
-                  ? ""
-                  : this.state.stations.find(
-                      (v) => v.code === result.data[0].nearestStation
-                    ).name) +
-                (result.data[0].japaneaseConversationLevel === null ||
-                result.data[0].japaneaseConversationLevel === ""
-                  ? ""
-                  : `
-【日本　語】：`) +
-                (result.data[0].japaneaseConversationLevel === null ||
-                result.data[0].japaneaseConversationLevel === ""
-                  ? ""
-                  : this.state.japaneaseConversationLevels.find(
-                      (v) =>
-                        v.code === result.data[0].japaneaseConversationLevel
-                    ).name) +
-                (result.data[0].englishConversationLevel === null ||
-                result.data[0].englishConversationLevel === ""
-                  ? ""
-                  : `
-【英　　語】：`) +
-                (result.data[0].englishConversationLevel === null ||
-                result.data[0].englishConversationLevel === ""
-                  ? ""
-                  : this.state.englishConversationLevels.find(
-                      (v) => v.code === result.data[0].englishConversationLevel
-                    ).name) +
-                (result.data[0].yearsOfExperience === null ||
-                result.data[0].yearsOfExperience === ""
-                  ? ""
-                  : `
-【業務年数】：`) +
-                (result.data[0].yearsOfExperience === null ||
-                result.data[0].yearsOfExperience === ""
-                  ? ""
-                  : result.data[0].yearsOfExperience + `年`) +
-                (result.data[0].projectPhase === null ||
-                result.data[0].projectPhase === ""
-                  ? ""
-                  : `
-【対応工程】：`) +
-                (result.data[0].projectPhase === null ||
-                result.data[0].projectPhase === ""
-                  ? ""
-                  : result.data[0].projectPhaseName + " から") +
-                (result.data[0].developLanguage === null ||
-                result.data[0].developLanguage === ""
-                  ? ""
-                  : `
-【得意言語】：`) +
-                (result.data[0].developLanguage === null ||
-                result.data[0].developLanguage === ""
-                  ? ""
-                  : result.data[0].developLanguage) +
-                ((this.state.employeeInfo[i].hopeHighestPrice === null ||
-                  this.state.employeeInfo[i].hopeHighestPrice === "") &&
-                (result.data[0].unitPrice === null ||
-                  result.data[0].unitPrice === "")
-                  ? ""
-                  : `
-【単　　価】：`) +
-                ((this.state.employeeInfo[i].hopeHighestPrice === null ||
-                this.state.employeeInfo[i].hopeHighestPrice === ""
-                  ? ""
-                  : this.state.employeeInfo[i].hopeHighestPrice + `万円`) === ""
-                  ? result.data[0].unitPrice === null ||
-                    result.data[0].unitPrice === ""
-                    ? ""
-                    : result.data[0].unitPrice + `万円`
-                  : this.state.employeeInfo[i].hopeHighestPrice + `万円`) +
-                (result.data[0].theMonthOfStartWork === undefined ||
-                result.data[0].theMonthOfStartWork === "" ||
-                result.data[0].theMonthOfStartWork === null
-                  ? ""
-                  : `
-【稼働開始】：`) +
-                (result.data[0].theMonthOfStartWork === undefined ||
-                result.data[0].theMonthOfStartWork === "" ||
-                result.data[0].theMonthOfStartWork === null
-                  ? ""
-                  : result.data[0].theMonthOfStartWork) +
-                (result.data[0].salesProgressCode === null ||
-                result.data[0].salesProgressCode === ""
-                  ? ""
-                  : `
-【営業状況】：`) +
-                (result.data[0].salesProgressCode === null ||
-                result.data[0].salesProgressCode === ""
-                  ? ""
-                  : this.state.salesProgresss.find(
-                      (v) => v.code === result.data[0].salesProgressCode
-                    ).name) +
-                (result.data[0].remark === null || result.data[0].remark === ""
-                  ? ""
-                  : `
-【備　　考】：`) +
-                (result.data[0].remark === null || result.data[0].remark === ""
-                  ? ""
-                  : result.data[0].remark) +
-                `
-`;
-            } else {
-              mailText +=
-                this.state.employeeInfo[i].mailContent +
-                `
-`;
-            }
-            clearTimeout(time);
-            time = setTimeout(() => {
-              this.sendMailWithFile(
-                mailText,
-                resumeInfo1,
-                resumeInfo2,
-                resumeName1,
-                resumeName2
-              );
-            }, 3000);
-          })
-          .catch(function (error) {
-            alert(error);
-          });
-      } else {
-        if (this.state.employeeInfo.length === 1) {
-          this.setState({
-            errorsMessageShow: true,
-            errorsMessageValue: "要員は存在していない。",
-          });
-          setTimeout(() => this.setState({ errorsMessageShow: false }), 3000);
-          this.setSelectedCusInfos("X");
-        }
-      }
-    }
+  getFinalResume = ({
+    resumeInfoName,
+    resumeName1,
+    resumeName2,
+    resumeInfo1,
+    resumeInfo2,
+    newResumeName,
+    index,
+  }) => {
+    let obj = { name: resumeInfoName };
 
-    // this.sendMailWithFile();
+    switch (resumeInfoName) {
+      case resumeName1:
+        obj.type = "url";
+        obj.value = resumeInfo1;
+        break;
+      case resumeName2:
+        obj.type = "url";
+        obj.value = resumeInfo2;
+        break;
+      case newResumeName:
+        obj.type = "file";
+        obj.value = publicUtils.nullToEmpty(
+          $(`#newResume${index - 1}`)?.get(0)?.files[0]
+        );
+        break;
+
+      default:
+        break;
+    }
+    return obj;
   };
 
   // 送信処理
-  sendMailWithFile = (
+  beforeSendMailWithFile = async () => {
+    const { employeeInfo } = this.state;
+    this.setSelectedCusInfos("○");
+    let mailText = ``;
+    let time;
+    let resumeNameList = [];
+    let resumePathList = [];
+    let resumeFileList = [];
+
+    employeeInfo.forEach(async (item, i) => {
+      let resumeResult = this.getFinalResume(item);
+      resumeNameList.push(resumeResult.name);
+      if (resumeResult.type === "url") {
+        resumePathList.push(resumeResult.value);
+      } else {
+        resumeFileList.push(resumeResult.value);
+      }
+      if (item.employeeNo) {
+        let result = await axios.post(
+          this.state.serverIP + "salesSituation/getPersonalSalesInfo",
+          {
+            employeeNo: String(item.employeeNo),
+          }
+        );
+        if (item.mailContent === undefined || item.mailContent === null) {
+          mailText +=
+            `
+【名　　前】：` +
+            result.data[0].employeeFullName +
+            `　` +
+            result.data[0].nationalityName +
+            `　` +
+            this.state.genders.find(
+              (v) => v.code === result.data[0].genderStatus
+            ).name +
+            `
+【所　　属】：` +
+            (result.data[0].employeeStatus === null ||
+            result.data[0].employeeStatus === ""
+              ? ""
+              : this.state.employees.find(
+                  (v) => v.code === result.data[0].employeeStatus
+                ).name) +
+            (result.data[0].age === null || result.data[0].age === ""
+              ? publicUtils.converToLocalTime(result.data[0].birthday, true) ===
+                ""
+                ? ""
+                : `
+【年　　齢】：`
+              : `
+【年　　齢】：`) +
+            (result.data[0].age === null || result.data[0].age === ""
+              ? publicUtils.converToLocalTime(result.data[0].birthday, true) ===
+                ""
+                ? ""
+                : Math.ceil(
+                    (new Date().getTime() -
+                      publicUtils
+                        .converToLocalTime(result.data[0].birthday, true)
+                        .getTime()) /
+                      31536000000
+                  ) + `歳`
+              : result.data[0].age + `歳`) +
+            (result.data[0].nearestStation === null ||
+            result.data[0].nearestStation === ""
+              ? ""
+              : `
+【最寄り駅】：`) +
+            (result.data[0].nearestStation === null ||
+            result.data[0].nearestStation === ""
+              ? ""
+              : this.state.stations.find(
+                  (v) => v.code === result.data[0].nearestStation
+                ).name) +
+            (result.data[0].japaneaseConversationLevel === null ||
+            result.data[0].japaneaseConversationLevel === ""
+              ? ""
+              : `
+【日本　語】：`) +
+            (result.data[0].japaneaseConversationLevel === null ||
+            result.data[0].japaneaseConversationLevel === ""
+              ? ""
+              : this.state.japaneaseConversationLevels.find(
+                  (v) => v.code === result.data[0].japaneaseConversationLevel
+                ).name) +
+            (result.data[0].englishConversationLevel === null ||
+            result.data[0].englishConversationLevel === ""
+              ? ""
+              : `
+【英　　語】：`) +
+            (result.data[0].englishConversationLevel === null ||
+            result.data[0].englishConversationLevel === ""
+              ? ""
+              : this.state.englishConversationLevels.find(
+                  (v) => v.code === result.data[0].englishConversationLevel
+                ).name) +
+            (result.data[0].yearsOfExperience === null ||
+            result.data[0].yearsOfExperience === ""
+              ? ""
+              : `
+【業務年数】：`) +
+            (result.data[0].yearsOfExperience === null ||
+            result.data[0].yearsOfExperience === ""
+              ? ""
+              : result.data[0].yearsOfExperience + `年`) +
+            (result.data[0].projectPhase === null ||
+            result.data[0].projectPhase === ""
+              ? ""
+              : `
+【対応工程】：`) +
+            (result.data[0].projectPhase === null ||
+            result.data[0].projectPhase === ""
+              ? ""
+              : result.data[0].projectPhaseName + " から") +
+            (result.data[0].developLanguage === null ||
+            result.data[0].developLanguage === ""
+              ? ""
+              : `
+【得意言語】：`) +
+            (result.data[0].developLanguage === null ||
+            result.data[0].developLanguage === ""
+              ? ""
+              : result.data[0].developLanguage) +
+            ((item.hopeHighestPrice === null || item.hopeHighestPrice === "") &&
+            (result.data[0].unitPrice === null ||
+              result.data[0].unitPrice === "")
+              ? ""
+              : `
+【単　　価】：`) +
+            ((item.hopeHighestPrice === null || item.hopeHighestPrice === ""
+              ? ""
+              : item.hopeHighestPrice + `万円`) === ""
+              ? result.data[0].unitPrice === null ||
+                result.data[0].unitPrice === ""
+                ? ""
+                : result.data[0].unitPrice + `万円`
+              : item.hopeHighestPrice + `万円`) +
+            (result.data[0].theMonthOfStartWork === undefined ||
+            result.data[0].theMonthOfStartWork === "" ||
+            result.data[0].theMonthOfStartWork === null
+              ? ""
+              : `
+【稼働開始】：`) +
+            (result.data[0].theMonthOfStartWork === undefined ||
+            result.data[0].theMonthOfStartWork === "" ||
+            result.data[0].theMonthOfStartWork === null
+              ? ""
+              : result.data[0].theMonthOfStartWork) +
+            (result.data[0].salesProgressCode === null ||
+            result.data[0].salesProgressCode === ""
+              ? ""
+              : `
+【営業状況】：`) +
+            (result.data[0].salesProgressCode === null ||
+            result.data[0].salesProgressCode === ""
+              ? ""
+              : this.state.salesProgresss.find(
+                  (v) => v.code === result.data[0].salesProgressCode
+                ).name) +
+            (result.data[0].remark === null || result.data[0].remark === ""
+              ? ""
+              : `
+【備　　考】：`) +
+            (result.data[0].remark === null || result.data[0].remark === ""
+              ? ""
+              : result.data[0].remark) +
+            `
+`;
+        } else {
+          mailText +=
+            item.mailContent +
+            `
+`;
+        }
+      } else {
+        mailText = "";
+      }
+    });
+
+    this.sendMailWithFile({
+      mailText,
+      resumeNameList,
+      resumePathList,
+      resumeFileList,
+    });
+  };
+
+  // 送信処理
+  sendMailWithFile = ({
     mailText,
-    resumeInfo1,
-    resumeInfo2,
-    resumeName1,
-    resumeName2
-  ) => {
-    for (let i = 0; i < this.state.selectedCusInfos.length; i++) {
-      let selectedCustomer = this.state.selectedCusInfos[i].customerNo;
+    resumeNameList: names,
+    resumePathList: paths,
+    resumeFileList: files,
+  }) => {
+    let {
+      selectedCusInfos,
+      loginUserInfo,
+      greetinTtext,
+      mailTitle,
+      selectedmail,
+    } = this.state;
+    for (let i = 0; i < selectedCusInfos.length; i++) {
+      let selectedCustomer = selectedCusInfos[i].customerNo;
       const mailConfirmContont =
-        (this.state.selectedCusInfos[i].customerName
-          .split("(")[0]
-          .search("株式会社") === -1
-          ? this.state.selectedCusInfos[i].customerName.split("(")[0] +
-            `株式会社`
-          : this.state.selectedCusInfos[i].customerName.split("(")[0]) +
+        (selectedCusInfos[i].customerName.split("(")[0].search("株式会社") ===
+        -1
+          ? selectedCusInfos[i].customerName.split("(")[0] + `株式会社`
+          : selectedCusInfos[i].customerName.split("(")[0]) +
         ` 
 ` +
-        (this.state.selectedCusInfos[i].purchasingManagers === ""
+        (selectedCusInfos[i].purchasingManagers === ""
           ? "ご担当者"
-          : this.state.selectedCusInfos[i].purchasingManagers.split("　")[0]) +
+          : selectedCusInfos[i].purchasingManagers.split("　")[0]) +
         ` 様
 
 お世話になっております、LYC` +
-        this.state.loginUserInfo[0].employeeFristName +
+        loginUserInfo[0].employeeFristName +
         `です。
 ` +
-        this.state.greetinTtext +
+        greetinTtext +
         `
 ` +
         mailText +
@@ -598,24 +591,23 @@ class sendLettersConfirm extends React.Component {
 
 *****************************************************************
 LYC株式会社 ` +
-        this.state.loginUserInfo[0].employeeFristName +
+        loginUserInfo[0].employeeFristName +
         ` ` +
-        this.state.loginUserInfo[0].employeeLastName +
+        loginUserInfo[0].employeeLastName +
         `
 〒:101-0032 東京都千代田区岩本町3-3-3サザンビル3F
 http://www.lyc.co.jp/
 TEL：03-6908-5796  携帯：` +
-        this.state.loginUserInfo[0].phoneNo +
+        loginUserInfo[0].phoneNo +
         `(優先）
 Email：` +
-        this.state.loginUserInfo[0].companyMail +
+        loginUserInfo[0].companyMail +
         ` 営業共通：eigyou@lyc.co.jp
 労働者派遣事業許可番号　派遣許可番号　派13-306371
 ＩＳＭＳ：MSA-IS-385
 *****************************************************************`;
-      const { resumeName, mailTitle, resumePath, selectedmail } = this.state;
       selectedmail =
-        this.state.selectedCusInfos[i]
+        selectedCusInfos[i]
           .purchasingManagersMail /* + "," + this.state.selectedCusInfos[i].purchasingManagersMail2*/;
       let selectedMailCC = [
         this.state.selectedMailCC.length >= 1
@@ -628,35 +620,25 @@ Email：` +
         return s;
       });
       console.log(selectedMailCC);
-      let mailFrom = this.state.loginUserInfo[0].companyMail;
-      let paths = [];
-      let names = [];
-      for (let i in this.state.employeeInfo) {
-        if (this.state.employeeInfo[i].resumeInfoName === resumeName1[i]) {
-          paths.push(resumeInfo1[i]);
-          names.push(
-            resumeInfo1[i].split("/")[resumeInfo1[i].split("/").length - 1]
-          );
-        } else if (
-          this.state.employeeInfo[i].resumeInfoName === resumeName2[i]
-        ) {
-          paths.push(resumeInfo2[i]);
-          names.push(
-            resumeInfo2[i].split("/")[resumeInfo2[i].split("/").length - 1]
-          );
-        }
-      }
+      let mailFrom = loginUserInfo[0].companyMail;
+      // files
+      const formData = new FormData();
+      files.forEach((item, index) => {
+        formData.append(`file${index}`, item);
+      });
+      formData.append(`names`, names);
+      formData.append(`paths`, paths);
+      formData.append(`mailTitle`, mailTitle);
+      formData.append(`mailConfirmContont`, mailConfirmContont);
+      formData.append(`selectedmail`, selectedmail);
+      formData.append(`selectedMailCC`, selectedMailCC);
+      formData.append(`mailFrom`, mailFrom);
+      formData.append(`selectedCustomer`, selectedCustomer);
       axios
-        .post(this.state.serverIP + "sendLettersConfirm/sendMailWithFile", {
-          names,
-          mailTitle,
-          paths,
-          mailConfirmContont,
-          selectedmail,
-          selectedMailCC,
-          mailFrom,
-          selectedCustomer,
-        })
+        .post(
+          this.state.serverIP + "sendLettersConfirm/sendMailWithFile",
+          formData
+        )
         .then((result) => {
           if (result.data.errorsMessage != null) {
             this.setState({
@@ -810,7 +792,7 @@ Email：` +
     index,
     mailContent
   ) => {
-    let employeeInfo = this.state.employeeInfo;
+    let { employeeInfo } = this.state;
     if (!employeeNo) {
       return;
     }
@@ -820,6 +802,10 @@ Email：` +
       })
       .then((result) => {
         if (index != undefined) {
+          employeeInfo[index - 1].resumeInfo1 = result.data[0].resumeInfo1;
+          employeeInfo[index - 1].resumeName1 = result.data[0].resumeName1;
+          employeeInfo[index - 1].resumeInfo2 = result.data[0].resumeInfo2;
+          employeeInfo[index - 1].resumeName2 = result.data[0].resumeName2;
           employeeInfo[index - 1].hopeHighestPrice = result.data[0].unitPrice;
           employeeInfo[index - 1].resumeInfoList =
             result.data[0].resumeInfoList;
@@ -1342,8 +1328,12 @@ Email：` +
       });
     }
 
+    let file = publicUtils.nullToEmpty(
+      $(`#newResume${this.state.selectedColumnId - 1}`)?.get(0)?.files[0]
+    );
     if (isSelected) {
       this.setState({
+        file,
         selectedColumnId: row.index,
         employeeFlag: true,
         selectRowFlag: true,
@@ -1394,31 +1384,52 @@ Email：` +
   // </div>);
   // }
 
+  formatNewResume(cell, row, enumObject, index) {
+    return (
+      <Form.Control
+        type="file"
+        id={`newResume${row.index - 1}`}
+        data-browse="添付"
+        onChange={(event) =>
+          this.changeFile(event, `newResume${row.index - 1}`)
+        }
+      />
+    );
+  }
   formatResumeInfoList(cell, row, enumObject, index) {
-    if (cell === "" || cell === null || cell === undefined) {
-      return cell;
-    } else {
-      return (
-        <div>
-          <Form.Control
-            as="select"
-            size="sm"
-            onChange={this.resumeInfoListChange.bind(this, row)}
-            name="resumeInfoList"
-            autoComplete="off"
-            value={this.state.employeeInfo[row.index - 1].resumeInfoName}
-          >
-            {cell.map((data) => (
+    let { resumeInfoList, newResumeName } = row;
+    if (!resumeInfoList && !newResumeName) {
+      return resumeInfoList;
+    }
+    let allResumeList = [];
+    if (resumeInfoList && resumeInfoList.length > 0) {
+      allResumeList = resumeInfoList;
+    }
+
+    if (newResumeName) {
+      allResumeList = allResumeList.concat([newResumeName]);
+    }
+    return (
+      <div>
+        <Form.Control
+          as="select"
+          size="sm"
+          onChange={this.resumeInfoListChange.bind(this, row)}
+          name="resumeInfoList"
+          autoComplete="off"
+          value={this.state.employeeInfo[row.index - 1].resumeInfoName}
+        >
+          {allResumeList.length > 0 &&
+            allResumeList.map((data) => (
               <option key={data} value={data}>
                 {data.split("_").length > 1
                   ? data.split("_")[data.split("_").length - 1]
                   : data}
               </option>
             ))}
-          </Form.Control>
-        </div>
-      );
-    }
+        </Form.Control>
+      </div>
+    );
   }
 
   //onChange
@@ -1440,11 +1451,11 @@ Email：` +
     employeeInfo[index] = {
       ...employeeInfo[index],
       employeeName: event.target.value,
+      newResumeName: "",
       inputFlag: true,
     };
 
     if (row.employeeNo && row.employeeStatus) {
-      console.log(this.state, row);
       employeeInfo[index] = {
         ...employeeInfo[index],
         employeeName: event.target.value,
@@ -1458,6 +1469,9 @@ Email：` +
         resumeInfo2Name: "",
         resumeInfoList: [],
         resumeInfoName: "",
+        newResumeName: "",
+        resumeName1: "",
+        resumeName2: "",
       };
     }
 
@@ -1488,97 +1502,31 @@ Email：` +
       return <div>{name}</div>;
     }
 
-    if (this.state.myCode) {
-      return (
-        <Autocomplete
-          disableClearable
-          freeSolo
-          size="small"
-          id="employeeName"
-          onChange={(event, value, reason, details) =>
-            this.myCodeEmployeeNameChange(event, value, reason, details, row)
-          }
-          options={this.state.allEmployeeNameInfo}
-          value={this.state.employeeInfo[row.index - 1] || {}}
-          getOptionLabel={(option) =>
-            option.employeeName ? option.employeeName : ""
-          }
-          renderInput={(params) => (
-            <TextField
-              className="autocompleteInput"
-              {...params}
-              onBlur={(event) => this.onInputEmployeeNameBlur(event, row)}
-              // variant="standard"
-              placeholder="名前"
-            />
-          )}
-        />
-      );
-    } else {
-      if (cell === "入力" || row.inputFlag) {
-        return (
-          <div>
-            <input
-              type="text"
-              class=" form-control editor edit-text"
-              name="employeeName"
-              value={cell}
-              onChange={(event) => this.tableValueChange(event, cell, row)}
-            />
-            {/*<FormControl
-                    value={row.employeeName}
-                    name="employeeName"
-                        onChange={(event) => this.tableValueChange(event, cell, row)}
-      		></FormControl>*/}
-          </div>
-        );
-      }
-      if (cell === "" || cell === null) {
-        return (
-          <div>
-            <Form.Control
-              as="select"
-              size="sm"
-              onChange={this.employeeNameChange.bind(this, row)}
-              name="employeeName"
-              autoComplete="off"
-            >
-              <option value=""></option>
-              {this.state.allEmployeeName.map((data, index) => (
-                <option key={index} value={data}>
-                  {data}
-                </option>
-              ))}
-            </Form.Control>
-          </div>
-        );
-      } else {
-        return (
-          <div>
-            <Form.Control
-              as="select"
-              size="sm"
-              onChange={this.employeeNameChange.bind(this, row)}
-              name="employeeName"
-              value={cell}
-              autoComplete="off"
-            >
-              <option value=""></option>
-              {[
-                <option key="ruri" value="入力">
-                  入力
-                </option>,
-                ...this.state.allEmployeeNameInfo.map((data) => (
-                  <option key={data.employeeNo} value={data.employeeName}>
-                    {data.employeeName}
-                  </option>
-                )),
-              ]}
-            </Form.Control>
-          </div>
-        );
-      }
-    }
+    return (
+      <Autocomplete
+        disableClearable
+        freeSolo
+        size="small"
+        id="employeeName"
+        onChange={(event, value, reason, details) =>
+          this.myCodeEmployeeNameChange(event, value, reason, details, row)
+        }
+        options={this.state.allEmployeeNameInfo}
+        value={this.state.employeeInfo[row.index - 1] || {}}
+        getOptionLabel={(option) =>
+          option.employeeName ? option.employeeName : ""
+        }
+        renderInput={(params) => (
+          <TextField
+            className="autocompleteInput"
+            {...params}
+            onBlur={(event) => this.onInputEmployeeNameBlur(event, row)}
+            // variant="standard"
+            placeholder="名前"
+          />
+        )}
+      />
+    );
   }
 
   resumeInfoListChange = (row, event) => {
@@ -1603,6 +1551,7 @@ Email：` +
     });
   };
 
+  // 要員名前触発されるイベント
   myCodeEmployeeNameChange = (event, value, reason, details, row) => {
     if (reason === "select-option") {
       // 选择
@@ -1628,9 +1577,10 @@ Email：` +
       }
       // 没重复
       // 修改employeeName
-
       employeeInfo[row.index - 1].employeeName = value.employeeName;
       employeeInfo[row.index - 1].employeeNo = value.employeeNo;
+      employeeInfo[row.index - 1].newResumeName = "";
+      employeeInfo[row.index - 1].resumeInfoName = "";
       if (value.employeeNo.match("LYC")) {
         // 社員
         employeeInfo[row.index - 1].employeeStatus = "0";
@@ -1642,10 +1592,6 @@ Email：` +
         employeeInfo,
         employeeFlag: true,
       });
-      // this.setState({
-      // [event.target.name]: event.target.value,
-      // employeeInfo: employeeInfo,
-      // })
 
       this.searchPersonnalDetail(
         value.employeeNo,
@@ -1674,152 +1620,24 @@ Email：` +
         });
       }
     }
-    // if (reason === "input") {
-    //   let { employeeInfo } = this.state,
-    //     index = row.index - 1;
-    //   employeeInfo[index] = {
-    //     ...employeeInfo[index],
-    //     employeeName: value,
-    //     inputFlag: true,
-    //     employeeStatus: "",
-    //     hopeHighestPrice: "",
-    //   };
-    //   this.setState({
-    //     inputEmployeeName: value,
-    //     employeeInfo,
-    //     employeeFlag: true,
-    //   });
-    //   $("#addButton").attr("disabled", false);
-    // } else if (reason === "select-option") {
-    // }
-    // this.setState({
-    //   selectedEmployeeName: value,
-    // });
-    console.log({ event, value, reason, details }, "myCodeEmployeeNameChange");
-  };
-
-  // 要員名前触発されるイベント
-  employeeNameChange = (row, event) => {
-    if (
-      event.target.value !== "" &&
-      event.target.value !== "入力" &&
-      !row.inputFlag
-    ) {
-      // 选择
-      let { employeeInfo } = this.state;
-      let employeeNoTemp;
-
-      // 看是否已经重复添加过了（下标不同但名字相同，证明已经选择过了）
-      for (let i = 0; i < employeeInfo.length; i++) {
-        if (
-          employeeInfo[i].index !== row.index &&
-          employeeInfo[i].employeeName === event.target.value
-        ) {
-          this.setState({
-            myToastShow: true,
-            type: false,
-            errorsMessageShow: false,
-            message: "同じ名前は選択されている。",
-            sendLetterButtonDisFlag: true,
-          });
-          setTimeout(() => this.setState({ myToastShow: false }), 3000);
-          // window.location.reload();
-          return;
-        }
-      }
-      // 没重复
-      // 修改employeeName
-      employeeInfo[row.index - 1].employeeName = event.target.value;
-      // this.setState({
-      // [event.target.name]: event.target.value,
-      // employeeInfo: employeeInfo,
-      // })
-
-      // 修改employeeNo，employeeStatus
-      for (let i = 0; i < this.state.allEmployeeNameInfo.length; i++) {
-        if (
-          event.target.value === this.state.allEmployeeNameInfo[i].employeeName
-        ) {
-          employeeNoTemp = this.state.allEmployeeNameInfo[i].employeeNo;
-          employeeInfo[row.index - 1].employeeNo = employeeNoTemp;
-          if (employeeNoTemp.match("LYC")) {
-            // 社員
-            employeeInfo[row.index - 1].employeeStatus = "0";
-          } else if (employeeNoTemp.match("BP")) {
-            // 協力
-            employeeInfo[row.index - 1].employeeStatus = "1";
-          }
-          this.setState({
-            employeeInfo,
-            employeeFlag: true,
-          });
-          break;
-        }
-      }
-
-      this.searchPersonnalDetail(
-        employeeNoTemp,
-        employeeInfo[row.index - 1].hopeHighestPrice,
-        row.index
-      );
-
-      // 检查是否都选择了，如果没有都选择则禁用添加按钮
-      let disabledFlg = true;
-      for (let j = 0; j < this.state.employeeInfo.length; j++) {
-        if (
-          this.state.employeeInfo[j].employeeName === "" ||
-          this.state.employeeInfo[j].employeeName === null
-        ) {
-          disabledFlg = false;
-          break;
-        }
-      }
-      if (disabledFlg) {
-        // 全ての要員明細の名前を入力した後で、追加ボタンが活性になる
-        $("#addButton").attr("disabled", false);
-      }
-      if (this.state.mailTitle !== "") {
-        this.setState({
-          sendLetterButtonDisFlag: false,
-        });
-      }
-    } else {
-      if (event.target.value === "入力") {
-        let { employeeInfo } = this.state,
-          index = row.index - 1;
-        employeeInfo[index] = {
-          ...employeeInfo[index],
-          employeeName: event.target.value,
-          inputFlag: true,
-          employeeStatus: "",
-          hopeHighestPrice: "",
-        };
-
-        this.setState({
-          employeeInfo,
-          employeeFlag: true,
-        });
-        $("#addButton").attr("disabled", false);
-      }
-    }
   };
 
   /* 要員追加機能の新規 20201216 張棟 END */
 
-  resumeValueChange = (row, event) => {
-    this.setState({
-      [event.target.name]: event.target.value,
-    });
-    if (event.target.selectedIndex === 1) {
-      this.setState({
-        resumePath: row.resumeInfo1,
-      });
-    } else if (event.target.selectedIndex === 2) {
-      this.setState({
-        resumePath: row.resumeInfo2,
-      });
-    }
-  };
+  // resumeValueChange = (row, event) => {
+  //   this.setState({
+  //     [event.target.name]: event.target.value,
+  //   });
+  //   if (event.target.selectedIndex === 1) {
+  //     this.setState({
+  //       resumePath: row.resumeInfo1,
+  //     });
+  //   } else if (event.target.selectedIndex === 2) {
+  //     this.setState({
+  //       resumePath: row.resumeInfo2,
+  //     });
+  //   }
+  // };
 
   // 要員追加機能の新規 20201216 張棟 START
   /**
@@ -1985,50 +1803,22 @@ Email：` +
    * @param {*}
    *            name
    */
-  addFile = (event, name) => {
-    $("#" + name).click();
+  addFile = (event) => {
+    $(`#newResume${this.state.selectedColumnId - 1}`).click();
   };
 
   changeFile = (event, name) => {
     let filePath = event.target.value;
     let arr = filePath.split("\\");
     let fileName = arr[arr.length - 1];
-    if (name === "resumeInfo1") {
-      let { employeeInfo, selectedColumnId } = this.state;
+    let { employeeInfo, selectedColumnId } = this.state;
+    // 除了两个本来就有的简历外，本地新增的简历只能新增一个。
 
-      let resumeInfoListTemp =
-        employeeInfo[selectedColumnId - 1].resumeInfoList;
-      if (!(fileName === null || fileName === "" || fileName === undefined)) {
-        if (resumeInfoListTemp === undefined || resumeInfoListTemp === null) {
-          resumeInfoListTemp = [];
-        }
-        resumeInfoListTemp.push(fileName);
-      }
-
-      employeeInfo[selectedColumnId - 1].resumeInfo1 = filePath;
-      employeeInfo[selectedColumnId - 1].resumeInfoList = resumeInfoListTemp;
-      employeeInfo[selectedColumnId - 1].resumeInfo1Name = fileName;
-      employeeInfo[selectedColumnId - 1].resumeInfoName = fileName;
-      this.setState({
-        employeeInfo,
-        resumeInfo1: "",
-        resumeInfo1Name: fileName,
-        resumePath: filePath,
-        resumeName: fileName,
-        selectedColumnId,
-      });
-    } else if (name === "image") {
-      if (publicUtils.nullToEmpty($("#image").get(0).files[0]) === "") {
-        return;
-      }
-      let reader = new FileReader();
-      reader.readAsDataURL(
-        publicUtils.nullToEmpty($("#image").get(0).files[0])
-      );
-      reader.onload = function () {
-        document.getElementById("imageId").src = reader.result;
-      };
-    }
+    employeeInfo[selectedColumnId - 1].newResumeName = fileName;
+    employeeInfo[selectedColumnId - 1].resumeInfoName = fileName;
+    this.setState({
+      employeeInfo,
+    });
   };
 
   valueChange = (event) => {
@@ -2369,7 +2159,7 @@ Email：` +
                 variant="info"
                 id="bookButton"
                 name="bookButton"
-                onClick={(event) => this.addFile(event, "resumeInfo1")}
+                onClick={(event) => this.addFile(event)}
               >
                 <FontAwesomeIcon icon={faFile} />
                 履歴書
@@ -2460,26 +2250,20 @@ Email：` +
               <TableHeaderColumn
                 placeholder="履歴書名"
                 width="19%"
-                dataField="resumeInfoList"
+                // dataField="resumeInfoList"
                 dataFormat={this.formatResumeInfoList.bind(this)}
                 editable={false}
-                value={resumeInfo1}
-                onChange={this.valueChange}
               >
                 履歴書
               </TableHeaderColumn>
-              <TableHeaderColumn dataField="resumeInfoName" hidden={true}>
-                resumeInfoName
+              <TableHeaderColumn
+                // hidden={true}
+                dataField="employeeName"
+                dataFormat={this.formatNewResume.bind(this)}
+              >
+                本地简历
               </TableHeaderColumn>
             </BootstrapTable>
-            <Form.File
-              id="resumeInfo1"
-              hidden={true}
-              data-browse="添付"
-              value={resumeInfo1}
-              custom
-              onChange={(event) => this.changeFile(event, "resumeInfo1")}
-            />
           </Col>
 
           <Col sm={4}>

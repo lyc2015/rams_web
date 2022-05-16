@@ -20,6 +20,7 @@ class mailConfirm extends React.Component {
   }
 
   initState = {
+    file: this.props.personalInfo.state.file,
     selectedEmployeeInfo: this.props.personalInfo.state.selectedEmployeeInfo,
     companyMailNames: [
       this.props.personalInfo.state.selectedMailCC.length >= 1
@@ -62,11 +63,7 @@ class mailConfirm extends React.Component {
       this.props.personalInfo.state.selectedPurchasingManagers,
     greetinTtext: this.props.personalInfo.state.greetinTtext,
     theMonthOfStartWork: this.props.personalInfo.state.theMonthOfStartWork,
-    resumeName:
-      this.props.personalInfo.state.resumeName === undefined ||
-      this.props.personalInfo.state.resumeName === null
-        ? ""
-        : this.props.personalInfo.state.resumeName,
+
     mailContent: this.props.personalInfo.state.mailContent,
     serverIP: store.getState().dropDown[store.getState().dropDown.length - 1],
   };
@@ -74,13 +71,17 @@ class mailConfirm extends React.Component {
 
   downloadResume = async () => {
     let {
-      resumeName,
-      selectedEmployeeInfo: { resumeInfo1, resumeInfo2 },
+      selectedEmployeeInfo: {
+        resumeInfo1,
+        resumeInfo2,
+        resumeInfoName,
+        newResumeName,
+      },
     } = this.state;
 
     let currentResumeUrl = "";
     [resumeInfo1, resumeInfo2].forEach((value) => {
-      if (!currentResumeUrl && value.includes(resumeName)) {
+      if (!currentResumeUrl && value && value.includes(resumeInfoName)) {
         currentResumeUrl = value;
       }
     });
@@ -88,10 +89,7 @@ class mailConfirm extends React.Component {
     let fileKey = "",
       downLoadPath = "";
 
-    if (
-      currentResumeUrl !== null &&
-      currentResumeUrl.split("file/").length > 1
-    ) {
+    if (currentResumeUrl && currentResumeUrl.split("file/").length > 1) {
       fileKey = currentResumeUrl.split("file/")[1];
       downLoadPath = (
         currentResumeUrl.substring(0, currentResumeUrl.lastIndexOf("_") + 1) +
@@ -100,7 +98,19 @@ class mailConfirm extends React.Component {
         currentResumeUrl.split(".")[currentResumeUrl.split(".").length - 1]
       ).replaceAll("/", "//");
     }
-    if (!fileKey || !downLoadPath) return;
+
+    // 选择的是本地文件
+    if (!fileKey || !downLoadPath) {
+      if (newResumeName === resumeInfoName) {
+        this.showDownloadResume({
+          fileBlobUrl: this.state.file,
+          resumeInfoName,
+        });
+      } else {
+        alert("ファイルが存在しません。");
+      }
+      return;
+    }
 
     try {
       await axios.post(this.state.serverIP + "s3Controller/downloadFile", {
@@ -119,7 +129,7 @@ class mailConfirm extends React.Component {
         }
       );
       let fileBlobUrl = window.URL.createObjectURL(res.data);
-      this.showDownloadResume({ fileBlobUrl, resumeName, fileKey });
+      this.showDownloadResume({ fileBlobUrl, resumeInfoName, fileKey });
 
       // this.setState({ fileBlobUrl }); // 预览
     } catch (error) {
@@ -127,11 +137,12 @@ class mailConfirm extends React.Component {
     }
   };
 
-  showDownloadResume({ fileBlobUrl, resumeName, fileKey }) {
+  showDownloadResume({ fileBlobUrl, resumeInfoName, fileKey }) {
     var a = document.createElement("a");
     a.href = fileBlobUrl;
-    a.download =
-      resumeName + "." + fileKey.split(".")[fileKey.split(".").length - 1];
+    a.download = fileKey
+      ? resumeInfoName + "." + fileKey.split(".")[fileKey.split(".").length - 1]
+      : resumeInfoName;
     a.click();
     a.remove();
   }
@@ -157,11 +168,8 @@ class mailConfirm extends React.Component {
             id="resumeInfo1"
             onClick={this.downloadResume.bind(this)}
             disabled={
-              this.state.linkDisableFlag ||
-              this.state.resumeInfo1 === null ||
-              this.state.resumeInfo1 === ""
-                ? true
-                : false
+              !this.state.selectedEmployeeInfo.resumeInfoName &&
+              !this.state.selectedEmployeeInfo.newResumeName
             }
           >
             <FontAwesomeIcon icon={faDownload} />
@@ -186,7 +194,7 @@ class mailConfirm extends React.Component {
 タイトル:` +
               this.state.mailTitle +
               `	添付ファイル名前:` +
-              this.state.resumeName +
+              this.state.selectedEmployeeInfo.resumeInfoName +
               `
 
 ` +
