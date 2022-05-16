@@ -1,5 +1,14 @@
 import React from "react";
 import "react-datepicker/dist/react-datepicker.css";
+import { Button } from "react-bootstrap";
+import { faDownload } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import * as publicUtils from "./utils/publicUtils.js";
+import axios from "axios";
+import store from "./redux/store";
+import FileViewer from "react-file-viewer";
+
 /**
  * メール確認
  *
@@ -11,6 +20,7 @@ class mailConfirm extends React.Component {
   }
 
   initState = {
+    selectedEmployeeInfo: this.props.personalInfo.state.selectedEmployeeInfo,
     companyMailNames: [
       this.props.personalInfo.state.selectedMailCC.length >= 1
         ? this.props.personalInfo.state.selectedMailCC[0].companyMail
@@ -58,13 +68,105 @@ class mailConfirm extends React.Component {
         ? ""
         : this.props.personalInfo.state.resumeName,
     mailContent: this.props.personalInfo.state.mailContent,
+    serverIP: store.getState().dropDown[store.getState().dropDown.length - 1],
   };
   componentDidMount() {}
+
+  downloadResume = async () => {
+    let {
+      resumeName,
+      selectedEmployeeInfo: { resumeInfo1, resumeInfo2 },
+    } = this.state;
+
+    let currentResumeUrl = "";
+    [resumeInfo1, resumeInfo2].forEach((value) => {
+      if (!currentResumeUrl && value.includes(resumeName)) {
+        currentResumeUrl = value;
+      }
+    });
+
+    let fileKey = "",
+      downLoadPath = "";
+
+    if (
+      currentResumeUrl !== null &&
+      currentResumeUrl.split("file/").length > 1
+    ) {
+      fileKey = currentResumeUrl.split("file/")[1];
+      downLoadPath = (
+        currentResumeUrl.substring(0, currentResumeUrl.lastIndexOf("_") + 1) +
+        currentResumeUrl.split("_")[1] +
+        "." +
+        currentResumeUrl.split(".")[currentResumeUrl.split(".").length - 1]
+      ).replaceAll("/", "//");
+    }
+    if (!fileKey || !downLoadPath) return;
+
+    try {
+      await axios.post(this.state.serverIP + "s3Controller/downloadFile", {
+        fileKey,
+        downLoadPath,
+      });
+
+      let path = downLoadPath.replaceAll("//", "/");
+      let res = await axios.post(
+        this.state.serverIP + "download",
+        {
+          name: path,
+        },
+        {
+          responseType: "blob",
+        }
+      );
+      let fileBlobUrl = window.URL.createObjectURL(res.data);
+      this.showDownloadResume({ fileBlobUrl, resumeName, fileKey });
+
+      // this.setState({ fileBlobUrl }); // 预览
+    } catch (error) {
+      alert("ファイルが存在しません。");
+    }
+  };
+
+  showDownloadResume({ fileBlobUrl, resumeName, fileKey }) {
+    var a = document.createElement("a");
+    a.href = fileBlobUrl;
+    a.download =
+      resumeName + "." + fileKey.split(".")[fileKey.split(".").length - 1];
+    a.click();
+    a.remove();
+  }
 
   render() {
     return (
       <div>
         <div>
+          {this.state.fileBlobUrl ? (
+            <FileViewer
+              fileType="xlsx"
+              filePath={this.state.fileBlobUrl}
+              // errorComponent={CustomErrorComponent}
+              // onError={this.onError}
+            />
+          ) : null}
+
+          <Button
+            style={{ marginBottom: "5px" }}
+            size="sm"
+            variant="info"
+            name="clickButton"
+            id="resumeInfo1"
+            onClick={this.downloadResume.bind(this)}
+            disabled={
+              this.state.linkDisableFlag ||
+              this.state.resumeInfo1 === null ||
+              this.state.resumeInfo1 === ""
+                ? true
+                : false
+            }
+          >
+            <FontAwesomeIcon icon={faDownload} />
+            履歴書
+          </Button>
           <textarea
             ref={(textarea) => (this.textArea = textarea)}
             disabled
@@ -149,4 +251,5 @@ Email：` +
     );
   }
 }
+
 export default mailConfirm;

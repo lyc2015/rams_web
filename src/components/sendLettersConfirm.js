@@ -32,8 +32,8 @@ import SalesEmpAddPopup from "./salesEmpAddPopup";
 import $ from "jquery";
 import MyToast from "./myToast";
 import ErrorsMessageToast from "./errorsMessageToast";
+import "./autocompleteInput.css";
 axios.defaults.withCredentials = true;
-
 /**
  * 営業送信お客確認画面
  */
@@ -229,7 +229,7 @@ class sendLettersConfirm extends React.Component {
 
   setSelectedCusInfos = (text) => {
     let selectedCusInfos = this.props.location.state?.targetCusInfos;
-    for (let i = 0; i < selectedCusInfos.length; i++) {
+    for (let i = 0; i < selectedCusInfos?.length; i++) {
       selectedCusInfos[i].rowNo = i + 1;
       selectedCusInfos[i].sendOver = text;
     }
@@ -1349,6 +1349,7 @@ Email：` +
         selectRowFlag: true,
         unitPriceShow: row.hopeHighestPrice,
         resumeName: this.state.employeeInfo[row.index - 1].resumeInfoName,
+        selectedEmployeeInfo: this.state.employeeInfo[row.index - 1],
       });
       $("#bookButton").attr("disabled", false);
       $("#deleteButton").attr("disabled", false);
@@ -1474,8 +1475,6 @@ Email：` +
     let flg = true;
     let name = cell;
 
-    // TODO: 入力选择简历后确认简历时显示的添付ファイル名前 某种情况下会不显示
-
     for (let v = 0; v < this.state.employeeInfo.length; v++) {
       if (this.state.employeeInfo[v].employeeName === cell) {
         flg =
@@ -1486,7 +1485,7 @@ Email：` +
       }
     }
     if (flg) {
-      return <div>&nbsp;&nbsp;{name}</div>;
+      return <div>{name}</div>;
     }
 
     if (this.state.myCode) {
@@ -1506,6 +1505,7 @@ Email：` +
           }
           renderInput={(params) => (
             <TextField
+              className="autocompleteInput"
               {...params}
               onBlur={(event) => this.onInputEmployeeNameBlur(event, row)}
               // variant="standard"
@@ -2098,6 +2098,7 @@ Email：` +
     };
     this.props.history.push(path);
   };
+
   render() {
     const {
       backPage,
@@ -2210,13 +2211,14 @@ Email：` +
             type={"danger"}
           />
         </div>
+
         <Modal
           aria-labelledby="contained-modal-title-vcenter"
           centered
           backdrop="static"
           onHide={this.closeDaiolog}
           show={this.state.daiologShowFlag}
-          dialogClassName="modal-bankInfo"
+          dialogClassName="modal-40w"
         >
           <Modal.Header closeButton>
             <Col className="text-center">
@@ -2418,7 +2420,7 @@ Email：` +
             >
               <TableHeaderColumn
                 width="15%"
-                tdStyle={{ padding: ".45em" }}
+                // tdStyle={{ padding: ".45em" }}
                 dataField="employeeName"
                 dataFormat={this.formatEmployeeName.bind(this)}
                 autoValue
