@@ -372,7 +372,8 @@ class sendLettersConfirm extends React.Component {
     let resumePathList = [];
     let resumeFileList = [];
 
-    employeeInfo.forEach(async (item, i) => {
+    for (let i = 0; i < employeeInfo.length; i++) {
+      const item = employeeInfo[i];
       let resumeResult = this.getFinalResume(item);
       resumeNameList.push(resumeResult.name);
       if (resumeResult.type === "url") {
@@ -380,6 +381,8 @@ class sendLettersConfirm extends React.Component {
       } else {
         resumeFileList.push(resumeResult.value);
       }
+
+      // 系统内的要员
       if (item.employeeNo) {
         let result = await axios.post(
           this.state.serverIP + "salesSituation/getPersonalSalesInfo",
@@ -387,7 +390,7 @@ class sendLettersConfirm extends React.Component {
             employeeNo: String(item.employeeNo),
           }
         );
-        if (item.mailContent === undefined || item.mailContent === null) {
+        if (!item.mailContent) {
           mailText +=
             `
 【名　　前】：` +
@@ -538,9 +541,9 @@ class sendLettersConfirm extends React.Component {
 `;
         }
       } else {
-        mailText = "";
+        mailText += this.newEmployeeMailContent(item);
       }
-    });
+    }
 
     this.sendMailWithFile({
       mailText,
@@ -623,17 +626,21 @@ Email：` +
       let mailFrom = loginUserInfo[0].companyMail;
       // files
       const formData = new FormData();
-      files.forEach((item, index) => {
-        formData.append(`file${index}`, item);
+      let emailModel = {
+        names,
+        mailTitle,
+        paths,
+        mailConfirmContont,
+        selectedmail,
+        selectedMailCC,
+        mailFrom,
+        selectedCustomer,
+      };
+
+      files.forEach((file, i) => {
+        formData.append(`myfiles`, file);
       });
-      formData.append(`names`, names);
-      formData.append(`paths`, paths);
-      formData.append(`mailTitle`, mailTitle);
-      formData.append(`mailConfirmContont`, mailConfirmContont);
-      formData.append(`selectedmail`, selectedmail);
-      formData.append(`selectedMailCC`, selectedMailCC);
-      formData.append(`mailFrom`, mailFrom);
-      formData.append(`selectedCustomer`, selectedCustomer);
+      formData.append(`emailModel`, JSON.stringify(emailModel));
       axios
         .post(
           this.state.serverIP + "sendLettersConfirm/sendMailWithFile",
@@ -1312,6 +1319,18 @@ Email：` +
     });
   };
 
+  newEmployeeMailContent = (item) => {
+    return `
+【名　　前】：${item.employeeName || "-"}
+【単　　価】：${
+      (item?.hopeHighestPrice?.length > 3
+        ? (item.hopeHighestPrice / 10000).toFixed(0) + "万円"
+        : item.hopeHighestPrice) || "-"
+    }
+        
+        `;
+  };
+
   /* 要員追加機能の新規 20201216 張棟 START */
   handleRowSelect = (row, isSelected, e) => {
     if (row.employeeNo !== "" && row.employeeNo !== null) {
@@ -1323,7 +1342,7 @@ Email：` +
       );
     } else {
       this.setState({
-        mailContent: "",
+        mailContent: this.newEmployeeMailContent(row),
         // resumeName: this.state.employeeInfo[row.index - 1].resumeInfoName,
       });
     }
@@ -1354,7 +1373,7 @@ Email：` +
   };
 
   formatPrice = (cell, row, enumObject, index) => {
-    if (cell != null && cell != undefined && cell.length > 3) {
+    if (cell && cell.length > 3) {
       cell = (cell / 10000).toFixed(0);
     }
     return cell;
@@ -1410,7 +1429,7 @@ Email：` +
       allResumeList = allResumeList.concat([newResumeName]);
     }
     return (
-      <div>
+      <div style={{ marginTop: "-4px" }}>
         <Form.Control
           as="select"
           size="sm"
@@ -1499,7 +1518,7 @@ Email：` +
       }
     }
     if (flg) {
-      return <div>{name}</div>;
+      return name;
     }
 
     return (
@@ -2257,7 +2276,7 @@ Email：` +
                 履歴書
               </TableHeaderColumn>
               <TableHeaderColumn
-                // hidden={true}
+                hidden={true}
                 dataField="employeeName"
                 dataFormat={this.formatNewResume.bind(this)}
               >
