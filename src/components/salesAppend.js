@@ -228,6 +228,8 @@ class salesAppend extends Component {
       onSelect: this.handleRowSelect,
     };
 
+    console.log({ state: this.state, props: this.props }, "render");
+
     const options = {
       onPageChange: (page) => {
         this.setState({ currentPage: page });

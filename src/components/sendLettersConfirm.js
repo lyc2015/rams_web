@@ -33,6 +33,7 @@ import $ from "jquery";
 import MyToast from "./myToast";
 import ErrorsMessageToast from "./errorsMessageToast";
 import "./autocompleteInput.css";
+import { message } from "antd";
 axios.defaults.withCredentials = true;
 /**
  * 営業送信お客確認画面
@@ -741,13 +742,19 @@ Email：` +
     });
   };
 
+  beforeSaveCell = (row, cellName, cellValue) => {
+    if (cellValue.length > 7 || Number.isNaN(cellValue)) {
+      alert("入力された単価は合理的ではありません！");
+      // message.error("入力された単価は合理的ではありません！");
+      return false;
+    }
+  };
+
   onAfterSaveCell = (row, cellName, cellValue) => {
-    let unitPrice = cellValue;
-    if (cellValue.length > 3) unitPrice = cellValue.substring(0, 3);
     axios
       .post(this.state.serverIP + "sendLettersConfirm/updateSalesSentence", {
         employeeNo: row.employeeNo,
-        unitPrice: unitPrice,
+        unitPrice: cellValue,
       })
       .then((result) => {
         this.setState({
@@ -760,13 +767,13 @@ Email：` +
   };
 
   getHopeHighestPrice = (result) => {
-    let tempEmployeeInfo = this.state.employeeInfo;
-    for (let i = 0; i < tempEmployeeInfo.length; i++) {
-      tempEmployeeInfo[i].hopeHighestPrice = result.data[i].unitPrice;
+    let { employeeInfo } = this.state;
+    for (let i = 0; i < employeeInfo.length; i++) {
+      employeeInfo[i].hopeHighestPrice = result.data[i].unitPrice;
     }
 
     this.setState({
-      employeeInfo: tempEmployeeInfo,
+      employeeInfo,
     });
   };
 
@@ -1278,12 +1285,7 @@ Email：` +
 【単　　価】：`
           : "") +
         (this.state.unitPrice !== "" && this.state.unitPrice !== null
-          ? this.state.unitPrice.length > 3
-            ? (this.state.unitPrice / 10000).toFixed(0)
-            : this.state.unitPrice
-          : "") +
-        (this.state.unitPrice !== "" && this.state.unitPrice !== null
-          ? `万円`
+          ? `${this.formatUnitePrice(this.state.unitPrice)}万円`
           : "") +
         (this.state.theMonthOfStartWork !== "" &&
         this.state.theMonthOfStartWork !== null
@@ -1372,11 +1374,13 @@ Email：` +
     }
   };
 
+  formatUnitePrice = (value) => {
+    let num = (value / 10000).toFixed(1).replace(".0", "");
+    return value === "" ? "" : num;
+  };
+
   formatPrice = (cell, row, enumObject, index) => {
-    if (cell && cell.length > 3) {
-      cell = (cell / 10000).toFixed(0);
-    }
-    return cell;
+    return this.formatUnitePrice(cell);
   };
 
   formatEmpStatus = (cell, row, enumObject, index) => {
@@ -1429,25 +1433,23 @@ Email：` +
       allResumeList = allResumeList.concat([newResumeName]);
     }
     return (
-      <div style={{ marginTop: "-4px" }}>
-        <Form.Control
-          as="select"
-          size="sm"
-          onChange={this.resumeInfoListChange.bind(this, row)}
-          name="resumeInfoList"
-          autoComplete="off"
-          value={this.state.employeeInfo[row.index - 1].resumeInfoName}
-        >
-          {allResumeList.length > 0 &&
-            allResumeList.map((data) => (
-              <option key={data} value={data}>
-                {data.split("_").length > 1
-                  ? data.split("_")[data.split("_").length - 1]
-                  : data}
-              </option>
-            ))}
-        </Form.Control>
-      </div>
+      <Form.Control
+        as="select"
+        size="sm"
+        onChange={this.resumeInfoListChange.bind(this, row)}
+        name="resumeInfoList"
+        autoComplete="off"
+        value={this.state.employeeInfo[row.index - 1].resumeInfoName}
+      >
+        {allResumeList.length > 0 &&
+          allResumeList.map((data) => (
+            <option key={data} value={data}>
+              {data.split("_").length > 1
+                ? data.split("_")[data.split("_").length - 1]
+                : data}
+            </option>
+          ))}
+      </Form.Control>
     );
   }
 
@@ -1734,7 +1736,7 @@ Email：` +
     next();
   }
   deleteRow = () => {
-    let deleteFlg = window.confirm("削除していただきますか？");
+    let deleteFlg = window.confirm("削除してもよろしいでしょうか？");
     if (deleteFlg) {
       $("#delectBtn").click();
     }
@@ -1982,6 +1984,7 @@ Email：` +
       mode: "click",
       blurToSave: true,
       afterSaveCell: this.onAfterSaveCell,
+      beforeSaveCell: this.beforeSaveCell,
     };
 
     const selectRow = {
@@ -2220,7 +2223,6 @@ Email：` +
               ref="table"
               pagination={true}
               cellEdit={cellEdit}
-              // className={"bg-white text-dark"}
               trClassName="customClass"
               headerStyle={{ background: "#5599FF" }}
               striped
@@ -2228,13 +2230,13 @@ Email：` +
               condensed
             >
               <TableHeaderColumn
-                width="15%"
-                // tdStyle={{ padding: ".45em" }}
+                width="8%"
                 dataField="employeeName"
                 dataFormat={this.formatEmployeeName.bind(this)}
                 autoValue
                 editable={false}
                 isKey
+                columnClassName="verticalAlignMiddle"
               >
                 名前
               </TableHeaderColumn>
@@ -2243,35 +2245,29 @@ Email：` +
                 dataField="employeeStatus"
                 dataFormat={this.formatEmpStatus.bind(this)}
                 editable={false}
+                columnClassName="verticalAlignMiddle"
               >
                 所属
               </TableHeaderColumn>
               <TableHeaderColumn
-                width="8%"
+                width="10%"
                 dataField="hopeHighestPrice"
                 dataFormat={this.formatPrice.bind(this)}
                 editColumnClassName="dutyRegistration-DataTableEditingCell"
+                columnClassName="verticalAlignMiddle"
               >
                 単価
               </TableHeaderColumn>
-              {/*
-               * <TableHeaderColumn dataField='resumeInfo1'
-               * hidden={true}>履歴書1</TableHeaderColumn>
-               */}
-              {/*
-               * <TableHeaderColumn dataField='resumeInfo2'
-               * hidden={true}>履歴書2</TableHeaderColumn>
-               */}
               <TableHeaderColumn
                 dataField="employeeNo"
                 hidden={true}
               ></TableHeaderColumn>
               <TableHeaderColumn
                 placeholder="履歴書名"
-                width="19%"
-                // dataField="resumeInfoList"
+                width="15%"
                 dataFormat={this.formatResumeInfoList.bind(this)}
                 editable={false}
+                columnClassName="verticalAlignMiddle"
               >
                 履歴書
               </TableHeaderColumn>
@@ -2359,6 +2355,7 @@ Email：` +
               data={this.state.selectedCusInfos}
               pagination={true}
               trClassName="customClass"
+              tdClass
               headerStyle={{ background: "#5599FF" }}
               striped
               hover
@@ -2401,7 +2398,7 @@ Email：` +
                 dataField="purchasingManagersMail"
                 editable={false}
               >
-                メール
+                送信先(TO)
               </TableHeaderColumn>
               {/*<TableHeaderColumn width='8%' dataField='purchasingManagers2' editable={false}>担当者</TableHeaderColumn>
 							<TableHeaderColumn width='8%' dataField='positionCode2' dataFormat={this.positionNameFormat} editable={false}>職位</TableHeaderColumn>
@@ -2411,7 +2408,7 @@ Email：` +
                 dataField="purchasingManagersOthers"
                 editable={false}
               >
-                追加者
+                送信先(CC)
               </TableHeaderColumn>
               <TableHeaderColumn
                 width="10%"

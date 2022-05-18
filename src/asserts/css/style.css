@@ -3333,6 +3333,10 @@ body {
   }
 }
 
-.pt4 {
-  padding-top: 4px !important;
+.MuiAutocomplete-root .autocompleteInput ::before {
+  border-bottom: 0px !important;
+}
+
+.verticalAlignMiddle {
+  vertical-align: middle !important;
 }

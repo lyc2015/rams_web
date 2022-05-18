@@ -709,9 +709,8 @@ class manageSituation extends React.Component {
     /*if(row.employeeNo.indexOf("BP") != -1){
 			unitPrice = row.unitPrice;
 		}else{*/
-    let num = (row.unitPrice / 10000).toFixed(1).replace(".0", "");
-    unitPrice =
-      row.unitPrice === "" ? "" : Number(num) === 0 ? row.unitPrice : num;
+    let num = (cell / 10000).toFixed(1).replace(".0", "");
+    unitPrice = cell === "" ? "" : Number(num) === 0 ? cell : num;
     /*}*/
     if (row.salesProgressCode === "0" || row.salesProgressCode === "1") {
       if (row.bpUnitPrice !== null)
