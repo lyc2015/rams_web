@@ -48,6 +48,8 @@ class sendLettersConfirm extends React.Component {
 
   // 初期化変数
   initialState = {
+    selectedCusInfoIndex: "",
+    confirmModalData: {},
     inputEmployeeName: "",
     resumePath: "",
     resumeName: "",
@@ -131,8 +133,7 @@ class sendLettersConfirm extends React.Component {
     initRemark: "",
     disableFlag: true,
     initWellUseLanguagss: [],
-    daiologShowFlag: false,
-    empAdddaiologShowFlag: false,
+    dialogShowFlag: false,
     selectRow1Flag: false,
     selectRowFlag: false,
     mails: [],
@@ -363,19 +364,27 @@ class sendLettersConfirm extends React.Component {
     return obj;
   };
 
-  // 送信処理
-  beforeSendMailWithFile = async () => {
-    const { employeeInfo } = this.state;
-    this.setSelectedCusInfos("○");
-    let mailText = ``;
-    let time;
-    let resumeNameList = [];
-    let resumePathList = [];
-    let resumeFileList = [];
-
+  // 获取mailText resumeNameList resumePathList resumeFileList（调用接口）
+  getMailTextAndList = async () => {
+    const {
+      employeeInfo,
+      englishConversationLevels,
+      salesProgresss,
+      japaneaseConversationLevels,
+      genders,
+      serverIP,
+      employees,
+      stations,
+    } = this.state;
+    let mailText = ``; // 技术人员信息
+    let resumeNameList = []; // 简历名称列表
+    let resumePathList = []; // 简历路径列表
+    let resumeFileList = []; // 新上传的简历file列表
+    let resumeResults = [];
     for (let i = 0; i < employeeInfo.length; i++) {
       const item = employeeInfo[i];
       let resumeResult = this.getFinalResume(item);
+      resumeResults.push(resumeResult);
       resumeNameList.push(resumeResult.name);
       if (resumeResult.type === "url") {
         resumePathList.push(resumeResult.value);
@@ -383,10 +392,10 @@ class sendLettersConfirm extends React.Component {
         resumeFileList.push(resumeResult.value);
       }
 
-      // 系统内的要员
+      // 生成mailText
       if (item.employeeNo) {
         let result = await axios.post(
-          this.state.serverIP + "salesSituation/getPersonalSalesInfo",
+          serverIP + "salesSituation/getPersonalSalesInfo",
           {
             employeeNo: String(item.employeeNo),
           }
@@ -399,17 +408,14 @@ class sendLettersConfirm extends React.Component {
             `　` +
             result.data[0].nationalityName +
             `　` +
-            this.state.genders.find(
-              (v) => v.code === result.data[0].genderStatus
-            ).name +
+            genders.find((v) => v.code === result.data[0].genderStatus).name +
             `
 【所　　属】：` +
             (result.data[0].employeeStatus === null ||
             result.data[0].employeeStatus === ""
               ? ""
-              : this.state.employees.find(
-                  (v) => v.code === result.data[0].employeeStatus
-                ).name) +
+              : employees.find((v) => v.code === result.data[0].employeeStatus)
+                  .name) +
             (result.data[0].age === null || result.data[0].age === ""
               ? publicUtils.converToLocalTime(result.data[0].birthday, true) ===
                 ""
@@ -438,9 +444,8 @@ class sendLettersConfirm extends React.Component {
             (result.data[0].nearestStation === null ||
             result.data[0].nearestStation === ""
               ? ""
-              : this.state.stations.find(
-                  (v) => v.code === result.data[0].nearestStation
-                ).name) +
+              : stations.find((v) => v.code === result.data[0].nearestStation)
+                  .name) +
             (result.data[0].japaneaseConversationLevel === null ||
             result.data[0].japaneaseConversationLevel === ""
               ? ""
@@ -449,7 +454,7 @@ class sendLettersConfirm extends React.Component {
             (result.data[0].japaneaseConversationLevel === null ||
             result.data[0].japaneaseConversationLevel === ""
               ? ""
-              : this.state.japaneaseConversationLevels.find(
+              : japaneaseConversationLevels.find(
                   (v) => v.code === result.data[0].japaneaseConversationLevel
                 ).name) +
             (result.data[0].englishConversationLevel === null ||
@@ -460,7 +465,7 @@ class sendLettersConfirm extends React.Component {
             (result.data[0].englishConversationLevel === null ||
             result.data[0].englishConversationLevel === ""
               ? ""
-              : this.state.englishConversationLevels.find(
+              : englishConversationLevels.find(
                   (v) => v.code === result.data[0].englishConversationLevel
                 ).name) +
             (result.data[0].yearsOfExperience === null ||
@@ -523,7 +528,7 @@ class sendLettersConfirm extends React.Component {
             (result.data[0].salesProgressCode === null ||
             result.data[0].salesProgressCode === ""
               ? ""
-              : this.state.salesProgresss.find(
+              : salesProgresss.find(
                   (v) => v.code === result.data[0].salesProgressCode
                 ).name) +
             (result.data[0].remark === null || result.data[0].remark === ""
@@ -545,126 +550,138 @@ class sendLettersConfirm extends React.Component {
         mailText += this.newEmployeeMailContent(item);
       }
     }
-
-    this.sendMailWithFile({
+    return {
       mailText,
       resumeNameList,
       resumePathList,
       resumeFileList,
-    });
+      resumeResults,
+    };
   };
 
-  // 送信処理
-  sendMailWithFile = ({
-    mailText,
-    resumeNameList: names,
-    resumePathList: paths,
-    resumeFileList: files,
-  }) => {
-    let {
-      selectedCusInfos,
-      loginUserInfo,
-      greetinTtext,
-      mailTitle,
-      selectedmail,
-    } = this.state;
-    for (let i = 0; i < selectedCusInfos.length; i++) {
-      let selectedCustomer = selectedCusInfos[i].customerNo;
-      const mailConfirmContont =
-        (selectedCusInfos[i].customerName.split("(")[0].search("株式会社") ===
-        -1
-          ? selectedCusInfos[i].customerName.split("(")[0] + `株式会社`
-          : selectedCusInfos[i].customerName.split("(")[0]) +
-        ` 
+  // 获取确认邮件文本
+  getMailConfirmContont = ({ selectedCusInfo, mailText }) => {
+    let { loginUserInfo, greetinTtext } = this.state;
+    return (
+      (selectedCusInfo.customerName.split("(")[0].search("株式会社") === -1
+        ? selectedCusInfo.customerName.split("(")[0] + `株式会社`
+        : selectedCusInfo.customerName.split("(")[0]) +
+      ` 
 ` +
-        (selectedCusInfos[i].purchasingManagers === ""
-          ? "ご担当者"
-          : selectedCusInfos[i].purchasingManagers.split("　")[0]) +
-        ` 様
+      (selectedCusInfo.purchasingManagers === ""
+        ? "ご担当者"
+        : selectedCusInfo.purchasingManagers.split("　")[0]) +
+      ` 様
 
 お世話になっております、LYC` +
-        loginUserInfo[0].employeeFristName +
-        `です。
+      loginUserInfo[0].employeeFristName +
+      `です。
 ` +
-        greetinTtext +
-        `
+      greetinTtext +
+      `
 ` +
-        mailText +
-        `
+      mailText +
+      `
 以上、よろしくお願いいたします。
 
 *****************************************************************
 LYC株式会社 ` +
-        loginUserInfo[0].employeeFristName +
-        ` ` +
-        loginUserInfo[0].employeeLastName +
-        `
+      loginUserInfo[0].employeeFristName +
+      ` ` +
+      loginUserInfo[0].employeeLastName +
+      `
 〒:101-0032 東京都千代田区岩本町3-3-3サザンビル3F
 http://www.lyc.co.jp/
 TEL：03-6908-5796  携帯：` +
-        loginUserInfo[0].phoneNo +
-        `(優先）
+      loginUserInfo[0].phoneNo +
+      `(優先）
 Email：` +
-        loginUserInfo[0].companyMail +
-        ` 営業共通：eigyou@lyc.co.jp
+      loginUserInfo[0].companyMail +
+      ` 営業共通：eigyou@lyc.co.jp
 労働者派遣事業許可番号　派遣許可番号　派13-306371
 ＩＳＭＳ：MSA-IS-385
-*****************************************************************`;
-      selectedmail =
-        selectedCusInfos[i]
-          .purchasingManagersMail /* + "," + this.state.selectedCusInfos[i].purchasingManagersMail2*/;
-      let selectedMailCC = [
-        this.state.selectedMailCC.length >= 1
-          ? this.state.selectedMailCC[0].companyMail
-          : "",
-        this.state.selectedMailCC.length >= 2
-          ? this.state.selectedMailCC[1].companyMail
-          : "",
+*****************************************************************`
+    );
+  };
+
+  // 送信処理请求数据整理 emailModel,resumeFileList
+  getSendMailWithFileRequestParams = async (selectedCusInfo) => {
+    let {
+      mailText,
+      resumeNameList,
+      resumePathList,
+      resumeFileList,
+      resumeResults,
+    } = await this.getMailTextAndList();
+    let { loginUserInfo, mailTitle, selectedMailCC } = this.state;
+
+    let emailModel = {
+      names: resumeNameList,
+      mailTitle,
+      paths: resumePathList,
+      selectedMailCC: [
+        selectedMailCC.length >= 1 ? selectedMailCC[0].companyMail : "",
+        selectedMailCC.length >= 2 ? selectedMailCC[1].companyMail : "",
       ].filter(function (s) {
         return s;
-      });
-      console.log(selectedMailCC);
-      let mailFrom = loginUserInfo[0].companyMail;
-      // files
-      const formData = new FormData();
-      let emailModel = {
-        names,
-        mailTitle,
-        paths,
-        mailConfirmContont,
-        selectedmail,
-        selectedMailCC,
-        mailFrom,
-        selectedCustomer,
-      };
+      }),
+      mailFrom: loginUserInfo[0].companyMail,
+      mailConfirmContont: this.getMailConfirmContont({
+        selectedCusInfo: selectedCusInfo,
+        mailText,
+      }),
+      selectedmail: selectedCusInfo.purchasingManagersMail,
+      selectedCustomer: selectedCusInfo.customerNo,
+    };
+    console.log(
+      { emailModel, resumeFileList },
+      "getSendMailWithFileRequestParams"
+    );
+    return {
+      emailModel,
+      resumeFileList,
+      resumeResults,
+    };
+  };
 
-      files.forEach((file, i) => {
-        formData.append(`myfiles`, file);
-      });
-      formData.append(`emailModel`, JSON.stringify(emailModel));
-      axios
-        .post(
+  handleSendMailWithFile = async () => {
+    try {
+      const { selectedCusInfos } = this.state;
+      this.setSelectedCusInfos("○");
+
+      // 遍历selectedCusInfos，发送邮件
+      for (let i = 0; i < selectedCusInfos.length; i++) {
+        let { emailModel, resumeFileList } =
+          await this.getSendMailWithFileRequestParams(selectedCusInfos[i]);
+        const formData = new FormData();
+        if (resumeFileList?.length > 0) {
+          resumeFileList.forEach((file, i) => {
+            formData.append(`myfiles`, file);
+          });
+        }
+
+        formData.append(`emailModel`, JSON.stringify(emailModel));
+        let result = await axios.post(
           this.state.serverIP + "sendLettersConfirm/sendMailWithFile",
           formData
-        )
-        .then((result) => {
-          if (result.data.errorsMessage != null) {
-            this.setState({
-              errorsMessageShow: true,
-              errorsMessageValue: result.data.errorsMessage,
-            });
-            setTimeout(() => this.setState({ errorsMessageShow: false }), 3000);
-            this.setSelectedCusInfos("X");
-          } else {
-            this.setSelectedCusInfos("済み");
-            this.setState({
-              sendLetterOverFlag: true,
-            });
-          }
-        })
-        .catch(function (error) {
-          alert(error);
-        });
+        );
+
+        if (result.data.errorsMessage != null) {
+          this.setState({
+            errorsMessageShow: true,
+            errorsMessageValue: result.data.errorsMessage,
+          });
+          setTimeout(() => this.setState({ errorsMessageShow: false }), 3000);
+          this.setSelectedCusInfos("X");
+        } else {
+          this.setSelectedCusInfos("済み");
+          this.setState({
+            sendLetterOverFlag: true,
+          });
+        }
+      }
+    } catch (error) {
+      alert(error);
     }
   };
 
@@ -736,9 +753,14 @@ Email：` +
     }
   };
 
-  openDaiolog = () => {
+  openDaiolog = async () => {
+    let { emailModel, resumeResults } =
+      await this.getSendMailWithFileRequestParams(
+        this.state.selectedCusInfos[this.state.selectedCusInfoIndex]
+      );
     this.setState({
-      daiologShowFlag: true,
+      confirmModalData: { emailModel, resumeResults },
+      dialogShowFlag: true,
     });
   };
 
@@ -791,7 +813,7 @@ Email：` +
   };
 
   sendOverFormat = (cell) => {
-    if (cell === "○") return <div class="donut"></div>;
+    if (cell === "○") return <div className="donut"></div>;
     else if (cell === "X")
       return <FontAwesomeIcon icon={faTimes} style={{ color: "red" }} />;
     else if (cell === "済み")
@@ -1155,18 +1177,14 @@ Email：` +
 
   closeDaiolog = () => {
     this.setState({
-      daiologShowFlag: false,
-    });
-  };
-
-  closeEmpAddDaiolog = () => {
-    this.setState({
-      empAdddaiologShowFlag: false,
+      confirmModalData: {},
+      dialogShowFlag: false,
     });
   };
 
   handleCtmSelect = (row, isSelected, e) => {
     this.setState({
+      selectedCusInfoIndex: row.rowId,
       selectedCustomerName: isSelected ? row.customerName : "",
       selectedPurchasingManagers: isSelected ? row.purchasingManagers : "",
       // selectedSalesPerson: isSelected ? row.customerName : '',
@@ -1181,13 +1199,6 @@ Email：` +
         selectRow1Flag: false,
       });
     }
-  };
-
-  openEmpAddDaiolog = (flag) => {
-    this.setState({
-      empAdddaiologShowFlag: true,
-      popupFlag: flag,
-    });
   };
 
   handleEmpSelect = (row, isSelected, e) => {
@@ -1916,8 +1927,10 @@ Email：` +
       errorsMessageValue,
       message,
       type,
-      resumeInfo1,
-      resumeInfo1Name,
+      confirmModalData,
+      selectedmail,
+      selectedPurchasingManagers,
+      selectedCustomerName,
     } = this.state;
 
     console.log({ state: this.state }, "render");
@@ -2029,7 +2042,7 @@ Email：` +
           centered
           backdrop="static"
           onHide={this.closeDaiolog}
-          show={this.state.daiologShowFlag}
+          show={this.state.dialogShowFlag}
           dialogClassName="modal-40w"
         >
           <Modal.Header closeButton>
@@ -2038,24 +2051,16 @@ Email：` +
             </Col>
           </Modal.Header>
           <Modal.Body>
-            <MailConfirm personalInfo={this} />
-          </Modal.Body>
-        </Modal>
-        <Modal
-          aria-labelledby="contained-modal-title-vcenter"
-          centered
-          backdrop="static"
-          onHide={this.closeEmpAddDaiolog}
-          show={this.state.empAdddaiologShowFlag}
-          dialogClassName="modal-bankInfo"
-        >
-          <Modal.Header closeButton>
-            <Col className="text-center">
-              <h2>履歴書選択</h2>
-            </Col>
-          </Modal.Header>
-          <Modal.Body>
-            <SalesEmpAddPopup personalInfo={this} />
+            {confirmModalData ? (
+              <MailConfirm
+                data={{
+                  ...confirmModalData,
+                  selectedmail,
+                  selectedPurchasingManagers,
+                  selectedCustomerName,
+                }}
+              />
+            ) : null}
           </Modal.Body>
         </Modal>
         <Row inline="true">
@@ -2211,6 +2216,7 @@ Email：` +
           <Col sm={4}>{"　"}営業文章</Col>
           <Col sm={1}></Col>
         </Row>
+        {/* 技術者table */}
         <Row>
           <Col sm={1}></Col>
           <Col sm={6}>
@@ -2308,6 +2314,7 @@ Email：` +
         <Row style={{ padding: "10px" }}>
           <Col sm={12}></Col>
         </Row>
+        {/* メール確認，送信 Button */}
         <Row>
           <Col sm={1}></Col>
           <Col sm={5}></Col>
@@ -2318,17 +2325,13 @@ Email：` +
                 size="sm"
                 variant="info"
                 name="clickButton"
-                disabled={
-                  this.state.selectRowFlag && this.state.selectRow1Flag
-                    ? false
-                    : true
-                }
+                disabled={!this.state.selectRow1Flag}
               >
                 <FontAwesomeIcon icon={faGlasses} />
                 メール確認
               </Button>{" "}
               <Button
-                onClick={this.beforeSendMailWithFile}
+                onClick={this.handleSendMailWithFile}
                 size="sm"
                 variant="info"
                 disabled={
@@ -2345,6 +2348,7 @@ Email：` +
           </Col>
           <Col sm={1}></Col>
         </Row>
+        {/* お客様table */}
         <Row>
           <Col sm={1}></Col>
           <Col sm={10}>
