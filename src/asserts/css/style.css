@@ -144,6 +144,7 @@
 
 body {
   font-family: Helvetica, sans-serif;
+  font-size: 16px !important;
 }
 
 .modal-passwordSet {
@@ -1430,7 +1431,7 @@ body {
 }
 
 .Autocompletestyle-salesSend-customers {
-  width: 21.2rem;
+  /* width: 21.2rem; */
   height: 31px;
   border-color: "#ced4da";
   border-width: 1;
@@ -2088,7 +2089,7 @@ body {
     color: "#495057";
   }
   .Autocompletestyle-salesSend-customers {
-    width: 14.7rem;
+    /* width: 14.7rem; */
     height: 31px;
     border-color: "#ced4da";
     border-width: 1;
@@ -2127,7 +2128,7 @@ body {
     color: "#495057";
   }
   .Autocompletestyle-salesSend-personInCharge {
-    width: 6rem;
+    /* width: 6rem; */
     height: 31px;
     border-color: "#ced4da";
     border-width: 1;
@@ -3339,4 +3340,16 @@ body {
 
 .verticalAlignMiddle {
   vertical-align: middle !important;
+}
+
+.w40p {
+  width: 40%;
+}
+
+.h100p {
+  height: 100%;
+}
+
+.h70p {
+  height: 70%;
 }

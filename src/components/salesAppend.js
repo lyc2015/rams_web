@@ -184,15 +184,22 @@ class salesAppend extends Component {
   };
 
   salesSelected = () => {
+    const {
+      parentSelectedInfo,
+      appendPersonMsg,
+      selectetRowIds,
+      allSalesPersons,
+    } = this.state;
     let salesPersons = this.state.selectetPersonsName.join(",");
-    this.state.parentSelectedInfo.salesPersonsAppend = salesPersons;
     let salesRowsId = this.state.selectetRowIds.join(",");
-    this.state.parentSelectedInfo.test = salesRowsId;
-    this.state.parentSelectedInfo.mainChargeList = salesRowsId;
     let purchasingManagersOthers = this.state.selectetPersonsName;
+    parentSelectedInfo.salesPersonsAppend = salesPersons;
+    parentSelectedInfo.test = salesRowsId;
+    parentSelectedInfo.mainChargeList = salesRowsId;
+
     purchasingManagersOthers.pop();
     //this.state.appendPersonMsg.purchasingManagersOthers = purchasingManagersOthers;
-    this.state.appendPersonMsg.purchasingManagersOthers = salesPersons;
+    appendPersonMsg.purchasingManagersOthers = salesPersons;
     if (
       this.props.customer.storageListName != null &&
       this.props.customer.storageListName != ""
@@ -213,10 +220,11 @@ class salesAppend extends Component {
           alert(err);
         });
     }
-    this.props.allState.saveSalesPersons(
-      this.state.parentSelectedInfo,
-      this.state.appendPersonMsg
-    );
+    this.props.allState.saveSalesPersons(parentSelectedInfo, appendPersonMsg);
+    this.props.allState.updateAllCustomerSelectedTanTou({
+      selectetRowIds,
+      allTanTou: allSalesPersons,
+    });
   };
   render() {
     const selectRow = {

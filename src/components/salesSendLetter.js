@@ -963,7 +963,8 @@ class salesSendLetter extends React.Component {
   };
 
   // 担当追加ボタンをクリック
-  handleGetSalesPersons = (selectedCustomer) => {
+  handleGetSalesPersons = (selectedCustomer, e) => {
+    e.preventDefault();
     this.setState({
       selectedCustomer: selectedCustomer,
       daiologShowFlag: true,
@@ -1270,6 +1271,20 @@ class salesSendLetter extends React.Component {
         {start}から {to}まで , 総計{total}
       </p>
     );
+  };
+
+  // 将添加的担当添加到对应allCustomer的selectedTanTou。在sendLettersConfirm中使用
+  updateAllCustomerSelectedTanTou = ({ selectetRowIds, allTanTou }) => {
+    const { allCustomer, selectedCustomer } = this.state;
+    if (!selectetRowIds && !allTanTou) return;
+    let selectedTanTou = allTanTou.filter((item) =>
+      selectetRowIds.includes(item.rowId)
+    );
+    let index = allCustomer.findIndex(
+      (customer) => customer.customerNo === selectedCustomer.customerNo
+    );
+    allCustomer[index].selectedTanTou = selectedTanTou;
+    this.setState({ allCustomer });
   };
 
   saveSalesPersons = (row, appendPersonMsg) => {

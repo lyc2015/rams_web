@@ -2,10 +2,10 @@ import "react-app-polyfill/ie9";
 import "react-app-polyfill/stable";
 import React from "react";
 import ReactDOM from "react-dom";
-// import "antd/dist/antd.css";
 
 import "./asserts/css/index.css";
-
+import "./asserts/css/antdCssReset.css";
+import "antd/dist/antd.css";
 import App from "./App";
 import { Provider } from "react-redux";
 import store from "./components/redux/store";

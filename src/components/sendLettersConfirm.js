@@ -33,7 +33,7 @@ import $ from "jquery";
 import MyToast from "./myToast";
 import ErrorsMessageToast from "./errorsMessageToast";
 import "./autocompleteInput.css";
-import { message } from "antd";
+import { message as myMessage, Select, notification } from "antd";
 axios.defaults.withCredentials = true;
 /**
  * 営業送信お客確認画面
@@ -284,7 +284,10 @@ class sendLettersConfirm extends React.Component {
         });
       })
       .catch(function (error) {
-        alert(error);
+        notification.error({
+          message: "服务器异常",
+          description: error,
+        });
       });
   };
   /* 要員追加機能の新規 20201216 張棟 END */
@@ -327,7 +330,10 @@ class sendLettersConfirm extends React.Component {
         });
       })
       .catch(function (error) {
-        //alert(error);
+        notification.error({
+          message: "服务器异常",
+          description: error,
+        });
       });
   };
 
@@ -542,12 +548,19 @@ class sendLettersConfirm extends React.Component {
 `;
         } else {
           mailText +=
+            `
+` +
             item.mailContent +
             `
 `;
         }
       } else {
-        mailText += this.newEmployeeMailContent(item);
+        mailText +=
+          `
+` +
+          this.newEmployeeMailContent(item) +
+          `
+`;
       }
     }
     return {
@@ -576,13 +589,13 @@ class sendLettersConfirm extends React.Component {
 お世話になっております、LYC` +
       loginUserInfo[0].employeeFristName +
       `です。
+
 ` +
       greetinTtext +
       `
 ` +
       mailText +
-      `
-以上、よろしくお願いいたします。
+      `以上、よろしくお願いいたします。
 
 *****************************************************************
 LYC株式会社 ` +
@@ -619,12 +632,13 @@ Email：` +
       names: resumeNameList,
       mailTitle,
       paths: resumePathList,
-      selectedMailCC: [
-        selectedMailCC.length >= 1 ? selectedMailCC[0].companyMail : "",
-        selectedMailCC.length >= 2 ? selectedMailCC[1].companyMail : "",
-      ].filter(function (s) {
-        return s;
-      }),
+      selectedMailCC: selectedMailCC
+        .map((item) => item.companyMail)
+        .concat(
+          selectedCusInfo?.selectedTanTou.map(
+            (item) => item.customerDepartmentMail
+          )
+        ),
       mailFrom: loginUserInfo[0].companyMail,
       mailConfirmContont: this.getMailConfirmContont({
         selectedCusInfo: selectedCusInfo,
@@ -644,8 +658,36 @@ Email：` +
     };
   };
 
+  checkCanSendEmail = () => {
+    const { employeeInfo } = this.state;
+    for (let index = 0; index < employeeInfo.length; index++) {
+      const item = employeeInfo[index];
+      if (!item.employeeName) {
+        return {
+          status: false,
+          msg: "要員の名前を入力してください！",
+        };
+      }
+      if (!item.resumeInfoName) {
+        return {
+          status: false,
+          msg: `要員${item.employeeName}の履歴書を選択してください！`,
+        };
+      }
+    }
+    return {
+      status: true,
+    };
+  };
+
   handleSendMailWithFile = async () => {
     try {
+      let checkCanSendEmailRes = this.checkCanSendEmail();
+      if (!checkCanSendEmailRes.status) {
+        myMessage.error(checkCanSendEmailRes.msg);
+        return;
+      }
+
       const { selectedCusInfos } = this.state;
       this.setSelectedCusInfos("○");
 
@@ -681,7 +723,10 @@ Email：` +
         }
       }
     } catch (error) {
-      alert(error);
+      notification.error({
+        message: "服务器异常",
+        description: error,
+      });
     }
   };
 
@@ -694,7 +739,10 @@ Email：` +
         });
       })
       .catch(function (error) {
-        //alert(error);
+        notification.error({
+          message: "服务器异常",
+          description: error,
+        });
       });
   };
 
@@ -707,7 +755,10 @@ Email：` +
         });
       })
       .catch(function (error) {
-        //alert(error);
+        notification.error({
+          message: "服务器异常",
+          description: error,
+        });
       });
   };
 
@@ -766,8 +817,7 @@ Email：` +
 
   beforeSaveCell = (row, cellName, cellValue) => {
     if (cellValue.length > 7 || Number.isNaN(cellValue)) {
-      alert("入力された単価は合理的ではありません！");
-      // message.error("入力された単価は合理的ではありません！");
+      myMessage.error("入力された単価は合理的ではありません！");
       return false;
     }
   };
@@ -779,12 +829,18 @@ Email：` +
         unitPrice: cellValue,
       })
       .then((result) => {
+        const { employeeInfo } = this.state;
+        employeeInfo[row.index - 1].unitPrice = cellValue;
         this.setState({
+          employeeInfo,
           unitPrice: cellValue,
         });
       })
       .catch(function (error) {
-        alert(error);
+        notification.error({
+          message: "服务器异常",
+          description: error,
+        });
       });
   };
 
@@ -810,6 +866,11 @@ Email：` +
         return positionsTem[i].name;
       }
     }
+  };
+  purchasingManagersOthersFormat = (cell, row, enumObject, index) => {
+    return row.storageListName
+      ? row.salesPersonsAppend
+      : row.purchasingManagersOthers;
   };
 
   sendOverFormat = (cell) => {
@@ -1103,7 +1164,10 @@ Email：` +
         }
       })
       .catch(function (error) {
-        alert(error);
+        notification.error({
+          message: "服务器异常",
+          description: error,
+        });
       });
   };
 
@@ -1156,7 +1220,10 @@ Email：` +
         this.getHopeHighestPrice(result);
       })
       .catch(function (error) {
-        alert(error);
+        notification.error({
+          message: "服务器异常",
+          description: error,
+        });
       });
     this.searchPersonnalDetail(this.state.selectedEmpNos[0]);
   };
@@ -1333,18 +1400,32 @@ Email：` +
   };
 
   newEmployeeMailContent = (item) => {
-    return `
-【名　　前】：${item.employeeName || "-"}
-【単　　価】：${
-      (item?.hopeHighestPrice?.length > 3
-        ? (item.hopeHighestPrice / 10000).toFixed(0) + "万円"
-        : item.hopeHighestPrice) || "-"
-    }
-        
-        `;
+    let str = ``;
+    if (item.employeeName)
+      str += `【名　　前】：${item.employeeName}
+`;
+    if (item?.hopeHighestPrice)
+      str += `【単　　価】：${
+        item?.hopeHighestPrice?.length > 3
+          ? (item.hopeHighestPrice / 10000).toFixed(0) + "万円"
+          : item.hopeHighestPrice
+      }
+`;
+    console.log(
+      +item?.employeeStatus,
+      "item?.employeeStatusitem?.employeeStatus"
+    );
+    if (item?.employeeStatus + "")
+      str += `【所　　属】：${
+        this.state.employeeStatusS.find((v) => v.code === item.employeeStatus)
+          ?.name
+      }
+`;
+    return str;
   };
 
   /* 要員追加機能の新規 20201216 張棟 START */
+
   handleRowSelect = (row, isSelected, e) => {
     if (row.employeeNo !== "" && row.employeeNo !== null) {
       this.searchPersonnalDetail(
@@ -1385,6 +1466,12 @@ Email：` +
     }
   };
 
+  handleEmpStatusChange = (value, row) => {
+    const { employeeInfo } = this.state;
+    employeeInfo[row.index - 1].employeeStatus = value;
+    this.setState({ employeeInfo });
+  };
+
   formatUnitePrice = (value) => {
     let num = (value / 10000).toFixed(1).replace(".0", "");
     return value === "" ? "" : num;
@@ -1395,11 +1482,21 @@ Email：` +
   };
 
   formatEmpStatus = (cell, row, enumObject, index) => {
-    return cell !== null && cell !== ""
-      ? this.state.employees.find((v) => v.code === cell).name === "1社先の社員"
-        ? "協力"
-        : this.state.employees.find((v) => v.code === cell).name
-      : "";
+    if (row.employeeNo) {
+      let name = this.state.employees.find((v) => v.code === cell).name;
+      return name === "1社先の社員" ? "協力" : name;
+    }
+    return (
+      <Select
+        // labelInValue
+        onChange={(value) => this.handleEmpStatusChange(value, row)}
+        showArrow
+        style={{ width: "100%" }}
+        fieldNames={{ label: "name", value: "code" }}
+        options={this.state.employeeStatusS}
+      />
+    );
+    // employeeStatusS
   };
   /* 要員追加機能の新規 20201216 張棟 END */
   // formatResume(cell, row, enumObject, index) {
@@ -1933,7 +2030,10 @@ Email：` +
       selectedCustomerName,
     } = this.state;
 
-    console.log({ state: this.state }, "render");
+    console.log(
+      { state: this.state, propsState: this.props.location.state },
+      "render"
+    );
 
     // ページネーション
     const options = {
@@ -2043,14 +2143,16 @@ Email：` +
           backdrop="static"
           onHide={this.closeDaiolog}
           show={this.state.dialogShowFlag}
-          dialogClassName="modal-40w"
+          dialogClassName="w40p h70p"
+          contentClassName="h100p"
         >
           <Modal.Header closeButton>
             <Col className="text-center">
-              <h2>メール内容確認</h2>
+              {/* <h2>メール内容確認</h2> */}
+              <h2>{`送信先(TO):${selectedmail}`}</h2>
             </Col>
           </Modal.Header>
-          <Modal.Body>
+          <Modal.Body style={{ display: "flex", flexDirection: "column" }}>
             {confirmModalData ? (
               <MailConfirm
                 data={{
@@ -2236,7 +2338,7 @@ Email：` +
               condensed
             >
               <TableHeaderColumn
-                width="8%"
+                width="10%"
                 dataField="employeeName"
                 dataFormat={this.formatEmployeeName.bind(this)}
                 autoValue
@@ -2247,7 +2349,7 @@ Email：` +
                 名前
               </TableHeaderColumn>
               <TableHeaderColumn
-                width="8%"
+                width="12%"
                 dataField="employeeStatus"
                 dataFormat={this.formatEmpStatus.bind(this)}
                 editable={false}
@@ -2256,7 +2358,7 @@ Email：` +
                 所属
               </TableHeaderColumn>
               <TableHeaderColumn
-                width="10%"
+                width="8%"
                 dataField="hopeHighestPrice"
                 dataFormat={this.formatPrice.bind(this)}
                 editColumnClassName="dutyRegistration-DataTableEditingCell"
@@ -2374,7 +2476,7 @@ Email：` +
                 番号
               </TableHeaderColumn>
               <TableHeaderColumn
-                width="25%"
+                width="15%"
                 dataField="customerName"
                 dataFormat={this.customerNameFormat}
                 autoValue
@@ -2407,9 +2509,17 @@ Email：` +
               {/*<TableHeaderColumn width='8%' dataField='purchasingManagers2' editable={false}>担当者</TableHeaderColumn>
 							<TableHeaderColumn width='8%' dataField='positionCode2' dataFormat={this.positionNameFormat} editable={false}>職位</TableHeaderColumn>
 							<TableHeaderColumn width='8%' dataField='purchasingManagersMail2' editable={false}>メール</TableHeaderColumn>*/}
+              {/* <TableHeaderColumn
+                width="25%"
+                dataFormat={this.toCCFormat}
+                editable={false}
+              >
+                送信先(CC)
+              </TableHeaderColumn> */}
               <TableHeaderColumn
-                width="17%"
-                dataField="purchasingManagersOthers"
+                width="25%"
+                dataField="selectedTanTou"
+                dataFormat={this.purchasingManagersOthersFormat}
                 editable={false}
               >
                 送信先(CC)

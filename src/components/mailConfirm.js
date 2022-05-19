@@ -102,31 +102,33 @@ class mailConfirm extends React.Component {
     //   return s;
     // });
     return (
-      <div>
+      <>
+        <textarea
+          ref={(textarea) => (this.textArea = textarea)}
+          disabled
+          style={{
+            width: "100%",
+            minHeight: "80%",
+            resize: "none",
+            border: "none",
+            flex: "1",
+            marginBottom: "10px",
+          }}
+          value={
+            // `送信先(TO):` +
+            // selectedmail +
+            //               (String(companyMailNames) === ""
+            //                 ? ""
+            //                 : `
+            // CC:` + companyMailNames.join(";")) +
+            emailModel?.mailConfirmContont
+          }
+        />
+        {/* 添付ファイル: */}
         <div>
-          <textarea
-            ref={(textarea) => (this.textArea = textarea)}
-            disabled
-            style={{
-              height: "800px",
-              width: "100%",
-              resize: "none",
-              border: "0",
-            }}
-            value={
-              `To:` +
-              selectedmail +
-              //               (String(companyMailNames) === ""
-              //                 ? ""
-              //                 : `
-              // CC:` + companyMailNames.join(";")) +
-              `
-` +
-              emailModel?.mailConfirmContont
-            }
-          />
           {resumeResults?.length > 0
             ? resumeResults.map((item, i) => {
+                if (!item.value) return null;
                 return (
                   <Button
                     key={i}
@@ -144,7 +146,7 @@ class mailConfirm extends React.Component {
               })
             : null}
         </div>
-      </div>
+      </>
     );
   }
 }
