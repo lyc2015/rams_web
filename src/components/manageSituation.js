@@ -1550,8 +1550,8 @@ class manageSituation extends React.Component {
       .then((result) => {
         let employeeStatus =
           this.state.employees.find(
-            (v) => v.code === result.data[0].employeeStatus
-          ).name || "";
+            (v) => v.code === result.data[0]?.employeeStatus
+          )?.name || "";
         let developLanguage = [
           this.fromCodeToNameLanguage(result.data[0].developLanguage1),
           this.fromCodeToNameLanguage(result.data[0].developLanguage2),
@@ -2491,7 +2491,7 @@ class manageSituation extends React.Component {
                       : false
                   }
                 >
-                  {this.state.salesPriorityStatuss.map((date) => (
+                  {this.state?.salesPriorityStatuss.map((date) => (
                     <option key={date.code} value={date.code}>
                       {date.name}
                     </option>
@@ -2837,209 +2837,222 @@ class manageSituation extends React.Component {
           </Row>
           <Row>
             <Col sm={12}>
-              <BootstrapTable
-                ref="table"
-                /* className={"bg-white text-dark"} */
-                data={this.state.salesSituationLists}
-                pagination
-                options={options}
-                selectRow={selectRow}
-                cellEdit={cellEdit}
-                trClassName="customClass"
-                headerStyle={{ background: "#5599FF" }}
-                striped
-                hover
-                condensed
+              <div
+              // style={{ overflowX: "scroll" }}
               >
-                <TableHeaderColumn
-                  hidden={true}
-                  width="0%"
-                  dataField="salesDateUpdate"
-                  autoValue
-                  dataSort={true}
-                  editable={false}
+                <BootstrapTable
+                  ref="table"
+                  data={this.state.salesSituationLists}
+                  pagination
+                  options={options}
+                  selectRow={selectRow}
+                  cellEdit={cellEdit}
+                  trClassName="customClass"
+                  headerStyle={{ background: "#5599FF" }}
+                  striped
+                  hover
+                  condensed
                 >
-                  salesDateUpdateHid
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  width="5%"
-                  dataField="rowNo"
-                  autoValue
-                  dataFormat={this.showGreyNo}
-                  editable={false}
-                >
-                  {<div onClick={this.selectAllLists}>番号</div>}
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  dataField="employeeNo"
-                  editable={false}
-                  hidden={true}
-                  isKey
-                >
-                  社員番号
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  width="11%"
-                  dataField="employeeName"
-                  dataFormat={this.showPriority}
-                  editable={false}
-                >
-                  氏名
-                </TableHeaderColumn>
-                <TableHeaderColumn dataField="interviewDate1" hidden={true}>
-                  面接1日付
-                </TableHeaderColumn>
-                <TableHeaderColumn dataField="stationCode1" hidden={true}>
-                  面接1場所
-                </TableHeaderColumn>
-                <TableHeaderColumn dataField="interviewCustomer1" hidden={true}>
-                  面接1客様
-                </TableHeaderColumn>
-                <TableHeaderColumn dataField="interviewDate2" hidden={true}>
-                  {" "}
-                  面接2日付
-                </TableHeaderColumn>
-                <TableHeaderColumn dataField="stationCode2" hidden={true}>
-                  面接2場所
-                </TableHeaderColumn>
-                <TableHeaderColumn dataField="interviewCustomer2" hidden={true}>
-                  面接2客様
-                </TableHeaderColumn>
-                <TableHeaderColumn dataField="hopeLowestPrice" hidden={true}>
-                  希望単価min
-                </TableHeaderColumn>
-                <TableHeaderColumn dataField="hopeHighestPrice" hidden={true}>
-                  希望単価max
-                </TableHeaderColumn>
-                <TableHeaderColumn dataField="remark1" hidden={true}>
-                  備考1
-                </TableHeaderColumn>
-                <TableHeaderColumn dataField="remark2" hidden={true}>
-                  備考2
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  dataField="salesPriorityStatus"
-                  hidden={true}
-                >
-                  優先度
-                </TableHeaderColumn>
-                <TableHeaderColumn dataField="admissionStartDate" hidden={true}>
-                  開始時間
-                </TableHeaderColumn>
-                <TableHeaderColumn dataField="resumeInfo1" hidden={true}>
-                  履歴書1
-                </TableHeaderColumn>
-                <TableHeaderColumn dataField="resumeInfo2" hidden={true}>
-                  履歴書2
-                </TableHeaderColumn>
-                <TableHeaderColumn dataField="resumeName1" hidden={true}>
-                  履歴書名前1
-                </TableHeaderColumn>
-                <TableHeaderColumn dataField="resumeName2" hidden={true}>
-                  履歴書名前2
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  width="5%"
-                  dataField="siteRoleCode"
-                  dataFormat={this.showGreySiteRoleCode}
-                  editable={false}
-                >
-                  役割
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  width="5%"
-                  dataField="yearsOfExperience"
-                  dataFormat={this.showGreyYearsOfExperience}
-                  editable={false}
-                >
-                  年数
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  width="19%"
-                  dataField="developLanguage"
-                  dataFormat={this.showGreyDevelopLanguage}
-                  editable={false}
-                >
-                  開発言語
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  width="8%"
-                  dataField="nearestStation"
-                  dataFormat={this.showGreyNearestStation}
-                  editable={false}
-                >
-                  寄り駅
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  width="6%"
-                  dataField="unitPrice"
-                  dataFormat={this.showGreyUnitPrice}
-                  editable={false}
-                >
-                  単価
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  width="9%"
-                  dataField="salesProgressCode"
-                  dataFormat={this.formatType.bind(this)}
-                  customEditor={{ getElement: tableSelect2 }}
-                >
-                  進捗
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  width="7%"
-                  dataField="customerContractStatus"
-                  dataFormat={this.formatcustomerContract}
-                  customEditor={{ getElement: tableSelect4 }}
-                  hidden
-                  editable={
-                    this.state.salesProgressCode === "" ||
-                    this.state.salesProgressCode === "0" ||
-                    this.state.salesProgressCode === "1"
-                      ? false
-                      : true
-                  }
-                >
-                  契約区分
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  width="10%"
-                  dataField="customer"
-                  dataFormat={this.formatCustome}
-                  customEditor={{ getElement: tableSelect1 }}
-                  editable={
-                    this.state.salesProgressCode === "1" ||
-                    this.state.salesProgressCode === "2"
-                      ? true
-                      : false
-                  }
-                >
-                  確定客様
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  width="8%"
-                  dataField="price"
-                  editable={
-                    this.state.salesProgressCode === "0" ||
-                    this.state.salesProgressCode === "1"
-                      ? true
-                      : false
-                  }
-                  editColumnClassName="dutyRegistration-DataTableEditingCell"
-                  dataFormat={this.showGreyPrice}
-                  editable={this.state.priceEditFlag}
-                >
-                  確定単価
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  width="8%"
-                  dataField="salesStaff"
-                  dataFormat={this.formatStaff}
-                  customEditor={{ getElement: tableSelect3 }}
-                >
-                  営業担当
-                </TableHeaderColumn>
-              </BootstrapTable>
+                  <TableHeaderColumn
+                    hidden={true}
+                    width="0%"
+                    dataField="salesDateUpdate"
+                    autoValue
+                    dataSort={true}
+                    editable={false}
+                  >
+                    salesDateUpdateHid
+                  </TableHeaderColumn>
+                  <TableHeaderColumn
+                    width="5%"
+                    dataField="rowNo"
+                    autoValue
+                    dataFormat={this.showGreyNo}
+                    editable={false}
+                  >
+                    {<div onClick={this.selectAllLists}>番号</div>}
+                  </TableHeaderColumn>
+                  <TableHeaderColumn
+                    dataField="employeeNo"
+                    editable={false}
+                    hidden={true}
+                    isKey
+                  >
+                    社員番号
+                  </TableHeaderColumn>
+                  <TableHeaderColumn
+                    width="15%"
+                    dataField="employeeName"
+                    dataFormat={this.showPriority}
+                    editable={false}
+                    // overflowX
+                  >
+                    氏名
+                  </TableHeaderColumn>
+                  <TableHeaderColumn dataField="interviewDate1" hidden={true}>
+                    面接1日付
+                  </TableHeaderColumn>
+                  <TableHeaderColumn dataField="stationCode1" hidden={true}>
+                    面接1場所
+                  </TableHeaderColumn>
+                  <TableHeaderColumn
+                    dataField="interviewCustomer1"
+                    hidden={true}
+                  >
+                    面接1客様
+                  </TableHeaderColumn>
+                  <TableHeaderColumn dataField="interviewDate2" hidden={true}>
+                    {" "}
+                    面接2日付
+                  </TableHeaderColumn>
+                  <TableHeaderColumn dataField="stationCode2" hidden={true}>
+                    面接2場所
+                  </TableHeaderColumn>
+                  <TableHeaderColumn
+                    dataField="interviewCustomer2"
+                    hidden={true}
+                  >
+                    面接2客様
+                  </TableHeaderColumn>
+                  <TableHeaderColumn dataField="hopeLowestPrice" hidden={true}>
+                    希望単価min
+                  </TableHeaderColumn>
+                  <TableHeaderColumn dataField="hopeHighestPrice" hidden={true}>
+                    希望単価max
+                  </TableHeaderColumn>
+                  <TableHeaderColumn dataField="remark1" hidden={true}>
+                    備考1
+                  </TableHeaderColumn>
+                  <TableHeaderColumn dataField="remark2" hidden={true}>
+                    備考2
+                  </TableHeaderColumn>
+                  <TableHeaderColumn
+                    dataField="salesPriorityStatus"
+                    hidden={true}
+                  >
+                    優先度
+                  </TableHeaderColumn>
+                  <TableHeaderColumn
+                    dataField="admissionStartDate"
+                    hidden={true}
+                  >
+                    開始時間
+                  </TableHeaderColumn>
+                  <TableHeaderColumn dataField="resumeInfo1" hidden={true}>
+                    履歴書1
+                  </TableHeaderColumn>
+                  <TableHeaderColumn dataField="resumeInfo2" hidden={true}>
+                    履歴書2
+                  </TableHeaderColumn>
+                  <TableHeaderColumn dataField="resumeName1" hidden={true}>
+                    履歴書名前1
+                  </TableHeaderColumn>
+                  <TableHeaderColumn dataField="resumeName2" hidden={true}>
+                    履歴書名前2
+                  </TableHeaderColumn>
+                  <TableHeaderColumn
+                    width="5%"
+                    dataField="siteRoleCode"
+                    dataFormat={this.showGreySiteRoleCode}
+                    editable={false}
+                  >
+                    役割
+                  </TableHeaderColumn>
+                  <TableHeaderColumn
+                    width="5%"
+                    dataField="yearsOfExperience"
+                    dataFormat={this.showGreyYearsOfExperience}
+                    editable={false}
+                  >
+                    年数
+                  </TableHeaderColumn>
+                  <TableHeaderColumn
+                    width="19%"
+                    dataField="developLanguage"
+                    dataFormat={this.showGreyDevelopLanguage}
+                    editable={false}
+                  >
+                    開発言語
+                  </TableHeaderColumn>
+                  <TableHeaderColumn
+                    width="8%"
+                    dataField="nearestStation"
+                    dataFormat={this.showGreyNearestStation}
+                    editable={false}
+                  >
+                    寄り駅
+                  </TableHeaderColumn>
+                  <TableHeaderColumn
+                    width="6%"
+                    dataField="unitPrice"
+                    dataFormat={this.showGreyUnitPrice}
+                    editable={false}
+                  >
+                    単価
+                  </TableHeaderColumn>
+                  <TableHeaderColumn
+                    width="9%"
+                    dataField="salesProgressCode"
+                    dataFormat={this.formatType.bind(this)}
+                    customEditor={{ getElement: tableSelect2 }}
+                  >
+                    進捗
+                  </TableHeaderColumn>
+                  <TableHeaderColumn
+                    width="7%"
+                    dataField="customerContractStatus"
+                    dataFormat={this.formatcustomerContract}
+                    customEditor={{ getElement: tableSelect4 }}
+                    hidden
+                    editable={
+                      this.state.salesProgressCode === "" ||
+                      this.state.salesProgressCode === "0" ||
+                      this.state.salesProgressCode === "1"
+                        ? false
+                        : true
+                    }
+                  >
+                    契約区分
+                  </TableHeaderColumn>
+                  <TableHeaderColumn
+                    width="10%"
+                    dataField="customer"
+                    dataFormat={this.formatCustome}
+                    customEditor={{ getElement: tableSelect1 }}
+                    editable={
+                      this.state.salesProgressCode === "1" ||
+                      this.state.salesProgressCode === "2"
+                        ? true
+                        : false
+                    }
+                  >
+                    確定客様
+                  </TableHeaderColumn>
+                  <TableHeaderColumn
+                    width="8%"
+                    dataField="price"
+                    editable={
+                      this.state.salesProgressCode === "0" ||
+                      this.state.salesProgressCode === "1"
+                        ? true
+                        : false
+                    }
+                    editColumnClassName="dutyRegistration-DataTableEditingCell"
+                    dataFormat={this.showGreyPrice}
+                    editable={this.state.priceEditFlag}
+                  >
+                    確定単価
+                  </TableHeaderColumn>
+                  <TableHeaderColumn
+                    width="8%"
+                    dataField="salesStaff"
+                    dataFormat={this.formatStaff}
+                    customEditor={{ getElement: tableSelect3 }}
+                  >
+                    営業担当
+                  </TableHeaderColumn>
+                </BootstrapTable>
+              </div>
             </Col>
           </Row>
         </Form>

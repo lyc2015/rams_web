@@ -333,7 +333,7 @@ class bpInfo extends React.Component {
                     }
                     options={this.state.customer}
                     disabled={this.props.actionType === "detail" ? true : false}
-                    getOptionLabel={(option) => option.name}
+                    getOptionLabel={(option) => option.name || ""}
                     renderInput={(params) => (
                       <div ref={params.InputProps.ref}>
                         <input
@@ -426,7 +426,7 @@ class bpInfo extends React.Component {
                     onChange={this.valueChange}
                     size="sm"
                     name="bpUnitPrice"
-                    maxlength="3"
+                    maxLength="3"
                     disabled={this.props.actionType === "detail" ? true : false}
                   />
                   <InputGroup.Prepend>
@@ -498,7 +498,7 @@ class bpInfo extends React.Component {
               variant="info"
               onClick={this.insertOrUpdateBpInfo}
               type="button"
-              on
+              on="true"
             >
               <FontAwesomeIcon icon={faSave} />{" "}
               {this.props.actionType === "update" ? "更新" : "登録"}

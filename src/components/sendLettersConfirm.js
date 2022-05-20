@@ -33,7 +33,7 @@ import $ from "jquery";
 import MyToast from "./myToast";
 import ErrorsMessageToast from "./errorsMessageToast";
 import "./autocompleteInput.css";
-import { message as myMessage, Select, notification } from "antd";
+import { message as myMessage, Select } from "antd";
 axios.defaults.withCredentials = true;
 /**
  * 営業送信お客確認画面
@@ -284,10 +284,7 @@ class sendLettersConfirm extends React.Component {
         });
       })
       .catch(function (error) {
-        notification.error({
-          message: "服务器异常",
-          description: error,
-        });
+        alert(error);
       });
   };
   /* 要員追加機能の新規 20201216 張棟 END */
@@ -330,10 +327,7 @@ class sendLettersConfirm extends React.Component {
         });
       })
       .catch(function (error) {
-        notification.error({
-          message: "服务器异常",
-          description: error,
-        });
+        //alert(error);
       });
   };
 
@@ -723,10 +717,7 @@ Email：` +
         }
       }
     } catch (error) {
-      notification.error({
-        message: "服务器异常",
-        description: error,
-      });
+      alert(error);
     }
   };
 
@@ -739,10 +730,7 @@ Email：` +
         });
       })
       .catch(function (error) {
-        notification.error({
-          message: "服务器异常",
-          description: error,
-        });
+        //myMessage.error(error);
       });
   };
 
@@ -755,10 +743,7 @@ Email：` +
         });
       })
       .catch(function (error) {
-        notification.error({
-          message: "服务器异常",
-          description: error,
-        });
+        //myMessage.error(error);
       });
   };
 
@@ -837,10 +822,7 @@ Email：` +
         });
       })
       .catch(function (error) {
-        notification.error({
-          message: "服务器异常",
-          description: error,
-        });
+        alert(error);
       });
   };
 
@@ -1164,10 +1146,7 @@ Email：` +
         }
       })
       .catch(function (error) {
-        notification.error({
-          message: "服务器异常",
-          description: error,
-        });
+        alert(error);
       });
   };
 
@@ -1220,10 +1199,7 @@ Email：` +
         this.getHopeHighestPrice(result);
       })
       .catch(function (error) {
-        notification.error({
-          message: "服务器异常",
-          description: error,
-        });
+        alert(error);
       });
     this.searchPersonnalDetail(this.state.selectedEmpNos[0]);
   };

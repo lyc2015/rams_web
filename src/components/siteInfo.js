@@ -1436,6 +1436,10 @@ class siteInfo extends Component {
   };
 
   render() {
+    console.log(
+      { state: this.state, propsState: this.props.location.state },
+      "siteInfo-render"
+    );
     this.options = {
       page: 1, // which page you want to show as default
       sizePerPage: 10, // which size per page you want to locate as
@@ -1577,7 +1581,7 @@ class siteInfo extends Component {
                       id="employeeName"
                       name="employeeName"
                       options={this.state.employeeInfo}
-                      getOptionLabel={(option) => option.text}
+                      getOptionLabel={(option) => option.text || ""}
                       value={
                         this.state.employeeInfo.find(
                           (v) => v.code === this.state.employeeName
@@ -1793,7 +1797,7 @@ class siteInfo extends Component {
                         this.getStation(event, values)
                       }
                       options={this.state.getstations}
-                      getOptionLabel={(option) => option.name}
+                      getOptionLabel={(option) => option.name || ""}
                       renderInput={(params) => (
                         <div ref={params.InputProps.ref}>
                           <input
@@ -1817,7 +1821,7 @@ class siteInfo extends Component {
                         id="typteOfContractStatus"
                         name="typteOfContractStatus"
                         options={this.state.typteOfContractStatus}
-                        getOptionLabel={(option) => option.name}
+                        getOptionLabel={(option) => option.name || ""}
                         value={
                           this.state.typteOfContractStatus.find(
                             (v) => v.code === this.state.typteOfContract
@@ -1850,7 +1854,7 @@ class siteInfo extends Component {
                         id="customerNo"
                         name="customerNo"
                         options={this.state.customerMaster}
-                        getOptionLabel={(option) => option.name}
+                        getOptionLabel={(option) => option.name || ""}
                         value={
                           this.state.customerMaster.find(
                             (v) => v.code === this.state.customerNo
@@ -1894,7 +1898,7 @@ class siteInfo extends Component {
                           this.getTopCustomer(event, values)
                         }
                         options={this.state.topCustomerMaster}
-                        getOptionLabel={(option) => option.name}
+                        getOptionLabel={(option) => option.name || ""}
                         renderInput={(params) => (
                           <div ref={params.InputProps.ref}>
                             <input
@@ -1952,7 +1956,7 @@ class siteInfo extends Component {
                         this.getDevelopLanguage(event, values)
                       }
                       options={this.state.developLanguageMaster}
-                      getOptionLabel={(option) => option.name}
+                      getOptionLabel={(option) => option.name || ""}
                       renderInput={(params) => (
                         <div ref={params.InputProps.ref}>
                           <input
@@ -1980,7 +1984,7 @@ class siteInfo extends Component {
                         this.getDevelopLanguage2(event, values)
                       }
                       options={this.state.developLanguageMaster}
-                      getOptionLabel={(option) => option.name}
+                      getOptionLabel={(option) => option.name || ""}
                       renderInput={(params) => (
                         <div ref={params.InputProps.ref}>
                           <input

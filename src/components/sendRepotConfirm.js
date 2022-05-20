@@ -28,6 +28,7 @@ import SalesEmpAddPopup from "./salesEmpAddPopup";
 import $, { now } from "jquery";
 import MyToast from "./myToast";
 import ErrorsMessageToast from "./errorsMessageToast";
+import { message as myMessage } from "antd";
 axios.defaults.withCredentials = true;
 
 /**
@@ -684,6 +685,13 @@ class sendRepotConfirm extends React.Component {
     });
   };
 
+  beforeSaveCell = (row, cellName, cellValue) => {
+    if (cellValue.length > 7 || Number.isNaN(cellValue)) {
+      myMessage.error("入力された単価は合理的ではありません！");
+      return false;
+    }
+  };
+
   onAfterSaveCell = (row, cellName, cellValue) => {
     axios
       .post(this.state.serverIP + "sendLettersConfirm/updateSalesSentence", {
@@ -1118,6 +1126,16 @@ class sendRepotConfirm extends React.Component {
       ? this.state.employees.find((v) => v.code === cell).name
       : "";
   };
+
+  formatUnitePrice = (value) => {
+    let num = (value / 10000).toFixed(1).replace(".0", "");
+    return value === "" ? "" : num;
+  };
+
+  formatPrice = (cell, row, enumObject, index) => {
+    return this.formatUnitePrice(cell);
+  };
+
   /* 要員追加機能の新規 20201216 張棟 END */
   // formatResume(cell, row, enumObject, index) {
   // return (<div>
@@ -1589,6 +1607,7 @@ class sendRepotConfirm extends React.Component {
       mode: "click",
       blurToSave: true,
       afterSaveCell: this.onAfterSaveCell,
+      beforeSaveCell: this.beforeSaveCell,
     };
 
     const selectRow = {
@@ -1942,6 +1961,7 @@ class sendRepotConfirm extends React.Component {
               <TableHeaderColumn
                 width="8%"
                 dataField="hopeHighestPrice"
+                dataFormat={this.formatPrice.bind(this)}
                 editColumnClassName="dutyRegistration-DataTableEditingCell"
               >
                 単価

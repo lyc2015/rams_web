@@ -3353,3 +3353,7 @@ body {
 .h70p {
   height: 70%;
 }
+
+.react-bs-table-container {
+  /* min-width: 1200px; */
+}
