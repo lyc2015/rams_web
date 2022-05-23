@@ -394,12 +394,14 @@ class sendLettersConfirm extends React.Component {
 
       // 生成mailText
       if (item.employeeNo) {
+        // 系统中要员
         let result = await axios.post(
           serverIP + "salesSituation/getPersonalSalesInfo",
           {
             employeeNo: String(item.employeeNo),
           }
         );
+        // 如果编辑过了就用编辑的
         if (!item.mailContent) {
           mailText +=
             `
@@ -549,12 +551,23 @@ class sendLettersConfirm extends React.Component {
 `;
         }
       } else {
-        mailText +=
-          `
+        // 新增的要员
+        if (!item.mailContent) {
+          mailText +=
+            `
 ` +
-          this.newEmployeeMailContent(item) +
-          `
+            this.newEmployeeMailContent(item) +
+            `
 `;
+        } else {
+          // 如果编辑过了就用编辑的
+          mailText +=
+            `
+` +
+            item.mailContent +
+            `
+`;
+        }
       }
     }
     return {
@@ -1413,6 +1426,7 @@ Email：` +
   /* 要員追加機能の新規 20201216 張棟 START */
 
   handleRowSelect = (row, isSelected, e) => {
+    let { employeeInfo } = this.state;
     if (row.employeeNo !== "" && row.employeeNo !== null) {
       this.searchPersonnalDetail(
         row.employeeNo,
@@ -1422,7 +1436,9 @@ Email：` +
       );
     } else {
       this.setState({
-        mailContent: this.newEmployeeMailContent(row),
+        mailContent:
+          employeeInfo[row.index - 1]?.mailContent ||
+          this.newEmployeeMailContent(row),
         // resumeName: this.state.employeeInfo[row.index - 1].resumeInfoName,
       });
     }
@@ -1943,12 +1959,12 @@ Email：` +
   };
 
   mailContentChange = (event) => {
-    let employeeInfo = this.state.employeeInfo;
+    let { employeeInfo } = this.state;
     employeeInfo[this.state.selectedColumnId - 1].mailContent =
       event.target.value;
     this.setState({
       [event.target.name]: event.target.value,
-      employeeInfo: employeeInfo,
+      employeeInfo,
     });
   };
 
