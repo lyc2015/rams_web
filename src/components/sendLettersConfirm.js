@@ -505,12 +505,12 @@ class sendLettersConfirm extends React.Component {
 【単　　価】：`) +
             ((item.hopeHighestPrice === null || item.hopeHighestPrice === ""
               ? ""
-              : item.hopeHighestPrice + `万円`) === ""
+              : this.formatUnitePrice(item.hopeHighestPrice)) === ""
               ? result.data[0].unitPrice === null ||
                 result.data[0].unitPrice === ""
                 ? ""
-                : result.data[0].unitPrice + `万円`
-              : item.hopeHighestPrice + `万円`) +
+                : this.formatUnitePrice(result.data[0].unitPrice)
+              : this.formatUnitePrice(item.hopeHighestPrice)) +
             (result.data[0].theMonthOfStartWork === undefined ||
             result.data[0].theMonthOfStartWork === "" ||
             result.data[0].theMonthOfStartWork === null
@@ -1362,7 +1362,7 @@ Email：` +
 【単　　価】：`
           : "") +
         (this.state.unitPrice !== "" && this.state.unitPrice !== null
-          ? `${this.formatUnitePrice(this.state.unitPrice)}万円`
+          ? `${this.formatUnitePrice(this.state.unitPrice)}`
           : "") +
         (this.state.theMonthOfStartWork !== "" &&
         this.state.theMonthOfStartWork !== null
@@ -1404,11 +1404,7 @@ Email：` +
       str += `【名　　前】：${item.employeeName}
 `;
     if (item?.hopeHighestPrice)
-      str += `【単　　価】：${
-        item?.hopeHighestPrice?.length > 3
-          ? (item.hopeHighestPrice / 10000).toFixed(0) + "万円"
-          : item.hopeHighestPrice
-      }
+      str += `【単　　価】：${this.formatUnitePrice(item?.hopeHighestPrice)}
 `;
     console.log(
       +item?.employeeStatus,
@@ -1475,7 +1471,7 @@ Email：` +
   };
 
   formatUnitePrice = (value) => {
-    let num = (value / 10000).toFixed(1).replace(".0", "");
+    let num = (value / 10000).toFixed(1).replace(".0", "") + "万円";
     return value === "" ? "" : num;
   };
 
