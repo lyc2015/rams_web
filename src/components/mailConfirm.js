@@ -93,14 +93,27 @@ class mailConfirm extends React.Component {
   }
 
   render() {
-    const { emailModel, selectedmail, selectedMailCC, resumeResults } =
-      this.props.data;
+    const { emailModel, selectedmail, resumeResults } = this.props.data;
     // const companyMailNames = [
     //   selectedMailCC?.length >= 1 ? selectedMailCC[0].companyMail : "",
     //   selectedMailCC?.length >= 2 ? selectedMailCC[1].companyMail : "",
     // ].filter(function (s) {
     //   return s;
     // });
+
+    let selectedMailCCText =
+      emailModel?.selectedMailCC?.length > 0
+        ? `送信先(CC)： ${emailModel?.selectedMailCC.join("、")}` +
+          `
+`
+        : "";
+
+    let title = emailModel?.mailTitle
+      ? `タイトル：` +
+        emailModel?.mailTitle +
+        `
+`
+      : "";
     return (
       <>
         <textarea
@@ -115,12 +128,12 @@ class mailConfirm extends React.Component {
             marginBottom: "10px",
           }}
           value={
-            // `送信先(TO):` +
-            // selectedmail +
-            //               (String(companyMailNames) === ""
-            //                 ? ""
-            //                 : `
-            // CC:` + companyMailNames.join(";")) +
+            title +
+            selectedMailCCText +
+            (title || selectedMailCCText
+              ? `
+`
+              : "") +
             emailModel?.mailConfirmContont
           }
         />

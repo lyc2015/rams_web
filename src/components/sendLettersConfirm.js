@@ -622,17 +622,27 @@ Email：` +
     } = await this.getMailTextAndList();
     let { loginUserInfo, mailTitle, selectedMailCC } = this.state;
 
+    let selectedMailCCs = [];
+    // 公用CC
+    if (selectedMailCC.length !== 0) {
+      for (let index = 0; index < selectedMailCC.length; index++) {
+        const item = selectedMailCC[index];
+        selectedMailCCs.push(item.companyMail);
+      }
+    }
+    // 客户CC
+    if (selectedCusInfo?.selectedTanTou?.length > 0) {
+      selectedMailCCs = selectedMailCCs.concat(
+        selectedCusInfo.selectedTanTou.map(
+          (item) => item.customerDepartmentMail
+        )
+      );
+    }
     let emailModel = {
       names: resumeNameList,
       mailTitle,
       paths: resumePathList,
-      selectedMailCC: selectedMailCC
-        .map((item) => item.companyMail)
-        .concat(
-          selectedCusInfo?.selectedTanTou.map(
-            (item) => item.customerDepartmentMail
-          )
-        ),
+      selectedMailCC: selectedMailCCs,
       mailFrom: loginUserInfo[0].companyMail,
       mailConfirmContont: this.getMailConfirmContont({
         selectedCusInfo: selectedCusInfo,
