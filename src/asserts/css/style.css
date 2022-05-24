@@ -3,6 +3,10 @@
   padding: 0px;
 }
 
+.react-bs-container-body tbody td {
+  vertical-align: middle;
+}
+
 .inputWithoutBorder {
   border-left-width: 0px;
   border-top-width: 0px;
@@ -3352,6 +3356,13 @@ body {
 
 .h70p {
   height: 70%;
+}
+.mr5 {
+  margin-right: 5px;
+}
+
+.w70 {
+  width: 70px !important;
 }
 
 .react-bs-table-container {

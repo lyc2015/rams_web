@@ -32,7 +32,6 @@ import SalesEmpAddPopup from "./salesEmpAddPopup";
 import $ from "jquery";
 import MyToast from "./myToast";
 import ErrorsMessageToast from "./errorsMessageToast";
-import "./autocompleteInput.css";
 import { message as myMessage, Select } from "antd";
 axios.defaults.withCredentials = true;
 /**
@@ -689,6 +688,12 @@ Email：` +
         return {
           status: false,
           msg: `要員${item.employeeName}の履歴書を選択してください！`,
+        };
+      }
+      if (item.hopeHighestPrice === undefined || item.hopeHighestPrice === "") {
+        return {
+          status: false,
+          msg: `要員${item.employeeName}の単価を入力してください！`,
         };
       }
     }
@@ -1480,9 +1485,17 @@ Email：` +
   };
 
   formatEmpStatus = (cell, row, enumObject, index) => {
+    let { employeeStatusS } = this.state;
     if (row.employeeNo) {
       let name = this.state.employees.find((v) => v.code === cell).name;
       return name === "1社先の社員" ? "協力" : name;
+    }
+    let newEmployeeCanSelectCode = ["0", "1", "2"],
+      newEmployeeStatus = [];
+    if (employeeStatusS.length > 1) {
+      newEmployeeStatus = employeeStatusS.filter((item, index) => {
+        return newEmployeeCanSelectCode.includes(item.code);
+      });
     }
     return (
       <Select
@@ -1491,7 +1504,7 @@ Email：` +
         showArrow
         style={{ width: "100%" }}
         fieldNames={{ label: "name", value: "code" }}
-        options={this.state.employeeStatusS}
+        options={newEmployeeStatus}
       />
     );
     // employeeStatusS

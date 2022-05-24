@@ -743,29 +743,33 @@ class manageSituation extends React.Component {
 
   // 優先度表示
   showPriority(cell, row, enumObject, index) {
+    let nameAndCompany =
+      row.employeeName +
+      (row.customerAbbreviation ? `(${row.customerAbbreviation})` : "");
+
     if (row.salesProgressCode === "0" || row.salesProgressCode === "1") {
       return (
         <div>
-          <font color="grey">{row.employeeName}</font>
+          <font color="grey">{nameAndCompany}</font>
         </div>
       );
     } else {
       if (row.salesPriorityStatus === "1") {
         return (
           <div>
-            {row.employeeName}
+            {nameAndCompany}
             <font color="red">★</font>
           </div>
         );
       } else if (row.salesPriorityStatus === "2") {
         return (
           <div>
-            {row.employeeName}
+            {nameAndCompany}
             <font color="black">★</font>
           </div>
         );
       } else {
-        return <div>{row.employeeName}</div>;
+        return <div>{nameAndCompany}</div>;
       }
     }
   }

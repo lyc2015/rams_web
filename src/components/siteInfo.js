@@ -1435,6 +1435,16 @@ class siteInfo extends Component {
     return unitPrice;
   };
 
+  workDateFormat = (cell, row) => {
+    let str = cell;
+    if (row.admissionStartDate) {
+      str = utils.dateFormate(row.admissionStartDate) + "~";
+      if (row.admissionEndDate) str += utils.dateFormate(row.admissionEndDate);
+    }
+
+    return str;
+  };
+
   render() {
     console.log(
       { state: this.state, propsState: this.props.location.state },
@@ -2420,8 +2430,9 @@ class siteInfo extends Component {
               >
                 <TableHeaderColumn
                   dataField="workDate"
-                  width="150"
+                  width="210"
                   tdStyle={{ padding: ".45em" }}
+                  dataFormat={this.workDateFormat}
                   isKey
                 >
                   期間
@@ -2447,13 +2458,13 @@ class siteInfo extends Component {
                 >
                   お客様
                 </TableHeaderColumn>
-                <TableHeaderColumn
+                {/* <TableHeaderColumn
                   dataField="siteManager"
                   width="60"
                   tdStyle={{ padding: ".45em" }}
                 >
                   責任者
-                </TableHeaderColumn>
+                </TableHeaderColumn> */}
                 <TableHeaderColumn
                   dataField="unitPrice"
                   width="60"

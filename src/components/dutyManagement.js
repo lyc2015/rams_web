@@ -205,10 +205,10 @@ class dutyManagement extends React.Component {
         if (averageWorkingTime === 0) averageWorkingTime = "";
         this.setState({
           employeeList: response.data,
-          totalPersons: totalPersons,
-          totalWorkingTime: totalWorkingTime,
-          minWorkingTime: minWorkingTime,
-          averageWorkingTime: averageWorkingTime,
+          totalPersons,
+          totalWorkingTime,
+          minWorkingTime,
+          averageWorkingTime,
         });
         if (rowNo !== undefined) {
           if (rowNo > response.data.length) {
@@ -703,19 +703,13 @@ class dutyManagement extends React.Component {
                     trClassName={this.rowClassNameFormat}
                     condensed
                   >
-                    <TableHeaderColumn
-                      isKey={true}
-                      dataField="rowNo"
-                      hidden
-                      tdStyle={{ padding: ".45em" }}
-                    >
+                    <TableHeaderColumn isKey={true} dataField="rowNo" hidden>
                       番号
                     </TableHeaderColumn>
                     <TableHeaderColumn
                       dataField="costClassificationCode"
                       width="10%"
                       dataFormat={this.costClassificationCodeFormat.bind(this)}
-                      tdStyle={{ padding: ".45em" }}
                     >
                       種別
                     </TableHeaderColumn>
@@ -723,7 +717,6 @@ class dutyManagement extends React.Component {
                       dataField="happendDate"
                       width="30%"
                       dataFormat={this.happendDateFormat.bind(this)}
-                      tdStyle={{ padding: ".45em" }}
                     >
                       日付・回数
                     </TableHeaderColumn>
@@ -731,7 +724,6 @@ class dutyManagement extends React.Component {
                       dataField="cost"
                       width="15%"
                       dataFormat={this.cost.bind(this)}
-                      tdStyle={{ padding: ".45em" }}
                     >
                       費用
                     </TableHeaderColumn>
@@ -739,7 +731,6 @@ class dutyManagement extends React.Component {
                       dataField="costFile"
                       width="10%"
                       dataFormat={this.costFileFormat.bind(this)}
-                      tdStyle={{ padding: ".45em" }}
                     >
                       添付
                     </TableHeaderColumn>
@@ -747,7 +738,6 @@ class dutyManagement extends React.Component {
                       dataField="costTotal"
                       width="15%"
                       dataFormat={this.costTotalFormat.bind(this)}
-                      tdStyle={{ padding: ".45em" }}
                     >
                       合計
                     </TableHeaderColumn>
@@ -755,7 +745,6 @@ class dutyManagement extends React.Component {
                       dataField="remark"
                       width="20%"
                       dataFormat={this.remarkFormat.bind(this)}
-                      tdStyle={{ padding: ".45em" }}
                     >
                       備考
                     </TableHeaderColumn>
@@ -896,7 +885,7 @@ class dutyManagement extends React.Component {
             </Form.Group>
             <Form.Group>
               <Row>
-                <Col sm={5}>
+                <Col sm={6}>
                   <InputGroup size="sm" className="mb-2">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
@@ -981,121 +970,152 @@ class dutyManagement extends React.Component {
         </Form>
         <div>
           <Row>
-            <Col sm={4}>
-              {/*<font style={{ whiteSpace: 'nowrap' }}>稼動人数：{this.state.totalPersons}</font>*/}
-              <Button
-                size="sm"
-                onClick={this.shuseiTo.bind(this, "employeeInfo")}
-                disabled={this.state.rowSelectEmployeeNo === "" ? true : false}
-                variant="info"
-                id="employeeInfo"
-              >
-                個人情報
-              </Button>{" "}
-              <Button
-                size="sm"
-                onClick={this.shuseiTo.bind(this, "siteInfo")}
-                disabled={this.state.rowSelectEmployeeNo === "" ? true : false}
-                name="clickButton"
-                variant="info"
-                id="siteInfo"
-              >
-                現場情報
-              </Button>{" "}
-              <Button
-                size="sm"
-                onClick={this.shuseiTo.bind(this, "sendInvoice")}
-                name="clickButton"
-                variant="info"
-                id="siteInfo"
-              >
-                請求書一覧
-              </Button>{" "}
-              <Button
-                size="sm"
-                onClick={this.shuseiTo.bind(this, "workRepot")}
-                disabled={this.state.rowSelectEmployeeNo === "" ? true : false}
-                hidden={this.state.authorityCode === "4" ? false : true}
-                name="clickButton"
-                variant="info"
-                id="workRepot"
-              >
-                勤務管理
-              </Button>{" "}
-            </Col>
             <Col>
-              <InputGroup size="sm">
-                <InputGroup.Prepend>
-                  <InputGroup.Text id="sixKanji" className="input-group-indiv">
-                    最小稼働時間
-                  </InputGroup.Text>
-                </InputGroup.Prepend>
-                <FormControl value={this.state.minWorkingTime} disabled />
-              </InputGroup>
-            </Col>
-            <Col>
-              <InputGroup size="sm">
-                <InputGroup.Prepend>
-                  <InputGroup.Text id="sixKanji" className="input-group-indiv">
-                    最大稼働時間
-                  </InputGroup.Text>
-                </InputGroup.Prepend>
-                <FormControl value={this.state.totalWorkingTime} disabled />
-              </InputGroup>
-            </Col>
-            <Col>
-              <InputGroup size="sm">
-                <InputGroup.Prepend>
-                  <InputGroup.Text id="sixKanji" className="input-group-indiv">
-                    平均稼働時間
-                  </InputGroup.Text>
-                </InputGroup.Prepend>
-                <FormControl value={this.state.averageWorkingTime} disabled />
-              </InputGroup>
-            </Col>
-
-            <Col sm={3}>
-              <div style={{ float: "right" }}>
-                <Button
-                  variant="info"
-                  size="sm"
-                  onClick={this.downloadTest}
-                  id="workRepot"
-                >
-                  <FontAwesomeIcon icon={faDownload} />
-                  報告書
-                </Button>{" "}
-                <Button
-                  variant="info"
-                  size="sm"
-                  id="upload"
-                  onClick={this.getFile}
-                >
-                  <FontAwesomeIcon icon={faUpload} />
-                  upload
-                </Button>{" "}
-                <Button
-                  variant="info"
-                  size="sm"
-                  id="update"
-                  onClick={this.listApproval.bind(this, 2)}
-                >
-                  <FontAwesomeIcon icon={faEdit} />
-                  残控更新
-                </Button>{" "}
-                <Button
-                  variant="info"
-                  size="sm"
-                  id="syounin"
-                  onClick={
-                    this.state.rowApprovalStatus !== "1"
-                      ? this.listApproval.bind(this, 1)
-                      : this.listApproval.bind(this, 0)
-                  }
-                >
-                  <FontAwesomeIcon icon={faEdit} />
-                  {this.state.rowApprovalStatus !== "1" ? "承認" : "取消"}
-                </Button>{" "}
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  marginBottom: "5px",
+                  flexWrap: "wrap",
+                }}
+              >
+                <div>
+                  {/*<font style={{ whiteSpace: 'nowrap' }}>稼動人数：{this.state.totalPersons}</font>*/}
+                  <Button
+                    size="sm"
+                    onClick={this.shuseiTo.bind(this, "employeeInfo")}
+                    disabled={
+                      this.state.rowSelectEmployeeNo === "" ? true : false
+                    }
+                    variant="info"
+                    id="employeeInfo"
+                  >
+                    個人情報
+                  </Button>{" "}
+                  <Button
+                    size="sm"
+                    onClick={this.shuseiTo.bind(this, "siteInfo")}
+                    disabled={
+                      this.state.rowSelectEmployeeNo === "" ? true : false
+                    }
+                    name="clickButton"
+                    variant="info"
+                    id="siteInfo"
+                  >
+                    現場情報
+                  </Button>{" "}
+                  <Button
+                    size="sm"
+                    onClick={this.shuseiTo.bind(this, "sendInvoice")}
+                    name="clickButton"
+                    variant="info"
+                    id="siteInfo"
+                  >
+                    請求書一覧
+                  </Button>{" "}
+                  <Button
+                    size="sm"
+                    onClick={this.shuseiTo.bind(this, "workRepot")}
+                    disabled={
+                      this.state.rowSelectEmployeeNo === "" ? true : false
+                    }
+                    hidden={this.state.authorityCode === "4" ? false : true}
+                    name="clickButton"
+                    variant="info"
+                    id="workRepot"
+                  >
+                    勤務管理
+                  </Button>{" "}
+                </div>
+                <div style={{ display: "flex", marginBottom: "5px" }}>
+                  <InputGroup className="mr5 " size="sm">
+                    <InputGroup.Prepend>
+                      <InputGroup.Text
+                        id="sixKanji"
+                        className="input-group-indiv"
+                      >
+                        最小稼働時間
+                      </InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <FormControl
+                      className="w70"
+                      value={this.state.minWorkingTime}
+                      disabled
+                    />
+                  </InputGroup>
+                  <InputGroup className="mr5" size="sm">
+                    <InputGroup.Prepend>
+                      <InputGroup.Text
+                        id="sixKanji"
+                        className="input-group-indiv"
+                      >
+                        最大稼働時間
+                      </InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <FormControl
+                      className="w70"
+                      value={this.state.totalWorkingTime}
+                      disabled
+                    />
+                  </InputGroup>
+                  <InputGroup size="sm">
+                    <InputGroup.Prepend>
+                      <InputGroup.Text
+                        id="sixKanji"
+                        className="input-group-indiv"
+                      >
+                        平均稼働時間
+                      </InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <FormControl
+                      className="w70"
+                      value={this.state.averageWorkingTime}
+                      disabled
+                    />
+                  </InputGroup>
+                </div>
+                <div>
+                  <Button
+                    variant="info"
+                    size="sm"
+                    onClick={this.downloadTest}
+                    id="workRepot"
+                  >
+                    <FontAwesomeIcon icon={faDownload} />
+                    報告書
+                  </Button>{" "}
+                  <Button
+                    variant="info"
+                    size="sm"
+                    id="upload"
+                    onClick={this.getFile}
+                  >
+                    <FontAwesomeIcon icon={faUpload} />
+                    upload
+                  </Button>{" "}
+                  <Button
+                    variant="info"
+                    size="sm"
+                    id="update"
+                    onClick={this.listApproval.bind(this, 2)}
+                  >
+                    <FontAwesomeIcon icon={faEdit} />
+                    残控更新
+                  </Button>{" "}
+                  <Button
+                    variant="info"
+                    size="sm"
+                    id="syounin"
+                    onClick={
+                      this.state.rowApprovalStatus !== "1"
+                        ? this.listApproval.bind(this, 1)
+                        : this.listApproval.bind(this, 0)
+                    }
+                  >
+                    <FontAwesomeIcon icon={faEdit} />
+                    {this.state.rowApprovalStatus !== "1" ? "承認" : "取消"}
+                  </Button>{" "}
+                </div>
               </div>
             </Col>
           </Row>
@@ -1112,10 +1132,10 @@ class dutyManagement extends React.Component {
               striped
               hover
               condensed
+              // tdStyle={{ padding: ".45em" }}
             >
               <TableHeaderColumn
                 width="55"
-                tdStyle={{ padding: ".45em" }}
                 dataFormat={this.greyShow.bind(this)}
                 dataField="rowNo"
                 editable={false}
@@ -1124,7 +1144,6 @@ class dutyManagement extends React.Component {
               </TableHeaderColumn>
               <TableHeaderColumn
                 width="90"
-                tdStyle={{ padding: ".45em" }}
                 dataFormat={this.greyShow.bind(this)}
                 dataField="employeeNo"
                 isKey
@@ -1134,7 +1153,6 @@ class dutyManagement extends React.Component {
               </TableHeaderColumn>
               <TableHeaderColumn
                 width="120"
-                tdStyle={{ padding: ".45em" }}
                 dataFormat={this.greyShow.bind(this)}
                 dataField="employeeName"
                 editable={false}
@@ -1143,7 +1161,6 @@ class dutyManagement extends React.Component {
               </TableHeaderColumn>
               <TableHeaderColumn
                 width="150"
-                tdStyle={{ padding: ".45em" }}
                 dataFormat={this.greyShow.bind(this)}
                 dataField="customerName"
                 editable={false}
@@ -1152,7 +1169,6 @@ class dutyManagement extends React.Component {
               </TableHeaderColumn>
               <TableHeaderColumn
                 width="90"
-                tdStyle={{ padding: ".45em" }}
                 dataFormat={this.greyShow.bind(this)}
                 dataField="stationName"
                 editable={false}
@@ -1161,7 +1177,6 @@ class dutyManagement extends React.Component {
               </TableHeaderColumn>
               <TableHeaderColumn
                 width="95"
-                tdStyle={{ padding: ".45em" }}
                 dataFormat={this.greyShow.bind(this)}
                 dataField="payOffRange"
                 editable={false}
@@ -1170,7 +1185,6 @@ class dutyManagement extends React.Component {
               </TableHeaderColumn>
               <TableHeaderColumn
                 width="90"
-                tdStyle={{ padding: ".45em" }}
                 dataField="workTime"
                 editable={false}
               >
@@ -1178,7 +1192,6 @@ class dutyManagement extends React.Component {
               </TableHeaderColumn>
               <TableHeaderColumn
                 width="125"
-                tdStyle={{ padding: ".45em" }}
                 hidden={this.state.authorityCode === "4" ? false : true}
                 dataField="deductionsAndOvertimePay"
                 editable={
@@ -1194,7 +1207,6 @@ class dutyManagement extends React.Component {
               </TableHeaderColumn>
               <TableHeaderColumn
                 width="110"
-                tdStyle={{ padding: ".45em" }}
                 dataField="deductionsAndOvertimePayOfUnitPrice"
                 editable={
                   !(
@@ -1209,7 +1221,6 @@ class dutyManagement extends React.Component {
               </TableHeaderColumn>
               <TableHeaderColumn
                 width="110"
-                tdStyle={{ padding: ".45em" }}
                 dataFormat={this.checkSection.bind(this)}
                 hidden
                 dataField="checkSection"
@@ -1219,7 +1230,6 @@ class dutyManagement extends React.Component {
               </TableHeaderColumn>
               <TableHeaderColumn
                 width="120"
-                tdStyle={{ padding: ".45em" }}
                 dataField="cost"
                 dataFormat={this.costFormat.bind(this)}
                 editable={false}
@@ -1228,7 +1238,6 @@ class dutyManagement extends React.Component {
               </TableHeaderColumn>
               <TableHeaderColumn
                 width="160"
-                tdStyle={{ padding: ".45em" }}
                 dataField="updateTime"
                 dataFormat={this.updateTimeFormat.bind(this)}
                 editable={false}
@@ -1237,7 +1246,6 @@ class dutyManagement extends React.Component {
               </TableHeaderColumn>
               <TableHeaderColumn
                 width="110"
-                tdStyle={{ padding: ".45em" }}
                 dataFormat={this.approvalStatus.bind(this)}
                 dataField="approvalStatus"
                 editable={false}

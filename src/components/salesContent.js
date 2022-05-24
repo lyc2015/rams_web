@@ -715,7 +715,7 @@ class salesContent extends React.Component {
                     variant="standard"
                     label="言語追加"
                     placeholder="言語追加"
-                    style={{ width: "400px", float: "right" }}
+                    style={{ float: "right" }}
                   />
                 )}
               />

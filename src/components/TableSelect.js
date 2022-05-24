@@ -87,7 +87,7 @@ class TableSelect extends React.Component {
       this.setState({
         allOption: this.props.dropdowns.state.developLanguageDrop,
         selectedValue: this.props.dropdowns.state.developLanguageCode1,
-        everyWidth: 140,
+        everyWidth: "100%",
       });
     } else if (this.props.flag === 10) {
       this.setState({
@@ -252,35 +252,33 @@ class TableSelect extends React.Component {
 
   render() {
     return (
-      <span>
-        <Autocomplete
-          //className="MuiAutocomplete-popupIndicator"
-          ref="inputRef"
-          blurOnSelect={true}
-          options={this.state.allOption}
-          value={
-            this.state.allOption.find(
-              (v) => v.code === this.state.selectedValue
-            ) || ""
-          }
-          onChange={this.onchange}
-          getOptionLabel={(option) => (option.name ? option.name : "")}
-          renderInput={(params) => (
-            <div ref={params.InputProps.ref}>
-              <input
-                /* placeholder="選択してください" */ type="text"
-                {...params.inputProps}
-                style={{
-                  width: this.state.everyWidth,
-                  height: 20,
-                  borderColor: "",
-                  borderWidth: 0,
-                }}
-              />
-            </div>
-          )}
-        />
-      </span>
+      <Autocomplete
+        //className="MuiAutocomplete-popupIndicator"
+        ref="inputRef"
+        blurOnSelect={true}
+        options={this.state.allOption}
+        value={
+          this.state.allOption.find(
+            (v) => v.code === this.state.selectedValue
+          ) || ""
+        }
+        onChange={this.onchange}
+        getOptionLabel={(option) => (option.name ? option.name : "")}
+        renderInput={(params) => (
+          <div ref={params.InputProps.ref}>
+            <input
+              /* placeholder="選択してください" */ type="text"
+              {...params.inputProps}
+              style={{
+                width: this.state.everyWidth,
+                height: 20,
+                borderColor: "",
+                borderWidth: 0,
+              }}
+            />
+          </div>
+        )}
+      />
     );
   }
 }

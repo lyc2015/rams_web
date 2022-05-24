@@ -1714,24 +1714,18 @@ class CustomerInfo extends Component {
                 hover
                 condensed
               >
-                <TableHeaderColumn
-                  isKey
-                  dataField="rowNo"
-                  tdStyle={{ padding: ".45em" }}
-                  width="6%"
-                >
+                <TableHeaderColumn isKey dataField="rowNo" width="6%">
                   番号
                 </TableHeaderColumn>
                 <TableHeaderColumn
                   dataField="responsiblePerson"
-                  tdStyle={{ padding: ".45em" }}
                   width="11%"
+                  editColumnClassName="dutyRegistration-DataTableEditingCell"
                 >
                   責任者
                 </TableHeaderColumn>
                 <TableHeaderColumn
                   dataField="customerDepartmentCode"
-                  tdStyle={{ padding: ".45em" }}
                   width="14%"
                   dataFormat={this.formatCustomerDepartment.bind(this)}
                   customEditor={{ getElement: tableSelect1 }}
@@ -1740,7 +1734,6 @@ class CustomerInfo extends Component {
                 </TableHeaderColumn>
                 <TableHeaderColumn
                   dataField="positionCode"
-                  tdStyle={{ padding: ".45em" }}
                   dataFormat={this.formatPosition.bind(this)}
                   customEditor={{ getElement: tableSelect2 }}
                   width="10%"
@@ -1749,14 +1742,13 @@ class CustomerInfo extends Component {
                 </TableHeaderColumn>
                 <TableHeaderColumn
                   dataField="customerDepartmentMail"
-                  tdStyle={{ padding: ".45em" }}
                   width="25%"
+                  editColumnClassName="dutyRegistration-DataTableEditingCell"
                 >
                   メール
                 </TableHeaderColumn>
                 <TableHeaderColumn
                   dataField="typeOfIndustryCode"
-                  tdStyle={{ padding: ".45em" }}
                   dataFormat={this.formatIndustry.bind(this)}
                   customEditor={{ getElement: tableSelect3 }}
                   width="10%"
@@ -1765,7 +1757,6 @@ class CustomerInfo extends Component {
                 </TableHeaderColumn>
                 <TableHeaderColumn
                   dataField="topCustomerCode"
-                  tdStyle={{ padding: ".45em" }}
                   width="11%"
                   hidden
                   dataFormat={this.formatTopCustomer.bind(this)}
@@ -1775,7 +1766,6 @@ class CustomerInfo extends Component {
                 </TableHeaderColumn>
                 <TableHeaderColumn
                   dataField="stationCode"
-                  tdStyle={{ padding: ".45em" }}
                   dataFormat={this.formatStation.bind(this)}
                   customEditor={{ getElement: tableSelect4 }}
                   width="12%"
@@ -1783,9 +1773,8 @@ class CustomerInfo extends Component {
                   拠点
                 </TableHeaderColumn>
                 <TableHeaderColumn
-                  thStyle={{ padding: ".10em" }}
+                  // thStyle={{ padding: ".10em" }}
                   dataField="developLanguageCode1"
-                  tdStyle={{ padding: ".45em" }}
                   width="11%"
                   dataFormat={this.formatLanguage.bind(this)}
                   customEditor={{ getElement: tableSelect5 }}
