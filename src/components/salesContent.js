@@ -534,6 +534,8 @@ class salesContent extends React.Component {
       customerNo,
       backPage,
     } = this.state;
+
+    console.log({ state: this.state }, "render");
     return (
       <div>
         <div style={{ display: this.state.myToastShow ? "block" : "none" }}>
@@ -606,7 +608,7 @@ class salesContent extends React.Component {
                   }
                   onChange={(event, values) => this.getStation(event, values)}
                   options={this.state.stations}
-                  getOptionLabel={(option) => option.name}
+                  getOptionLabel={(option) => option.name || ""}
                   renderInput={(params) => (
                     <div ref={params.InputProps.ref}>
                       <input
@@ -646,7 +648,7 @@ class salesContent extends React.Component {
                   style={{ display: "inherit", width: "150px", height: "30px" }}
                   onChange={this.valueChange}
                   name="englishConversationLevel"
-                  value={this.state.englishConversationLevel}
+                  value={this.state.englishConversationLevel || ""}
                 >
                   {this.state.englishConversationLevels.map((date) => (
                     <option key={date.code} value={date.code}>
@@ -774,8 +776,9 @@ class salesContent extends React.Component {
                   style={{ display: "inherit", width: "145px", height: "30px" }}
                   onChange={this.valueChange}
                   name="salesProgressCode"
-                  value={this.state.salesProgressCode}
+                  value={this.state.salesProgressCode + "" || "5"}
                 >
+                  {/* 如果salesProgressCode为空，则显示并行营业 */}
                   {this.state.salesProgresss.map((date) => (
                     <option key={date.code} value={date.code}>
                       {date.name}
@@ -894,18 +897,25 @@ class salesContent extends React.Component {
                     .formateDate(this.state.beginMonth, false)
                     .substring(4, 6)
                     .replace(/\b(0+)/gi, "") + "月") +
-              (this.state.salesProgressCode === "" ||
-              this.state.salesProgressCode === null
-                ? ""
-                : `
+              `
 【営業状況】：` +
-                  (this.state.salesProgressCode !== "" &&
-                  this.state.salesProgressCode !== null
-                    ? this.state.salesProgresss.find(
-                        (v) => v.code === this.state.salesProgressCode
-                      ).name
-                    : "") +
-                  this.state.interviewDate) +
+              (this.state.salesProgressCode + ""
+                ? this.state.salesProgresss.find(
+                    (v) => v.code === this.state.salesProgressCode
+                  ).name
+                : "並行営業") +
+              //               (this.state.salesProgressCode === "" ||
+              //               this.state.salesProgressCode === null
+              //                 ? ""
+              //                 : `
+              // 【営業状況】：` +
+              //                   (this.state.salesProgressCode !== "" &&
+              //                   this.state.salesProgressCode !== null
+              //                     ? this.state.salesProgresss.find(
+              //                         (v) => v.code === this.state.salesProgressCode
+              //                       ).name
+              //                     : "並行営業") +
+              //                   this.state.interviewDate)
               (this.state.remark === " "
                 ? ""
                 : `

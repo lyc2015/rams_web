@@ -1609,7 +1609,7 @@ body {
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
-  background-color: #e9ecef;
+  /* background-color: #e9ecef; */
   width: 7rem;
 }
 
@@ -1620,7 +1620,7 @@ body {
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
-  background-color: white;
+  /* background-color: white; */
   width: 7rem;
 }
 
@@ -2412,7 +2412,7 @@ body {
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
-    background-color: #e9ecef;
+    /* background-color: #e9ecef; */
     width: 6.5rem;
   }
   #siteAdmissionStart {
@@ -2422,7 +2422,7 @@ body {
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
-    background-color: white;
+    /* background-color: white; */
     width: 6.5rem;
   }
   .siteTime {
@@ -3367,4 +3367,17 @@ body {
 
 .react-bs-table-container {
   /* min-width: 1200px; */
+}
+
+.react-datepicker__day-names .react-datepicker__day-name:nth-of-type(6),
+.react-datepicker__day-names .react-datepicker__day-name:nth-of-type(7) {
+  color: red;
+  font-weight: bold;
+}
+
+.react-datepicker__navigation--previous {
+  border-right-color: black;
+}
+.react-datepicker__navigation--next {
+  border-left-color: black;
 }

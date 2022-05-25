@@ -3060,7 +3060,7 @@ class manageSituation extends React.Component {
             </Col>
           </Row>
         </Form>
-        <input type="text" id="snippet" value="" hidden></input>
+        <input type="text" id="snippet" defaultValue="" hidden></input>
         <div
           className="loadingImage"
           hidden={this.state.loading}
@@ -3068,8 +3068,8 @@ class manageSituation extends React.Component {
             position: "absolute",
             top: "60%",
             left: "60%",
-            "margin-left": "-300px",
-            "margin-top": "-150px",
+            marginLeft: "-300px",
+            marginTop: "-150px",
           }}
         ></div>
       </div>

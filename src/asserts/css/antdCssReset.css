@@ -2,3 +2,12 @@
   display: flex;
   align-items: center;
 }
+
+.ant-picker {
+  height: calc(1.5em + 0.5rem + 2px);
+}
+
+.ant-picker-date-panel .ant-picker-content th:nth-of-type(1),
+.ant-picker-date-panel .ant-picker-content th:nth-of-type(7) {
+  color: red;
+}

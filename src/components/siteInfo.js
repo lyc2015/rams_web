@@ -30,8 +30,11 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import MyToast from "./myToast";
 import ErrorsMessageToast from "./errorsMessageToast";
 import store from "./redux/store";
+import moment from "moment";
+import { DatePicker as AntdDatePicker } from "antd";
 axios.defaults.withCredentials = true;
 registerLocale("ja", ja);
+moment.locale("ja");
 
 /*
  * 現場情報
@@ -238,14 +241,43 @@ class siteInfo extends Component {
     admissionStartDate: new Date(),
     admissionEndDate: new Date(),
   };
+
+  setGray = (date) => {
+    return true;
+    // const month = date.getMonth(date);
+    // console.log(
+    //   {
+    //     date,
+    //     getDate: date.getDate(date),
+    //     getFullYear: date.getFullYear(date),
+    //     getMonth: date.getMonth(date),
+    //     getTime: date.getTime(date),
+    //   },
+    //   "day"
+    // );
+    // return date.getTime() > Date.now();
+    // const day = date.getDay(date);
+    // console.log(
+    //   {
+    //     date,
+    //     getDate: date.getDate(date),
+    //     getFullYear: date.getFullYear(date),
+    //     getMonth: date.getMonth(date),
+    //   },
+    //   "day"
+    // );
+    // return day !== 0 && day !== 6;
+  };
+
   // 入場年月
-  admissionStartDate = (date) => {
+  handleAdmissionStartDate = (date, dateString) => {
+    date = date?.toDate();
     this.setState({
       admissionStartDate: date,
       time: publicUtils.getFullYearMonth(date, new Date()),
     });
     if (date !== null) {
-      if (date.getDate() > 2) {
+      if (date?.getDate() > 2) {
         this.setState({
           dailyCalculationStatusFlag: false,
         });
@@ -1649,13 +1681,17 @@ class siteInfo extends Component {
                       </InputGroup.Text>
                     </InputGroup.Prepend>
                     <InputGroup.Prepend>
-                      <DatePicker
-                        selected={this.state.admissionStartDate}
-                        onChange={this.admissionStartDate.bind(this)}
-                        dateFormat="yyyy/MM/dd"
+                      <AntdDatePicker
+                        allowClear={false}
+                        suffixIcon={false}
+                        value={
+                          this.state.admissionStartDate
+                            ? moment(this.state.admissionStartDate)
+                            : ""
+                        }
+                        onChange={this.handleAdmissionStartDate}
+                        format="YYYY/MM/DD"
                         name="admissionStartDate"
-                        className="form-control form-control-sm"
-                        autoComplete="off"
                         locale="ja"
                         id={
                           pageDisabledFlag
@@ -1664,6 +1700,23 @@ class siteInfo extends Component {
                         }
                         disabled={pageDisabledFlag}
                       />
+                      {/* <DatePicker
+                        // filterDate={this.setGray}
+                        selected={this.state.admissionStartDate}
+                        onChange={this.handleAdmissionStartDate.bind(this)}
+                        dateFormat="yyyy/MM/dd"
+                        name="admissionStartDate"
+                        className="form-control form-control-sm"
+                        calendarClassName="calendarClass"
+                        autoComplete="off"
+                        locale="ja"
+                        id={
+                          pageDisabledFlag
+                            ? "siteAdmissionStartReadonlyDefault"
+                            : "siteAdmissionStart"
+                        }
+                        disabled={pageDisabledFlag}
+                      /> */}
                     </InputGroup.Prepend>
                     <FormControl
                       className="auto form-control siteTime"
@@ -1721,6 +1774,7 @@ class siteInfo extends Component {
                     </InputGroup.Prepend>
                     <InputGroup.Prepend>
                       <DatePicker
+                        filterDate={this.setGray}
                         selected={this.state.admissionEndDate}
                         onChange={this.admissionEndDate.bind(this)}
                         dateFormat="yyyy/MM/dd"

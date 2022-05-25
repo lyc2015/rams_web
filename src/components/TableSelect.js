@@ -251,6 +251,7 @@ class TableSelect extends React.Component {
   };
 
   render() {
+    console.log({ state: this.state, props: this.props }, "render");
     return (
       <Autocomplete
         //className="MuiAutocomplete-popupIndicator"
