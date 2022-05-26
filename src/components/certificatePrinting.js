@@ -689,8 +689,8 @@ class certificatePrinting extends Component {
               position: "absolute",
               top: "60%",
               left: "60%",
-              "margin-left": "-150px",
-              "margin-top": "-160px",
+              marginLeft: "-150px",
+              marginTop: "-160px",
             }}
           ></div>
         </div>

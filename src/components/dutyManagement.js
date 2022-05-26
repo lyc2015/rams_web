@@ -425,6 +425,8 @@ class dutyManagement extends React.Component {
             yearAndMonth: this.state.yearAndMonth,
             backPage: "dutyManagement",
             sendValue: sendValue,
+            employeeNo: this.state.rowSelectEmployeeNo,
+            employeeName: this.state.rowSelectEmployeeName,
           },
         };
         break;
@@ -824,6 +826,14 @@ class dutyManagement extends React.Component {
 
   render() {
     const { approvalStatus, employeeList } = this.state;
+    console.log(
+      {
+        state: this.state,
+        propsState: this.props.location.state,
+      },
+      "render"
+    );
+
     //　テーブルの行の選択
     const selectRow = {
       mode: "radio",
@@ -1143,6 +1153,13 @@ class dutyManagement extends React.Component {
                 番号
               </TableHeaderColumn>
               <TableHeaderColumn
+                width="55"
+                dataField="employeeNo"
+                editable={false}
+              >
+                ID
+              </TableHeaderColumn>
+              <TableHeaderColumn
                 width="90"
                 dataFormat={this.greyShow.bind(this)}
                 dataField="employeeNo"
@@ -1262,8 +1279,8 @@ class dutyManagement extends React.Component {
             position: "absolute",
             top: "60%",
             left: "60%",
-            "margin-left": "-200px",
-            "margin-top": "-150px",
+            marginLeft: "-200px",
+            marginTop: "-150px",
           }}
         >
           <Form.File

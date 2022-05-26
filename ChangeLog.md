@@ -1,5 +1,10 @@
 # ChangeLog
 
+## 0.1.0（2022/05/26）by 樊崇鑫
+
+- 【修改】deleteCostRegistration 删除传 employeeNo
+- 【修改】請求書一覧增加 employeeNo 查询项
+
 ## 0.1.0（2022/05/25）by 樊崇鑫
 
 - 【修改】现场详情页面入場年月日的カレンダー样式调整为 antd

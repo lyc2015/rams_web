@@ -1841,8 +1841,8 @@ Email：` +
             position: "absolute",
             top: "60%",
             left: "60%",
-            "margin-left": "-200px",
-            "margin-top": "-150px",
+            marginLeft: "-200px",
+            marginTop: "-150px",
           }}
         ></div>
       </div>

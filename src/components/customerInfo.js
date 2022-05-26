@@ -1154,7 +1154,7 @@ class CustomerInfo extends Component {
                       this.getStationCode(event, values)
                     }
                     options={this.state.stationCodeDrop}
-                    getOptionLabel={(option) => option.name}
+                    getOptionLabel={(option) => option.name || ""}
                     renderInput={(params) => (
                       <div ref={params.InputProps.ref}>
                         <input
@@ -1288,7 +1288,7 @@ class CustomerInfo extends Component {
                       this.getTopCustomer(event, values)
                     }
                     options={this.state.topCustomerDrop}
-                    getOptionLabel={(option) => option.name}
+                    getOptionLabel={(option) => option.name || ""}
                     renderInput={(params) => (
                       <div ref={params.InputProps.ref}>
                         <input
@@ -1436,7 +1436,7 @@ class CustomerInfo extends Component {
                       this.getPosition2(event, values)
                     }
                     options={this.state.positionDrop}
-                    getOptionLabel={(option) => option.name}
+                    getOptionLabel={(option) => option.name || ""}
                     renderInput={(params) => (
                       <div ref={params.InputProps.ref}>
                         <input

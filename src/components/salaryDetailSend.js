@@ -958,7 +958,7 @@ P-mark：第21004525(02)号
                   個人情報
                 </Button>
                 <font
-                  style={{ "margin-left": "2px", "margin-right": "2px" }}
+                  style={{ marginLeft: "2px", "margin-right": "2px" }}
                 ></font>
                 <Button
                   size="sm"
@@ -973,7 +973,7 @@ P-mark：第21004525(02)号
                   メール確認
                 </Button>
                 <font
-                  style={{ "margin-left": "2px", "margin-right": "2px" }}
+                  style={{ marginLeft: "2px", "margin-right": "2px" }}
                 ></font>
                 <Button
                   size="sm"
@@ -984,7 +984,7 @@ P-mark：第21004525(02)号
                   すべて選択
                 </Button>
                 <font
-                  style={{ "margin-left": "2px", "margin-right": "2px" }}
+                  style={{ marginLeft: "2px", "margin-right": "2px" }}
                 ></font>
                 <InputGroup.Prepend>
                   <InputGroup.Text id="sixKanji" className="input-group-indiv">
@@ -1105,8 +1105,8 @@ P-mark：第21004525(02)号
             position: "absolute",
             top: "60%",
             left: "60%",
-            "margin-left": "-200px",
-            "margin-top": "-150px",
+            marginLeft: "-200px",
+            marginTop: "-150px",
           }}
         ></div>
       </div>

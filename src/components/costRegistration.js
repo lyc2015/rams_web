@@ -448,6 +448,7 @@ class costRegistration extends React.Component {
       yearMonth: publicUtils
         .formateDate(this.state.yearMonth, true)
         .substring(0, 6),
+      employeeNo: this.state.employeeNo,
     };
     axios
       .post(

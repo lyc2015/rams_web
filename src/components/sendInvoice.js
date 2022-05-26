@@ -58,20 +58,17 @@ class sendInvoice extends React.Component {
   };
 
   componentDidMount() {
+    console.log(
+      { propsState: this.props.location.state, state: this.state },
+      "componentDidMount"
+    );
     this.getLoginUserInfo();
 
-    const { location } = this.props;
-    if (
-      !(
-        location.state === undefined ||
-        location.state.yearAndMonth === undefined ||
-        location.state.yearAndMonth === null
-      )
-    ) {
-      $("#datePicker").val(location.state.yearAndMonth);
+    const { state: locationState } = this.props.location;
+    if (locationState) {
       this.setState(
         {
-          yearAndMonth: location.state.yearAndMonth,
+          yearAndMonth: locationState?.yearAndMonth,
         },
         () => {
           this.searchSendInvoiceList();
@@ -87,6 +84,7 @@ class sendInvoice extends React.Component {
     // (new Date().getFullYear() - 1) + "/12" :
     // new Date().getFullYear() + "/" + new
     // Date().getMonth()).getTime(),
+    selected: [],
     month: new Date().getMonth() + 1,
     loginUserInfo: [],
     sendInvoiceList: [],
@@ -103,19 +101,22 @@ class sendInvoice extends React.Component {
 
   // 検索
   searchSendInvoiceList = () => {
+    let { employeeNo } = this.props.location.state;
+
     const emp = {
       yearAndMonth: publicUtils.formateDate($("#datePicker").val(), false),
       customerNo: this.state.customerNo,
     };
+    if (employeeNo) {
+      emp.employeeNo = employeeNo;
+    }
     axios
       .post(this.state.serverIP + "sendInvoice/selectSendInvoice", emp)
       .then((result) => {
         this.setState({
           sendInvoiceList: result.data,
           rowCustomerNo: "",
-        });
-        this.refs.table.setState({
-          selectedRowKeys: [],
+          selected: [],
         });
       })
       .catch(function (error) {
@@ -128,11 +129,9 @@ class sendInvoice extends React.Component {
     this.setState({
       yearAndMonth: date,
       month: date.getMonth() + 1,
+      selected: [],
     });
     $("#datePicker").val(date);
-    this.refs.table.setState({
-      selectedRowKeys: [],
-    });
     this.searchSendInvoiceList();
   };
 
@@ -140,6 +139,7 @@ class sendInvoice extends React.Component {
   handleRowSelect = (row, isSelected, e) => {
     if (isSelected) {
       this.setState({
+        selected: [row.employeeNo],
         rowCustomerNo: row.customerNo,
         rowCustomerName: row.customerName,
         rowPurchasingManagers: row.purchasingManagers,
@@ -159,6 +159,7 @@ class sendInvoice extends React.Component {
       });
     } else {
       this.setState({
+        selected: [],
         rowCustomerNo: "",
         rowCustomerName: "",
         rowPurchasingManagers: "",
@@ -664,7 +665,7 @@ P-mark:第21004525(02)号
       hideSizePerPage: true, // > You can hide the dropdown for
       // sizePerPage
     };
-    const selectRow = {
+    const selectRow1 = {
       mode: "radio",
       bgColor: "pink",
       hideSelectColumn: true,
@@ -709,7 +710,7 @@ P-mark:第21004525(02)号
                     pagination={false}
                     options={options}
                     data={row.sendInvoiceWorkTimeModel}
-                    selectRow={selectRow}
+                    selectRow={selectRow1}
                     headerStyle={{ background: "#5599FF" }}
                     striped
                     hover
@@ -815,8 +816,16 @@ P-mark:第21004525(02)号
 
   render() {
     const { sendInvoiceList } = this.state;
+    console.log(
+      {
+        state: this.state,
+        propsState: this.props.location.state,
+        table: this.refs.table,
+      },
+      "render"
+    );
     // テーブルの行の選択
-    const selectRow = {
+    const selectRow2 = {
       mode: "radio",
       bgColor: "pink",
       clickToSelectAndEditCell: true,
@@ -824,6 +833,7 @@ P-mark:第21004525(02)号
       clickToSelect: true, // click to select, default is false
       clickToExpand: true, // click to expand row, default is false
       onSelect: this.handleRowSelect,
+      selected: this.state.selected,
     };
     // テーブルの定義
     const options = {
@@ -1012,8 +1022,7 @@ P-mark:第21004525(02)号
           <Col>
             <BootstrapTable
               data={sendInvoiceList}
-              ref="table"
-              selectRow={selectRow}
+              selectRow={selectRow2}
               pagination={true}
               options={options}
               approvalRow
@@ -1023,43 +1032,59 @@ P-mark:第21004525(02)号
               condensed
             >
               <TableHeaderColumn
-                width="5%"
+                width="60"
                 tdStyle={{ padding: ".45em" }}
                 dataField="rowNo"
-                isKey
               >
                 番号
               </TableHeaderColumn>
               <TableHeaderColumn
-                width="10%"
+                // width="10%"
+
+                tdStyle={{ padding: ".45em" }}
+                dataField="employeeName"
+              >
+                社員氏名
+              </TableHeaderColumn>
+              <TableHeaderColumn
+                // width="10%"
+                isKey
+                hidden={true}
+                tdStyle={{ padding: ".45em" }}
+                dataField="employeeNo"
+              >
+                社員番号
+              </TableHeaderColumn>
+              <TableHeaderColumn
+                width="106"
                 tdStyle={{ padding: ".45em" }}
                 dataField="customerNo"
               >
                 お客様番号
               </TableHeaderColumn>
               <TableHeaderColumn
-                width="24%"
+                // width="24%"
                 tdStyle={{ padding: ".45em" }}
                 dataField="customerName"
               >
                 お客様
               </TableHeaderColumn>
               <TableHeaderColumn
-                width="10%"
+                // width="10%"
                 tdStyle={{ padding: ".45em" }}
                 dataField="purchasingManagers"
               >
                 担当者
               </TableHeaderColumn>
               <TableHeaderColumn
-                width="22%"
+                // width="22%"
                 tdStyle={{ padding: ".45em" }}
                 dataField="purchasingManagersMail"
               >
                 メール
               </TableHeaderColumn>
               <TableHeaderColumn
-                width="7%"
+                width="100"
                 tdStyle={{ padding: ".45em" }}
                 dataField="employeeList"
                 dataFormat={this.employeeListFormat.bind(this)}
@@ -1067,7 +1092,7 @@ P-mark:第21004525(02)号
                 関連要員
               </TableHeaderColumn>
               <TableHeaderColumn
-                width="18%"
+                // width="18%"
                 tdStyle={{ padding: ".45em" }}
                 dataField="sendLetterDate"
                 dataFormat={this.sendLetterDateFormat.bind(this)}
@@ -1075,7 +1100,7 @@ P-mark:第21004525(02)号
                 送信日付
               </TableHeaderColumn>
               <TableHeaderColumn
-                width="12%"
+                // width="12%"
                 tdStyle={{ padding: ".45em" }}
                 dataField="sendLetterStatus"
                 dataFormat={this.sendLetterStatusFormat.bind(this)}
@@ -1092,8 +1117,8 @@ P-mark:第21004525(02)号
             position: "absolute",
             top: "60%",
             left: "60%",
-            "margin-left": "-200px",
-            "margin-top": "-150px",
+            marginLeft: "-200px",
+            marginTop: "-150px",
           }}
         ></div>
       </div>
