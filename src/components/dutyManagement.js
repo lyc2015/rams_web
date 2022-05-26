@@ -28,6 +28,7 @@ import * as publicUtils from "./utils/publicUtils.js";
 import MyToast from "./myToast";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import store from "./redux/store";
+import { message } from "antd";
 registerLocale("ja", ja);
 axios.defaults.withCredentials = true;
 
@@ -99,6 +100,17 @@ class dutyManagement extends React.Component {
       }
     );
   };
+  //onchange
+  employeeStatusChange = (event) => {
+    this.setState(
+      {
+        [event.target.name]: event.target.value,
+      },
+      () => {
+        this.searchDutyManagement();
+      }
+    );
+  };
   //　初期化データ
   initialState = {
     //yearAndMonth: new Date(new Date().getFullYear() + '/' + (new Date().getMonth() + 1 < 10 ? '0' + (new Date().getMonth() + 1) : (new Date().getMonth() + 1))).getTime(),
@@ -122,6 +134,14 @@ class dutyManagement extends React.Component {
     checkSectionlist: store.getState().dropDown[28],
     costClassification: store.getState().dropDown[30],
     serverIP: store.getState().dropDown[store.getState().dropDown.length - 1],
+    employeeStatusS: store.getState().dropDown[4].slice(1)
+      ? store
+          .getState()
+          .dropDown[4].slice(1)
+          .filter((item, index) => {
+            return ["0", "1", "2"].includes(item.code);
+          })
+      : store.getState().dropDown[4].slice(1),
   };
   checkSection(code) {
     let checkSections = this.state.checkSectionlist;
@@ -160,6 +180,13 @@ class dutyManagement extends React.Component {
       approvalStatus: this.state.approvalStatus,
       customerNo: this.state.customerNo,
     };
+
+    if (
+      this.state.employeeStatus + "" &&
+      this.state.employeeStatus + "" !== "-1"
+    ) {
+      emp.employeeStatus = this.state.employeeStatus;
+    }
     axios
       .post(this.state.serverIP + "dutyManagement/selectDutyManagement", emp)
       .then((response) => {
@@ -825,7 +852,8 @@ class dutyManagement extends React.Component {
   };
 
   render() {
-    const { approvalStatus, employeeList } = this.state;
+    const { approvalStatus, employeeList, employeeStatusS } = this.state;
+
     console.log(
       {
         state: this.state,
@@ -865,6 +893,7 @@ class dutyManagement extends React.Component {
       mode: "click",
       blurToSave: true,
     };
+
     return (
       <div>
         <div style={{ display: this.state.myToastShow ? "block" : "none" }}>
@@ -895,6 +924,35 @@ class dutyManagement extends React.Component {
             </Form.Group>
             <Form.Group>
               <Row>
+                <Col sm={3}>
+                  <InputGroup size="sm" className="mb-3">
+                    <InputGroup.Prepend>
+                      <InputGroup.Text id="inputGroup-sizing-sm">
+                        社員区分
+                      </InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <Form.Control
+                      as="select"
+                      size="sm"
+                      onChange={(event) => this.employeeStatusChange(event)}
+                      name="employeeStatus"
+                      value={this.state.employeeStatus}
+                      autoComplete="off"
+                    >
+                      <option key="all" value="-1">
+                        すべて
+                      </option>
+                      {employeeStatusS.length > 0
+                        ? employeeStatusS.map((date) => (
+                            <option key={date.code} value={date.code}>
+                              {date.name}
+                            </option>
+                          ))
+                        : null}
+                    </Form.Control>
+                    <font className="site-mark"></font>
+                  </InputGroup>
+                </Col>
                 <Col sm={6}>
                   <InputGroup size="sm" className="mb-2">
                     <InputGroup.Prepend>
@@ -1016,15 +1074,6 @@ class dutyManagement extends React.Component {
                   </Button>{" "}
                   <Button
                     size="sm"
-                    onClick={this.shuseiTo.bind(this, "sendInvoice")}
-                    name="clickButton"
-                    variant="info"
-                    id="siteInfo"
-                  >
-                    請求書一覧
-                  </Button>{" "}
-                  <Button
-                    size="sm"
                     onClick={this.shuseiTo.bind(this, "workRepot")}
                     disabled={
                       this.state.rowSelectEmployeeNo === "" ? true : false
@@ -1035,6 +1084,26 @@ class dutyManagement extends React.Component {
                     id="workRepot"
                   >
                     勤務管理
+                  </Button>{" "}
+                  <Button
+                    size="sm"
+                    onClick={() => {
+                      if (
+                        this.state.rowSelectEmployeeNo &&
+                        this.state?.rowApprovalStatus + "" !== "1"
+                      ) {
+                        message.info(
+                          `まず${this.state.rowSelectEmployeeName}のデータを承認してください！`
+                        );
+                        return;
+                      }
+                      this.shuseiTo("sendInvoice");
+                    }}
+                    name="clickButton"
+                    variant="info"
+                    id="siteInfo"
+                  >
+                    請求書一覧
                   </Button>{" "}
                 </div>
                 <div style={{ display: "flex", marginBottom: "5px" }}>
@@ -1153,7 +1222,7 @@ class dutyManagement extends React.Component {
                 番号
               </TableHeaderColumn>
               <TableHeaderColumn
-                width="55"
+                width="100"
                 dataField="employeeNo"
                 editable={false}
               >

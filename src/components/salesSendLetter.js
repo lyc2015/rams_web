@@ -1,5 +1,5 @@
 // 営業送信画面
-import React from "react";
+import React, { useEffect } from "react";
 import { Form, Button, Col, Row, InputGroup, Modal } from "react-bootstrap";
 import axios from "axios";
 import "react-datepicker/dist/react-datepicker.css";

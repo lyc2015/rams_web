@@ -30,6 +30,7 @@ import MyToast from "./myToast";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import store from "./redux/store";
 import SendInvoiceLetter from "./sendInvoiceLetter";
+import { faLevelUpAlt } from "@fortawesome/free-solid-svg-icons";
 registerLocale("ja", ja);
 axios.defaults.withCredentials = true;
 
@@ -193,6 +194,10 @@ class sendInvoice extends React.Component {
             customerNo: this.state.rowCustomerNo,
             backPage: "sendInvoice",
             sendValue: sendValue,
+            employeeNo: this.state.selected.length
+              ? this.state.selected[0]
+              : "",
+            yearAndMonth: this.state.yearAndMonth,
           },
         };
         break;
@@ -204,6 +209,9 @@ class sendInvoice extends React.Component {
             yearAndMonth: this.state.yearAndMonth,
             customerNo: this.state.rowCustomerNo,
             sendValue: sendValue,
+            employeeNo: this.state.selected.length
+              ? this.state.selected[0]
+              : "",
           },
         };
         break;
@@ -964,13 +972,13 @@ P-mark:第21004525(02)号
         <div>
           <Row>
             <Col sm={12}>
-              <Button
+              {/* <Button
                 size="sm"
                 variant="info"
                 onClick={this.shuseiTo.bind(this, "dutyManagement")}
               >
                 勤務管理
-              </Button>{" "}
+              </Button>{" "} */}
               <Button
                 size="sm"
                 name="clickButton"
@@ -979,6 +987,14 @@ P-mark:第21004525(02)号
                 disabled={this.state.rowCustomerNo === ""}
               >
                 お客様情報
+              </Button>{" "}
+              <Button
+                size="sm"
+                variant="info"
+                onClick={this.shuseiTo.bind(this, "dutyManagement")}
+              >
+                <FontAwesomeIcon icon={faLevelUpAlt} />
+                戻る
               </Button>{" "}
               <div style={{ float: "right" }}>
                 <Button

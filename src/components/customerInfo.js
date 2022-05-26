@@ -919,6 +919,8 @@ class CustomerInfo extends Component {
           : this.state.currPage,
         backbackPage: this.state.backbackPage,
         projectNo: this.state.projectNo,
+        employeeNo: this.props.location.state.employeeNo,
+        yearAndMonth: this.props.location.state.yearAndMonth,
       },
     };
     this.props.history.push(path);
