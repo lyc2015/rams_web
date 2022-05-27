@@ -79,7 +79,7 @@ class workRepot extends React.Component {
         }
         this.setState(
           {
-            disabledFlag: disabledFlag,
+            disabledFlag,
           },
           () => {
             this.searchWorkRepot();
@@ -163,9 +163,8 @@ class workRepot extends React.Component {
   //　変更
   sumWorkTimeChange = (sumWorkTime, row) => {
     if (
-      row.workingTimeReportFile === "まずファイルをアップロードしてください"
-      // &&
-      // !this.state.employeeNo?.startsWith("BP")
+      row.workingTimeReportFile === "まずファイルをアップロードしてください" &&
+      !this.state.employeeNo?.startsWith("BP")
     ) {
       alert("まずファイルをアップロードしてください");
       let employeeList = this.state.employeeList;

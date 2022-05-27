@@ -237,6 +237,12 @@ class dutyManagement extends React.Component {
           minWorkingTime,
           averageWorkingTime,
         });
+
+        let { rowSelectEmployeeNo } = this.state;
+        response.data.forEach((item) => {
+          if (item.employeeNo === rowSelectEmployeeNo) rowNo = item.rowNo;
+        });
+
         if (rowNo !== undefined) {
           if (rowNo > response.data.length) {
             this.setState({
@@ -309,6 +315,9 @@ class dutyManagement extends React.Component {
       ),
       approvalStatus: approvalStatus,
     };
+    this.setState({
+      rowApprovalStatus: approvalStatus,
+    });
     axios
       .post(this.state.serverIP + "dutyManagement/updateDutyManagement", emp)
       .then((result) => {
@@ -337,13 +346,14 @@ class dutyManagement extends React.Component {
   };
 
   employeeNameFormat = (cell, row) => {
-    this.greyShow(cell, row);
-    return row.employeeNo?.startsWith("BP")
-      ? cell +
-          (row.bpBelongCustomerAbbreviation
-            ? `(${row.bpBelongCustomerAbbreviation})`
-            : "(BP)")
-      : cell;
+    let text = cell;
+
+    if (row.employeeNo?.startsWith("BP")) {
+      text += row.bpBelongCustomerAbbreviation
+        ? `(${row.bpBelongCustomerAbbreviation})`
+        : "(BP)";
+    }
+    return this.greyShow(text, row);
   };
 
   overtimePayFormat = (cell, row) => {
@@ -1229,17 +1239,9 @@ class dutyManagement extends React.Component {
                 dataFormat={this.greyShow.bind(this)}
                 dataField="rowNo"
                 editable={false}
-                hidden
+                // hidden
               >
                 番号
-              </TableHeaderColumn>
-              <TableHeaderColumn
-                width="100"
-                dataField="employeeNo"
-                dataFormat={this.greyShow.bind(this)}
-                editable={false}
-              >
-                ID
               </TableHeaderColumn>
               <TableHeaderColumn
                 width="90"
@@ -1251,11 +1253,10 @@ class dutyManagement extends React.Component {
                 社員番号
               </TableHeaderColumn>
               <TableHeaderColumn
-                width="120"
+                width="150"
                 dataField="employeeName"
                 editable={false}
                 dataFormat={this.employeeNameFormat.bind(this)}
-                // bpBelongcustomerAbbreviation
               >
                 氏名
               </TableHeaderColumn>
