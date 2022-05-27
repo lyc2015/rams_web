@@ -6,8 +6,6 @@ import {
   Row,
   InputGroup,
   FormControl,
-  OverlayTrigger,
-  Popover,
 } from "react-bootstrap";
 import axios from "axios";
 import "../asserts/css/development.css";
@@ -70,18 +68,30 @@ class invoicePDF extends React.Component {
   }
 
   componentDidMount() {
-    const { location } = this.props;
-    if (
-      !(
-        location.state === undefined ||
-        location.state.yearAndMonth === undefined ||
-        location.state.yearAndMonth === null
-      )
-    ) {
-      $("#datePicker").val(location.state.yearAndMonth);
+    const { state: locationState } = this.props.location;
+
+    if (locationState) {
       this.setState(
         {
-          yearAndMonth: location.state.yearAndMonth,
+          dutyManagementSelectedEmployeeNo:
+            locationState.dutyManagementSelectedEmployeeNo,
+        },
+        () => {
+          this.getCompanyDate();
+        }
+      );
+    }
+    if (
+      !(
+        locationState === undefined ||
+        locationState.yearAndMonth === undefined ||
+        locationState.yearAndMonth === null
+      )
+    ) {
+      $("#datePicker").val(locationState.yearAndMonth);
+      this.setState(
+        {
+          yearAndMonth: locationState.yearAndMonth,
         },
         () => {
           this.getCompanyDate();
@@ -302,7 +312,9 @@ class invoicePDF extends React.Component {
       pathname: this.state.backPage,
       state: {
         yearAndMonth: this.state.yearAndMonth,
-        employeeNo: this.props.location.state.employeeNo,
+        dutyManagementSelectedEmployeeNo:
+          this.state.dutyManagementSelectedEmployeeNo,
+        // employeeNo: this.props.location.state.employeeNo,
       },
     };
     this.props.history.push(path);

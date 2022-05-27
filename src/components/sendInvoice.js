@@ -6,8 +6,6 @@ import {
   Row,
   InputGroup,
   FormControl,
-  OverlayTrigger,
-  Popover,
   Modal,
 } from "react-bootstrap";
 import axios from "axios";
@@ -31,6 +29,7 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import store from "./redux/store";
 import SendInvoiceLetter from "./sendInvoiceLetter";
 import { faLevelUpAlt } from "@fortawesome/free-solid-svg-icons";
+import { Popover } from "antd";
 registerLocale("ja", ja);
 axios.defaults.withCredentials = true;
 
@@ -69,6 +68,8 @@ class sendInvoice extends React.Component {
     if (locationState) {
       this.setState(
         {
+          dutyManagementSelectedEmployeeNo:
+            locationState.dutyManagementSelectedEmployeeNo,
           dutyManagementTempState: locationState.dutyManagementTempState,
           yearAndMonth: locationState?.yearAndMonth,
         },
@@ -82,6 +83,8 @@ class sendInvoice extends React.Component {
   }
   // 初期化データ
   initialState = {
+    dutyManagementSelectedEmployeeNo:
+      this.props.location.state.dutyManagementSelectedEmployeeNo || "",
     yearAndMonth: new Date(), // new Date(new Date().getMonth() === 0 ?
     // (new Date().getFullYear() - 1) + "/12" :
     // new Date().getFullYear() + "/" + new
@@ -103,14 +106,13 @@ class sendInvoice extends React.Component {
 
   // 検索
   searchSendInvoiceList = () => {
-    let { employeeNo } = this.props.location.state;
-
     const emp = {
       yearAndMonth: publicUtils.formateDate($("#datePicker").val(), false),
       customerNo: this.state.customerNo,
     };
-    if (employeeNo) {
-      emp.employeeNo = employeeNo;
+
+    if (this.state.dutyManagementSelectedEmployeeNo) {
+      emp.employeeNo = this.state.dutyManagementSelectedEmployeeNo;
     }
     axios
       .post(this.state.serverIP + "sendInvoice/selectSendInvoice", emp)
@@ -214,6 +216,8 @@ class sendInvoice extends React.Component {
             employeeNo: this.state.selected.length
               ? this.state.selected[0]
               : "",
+            dutyManagementSelectedEmployeeNo:
+              this.state.dutyManagementSelectedEmployeeNo,
           },
         };
         break;
@@ -683,117 +687,114 @@ P-mark:第21004525(02)号
       clickToExpand: true,
     };
     returnItem = (
-      <OverlayTrigger
-        trigger="click"
-        placement={"left"}
-        overlay={
-          <Popover className="popoverC">
-            <Popover.Content>
-              <div>
-                <Row>
-                  <Col style={{ padding: "0px", marginTop: "10px" }}>
-                    <h2>要員確認</h2>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col style={{ padding: "0px" }}>
-                    <div style={{ float: "right" }}>
-                      <Button
-                        variant="info"
-                        size="sm"
-                        onClick={this.selectAll.bind(this, true)}
-                      >
-                        選択
-                      </Button>{" "}
-                      <Button
-                        variant="info"
-                        size="sm"
-                        onClick={this.selectAll.bind(this, false)}
-                      >
-                        取消
-                      </Button>
-                    </div>
-                  </Col>
-                </Row>
-                <Row>
-                  <BootstrapTable
-                    pagination={false}
-                    options={options}
-                    data={row.sendInvoiceWorkTimeModel}
-                    selectRow={selectRow1}
-                    headerStyle={{ background: "#5599FF" }}
-                    striped
-                    hover
-                    condensed
+      <Popover
+        overlayClassName={"w50p"}
+        placement="leftBottom"
+        content={
+          <div>
+            <Row>
+              <Col style={{ padding: "0px", marginTop: "10px" }}>
+                <h2>要員確認</h2>
+              </Col>
+            </Row>
+            <Row>
+              <Col style={{ padding: "0px" }}>
+                <div style={{ float: "right" }}>
+                  <Button
+                    variant="info"
+                    size="sm"
+                    onClick={this.selectAll.bind(this, true)}
                   >
-                    <TableHeaderColumn
-                      isKey={true}
-                      width="10%"
-                      dataField="rowNo"
-                      tdStyle={{ padding: ".45em" }}
-                    >
-                      番号
-                    </TableHeaderColumn>
-                    <TableHeaderColumn
-                      dataField="employeeName"
-                      width="18%"
-                      tdStyle={{ padding: ".45em" }}
-                    >
-                      氏名
-                    </TableHeaderColumn>
-                    <TableHeaderColumn
-                      dataField="payOffRange"
-                      width="14%"
-                      dataFormat={this.payOffRangeFormat}
-                      tdStyle={{ padding: ".45em" }}
-                    >
-                      基準時間
-                    </TableHeaderColumn>
-                    <TableHeaderColumn
-                      dataField="sumWorkTime"
-                      width="14%"
-                      tdStyle={{ padding: ".45em" }}
-                    >
-                      稼働時間
-                    </TableHeaderColumn>
-                    <TableHeaderColumn
-                      dataField="unitPrice"
-                      dataFormat={this.unitPriceFormat}
-                      width="16%"
-                      tdStyle={{ padding: ".45em" }}
-                    >
-                      単価
-                    </TableHeaderColumn>
-                    <TableHeaderColumn
-                      dataField="cost"
-                      dataFormat={this.costFormat}
-                      width="16%"
-                      tdStyle={{ padding: ".45em" }}
-                    >
-                      残業・控除
-                    </TableHeaderColumn>
-                    <TableHeaderColumn
-                      dataField="report"
-                      dataFormat={this.reportFormat}
-                      width="12%"
-                      tdStyle={{ padding: ".45em" }}
-                    >
-                      報告書
-                    </TableHeaderColumn>
-                  </BootstrapTable>
-                </Row>
-              </div>
-            </Popover.Content>
-          </Popover>
+                    選択
+                  </Button>{" "}
+                  <Button
+                    variant="info"
+                    size="sm"
+                    onClick={this.selectAll.bind(this, false)}
+                  >
+                    取消
+                  </Button>
+                </div>
+              </Col>
+            </Row>
+            <Row>
+              <BootstrapTable
+                pagination={false}
+                options={options}
+                data={row.sendInvoiceWorkTimeModel}
+                selectRow={selectRow1}
+                headerStyle={{ background: "#5599FF" }}
+                striped
+                hover
+                condensed
+              >
+                <TableHeaderColumn
+                  isKey={true}
+                  width="10%"
+                  dataField="rowNo"
+                  tdStyle={{ padding: ".45em" }}
+                >
+                  番号
+                </TableHeaderColumn>
+                <TableHeaderColumn
+                  dataField="employeeName"
+                  width="18%"
+                  tdStyle={{ padding: ".45em" }}
+                >
+                  氏名
+                </TableHeaderColumn>
+                <TableHeaderColumn
+                  dataField="payOffRange"
+                  width="14%"
+                  dataFormat={this.payOffRangeFormat}
+                  tdStyle={{ padding: ".45em" }}
+                >
+                  基準時間
+                </TableHeaderColumn>
+                <TableHeaderColumn
+                  dataField="sumWorkTime"
+                  width="14%"
+                  tdStyle={{ padding: ".45em" }}
+                >
+                  稼働時間
+                </TableHeaderColumn>
+                <TableHeaderColumn
+                  dataField="unitPrice"
+                  dataFormat={this.unitPriceFormat}
+                  width="16%"
+                  tdStyle={{ padding: ".45em" }}
+                >
+                  単価
+                </TableHeaderColumn>
+                <TableHeaderColumn
+                  dataField="cost"
+                  dataFormat={this.costFormat}
+                  width="16%"
+                  tdStyle={{ padding: ".45em" }}
+                >
+                  残業・控除
+                </TableHeaderColumn>
+                <TableHeaderColumn
+                  dataField="report"
+                  dataFormat={this.reportFormat}
+                  width="12%"
+                  tdStyle={{ padding: ".45em" }}
+                >
+                  報告書
+                </TableHeaderColumn>
+              </BootstrapTable>
+            </Row>
+          </div>
         }
+        title=""
+        trigger="click"
       >
-        <div>
-          <Button variant="warning" size="sm">
-            要員
-          </Button>
-        </div>
-      </OverlayTrigger>
+        <Button variant="warning" size="sm">
+          要員
+        </Button>
+      </Popover>
     );
+
     if (row.sendInvoiceWorkTimeModel.length > 0) return <div>{returnItem}</div>;
     else return "";
   };

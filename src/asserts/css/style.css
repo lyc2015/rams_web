@@ -3364,6 +3364,10 @@ body {
   width: 70px !important;
 }
 
+.w50p {
+  width: 50% !important;
+}
+
 .react-bs-table-container {
   /* min-width: 1200px; */
 }

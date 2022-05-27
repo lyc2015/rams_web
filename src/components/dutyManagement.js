@@ -7,7 +7,6 @@ import {
   InputGroup,
   FormControl,
   OverlayTrigger,
-  Popover,
 } from "react-bootstrap";
 import axios from "axios";
 import "../asserts/css/development.css";
@@ -29,6 +28,7 @@ import MyToast from "./myToast";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import store from "./redux/store";
 import { message } from "antd";
+import { Popover } from "antd";
 registerLocale("ja", ja);
 axios.defaults.withCredentials = true;
 
@@ -487,8 +487,9 @@ class dutyManagement extends React.Component {
             yearAndMonth: this.state.yearAndMonth,
             backPage: "dutyManagement",
             sendValue: sendValue,
-            employeeNo: this.state.rowSelectEmployeeNo,
-            employeeName: this.state.rowSelectEmployeeName,
+            dutyManagementSelectedEmployeeNo: this.state.rowSelectEmployeeNo,
+            dutyManagementSelectedEmployeeName:
+              this.state.rowSelectEmployeeName,
             dutyManagementTempState: this.state,
           },
         };
@@ -729,104 +730,103 @@ class dutyManagement extends React.Component {
       clickToExpand: true,
       onSelect: this.handleRowClick,
     };
+
     returnItem = (
-      <OverlayTrigger
-        trigger="click"
-        placement={"left"}
-        overlay={
-          <Popover className="popoverC">
-            <Popover.Content>
-              <div>
-                <Row>
-                  <Col style={{ padding: "0px", marginTop: "10px" }}>
-                    <font>{this.state.month + "月"}</font>
-                  </Col>
-                  <Col style={{ padding: "0px", marginTop: "10px" }}>
-                    <h2>費用詳細</h2>
-                  </Col>
-                  <Col style={{ padding: "0px" }}>
-                    <div style={{ float: "right" }}>
-                      <Button
-                        variant="info"
-                        size="sm"
-                        disabled={this.state.rowDownload === ""}
-                        onClick={this.rowDownload}
-                        id="workRepot"
-                      >
-                        <FontAwesomeIcon icon={faDownload} />
-                        download
-                      </Button>
-                    </div>
-                  </Col>
-                </Row>
-                <Row>
-                  <BootstrapTable
-                    pagination={false}
-                    options={options}
-                    data={row.costRegistrationModel}
-                    selectRow={selectRow}
-                    headerStyle={{ background: "#5599FF" }}
-                    trClassName={this.rowClassNameFormat}
-                    condensed
+      <Popover
+        overlayClassName={"w50p"}
+        placement="leftBottom"
+        content={
+          <div>
+            <Row>
+              <Col style={{ padding: "0px", marginTop: "10px" }}>
+                <font>{this.state.month + "月"}</font>
+              </Col>
+              <Col style={{ padding: "0px", marginTop: "10px" }}>
+                <h2>費用詳細</h2>
+              </Col>
+              <Col style={{ padding: "0px" }}>
+                <div style={{ float: "right" }}>
+                  <Button
+                    variant="info"
+                    size="sm"
+                    disabled={this.state.rowDownload === ""}
+                    onClick={this.rowDownload}
+                    id="workRepot"
                   >
-                    <TableHeaderColumn isKey={true} dataField="rowNo" hidden>
-                      番号
-                    </TableHeaderColumn>
-                    <TableHeaderColumn
-                      dataField="costClassificationCode"
-                      width="10%"
-                      dataFormat={this.costClassificationCodeFormat.bind(this)}
-                    >
-                      種別
-                    </TableHeaderColumn>
-                    <TableHeaderColumn
-                      dataField="happendDate"
-                      width="30%"
-                      dataFormat={this.happendDateFormat.bind(this)}
-                    >
-                      日付・回数
-                    </TableHeaderColumn>
-                    <TableHeaderColumn
-                      dataField="cost"
-                      width="15%"
-                      dataFormat={this.cost.bind(this)}
-                    >
-                      費用
-                    </TableHeaderColumn>
-                    <TableHeaderColumn
-                      dataField="costFile"
-                      width="10%"
-                      dataFormat={this.costFileFormat.bind(this)}
-                    >
-                      添付
-                    </TableHeaderColumn>
-                    <TableHeaderColumn
-                      dataField="costTotal"
-                      width="15%"
-                      dataFormat={this.costTotalFormat.bind(this)}
-                    >
-                      合計
-                    </TableHeaderColumn>
-                    <TableHeaderColumn
-                      dataField="remark"
-                      width="20%"
-                      dataFormat={this.remarkFormat.bind(this)}
-                    >
-                      備考
-                    </TableHeaderColumn>
-                  </BootstrapTable>
-                </Row>
-              </div>
-            </Popover.Content>
-          </Popover>
+                    <FontAwesomeIcon icon={faDownload} />
+                    download
+                  </Button>
+                </div>
+              </Col>
+            </Row>
+            <Row>
+              <BootstrapTable
+                pagination={false}
+                options={options}
+                data={row.costRegistrationModel}
+                selectRow={selectRow}
+                headerStyle={{ background: "#5599FF" }}
+                trClassName={this.rowClassNameFormat}
+                condensed
+              >
+                <TableHeaderColumn isKey={true} dataField="rowNo" hidden>
+                  番号
+                </TableHeaderColumn>
+                <TableHeaderColumn
+                  dataField="costClassificationCode"
+                  width="10%"
+                  dataFormat={this.costClassificationCodeFormat.bind(this)}
+                >
+                  種別
+                </TableHeaderColumn>
+                <TableHeaderColumn
+                  dataField="happendDate"
+                  width="30%"
+                  dataFormat={this.happendDateFormat.bind(this)}
+                >
+                  日付・回数
+                </TableHeaderColumn>
+                <TableHeaderColumn
+                  dataField="cost"
+                  width="15%"
+                  dataFormat={this.cost.bind(this)}
+                >
+                  費用
+                </TableHeaderColumn>
+                <TableHeaderColumn
+                  dataField="costFile"
+                  width="10%"
+                  dataFormat={this.costFileFormat.bind(this)}
+                >
+                  添付
+                </TableHeaderColumn>
+                <TableHeaderColumn
+                  dataField="costTotal"
+                  width="15%"
+                  dataFormat={this.costTotalFormat.bind(this)}
+                >
+                  合計
+                </TableHeaderColumn>
+                <TableHeaderColumn
+                  dataField="remark"
+                  width="20%"
+                  dataFormat={this.remarkFormat.bind(this)}
+                >
+                  備考
+                </TableHeaderColumn>
+              </BootstrapTable>
+            </Row>
+          </div>
         }
+        title=""
+        trigger="click"
       >
         <div style={{ float: "right" }}>
           <Button variant="warning" size="sm">
             詳細
           </Button>
         </div>
-      </OverlayTrigger>
+      </Popover>
     );
     if (row.costRegistrationModel.length > 0)
       return (
