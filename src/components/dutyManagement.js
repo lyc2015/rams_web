@@ -336,6 +336,16 @@ class dutyManagement extends React.Component {
     yearAndMonth: new Date(),
   };
 
+  employeeNameFormat = (cell, row) => {
+    this.greyShow(cell, row);
+    return row.employeeNo?.startsWith("BP")
+      ? cell +
+          (row.bpBelongCustomerAbbreviation
+            ? `(${row.bpBelongCustomerAbbreviation})`
+            : "(BP)")
+      : cell;
+  };
+
   overtimePayFormat = (cell, row) => {
     if (row.workTime === "" || row.workTime === null) return "";
     if (cell === null || cell === "") return "";
@@ -1211,6 +1221,7 @@ class dutyManagement extends React.Component {
               striped
               hover
               condensed
+
               // tdStyle={{ padding: ".45em" }}
             >
               <TableHeaderColumn
@@ -1218,12 +1229,14 @@ class dutyManagement extends React.Component {
                 dataFormat={this.greyShow.bind(this)}
                 dataField="rowNo"
                 editable={false}
+                hidden
               >
                 番号
               </TableHeaderColumn>
               <TableHeaderColumn
                 width="100"
                 dataField="employeeNo"
+                dataFormat={this.greyShow.bind(this)}
                 editable={false}
               >
                 ID
@@ -1239,9 +1252,10 @@ class dutyManagement extends React.Component {
               </TableHeaderColumn>
               <TableHeaderColumn
                 width="120"
-                dataFormat={this.greyShow.bind(this)}
                 dataField="employeeName"
                 editable={false}
+                dataFormat={this.employeeNameFormat.bind(this)}
+                // bpBelongcustomerAbbreviation
               >
                 氏名
               </TableHeaderColumn>
@@ -1254,7 +1268,7 @@ class dutyManagement extends React.Component {
                 お客様
               </TableHeaderColumn>
               <TableHeaderColumn
-                width="90"
+                width="120"
                 dataFormat={this.greyShow.bind(this)}
                 dataField="stationName"
                 editable={false}

@@ -164,6 +164,8 @@ class workRepot extends React.Component {
   sumWorkTimeChange = (sumWorkTime, row) => {
     if (
       row.workingTimeReportFile === "まずファイルをアップロードしてください"
+      // &&
+      // !this.state.employeeNo?.startsWith("BP")
     ) {
       alert("まずファイルをアップロードしてください");
       let employeeList = this.state.employeeList;
