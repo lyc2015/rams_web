@@ -219,7 +219,7 @@ body {
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: white;
-  width: 8rem !important;
+  width: 5.5rem !important;
 }
 
 #datePicker-invoicePDF {
@@ -3198,7 +3198,6 @@ body {
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: white;
-    width: 4.8rem !important;
   }
 
   #datePicker-duty {
@@ -3279,7 +3278,7 @@ body {
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: white;
-    width: 4.8rem !important;
+    /* width: 4.8rem !important; */
   }
 
   #datePicker-duty {

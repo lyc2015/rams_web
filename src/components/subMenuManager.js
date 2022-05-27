@@ -365,7 +365,6 @@ class SubMenu extends Component {
                           ? menuStyleHover
                           : menuStyle
                       }
-                      block
                       data-place="right"
                       data-type="info"
                       data-tip=""
@@ -426,7 +425,6 @@ class SubMenu extends Component {
                                         "/subMenuManager/employeeInsertNew",
                                       state: { actionType: "insert" },
                                     })}
-                                    block
                                   >
                                     <div>
                                       <Link
@@ -468,7 +466,6 @@ class SubMenu extends Component {
                                       pathname:
                                         "/subMenuManager/employeeSearch",
                                     })}
-                                    block
                                   >
                                     <div>
                                       <Link
@@ -506,7 +503,6 @@ class SubMenu extends Component {
                                       pathname:
                                         "/subMenuManager/employeeInformation",
                                     })}
-                                    block
                                   >
                                     <div>
                                       <Link
@@ -544,7 +540,6 @@ class SubMenu extends Component {
                                       pathname:
                                         "/subMenuManager/certificatePrinting",
                                     })}
-                                    block
                                   >
                                     <div>
                                       <Link
@@ -582,7 +577,6 @@ class SubMenu extends Component {
                                       pathname:
                                         "/subMenuManager/envelopePrinting",
                                     })}
-                                    block
                                   >
                                     <div>
                                       <Link
@@ -620,7 +614,6 @@ class SubMenu extends Component {
                                       pathname:
                                         "/subMenuManager/salaryDetailSend",
                                     })}
-                                    block
                                   >
                                     <div>
                                       <Link
@@ -657,7 +650,6 @@ class SubMenu extends Component {
                                     onClick={this.shuseiTo.bind(this, {
                                       pathname: "/subMenuManager/sendInvoice",
                                     })}
-                                    block
                                   >
                                     <div>
                                       <Link
@@ -703,7 +695,6 @@ class SubMenu extends Component {
                           ? menuStyleHover
                           : menuStyle
                       }
-                      block
                       data-place="right"
                       data-type="info"
                       data-tip=""
@@ -761,7 +752,6 @@ class SubMenu extends Component {
                                     onClick={this.shuseiTo.bind(this, {
                                       pathname: "/subMenuManager/siteInfo",
                                     })}
-                                    block
                                   >
                                     <div>
                                       <Link
@@ -798,7 +788,6 @@ class SubMenu extends Component {
                                     onClick={this.shuseiTo.bind(this, {
                                       pathname: "/subMenuManager/siteSearch",
                                     })}
-                                    block
                                   >
                                     <div>
                                       <Link
@@ -899,7 +888,6 @@ class SubMenu extends Component {
                                       this,
                                       customerInfoPath
                                     )}
-                                    block
                                   >
                                     <div>
                                       <Link
@@ -937,7 +925,6 @@ class SubMenu extends Component {
                                       pathname:
                                         "/subMenuManager/customerInfoSearch",
                                     })}
-                                    block
                                   >
                                     <div>
                                       <Link
@@ -1045,7 +1032,6 @@ class SubMenu extends Component {
                                         onClick={this.shuseiTo.bind(this, {
                                           pathname: "/subMenuManager/wagesInfo",
                                         })}
-                                        block
                                       >
                                         <div>
                                           <Link
@@ -1084,7 +1070,6 @@ class SubMenu extends Component {
                                           pathname:
                                             "/subMenuManager/individualSales",
                                         })}
-                                        block
                                       >
                                         <div>
                                           <Link
@@ -1123,7 +1108,6 @@ class SubMenu extends Component {
                                           pathname:
                                             "/subMenuManager/monthlySalesSearch",
                                         })}
-                                        block
                                       >
                                         <div>
                                           <Link
@@ -1162,7 +1146,6 @@ class SubMenu extends Component {
                                           pathname:
                                             "/subMenuManager/individualCustomerSales",
                                         })}
-                                        block
                                       >
                                         <div>
                                           <Link
@@ -1201,7 +1184,6 @@ class SubMenu extends Component {
                                           pathname:
                                             "/subMenuManager/customerSalesList",
                                         })}
-                                        block
                                       >
                                         <div>
                                           <Link
@@ -1240,7 +1222,6 @@ class SubMenu extends Component {
                                           pathname:
                                             "/subMenuManager/profitChartist",
                                         })}
-                                        block
                                       >
                                         <div>
                                           <Link
@@ -1354,7 +1335,6 @@ class SubMenu extends Component {
                                         pathname:
                                           "/subMenuManager/manageSituation",
                                       })}
-                                      block
                                     >
                                       <div>
                                         <Link
@@ -1392,7 +1372,6 @@ class SubMenu extends Component {
                                         pathname:
                                           "/subMenuManager/salesSendLetter",
                                       })}
-                                      block
                                     >
                                       <div>
                                         <Link
@@ -1430,7 +1409,6 @@ class SubMenu extends Component {
                                         this,
                                         projectInfoPath
                                       )}
-                                      block
                                     >
                                       <div>
                                         <Link
@@ -1468,7 +1446,6 @@ class SubMenu extends Component {
                                         pathname:
                                           "/subMenuManager/projectInfoSearch",
                                       })}
-                                      block
                                     >
                                       <div>
                                         <Link
@@ -1578,7 +1555,6 @@ class SubMenu extends Component {
                                         pathname:
                                           "/subMenuManager/salesPointSet",
                                       })}
-                                      block
                                     >
                                       <div>
                                         <Link
@@ -1615,7 +1591,6 @@ class SubMenu extends Component {
                                       onClick={this.shuseiTo.bind(this, {
                                         pathname: "/subMenuManager/salesProfit",
                                       })}
-                                      block
                                     >
                                       <div>
                                         <Link
@@ -1652,7 +1627,6 @@ class SubMenu extends Component {
                                       onClick={this.shuseiTo.bind(this, {
                                         pathname: "/subMenuManager/salesPoint",
                                       })}
-                                      block
                                     >
                                       <div>
                                         <Link
@@ -1756,7 +1730,6 @@ class SubMenu extends Component {
                                         pathname:
                                           "/subMenuManager/dutyManagement",
                                       })}
-                                      block
                                     >
                                       <div>
                                         <Link
@@ -1793,7 +1766,6 @@ class SubMenu extends Component {
                                       onClick={this.shuseiTo.bind(this, {
                                         pathname: "/subMenuManager/sendRepot",
                                       })}
-                                      block
                                     >
                                       <div>
                                         <Link
@@ -1900,7 +1872,6 @@ class SubMenu extends Component {
                                           pathname:
                                             "/subMenuManager/situationChange",
                                         })}
-                                        block
                                       >
                                         <div>
                                           <Link
@@ -1939,7 +1910,6 @@ class SubMenu extends Component {
                                           pathname:
                                             "/subMenuManager/enterPeriodSearch",
                                         })}
-                                        block
                                       >
                                         <div>
                                           <Link
@@ -2047,7 +2017,6 @@ class SubMenu extends Component {
                                         pathname:
                                           "/subMenuManager/masterInsert",
                                       })}
-                                      block
                                     >
                                       <div>
                                         <Link
@@ -2085,7 +2054,6 @@ class SubMenu extends Component {
                                         pathname:
                                           "/subMenuManager/masterUpdate",
                                       })}
-                                      block
                                     >
                                       <div>
                                         <Link
@@ -2190,7 +2158,6 @@ class SubMenu extends Component {
                                       onClick={this.shuseiTo.bind(this, {
                                         pathname: "/subMenuManager/dataShare",
                                       })}
-                                      block
                                     >
                                       <div>
                                         <Link
@@ -2227,7 +2194,6 @@ class SubMenu extends Component {
                                       onClick={this.shuseiTo.bind(this, {
                                         pathname: "/subMenuManager/systemSet",
                                       })}
-                                      block
                                     >
                                       <div>
                                         <Link

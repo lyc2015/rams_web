@@ -19,8 +19,10 @@ import {
   faUpload,
   faDownload,
   faMoneyCheckAlt,
+  faLevelUpAlt,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
+
 import * as publicUtils from "./utils/publicUtils.js";
 import store from "./redux/store";
 import MyToast from "./myToast";
@@ -41,8 +43,11 @@ class workRepot extends React.Component {
     if (this.props.location.state !== undefined) {
       this.setState(
         {
+          backPage: this.props.location.state.backPage,
           employeeNo: this.props.location.state.employeeNo,
           employeeName: this.props.location.state.employeeName,
+          dutyManagementTempState:
+            this.props.location.state.dutyManagementTempState,
         },
         () => {
           this.selectWorkTime();
@@ -404,6 +409,21 @@ class workRepot extends React.Component {
     }
   };
 
+  /**
+   * 戻るボタン
+   */
+  back = () => {
+    var path = {};
+    path = {
+      pathname: this.state.backPage,
+      state: {},
+    };
+    if (this.state.dutyManagementTempState) {
+      path.state.dutyManagementTempState = this.state.dutyManagementTempState;
+    }
+    this.props.history.push(path);
+  };
+
   shuseiTo = (actionType) => {
     var path = {};
     const sendValue = {};
@@ -569,6 +589,15 @@ class workRepot extends React.Component {
                 onClick={this.shuseiTo.bind(this, "costRegistration")}
               >
                 <FontAwesomeIcon icon={faMoneyCheckAlt} /> 費用登録
+              </Button>
+              <Button
+                size="sm"
+                variant="info"
+                type="button"
+                onClick={this.back}
+                style={{ marginLeft: "5px" }}
+              >
+                <FontAwesomeIcon icon={faLevelUpAlt} /> 戻る
               </Button>
             </Col>
             <Col sm={6}>

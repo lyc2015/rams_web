@@ -30,6 +30,8 @@ import * as publicUtils from "./utils/publicUtils.js";
 import MyToast from "./myToast";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import store from "./redux/store";
+import moment from "moment";
+import { message } from "antd";
 registerLocale("ja", ja);
 axios.defaults.withCredentials = true;
 
@@ -108,10 +110,10 @@ class invoicePDF extends React.Component {
                 customerNo: this.props.location.state.customerNo,
                 customerName: this.state.customerNameList.find(
                   (v) => v.code === this.props.location.state.customerNo
-                ).text,
+                )?.text,
                 customerAbbreviation: this.state.customerAbbreviationList.find(
                   (v) => v.code === this.props.location.state.customerNo
-                ).text,
+                )?.text,
               },
               () => {
                 this.setState({ loading: false });
@@ -128,7 +130,8 @@ class invoicePDF extends React.Component {
   // 初期化データ
   initialState = {
     yearAndMonth: new Date(),
-    invoiceDate: new Date(),
+    invoiceDate: moment(new Date()).endOf("month").toDate(),
+    // invoiceDate: new Date(),
     yearAndMonthFormat:
       String(new Date().getFullYear()) +
       (new Date().getMonth() + 1 < 10
@@ -177,6 +180,7 @@ class invoicePDF extends React.Component {
       yearAndMonth: publicUtils.formateDate(this.state.yearAndMonth, false),
       customerNo: this.state.customerNo,
       invoiceNo: invoiceNo,
+      invoiceDate: moment(this.state.invoiceDate).format("YYYYMMDD"),
     };
     axios
       .post(
@@ -239,10 +243,9 @@ class invoicePDF extends React.Component {
                 ? this.state.invoiceNo
                 : result.data[0].invoiceNo,
             remark: result.data[0].remark,
-            invoiceDate: publicUtils.converToLocalTime(
-              result.data[0].invoiceDate,
-              true
-            ),
+            invoiceDate:
+              publicUtils.converToLocalTime(result.data[0].invoiceDate, true) ||
+              this.initialState.invoiceDate,
             deadLine: publicUtils.converToLocalTime(
               result.data[0].deadLine,
               true
@@ -259,7 +262,8 @@ class invoicePDF extends React.Component {
         }
       })
       .catch(function (error) {
-        this.setState({ loading: true });
+        // message.error(error);
+        // this.setState({ loading: true });
       });
   };
 
@@ -824,7 +828,9 @@ class invoicePDF extends React.Component {
       customerNo: this.state.customerNo,
       customerName: this.state.customerName,
       invoiceNo: this.state.invoiceNo,
-      invoiceDate: publicUtils.formateDate(this.state.yearAndMonth, true),
+      invoiceDate: publicUtils.formateDate(this.state.invoiceDate, true),
+      // invoiceDate: publicUtils.formateDate(this.state.yearAndMonth, true),
+      // invoiceDate: moment(this.state.invoiceDate).format("YYYYMMDD"),
       deadLine: publicUtils.formateDate(this.state.deadLine, true),
       bankCode: this.state.bankAccountInfo,
       remark: this.state.remark,
@@ -1309,7 +1315,7 @@ class invoicePDF extends React.Component {
               </InputGroup.Prepend>
               <FormControl
                 rows="3"
-                value={this.state.remark}
+                value={this.state.remark || ""}
                 onChange={this.valueChange}
                 name="remark"
                 as="textarea"
@@ -1389,8 +1395,8 @@ class invoicePDF extends React.Component {
             position: "absolute",
             top: "60%",
             left: "60%",
-            "margin-left": "-200px",
-            "margin-top": "-150px",
+            marginLeft: "-200px",
+            marginTop: "-150px",
           }}
         ></div>
         <br />

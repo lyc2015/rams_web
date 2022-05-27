@@ -69,6 +69,7 @@ class sendInvoice extends React.Component {
     if (locationState) {
       this.setState(
         {
+          dutyManagementTempState: locationState.dutyManagementTempState,
           yearAndMonth: locationState?.yearAndMonth,
         },
         () => {
@@ -183,6 +184,7 @@ class sendInvoice extends React.Component {
             yearAndMonth: this.state.yearAndMonth,
             backPage: "sendInvoice",
             sendValue: sendValue,
+            dutyManagementTempState: this.state.dutyManagementTempState,
           },
         };
         break;

@@ -32,13 +32,16 @@ import { message } from "antd";
 registerLocale("ja", ja);
 axios.defaults.withCredentials = true;
 
+const SIZE_PRE_PAGE = 12;
+
 /**
  * 社員勤務管理画面
  */
 class dutyManagement extends React.Component {
   constructor(props) {
     super(props);
-    this.state = this.initialState; //初期化
+    this.state =
+      this.props.location?.state?.dutyManagementTempState || this.initialState; //初期化
     this.approvalStatusChange = this.approvalStatusChange.bind(this);
     this.searchEmployee = this.searchDutyManagement.bind(this);
   }
@@ -174,17 +177,14 @@ class dutyManagement extends React.Component {
   }
 
   //　検索
-  searchDutyManagement = (rowNo) => {
+  searchDutyManagement = () => {
     const emp = {
       yearAndMonth: publicUtils.formateDate($("#datePicker").val(), false),
       approvalStatus: this.state.approvalStatus,
       customerNo: this.state.customerNo,
     };
 
-    if (
-      this.state.employeeStatus + "" &&
-      this.state.employeeStatus + "" !== "-1"
-    ) {
+    if (this.state.employeeStatus + "") {
       emp.employeeStatus = this.state.employeeStatus;
     }
     axios
@@ -230,72 +230,85 @@ class dutyManagement extends React.Component {
         if (minWorkingTime === 999) minWorkingTime = "";
         if (totalWorkingTime === 0) totalWorkingTime = "";
         if (averageWorkingTime === 0) averageWorkingTime = "";
-        this.setState({
-          employeeList: response.data,
-          totalPersons,
-          totalWorkingTime,
-          minWorkingTime,
-          averageWorkingTime,
-        });
+        this.setState(
+          {
+            employeeList: response.data,
+            totalPersons,
+            totalWorkingTime,
+            minWorkingTime,
+            averageWorkingTime,
+          },
+          () => {
+            // 当前employeeNo对应res.data中的下标
+            let { rowSelectEmployeeNo } = this.state;
+            let rowNo;
+            response.data.forEach((item) => {
+              if (item.employeeNo === rowSelectEmployeeNo) rowNo = item.rowNo;
+            });
 
-        let { rowSelectEmployeeNo } = this.state;
-        response.data.forEach((item) => {
-          if (item.employeeNo === rowSelectEmployeeNo) rowNo = item.rowNo;
-        });
-
-        if (rowNo !== undefined) {
-          if (rowNo > response.data.length) {
-            this.setState({
-              rowSelectEmployeeNo: "",
-              rowSelectEmployeeName: "",
-            });
-            this.refs.table.setState({
-              selectedRowKeys: [],
-            });
-            $("#update").attr("disabled", true);
-            $("#workRepot").attr("disabled", true);
-            $("#syounin").attr("disabled", true);
-            $("#upload").attr("disabled", true);
-          } else {
-            this.setState({
-              rowApprovalStatus: response.data[rowNo - 1].approvalStatus,
-            });
-            if (response.data[rowNo - 1].approvalStatus === "1") {
-              $("#update").attr("disabled", true);
-            } else {
-              $("#update").attr("disabled", false);
-            }
-          }
-        }
-        let flag = false;
-        for (let i in response.data) {
-          if (
-            String(response.data[i].employeeNo) ===
-            String(this.refs.table.state.selectedRowKeys)
-          ) {
-            flag = true;
-            break;
-          }
-        }
-        if (!flag) {
-          axios
-            .post(this.state.serverIP + "subMenu/checkSession")
-            .then((resultMap) => {
-              if (!(resultMap.data === null || resultMap.data === "")) {
+            if (rowNo) {
+              if (rowNo > response.data.length) {
                 this.setState({
                   rowSelectEmployeeNo: "",
                   rowSelectEmployeeName: "",
+                  currentPage: 1,
                 });
-                this.refs.table.setState({
-                  selectedRowKeys: [],
+                // this.refs.table.setState({
+                //   selectedRowKeys: [],
+                // });
+                $("#update").attr("disabled", true);
+                $("#workRepot").attr("disabled", true);
+                $("#syounin").attr("disabled", true);
+                $("#upload").attr("disabled", true);
+              } else {
+                this.setState({
+                  rowApprovalStatus: response.data[rowNo - 1].approvalStatus,
+                  currentPage: Math.ceil(rowNo / SIZE_PRE_PAGE),
                 });
+                if (response.data[rowNo - 1].approvalStatus === "1") {
+                  $("#update").attr("disabled", true);
+                } else {
+                  $("#update").attr("disabled", false);
+                }
               }
-            });
-          $("#update").attr("disabled", true);
-          $("#workRepot").attr("disabled", true);
-          $("#syounin").attr("disabled", true);
-          $("#upload").attr("disabled", true);
-        }
+            } else {
+              this.setState({
+                rowSelectEmployeeNo: "",
+                rowSelectEmployeeName: "",
+                currentPage: 1,
+              });
+            }
+            let flag = false;
+            for (let i in response.data) {
+              if (
+                String(response.data[i].employeeNo) ===
+                String(this.refs.table.state.selectedRowKeys)
+              ) {
+                flag = true;
+                break;
+              }
+            }
+            if (!flag) {
+              axios
+                .post(this.state.serverIP + "subMenu/checkSession")
+                .then((resultMap) => {
+                  if (!(resultMap.data === null || resultMap.data === "")) {
+                    this.setState({
+                      rowSelectEmployeeNo: "",
+                      rowSelectEmployeeName: "",
+                    });
+                    this.refs.table.setState({
+                      selectedRowKeys: [],
+                    });
+                  }
+                });
+              $("#update").attr("disabled", true);
+              $("#workRepot").attr("disabled", true);
+              $("#syounin").attr("disabled", true);
+              $("#upload").attr("disabled", true);
+            }
+          }
+        );
       });
   };
   /**
@@ -322,7 +335,7 @@ class dutyManagement extends React.Component {
       .post(this.state.serverIP + "dutyManagement/updateDutyManagement", emp)
       .then((result) => {
         if (result.data == true) {
-          this.searchDutyManagement(this.state.rowNo);
+          this.searchDutyManagement();
           this.setState({
             myToastShow: true,
             message:
@@ -452,6 +465,7 @@ class dutyManagement extends React.Component {
             sendValue: sendValue,
             searchFlag: true,
             actionType: "update",
+            dutyManagementTempState: this.state,
           },
         };
         break;
@@ -462,6 +476,7 @@ class dutyManagement extends React.Component {
             employeeNo: this.state.rowSelectEmployeeNo,
             backPage: "dutyManagement",
             sendValue: sendValue,
+            dutyManagementTempState: this.state,
           },
         };
         break;
@@ -474,6 +489,7 @@ class dutyManagement extends React.Component {
             sendValue: sendValue,
             employeeNo: this.state.rowSelectEmployeeNo,
             employeeName: this.state.rowSelectEmployeeName,
+            dutyManagementTempState: this.state,
           },
         };
         break;
@@ -483,9 +499,10 @@ class dutyManagement extends React.Component {
           state: {
             employeeNo: this.state.rowSelectEmployeeNo,
             employeeName: this.state.rowSelectEmployeeName,
-            backPage: "employeeSearch",
+            backPage: "dutyManagement",
             sendValue: sendValue,
             searchFlag: this.state.searchFlag,
+            dutyManagementTempState: this.state,
           },
         };
         break;
@@ -891,11 +908,18 @@ class dutyManagement extends React.Component {
       clickToSelect: true, // click to select, default is false
       clickToExpand: true, // click to expand row, default is false
       onSelect: this.handleRowSelect,
+      selected: this.state.rowSelectEmployeeNo
+        ? [this.state.rowSelectEmployeeNo]
+        : [],
     };
     //　 テーブルの定義
     const options = {
-      page: 1,
-      sizePerPage: 12, // which size per page you want to locate as default
+      // page: 1,
+      onPageChange: (page) => {
+        this.setState({ currentPage: page });
+      },
+      page: this.state.currentPage,
+      sizePerPage: SIZE_PRE_PAGE, // which size per page you want to locate as default
       pageStartIndex: 1, // where to start counting the pages
       paginationSize: 3, // the pagination bar size.
       prePage: "<", // Previous page button text
@@ -944,7 +968,29 @@ class dutyManagement extends React.Component {
             </Form.Group>
             <Form.Group>
               <Row>
-                <Col sm={3}>
+                <Col sm={2}>
+                  <InputGroup size="sm" className="mb-2">
+                    <InputGroup.Prepend>
+                      <InputGroup.Text id="inputGroup-sizing-sm">
+                        年月
+                      </InputGroup.Text>
+                      <DatePicker
+                        selected={this.state.yearAndMonth}
+                        onChange={this.inactiveYearAndMonth}
+                        autoComplete="off"
+                        locale="ja"
+                        dateFormat="yyyy/MM"
+                        showMonthYearPicker
+                        showFullMonthYearPicker
+                        maxDate={new Date()}
+                        id="datePicker"
+                        className="form-control form-control-sm"
+                      />
+                    </InputGroup.Prepend>
+                  </InputGroup>
+                </Col>
+
+                <Col sm={2}>
                   <InputGroup size="sm" className="mb-3">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
@@ -973,26 +1019,9 @@ class dutyManagement extends React.Component {
                     <font className="site-mark"></font>
                   </InputGroup>
                 </Col>
-                <Col sm={6}>
+
+                <Col sm={3}>
                   <InputGroup size="sm" className="mb-2">
-                    <InputGroup.Prepend>
-                      <InputGroup.Text id="inputGroup-sizing-sm">
-                        年月
-                      </InputGroup.Text>
-                      <DatePicker
-                        selected={this.state.yearAndMonth}
-                        onChange={this.inactiveYearAndMonth}
-                        autoComplete="off"
-                        locale="ja"
-                        dateFormat="yyyy/MM"
-                        showMonthYearPicker
-                        showFullMonthYearPicker
-                        maxDate={new Date()}
-                        id="datePicker"
-                        className="form-control form-control-sm"
-                      />
-                    </InputGroup.Prepend>
-                    <font style={{ marginRight: "30px" }}></font>
                     <InputGroup.Prepend>
                       <InputGroup.Text id="sixKanji">
                         ステータス
@@ -1014,10 +1043,9 @@ class dutyManagement extends React.Component {
                       <option value="3">未承認</option>
                       <option value="4">承認済</option>
                     </Form.Control>
-                    <font style={{ marginLeft: "80px" }}></font>
                   </InputGroup>
                 </Col>
-                <Col sm={3} style={{ marginLeft: "-80px" }}>
+                <Col sm={3}>
                   <InputGroup size="sm" className="mb-3">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="sanKanji">お客様</InputGroup.Text>

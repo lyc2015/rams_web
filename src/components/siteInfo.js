@@ -415,12 +415,9 @@ class siteInfo extends Component {
 
   // 页面加载
   componentDidMount() {
-    console.log(this.props.location);
-    if (
-      this.props.location.state !== null &&
-      this.props.location.state !== undefined &&
-      this.props.location.state !== ""
-    ) {
+    const { state: locationState } = this.props.location;
+
+    if (this.props.location.state) {
       let employeeNo = this.props.location.state.employeeNo;
       this.setState({
         backPage: this.props.location.state.backPage,
@@ -428,6 +425,7 @@ class siteInfo extends Component {
         pageDisabledFlag: false,
         searchFlag: this.props.location.state.searchFlag,
         backbackPage: this.props.location.state.backbackPage,
+        dutyManagementTempState: locationState.dutyManagementTempState,
       });
       if (
         this.props.location.state.currPage !== null &&
@@ -1416,6 +1414,9 @@ class siteInfo extends Component {
         backPage: this.state.backbackPage,
       },
     };
+    if (this.state.dutyManagementTempState) {
+      path.state.dutyManagementTempState = this.state.dutyManagementTempState;
+    }
     this.props.history.push(path);
   };
 
