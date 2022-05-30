@@ -92,7 +92,7 @@ class siteInfo extends Component {
     });
   };
 
-  valueChangeMoney = (event) => {
+  onUnitPriceChange = (event) => {
     var name = event.target.name;
     var value = event.target.value;
     this.setState(
@@ -106,6 +106,25 @@ class siteInfo extends Component {
       }
     );
   };
+
+  // onUnitPriceChange = (event) => {
+  //   var name = event.target.name;
+  //   var value = event.target.value;
+  //   // let temp = publicUtils.ToCDB(value);
+  //   // this.setState({ unitPrice: temp });
+  //   let temp = publicUtils.toCharCode(event);
+  //   console.log({ value, temp }, "temp");
+  //   this.setState(
+  //     {
+  //       [event.target.name]: temp,
+  //     },
+  //     () => {
+  //       this.setState({
+  //         [name]: utils.addComma(value),
+  //       });
+  //     }
+  //   );
+  // };
 
   /**
    * タイプが違う時に、色々な操作をします。
@@ -1737,11 +1756,13 @@ class siteInfo extends Component {
                       <InputGroup.Text id="cssNikanji">単価</InputGroup.Text>
                     </InputGroup.Prepend>
                     <FormControl
+                      ref="unitPrice"
                       maxLength="8"
                       id="unitPrice"
                       name="unitPrice"
                       type="text"
-                      onChange={this.valueChangeMoney}
+                      onChange={(event) => this.onUnitPriceChange(event)}
+                      // onKeyUp={(event) => this.onUnitPriceKeyUp(event)}
                       value={unitPrice}
                       disabled={pageDisabledFlag}
                     />

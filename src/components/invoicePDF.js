@@ -75,6 +75,7 @@ class invoicePDF extends React.Component {
         {
           dutyManagementSelectedEmployeeNo:
             locationState.dutyManagementSelectedEmployeeNo,
+          sendInvoiceTempState: locationState.sendInvoiceTempState,
         },
         () => {
           this.getCompanyDate();
@@ -314,6 +315,7 @@ class invoicePDF extends React.Component {
         yearAndMonth: this.state.yearAndMonth,
         dutyManagementSelectedEmployeeNo:
           this.state.dutyManagementSelectedEmployeeNo,
+        sendInvoiceTempState: this.state.sendInvoiceTempState,
         // employeeNo: this.props.location.state.employeeNo,
       },
     };

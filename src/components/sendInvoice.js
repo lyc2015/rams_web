@@ -140,27 +140,45 @@ class sendInvoice extends React.Component {
   };
 
   // 行Selectファンクション
-  handleRowSelect = (row, isSelected, e) => {
+  handleRowSelect = async (row, isSelected, e) => {
     if (isSelected) {
-      this.setState({
-        selected: [row.employeeNo],
-        rowCustomerNo: row.customerNo,
-        rowCustomerName: row.customerName,
-        rowPurchasingManagers: row.purchasingManagers,
-        rowEmployeeList: row.sendInvoiceWorkTimeModel,
-        rowPurchasingManagersMail: row.purchasingManagersMail,
-        sendFlag: row.havePDF === "false",
-        reportRowNo: row.rowNo,
-        mailTitle:
-          "請求書_" +
-          this.state.yearAndMonth.getFullYear() +
-          "年" +
-          (this.state.yearAndMonth.getMonth() + 1) +
-          "月分_" +
-          (row.customerName.search("会社") === -1
-            ? row.customerName + `株式会社`
-            : row.customerName),
-      });
+      this.setState(
+        {
+          selected: [row.employeeNo],
+          rowCustomerNo: row.customerNo,
+          rowCustomerName: row.customerName,
+          rowPurchasingManagers: row.purchasingManagers,
+          rowEmployeeList: row.sendInvoiceWorkTimeModel,
+          rowPurchasingManagersMail: row.purchasingManagersMail,
+          sendFlag: row.havePDF === "false",
+          reportRowNo: row.rowNo,
+          mailTitle:
+            "請求書_" +
+            this.state.yearAndMonth.getFullYear() +
+            "年" +
+            (this.state.yearAndMonth.getMonth() + 1) +
+            "月分_" +
+            (row.customerName.search("会社") === -1
+              ? row.customerName + `株式会社`
+              : row.customerName),
+        },
+        async () => {
+          let { mailCC, customerNo } = await this.getSalesPersonsCC();
+          if (mailCC.length > 0) {
+            const { sendInvoiceList } = this.state;
+            for (let i in sendInvoiceList) {
+              if (sendInvoiceList[i].customerNo === customerNo) {
+                sendInvoiceList[i].mailCC = mailCC;
+                break;
+              }
+            }
+
+            this.setState({
+              sendInvoiceList,
+            });
+          }
+        }
+      );
     } else {
       this.setState({
         selected: [],
@@ -218,6 +236,7 @@ class sendInvoice extends React.Component {
               : "",
             dutyManagementSelectedEmployeeNo:
               this.state.dutyManagementSelectedEmployeeNo,
+            sendInvoiceTempState: this.state,
           },
         };
         break;
@@ -526,8 +545,10 @@ P-mark:第21004525(02)号
               $("#datePicker").val(),
               false
             ),
+            // mailCC:this.state.mailCC
             customerAbbreviation: sendInvoiceList[i].customerAbbreviation,
             mail: sendInvoiceList[i].purchasingManagersMail,
+            selectedMailCC: sendInvoiceList[i].mailCC.join(","),
             purchasingManagers: sendInvoiceList[i].purchasingManagers,
             customerNo: sendInvoiceList[i].customerNo,
             customerName: sendInvoiceList[i].customerName,
@@ -645,6 +666,17 @@ P-mark:第21004525(02)号
       selectAllFlag: flag,
       sendInvoiceList: sendInvoiceList,
     });
+  };
+
+  employeeNameFormat = (cell, row) => {
+    let text = cell;
+
+    if (row.employeeNo?.startsWith("BP")) {
+      text += row.bpBelongCustomerAbbreviation
+        ? `(${row.bpBelongCustomerAbbreviation})`
+        : "(BP)";
+    }
+    return text;
   };
 
   employeeListFormat = (cell, row) => {
@@ -792,8 +824,30 @@ P-mark:第21004525(02)号
   /**
    *  小さい画面の開き
    */
-  handleShowModal = (Kbn) => {
+  handleShowModal = async (Kbn) => {
     this.setState({ showSendInvoiceLetter: true });
+  };
+
+  getSalesPersonsCC = async () => {
+    try {
+      const { rowCustomerNo, rowPurchasingManagersMail } = this.state;
+      let res = await axios.post(
+        this.state.serverIP + "salesSendLetters/getSalesPersonsCC",
+        {
+          customerNo: rowCustomerNo,
+        }
+      );
+      if (res.data.length > 0) {
+        let mailCC = res.data;
+        mailCC = mailCC
+          ?.map((item) => item.customerDepartmentMail)
+          .filter((value) => value !== rowPurchasingManagersMail);
+        return { mailCC, customerNo: rowCustomerNo };
+      }
+      return { mailCC: [], customerNo: rowCustomerNo };
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   setNewMail = (mailConfirmContont) => {
@@ -810,7 +864,7 @@ P-mark:第21004525(02)号
   };
 
   render() {
-    const { sendInvoiceList } = this.state;
+    const { sendInvoiceList, customerAbbreviationList } = this.state;
     console.log(
       {
         state: this.state,
@@ -854,6 +908,14 @@ P-mark:第21004525(02)号
       mode: "click",
       blurToSave: true,
     };
+    let filteredCustomerAbbreviationList = [];
+    if (sendInvoiceList?.length > 0) {
+      let customerNoList = sendInvoiceList.map((item) => item.customerNo);
+      filteredCustomerAbbreviationList = customerAbbreviationList.filter(
+        (item) => customerNoList.includes(item.code)
+      );
+    }
+
     return (
       <div>
         <div style={{ display: this.state.myToastShow ? "block" : "none" }}>
@@ -883,7 +945,11 @@ P-mark:第21004525(02)号
                   returnMail={this}
                   mailConfirmContont={this.state.mailConfirmContont}
                   mailTO={this.state.rowPurchasingManagersMail}
+                  mailCC={this.state.sendInvoiceList[
+                    this.state.reportRowNo - 1
+                  ]?.mailCC?.join(",")}
                   mailTitle={this.state.mailTitle}
+                  customerNo={this.state.rowCustomerNo}
                 />
               </Modal.Body>
             </Modal>
@@ -926,11 +992,11 @@ P-mark:第21004525(02)号
                       id="customerAbbreviation"
                       name="customerAbbreviation"
                       value={
-                        this.state.customerAbbreviationList.find(
+                        filteredCustomerAbbreviationList.find(
                           (v) => v.code === this.state.customerAbbreviation
                         ) || ""
                       }
-                      options={this.state.customerAbbreviationList}
+                      options={filteredCustomerAbbreviationList}
                       getOptionLabel={(option) =>
                         option.text ? option.text : ""
                       }
@@ -1043,9 +1109,9 @@ P-mark:第21004525(02)号
               </TableHeaderColumn>
               <TableHeaderColumn
                 // width="10%"
-
                 tdStyle={{ padding: ".45em" }}
                 dataField="employeeName"
+                dataFormat={this.employeeNameFormat.bind(this)}
               >
                 社員氏名
               </TableHeaderColumn>

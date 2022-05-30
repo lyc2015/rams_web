@@ -32,6 +32,8 @@ class sendInvoiceLetter extends Component {
     this.setState({
       mailConfirmContont: this.props.mailConfirmContont,
       mailTO: this.props.mailTO,
+      mailCC: this.props.mailCC,
+      customerNo: this.props.customerNo,
       mailTitle: this.props.mailTitle,
     });
   }
@@ -41,6 +43,14 @@ class sendInvoiceLetter extends Component {
   };
 
   render() {
+    console.log(
+      {
+        state: this.state,
+        props: this.props,
+      },
+      "render"
+    );
+
     return (
       <div>
         <div style={{ display: this.state.myToastShow ? "block" : "none" }}>
@@ -62,6 +72,7 @@ class sendInvoiceLetter extends Component {
               onChange={this.valueChange}
               size="sm"
               name="mailTO"
+              disabled
             />
           </InputGroup>
 
@@ -76,6 +87,7 @@ class sendInvoiceLetter extends Component {
               onChange={this.valueChange}
               size="sm"
               name="mailCC"
+              disabled
             />
           </InputGroup>
 
@@ -92,6 +104,7 @@ class sendInvoiceLetter extends Component {
               onChange={this.valueChange}
               size="sm"
               name="mailTitle"
+              disabled
             />
           </InputGroup>
 

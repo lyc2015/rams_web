@@ -736,7 +736,11 @@ class dutyManagement extends React.Component {
         overlayClassName={"w50p"}
         placement="leftBottom"
         content={
-          <div>
+          <div
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+          >
             <Row>
               <Col style={{ padding: "0px", marginTop: "10px" }}>
                 <font>{this.state.month + "月"}</font>
@@ -889,7 +893,12 @@ class dutyManagement extends React.Component {
   };
 
   render() {
-    const { approvalStatus, employeeList, employeeStatusS } = this.state;
+    const {
+      approvalStatus,
+      employeeList,
+      customerAbbreviationList,
+      employeeStatusS,
+    } = this.state;
 
     console.log(
       {
@@ -937,6 +946,11 @@ class dutyManagement extends React.Component {
       mode: "click",
       blurToSave: true,
     };
+
+    let customerNoList = employeeList?.map((item) => item.customerNo);
+    let filteredCustomerAbbreviationList = customerAbbreviationList.filter(
+      (item) => customerNoList.includes(item.code)
+    );
 
     return (
       <div>
@@ -1054,11 +1068,11 @@ class dutyManagement extends React.Component {
                       id="customerAbbreviation"
                       name="customerAbbreviation"
                       value={
-                        this.state.customerAbbreviationList.find(
+                        filteredCustomerAbbreviationList.find(
                           (v) => v.code === this.state.customerAbbreviation
                         ) || ""
                       }
-                      options={this.state.customerAbbreviationList}
+                      options={filteredCustomerAbbreviationList}
                       getOptionLabel={(option) =>
                         option.text ? option.text : ""
                       }
