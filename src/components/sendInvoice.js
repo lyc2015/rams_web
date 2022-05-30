@@ -303,55 +303,35 @@ class sendInvoice extends React.Component {
       row.workingTimeReport === ""
     ) {
       return "";
-    } else {
-      if (cell)
-        return (
-          <div>
-            <font
-              onClick={(event) => {
-                this.setReport(row);
-              }}
-            >
-              あり
-            </font>
-            <input
-              type="checkbox"
-              onChange={(event) => {
-                this.setReport(row);
-              }}
-              checked
-            />
-          </div>
-        );
-      else
-        return (
-          <div>
-            <font
-              onClick={(event) => {
-                this.setReport(row);
-              }}
-            >
-              あり
-            </font>
-            <input
-              type="checkbox"
-              onChange={(event) => {
-                this.setReport(row);
-              }}
-            />
-          </div>
-        );
     }
+    return (
+      <div>
+        <font
+          onClick={(event) => {
+            this.setReport(row);
+          }}
+        >
+          あり
+        </font>
+        <input
+          type="checkbox"
+          onChange={(event) => {
+            this.setReport(row);
+          }}
+          checked={cell ? true : false}
+        />
+      </div>
+    );
   };
 
   setReport = (row) => {
-    let sendInvoiceList = this.state.sendInvoiceList;
-    let sendInvoiceWorkTimeModel =
-      sendInvoiceList[this.state.reportRowNo - 1].sendInvoiceWorkTimeModel;
+    const { sendInvoiceList } = this.state;
+    const { sendInvoiceWorkTimeModel } =
+      sendInvoiceList[this.state.reportRowNo - 1];
     sendInvoiceWorkTimeModel[row.rowNo - 1].report =
       !sendInvoiceWorkTimeModel[row.rowNo - 1].report;
     this.setState({
-      sendInvoiceList: sendInvoiceList,
+      sendInvoiceList,
     });
     this.reportDownload(
       sendInvoiceWorkTimeModel[row.rowNo - 1].workingTimeReport,
@@ -648,9 +628,9 @@ P-mark:第21004525(02)号
   };
 
   selectAll = (flag) => {
-    let sendInvoiceList = this.state.sendInvoiceList;
+    const { sendInvoiceList, reportRowNo } = this.state;
     let sendInvoiceWorkTimeModel =
-      sendInvoiceList[this.state.reportRowNo - 1].sendInvoiceWorkTimeModel;
+      sendInvoiceList[reportRowNo - 1].sendInvoiceWorkTimeModel;
     for (let i in sendInvoiceWorkTimeModel) {
       if (flag) {
         this.reportDownload(
@@ -691,7 +671,11 @@ P-mark:第21004525(02)号
         overlayClassName={"w50p"}
         placement="leftBottom"
         content={
-          <div>
+          <div
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+          >
             <Row>
               <Col style={{ padding: "0px", marginTop: "10px" }}>
                 <h2>要員確認</h2>
@@ -705,7 +689,7 @@ P-mark:第21004525(02)号
                     size="sm"
                     onClick={this.selectAll.bind(this, true)}
                   >
-                    選択
+                    すべて選択
                   </Button>{" "}
                   <Button
                     variant="info"
@@ -722,7 +706,7 @@ P-mark:第21004525(02)号
                 pagination={false}
                 options={options}
                 data={row.sendInvoiceWorkTimeModel}
-                selectRow={selectRow1}
+                // selectRow={selectRow1}
                 headerStyle={{ background: "#5599FF" }}
                 striped
                 hover
@@ -789,7 +773,7 @@ P-mark:第21004525(02)号
         title=""
         trigger="click"
       >
-        <Button variant="warning" size="sm">
+        <Button id="popoverEmployeeBtn" variant="warning" size="sm">
           要員
         </Button>
       </Popover>
