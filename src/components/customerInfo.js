@@ -160,11 +160,19 @@ class CustomerInfo extends Component {
    */
   async componentDidMount() {
     console.log(this.props.history);
+    const { state: locationState } = this.props.location;
+    if (locationState) {
+      this.setState({
+        sendInvoiceTempState: locationState.sendInvoiceTempState,
+      });
+    }
+
     $("#response").val("");
     console.log(
       this.props.location.state,
       "CustomerInfo-this.props.location.state"
     );
+
     this.setState({
       actionType: this.props.location.state.actionType,
       backPage: this.props.location.state.backPage,
@@ -921,6 +929,7 @@ class CustomerInfo extends Component {
         projectNo: this.state.projectNo,
         employeeNo: this.props.location.state.employeeNo,
         yearAndMonth: this.props.location.state.yearAndMonth,
+        sendInvoiceTempState: this.state.sendInvoiceTempState,
       },
     };
     this.props.history.push(path);

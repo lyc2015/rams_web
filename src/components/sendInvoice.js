@@ -72,9 +72,12 @@ class sendInvoice extends React.Component {
       this.setState(
         {
           dutyManagementSelectedEmployeeNo:
-            locationState.dutyManagementSelectedEmployeeNo,
-          dutyManagementTempState: locationState.dutyManagementTempState,
-          yearAndMonth: locationState?.yearAndMonth,
+            locationState.dutyManagementSelectedEmployeeNo ||
+            this.state.dutyManagementSelectedEmployeeNo,
+          dutyManagementTempState:
+            locationState.dutyManagementTempState ||
+            this.state.dutyManagementTempState,
+          yearAndMonth: locationState?.yearAndMonth || this.state.yearAndMonth,
         },
         () => {
           this.searchSendInvoiceList();
@@ -242,6 +245,7 @@ class sendInvoice extends React.Component {
               ? this.state.selected[0]
               : "",
             yearAndMonth: this.state.yearAndMonth,
+            sendInvoiceTempState: this.state,
           },
         };
         break;
@@ -690,6 +694,9 @@ P-mark:第21004525(02)号
     });
   };
 
+  customerNameFormat = (cell, row) => {
+    return `${cell}(${row.customerNo})`;
+  };
   employeeNameFormat = (cell, row) => {
     let text = cell;
 
@@ -1150,16 +1157,10 @@ P-mark:第21004525(02)号
                 社員番号
               </TableHeaderColumn>
               <TableHeaderColumn
-                width="106"
-                tdStyle={{ padding: ".45em" }}
-                dataField="customerNo"
-              >
-                お客様番号
-              </TableHeaderColumn>
-              <TableHeaderColumn
                 // width="24%"
                 tdStyle={{ padding: ".45em" }}
                 dataField="customerName"
+                dataFormat={this.customerNameFormat.bind(this)}
               >
                 お客様
               </TableHeaderColumn>

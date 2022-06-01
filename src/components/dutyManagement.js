@@ -27,8 +27,7 @@ import * as publicUtils from "./utils/publicUtils.js";
 import MyToast from "./myToast";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import store from "./redux/store";
-import { message } from "antd";
-import { Popover } from "antd";
+import { message, Tooltip, Popover } from "antd";
 registerLocale("ja", ja);
 axios.defaults.withCredentials = true;
 
@@ -116,6 +115,7 @@ class dutyManagement extends React.Component {
   };
   //　初期化データ
   initialState = {
+    employeeStatus: "-1",
     //yearAndMonth: new Date(new Date().getFullYear() + '/' + (new Date().getMonth() + 1 < 10 ? '0' + (new Date().getMonth() + 1) : (new Date().getMonth() + 1))).getTime(),
     yearAndMonth: new Date(),
     month: new Date().getMonth() + 1,
@@ -182,11 +182,9 @@ class dutyManagement extends React.Component {
       yearAndMonth: publicUtils.formateDate($("#datePicker").val(), false),
       approvalStatus: this.state.approvalStatus,
       customerNo: this.state.customerNo,
+      employeeStatus: this.state.employeeStatus,
     };
 
-    if (this.state.employeeStatus + "") {
-      emp.employeeStatus = this.state.employeeStatus;
-    }
     axios
       .post(this.state.serverIP + "dutyManagement/selectDutyManagement", emp)
       .then((response) => {
@@ -361,6 +359,15 @@ class dutyManagement extends React.Component {
     yearAndMonth: new Date(),
   };
 
+  workTimeFormat = (cell, row) => {
+    let arr = [cell, `${cell}(アップロード)`, `${cell}(時間入力)`];
+    return (
+      <Tooltip title={String(row.checkSection) ? arr[row.checkSection] : cell}>
+        {cell}
+      </Tooltip>
+    );
+  };
+
   employeeNameFormat = (cell, row) => {
     let text = cell;
 
@@ -369,7 +376,7 @@ class dutyManagement extends React.Component {
         ? `(${row.bpBelongCustomerAbbreviation})`
         : "(BP)";
     }
-    return this.greyShow(text, row);
+    return <Tooltip title={row.employeeNo}>{this.greyShow(text, row)}</Tooltip>;
   };
 
   overtimePayFormat = (cell, row) => {
@@ -1332,6 +1339,7 @@ class dutyManagement extends React.Component {
               <TableHeaderColumn
                 width="90"
                 dataField="workTime"
+                dataFormat={this.workTimeFormat.bind(this)}
                 editable={false}
               >
                 稼働時間

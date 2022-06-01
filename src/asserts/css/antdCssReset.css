@@ -1,6 +1,9 @@
 .ant-message-error {
   display: flex;
-  align-items: center;
+  /* align-items: center; */
+}
+.ant-message-notice {
+  text-align: left !important;
 }
 
 .ant-picker {

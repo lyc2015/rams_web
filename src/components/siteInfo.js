@@ -93,38 +93,10 @@ class siteInfo extends Component {
   };
 
   onUnitPriceChange = (value, name) => {
-    value = publicUtils.ToCDB(value);
-    debugger;
-    this.setState(
-      {
-        [name]: value,
-      },
-      () => {
-        this.setState({
-          [name]: utils.addComma(value),
-        });
-      }
-    );
+    this.setState({
+      [name]: value,
+    });
   };
-
-  // onUnitPriceChange = (event) => {
-  //   var name = event.target.name;
-  //   var value = event.target.value;
-  //   // let temp = publicUtils.ToCDB(value);
-  //   // this.setState({ unitPrice: temp });
-  //   let temp = publicUtils.toCharCode(event);
-  //   console.log({ value, temp }, "temp");
-  //   this.setState(
-  //     {
-  //       [event.target.name]: temp,
-  //     },
-  //     () => {
-  //       this.setState({
-  //         [name]: utils.addComma(value),
-  //       });
-  //     }
-  //   );
-  // };
 
   /**
    * タイプが違う時に、色々な操作をします。
@@ -1720,23 +1692,6 @@ class siteInfo extends Component {
                         }
                         disabled={pageDisabledFlag}
                       />
-                      {/* <DatePicker
-                        // filterDate={this.setGray}
-                        selected={this.state.admissionStartDate}
-                        onChange={this.handleAdmissionStartDate.bind(this)}
-                        dateFormat="yyyy/MM/dd"
-                        name="admissionStartDate"
-                        className="form-control form-control-sm"
-                        calendarClassName="calendarClass"
-                        autoComplete="off"
-                        locale="ja"
-                        id={
-                          pageDisabledFlag
-                            ? "siteAdmissionStartReadonlyDefault"
-                            : "siteAdmissionStart"
-                        }
-                        disabled={pageDisabledFlag}
-                      /> */}
                     </InputGroup.Prepend>
                     <FormControl
                       className="auto form-control siteTime"
@@ -1758,30 +1713,17 @@ class siteInfo extends Component {
                     <InputNumber
                       ref="unitPrice"
                       min={0}
-                      // max={10}
                       id="unitPrice"
                       name="unitPrice"
                       maxLength="8"
-                      defaultValue={3}
                       onChange={(value) =>
                         this.onUnitPriceChange(value, "unitPrice")
                       }
-                      formatter={(value) => `${value}`}
+                      formatter={(value) => `${utils.addComma(value)}`}
                       value={unitPrice}
                       disabled={pageDisabledFlag}
                       controls={false}
                     />
-                    {/* <FormControl
-                      ref="unitPrice"
-                      maxLength="8"
-                      id="unitPrice"
-                      name="unitPrice"
-                      type="text"
-                      onChange={(event) => this.onUnitPriceChange(event)}
-                      // onKeyUp={(event) => this.onUnitPriceKeyUp(event)}
-                      value={unitPrice}
-                      disabled={pageDisabledFlag}
-                    /> */}
                     <InputGroup.Prepend id="checkBox">
                       <InputGroup.Text className="hiwari">日割</InputGroup.Text>
                       <InputGroup.Checkbox

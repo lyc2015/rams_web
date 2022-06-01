@@ -32,7 +32,7 @@ import SalesEmpAddPopup from "./salesEmpAddPopup";
 import $ from "jquery";
 import MyToast from "./myToast";
 import ErrorsMessageToast from "./errorsMessageToast";
-import { message as myMessage, Select } from "antd";
+import { message, Select } from "antd";
 axios.defaults.withCredentials = true;
 /**
  * 営業送信お客確認画面
@@ -706,7 +706,7 @@ Email：` +
     try {
       let checkCanSendEmailRes = this.checkCanSendEmail();
       if (!checkCanSendEmailRes.status) {
-        myMessage.error(checkCanSendEmailRes.msg);
+        message.error({ content: checkCanSendEmailRes.msg, duration: 3 });
         return;
       }
 
@@ -758,7 +758,7 @@ Email：` +
         });
       })
       .catch(function (error) {
-        //myMessage.error(error);
+        //message.error(error);
       });
   };
 
@@ -771,7 +771,7 @@ Email：` +
         });
       })
       .catch(function (error) {
-        //myMessage.error(error);
+        //message.error(error);
       });
   };
 
@@ -830,7 +830,7 @@ Email：` +
 
   beforeSaveCell = (row, cellName, cellValue) => {
     if (cellValue.length > 7 || Number.isNaN(cellValue)) {
-      myMessage.error("入力された単価は合理的ではありません！");
+      message.error("入力された単価は合理的ではありません！");
       return false;
     }
   };

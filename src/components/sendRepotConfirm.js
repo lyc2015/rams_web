@@ -28,7 +28,7 @@ import SalesEmpAddPopup from "./salesEmpAddPopup";
 import $, { now } from "jquery";
 import MyToast from "./myToast";
 import ErrorsMessageToast from "./errorsMessageToast";
-import { message as myMessage } from "antd";
+import { message } from "antd";
 axios.defaults.withCredentials = true;
 
 /**
@@ -687,7 +687,7 @@ class sendRepotConfirm extends React.Component {
 
   beforeSaveCell = (row, cellName, cellValue) => {
     if (cellValue.length > 7 || Number.isNaN(cellValue)) {
-      myMessage.error("入力された単価は合理的ではありません！");
+      message.error("入力された単価は合理的ではありません！");
       return false;
     }
   };

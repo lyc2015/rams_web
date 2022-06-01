@@ -19,6 +19,7 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import * as utils from "./utils/publicUtils.js";
 import store from "./redux/store";
 import MyToast from "./myToast";
+import { InputNumber } from "antd";
 import $ from "jquery";
 axios.defaults.withCredentials = true;
 
@@ -47,6 +48,11 @@ class bpInfo extends React.Component {
   valueChange = (event) => {
     this.setState({
       [event.target.name]: event.target.value,
+    });
+  };
+  handleValueChange = (value, name) => {
+    this.setState({
+      [name]: value,
     });
   };
 
@@ -419,15 +425,18 @@ class bpInfo extends React.Component {
                       BP単価
                     </InputGroup.Text>
                   </InputGroup.Prepend>
-                  <FormControl
+                  <InputNumber
                     placeholder="BP単価"
                     value={bpUnitPrice}
                     autoComplete="off"
-                    onChange={this.valueChange}
+                    onChange={(value) =>
+                      this.handleValueChange(value, "bpUnitPrice")
+                    }
                     size="sm"
                     name="bpUnitPrice"
-                    maxLength="3"
                     disabled={this.props.actionType === "detail" ? true : false}
+                    maxLength="3"
+                    controls={false}
                   />
                   <InputGroup.Prepend>
                     <InputGroup.Text id="twoKanji">万円</InputGroup.Text>
