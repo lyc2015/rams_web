@@ -31,7 +31,7 @@ import MyToast from "./myToast";
 import ErrorsMessageToast from "./errorsMessageToast";
 import store from "./redux/store";
 import moment from "moment";
-import { DatePicker as AntdDatePicker } from "antd";
+import { DatePicker as AntdDatePicker, InputNumber } from "antd";
 axios.defaults.withCredentials = true;
 registerLocale("ja", ja);
 moment.locale("ja");
@@ -92,12 +92,12 @@ class siteInfo extends Component {
     });
   };
 
-  onUnitPriceChange = (event) => {
-    var name = event.target.name;
-    var value = event.target.value;
+  onUnitPriceChange = (value, name) => {
+    value = publicUtils.ToCDB(value);
+    debugger;
     this.setState(
       {
-        [event.target.name]: event.target.value,
+        [name]: value,
       },
       () => {
         this.setState({
@@ -1755,7 +1755,23 @@ class siteInfo extends Component {
                     <InputGroup.Prepend>
                       <InputGroup.Text id="cssNikanji">単価</InputGroup.Text>
                     </InputGroup.Prepend>
-                    <FormControl
+                    <InputNumber
+                      ref="unitPrice"
+                      min={0}
+                      // max={10}
+                      id="unitPrice"
+                      name="unitPrice"
+                      maxLength="8"
+                      defaultValue={3}
+                      onChange={(value) =>
+                        this.onUnitPriceChange(value, "unitPrice")
+                      }
+                      formatter={(value) => `${value}`}
+                      value={unitPrice}
+                      disabled={pageDisabledFlag}
+                      controls={false}
+                    />
+                    {/* <FormControl
                       ref="unitPrice"
                       maxLength="8"
                       id="unitPrice"
@@ -1765,7 +1781,7 @@ class siteInfo extends Component {
                       // onKeyUp={(event) => this.onUnitPriceKeyUp(event)}
                       value={unitPrice}
                       disabled={pageDisabledFlag}
-                    />
+                    /> */}
                     <InputGroup.Prepend id="checkBox">
                       <InputGroup.Text className="hiwari">日割</InputGroup.Text>
                       <InputGroup.Checkbox

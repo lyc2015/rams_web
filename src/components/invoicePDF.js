@@ -364,6 +364,7 @@ class invoicePDF extends React.Component {
                 <input
                   type="text"
                   class=" form-control editor edit-text"
+                  maxLength={20}
                   name="systemName"
                   value={row.systemName}
                   onChange={(event) => this.tableValueChange(event, cell, row)}
@@ -440,40 +441,40 @@ class invoicePDF extends React.Component {
     } else {
       return (
         <div>
-          <Row>
-            <font>
+          <div className="df">
+            <div className="wordBreak">
               {row.systemName === null || row.systemName === ""
                 ? this.state.employeeNameFlag
-                  ? cell === null
-                    ? ""
-                    : cell
+                  ? cell || ""
                   : ""
-                : (this.state.systemNameFlag ||
+                : this.state.systemNameFlag ||
                   row.systemName.search("出張") !== -1 ||
                   row.systemName.search("食事") !== -1 ||
                   row.systemName.search("宿泊") !== -1 ||
                   row.systemName.search("他の") !== -1
-                    ? row.systemName
-                    : "技術支援") +
-                  (this.state.employeeNameFlag
-                    ? cell === null
-                      ? ""
-                      : "(" + cell + ")"
-                    : "")}
-            </font>
-          </Row>
-          <Row>
-            <Col style={{ margin: "0px", padding: "0px" }} sm={9}>
+                ? row.systemName
+                : "技術支援"}
+              <span>
+                {this.state.employeeNameFlag
+                  ? cell === null
+                    ? ""
+                    : `(${cell})`
+                  : ""}
+              </span>
+            </div>
+          </div>
+          <div className="df">
+            <div className="mr5" sm={9}>
               {row.workPeriod}
-            </Col>
-            <Col sm={3}>
+            </div>
+            <div sm={3}>
               {this.state.workTimeFlag
                 ? row.sumWorkTime === null || row.sumWorkTime === ""
                   ? ""
                   : row.sumWorkTime + "H"
                 : ""}
-            </Col>
-          </Row>
+            </div>
+          </div>
         </div>
       );
     }
@@ -981,6 +982,14 @@ class invoicePDF extends React.Component {
       clickToExpand: true, // click to expand row, default is false
       onSelect: this.handleRowSelect,
     };
+    console.log(
+      {
+        state: this.state,
+        propsState: this.props.location.state,
+        table: this.refs.table,
+      },
+      "render"
+    );
     // テーブルの定義
     const options = {
       page: this.state.currentPage,

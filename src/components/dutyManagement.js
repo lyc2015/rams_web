@@ -265,6 +265,9 @@ class dutyManagement extends React.Component {
                   rowApprovalStatus: response.data[rowNo - 1].approvalStatus,
                   currentPage: Math.ceil(rowNo / SIZE_PRE_PAGE),
                 });
+                $("#workRepot").attr("disabled", false);
+                $("#upload").attr("disabled", false);
+                $("#syounin").attr("disabled", false);
                 if (response.data[rowNo - 1].approvalStatus === "1") {
                   $("#update").attr("disabled", true);
                 } else {

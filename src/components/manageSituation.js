@@ -1552,6 +1552,9 @@ class manageSituation extends React.Component {
         employeeNo: row.employeeNo,
       })
       .then((result) => {
+        if (result.data.length < 0) {
+          return;
+        }
         let employeeStatus =
           this.state.employees.find(
             (v) => v.code === result.data[0]?.employeeStatus

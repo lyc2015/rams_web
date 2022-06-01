@@ -33,13 +33,16 @@ import { Popover } from "antd";
 registerLocale("ja", ja);
 axios.defaults.withCredentials = true;
 
+const SIZE_PRE_PAGE = 12;
+
 /**
  * 社員勤務管理画面
  */
 class sendInvoice extends React.Component {
   constructor(props) {
     super(props);
-    this.state = this.initialState; // 初期化
+    this.state =
+      this.props.location?.state?.sendInvoiceTempState || this.initialState; // 初期化
     this.searchEmployee = this.searchSendInvoiceList.bind(this);
   }
 
@@ -116,12 +119,31 @@ class sendInvoice extends React.Component {
     }
     axios
       .post(this.state.serverIP + "sendInvoice/selectSendInvoice", emp)
-      .then((result) => {
-        this.setState({
-          sendInvoiceList: result.data,
-          rowCustomerNo: "",
-          selected: [],
-        });
+      .then((response) => {
+        this.setState(
+          {
+            sendInvoiceList: response.data,
+          },
+          () => {
+            let { selected } = this.state;
+            let rowNo;
+            // 当前employeeNo对应response.data中的下标
+            response.data.forEach((item) => {
+              if (item.employeeNo === selected?.[0]) rowNo = item.rowNo;
+            });
+
+            if (!rowNo || rowNo > response.data.length) {
+              this.setState({
+                selected: [],
+                currentPage: 1,
+              });
+            } else {
+              this.setState({
+                currentPage: Math.ceil(rowNo / SIZE_PRE_PAGE),
+              });
+            }
+          }
+        );
       })
       .catch(function (error) {
         // alert(error);
@@ -886,8 +908,11 @@ P-mark:第21004525(02)号
     };
     // テーブルの定義
     const options = {
-      page: 1,
-      sizePerPage: 12, // which size per page you want to locate as
+      onPageChange: (page) => {
+        this.setState({ currentPage: page });
+      },
+      page: this.state.currentPage,
+      sizePerPage: SIZE_PRE_PAGE, // which size per page you want to locate as
       // default
       pageStartIndex: 1, // where to start counting the pages
       paginationSize: 3, // the pagination bar size.

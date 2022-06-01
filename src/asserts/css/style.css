@@ -3368,6 +3368,21 @@ body {
   width: 50% !important;
 }
 
+.df {
+  display: flex;
+}
+
+.wordBreak {
+  white-space: normal;
+  word-break: break-all;
+  word-wrap: break-word;
+}
+
+.overflowEllipsis {
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
 .react-bs-table-container {
   /* min-width: 1200px; */
 }
