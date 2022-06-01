@@ -103,7 +103,6 @@ class salesContent extends React.Component {
 
   componentDidMount() {
     this.setNewDevelopLanguagesShow();
-    this.copyToClipboard();
 
     if (this.state.interviewDate !== "") {
       var myDate = new Date();
@@ -161,7 +160,7 @@ class salesContent extends React.Component {
         employees: employees,
       },
       () => {
-        this.init();
+        this.getPersonalSalesInfo();
       }
     );
   };
@@ -201,6 +200,9 @@ class salesContent extends React.Component {
   };
 
   getText = () => {
+    let employeeStatusName =
+      this.state.employees.find((v) => v.code === this.state.employeeStatus)
+        .name || "";
     let text =
       `【名　　前】：` +
       this.state.employeeName +
@@ -210,9 +212,7 @@ class salesContent extends React.Component {
       this.state.genderStatus +
       `
 【所　　属】：` +
-      (this.state.employeeStatus === "子会社社員"
-        ? "社員"
-        : this.state.employeeStatus) +
+      (employeeStatusName === "子会社社員" ? "社員" : employeeStatusName) +
       (this.state.age === ""
         ? ""
         : `
@@ -279,8 +279,7 @@ class salesContent extends React.Component {
         ? ""
         : `
 【単　　価】：` +
-          this.state.unitPriceShow +
-          `万円`) +
+          utils.enToManEn(utils.deleteComma(this.state.unitPriceShow))) +
       `
 【稼働開始】：` /*(this.state.beginMonth !== "" && this.state.beginMonth !== null ? publicUtils.formateDate(this.state.beginMonth, false).substring(0,4) + "/" + */ +
       (Number(this.state.admissionEndDate) + 1 <
@@ -320,23 +319,15 @@ class salesContent extends React.Component {
   };
 
   // コピー
-  copyToClipboard = () => {
+  copyToClipboard = async () => {
+    // let text = this.getText();
     let myThis = this;
-    var clipboard = new Clipboard("#copyUrl", {
+    let clipboard = new Clipboard("#copyUrl2", {
       text: function () {
         return myThis.getText();
+        // return text;
       },
     });
-    // target: function () {
-    //   return document.querySelector("#snippet");
-    // },
-    // var clipboard = new Clipboard("#copyUrl", {
-    //   text: function () {
-    //     return document
-    //       .getElementById("snippet")
-    //       .value.replace("　　　　営業文章\n", "");
-    //   },
-    // });
     clipboard.on("success", function () {
       console.log("已复制到剪贴板！");
     });
@@ -448,151 +439,160 @@ class salesContent extends React.Component {
     }
   };
 
-  init = () => {
-    axios
-      .post(this.state.serverIP + "salesSituation/getPersonalSalesInfo", {
+  setResDataToState = (data, callback) => {
+    this.setState(
+      {
+        employeeName: data.employeeFullName,
+        projectPhase:
+          data.projectPhase === null ||
+          data.projectPhase === "" ||
+          data.projectPhase === undefined
+            ? this.getProjectPhase(data.siteRoleCode)
+            : data.projectPhase,
+        genderStatus: this.state.genders.find(
+          (v) => v.code === data.genderStatus
+        ).name,
+        nationalityName: data.nationalityName,
+        age: data.age === null || data.age === undefined ? "" : data.age,
+        developLanguageCode6: data.developLanguage1,
+        developLanguageCode7: data.developLanguage2,
+        developLanguageCode8: data.developLanguage3,
+        developLanguageCode9: data.developLanguage4,
+        developLanguageCode10: data.developLanguage5,
+        developLanguageCode11: data.developLanguage6,
+        wellUseLanguagss: [
+          this.fromCodeToListLanguage(data.developLanguage1),
+          this.fromCodeToListLanguage(data.developLanguage2),
+          this.fromCodeToListLanguage(data.developLanguage3),
+          this.fromCodeToListLanguage(data.developLanguage4),
+          this.fromCodeToListLanguage(data.developLanguage5),
+          this.fromCodeToListLanguage(data.developLanguage6),
+        ].filter(function (s) {
+          return s; // 注：IE9(不包含IE9)以下的版本没有trim()方法
+        }),
+        disbleState:
+          this.fromCodeToListLanguage(data.developLanguage6) === ""
+            ? false
+            : true,
+        developLanguage: [
+          this.fromCodeToNameLanguage(data.developLanguage1),
+          this.fromCodeToNameLanguage(data.developLanguage2),
+          this.fromCodeToNameLanguage(data.developLanguage3),
+          this.fromCodeToNameLanguage(data.developLanguage4),
+          this.fromCodeToNameLanguage(data.developLanguage5),
+          this.fromCodeToNameLanguage(data.developLanguage6),
+        ]
+          .filter(function (s) {
+            return s && s.trim(); // 注：IE9(不包含IE9)以下的版本没有trim()方法
+          })
+          .join("、"),
+        yearsOfExperience:
+          data.yearsOfExperience === null ||
+          data.yearsOfExperience === undefined
+            ? ""
+            : data.yearsOfExperience,
+        japaneaseConversationLevel: data.japaneaseConversationLevel,
+        englishConversationLevel: data.englishConversationLevel,
+        beginMonth:
+          data.theMonthOfStartWork === null || data.theMonthOfStartWork === ""
+            ? !(
+                this.state.admissionEndDate === null ||
+                this.state.admissionEndDate === undefined ||
+                this.state.admissionEndDate === ""
+              )
+              ? new Date(
+                  this.getNextMonth(
+                    publicUtils.converToLocalTime(
+                      this.state.admissionEndDate,
+                      false
+                    ),
+                    1
+                  )
+                ).getTime()
+              : new Date(data.theMonthOfStartWork).getTime()
+            : new Date(data.theMonthOfStartWork).getTime(),
+        nearestStation: data.nearestStation,
+        stationCode: data.nearestStation,
+        employeeStatus: data.employeeStatus,
+        japaneseLevelCode:
+          this.state.japaneseLevels.find(
+            (v) => v.code === data.japaneseLevelCode
+          ) === undefined
+            ? ""
+            : this.state.japaneseLevels.find(
+                (v) => v.code === data.japaneseLevelCode
+              ).name,
+        englishLevelCode:
+          this.state.englishLevels.find(
+            (v) => v.code === data.englishLevelCode
+          ) === undefined
+            ? ""
+            : this.state.englishLevels.find(
+                (v) => v.code === data.englishLevelCode
+              ).name,
+        siteRoleCode: data.siteRoleCode,
+        unitPrice:
+          data.unitPrice === null ||
+          data.unitPrice === "" ||
+          data.unitPrice === undefined
+            ? this.state.unitPrice
+            : data.unitPrice,
+        unitPriceShow:
+          data.unitPrice === null ||
+          data.unitPrice === "" ||
+          data.unitPrice === undefined
+            ? utils.addComma(this.state.unitPrice)
+            : utils.addComma(data.unitPrice),
+        remark:
+          data.remark === null ||
+          data.remark === "" ||
+          data.remark === undefined
+            ? this.state.remark
+            : data.remark,
+        initAge: data.age,
+        initNearestStation: data.nearestStation,
+        initJapaneaseConversationLevel: data.japaneaseConversationLevel,
+        initEnglishConversationLevel: data.englishConversationLevel,
+        initYearsOfExperience: data.yearsOfExperience,
+        initDevelopLanguageCode6: data.developLanguage1,
+        initDevelopLanguageCode7: data.developLanguage2,
+        initDevelopLanguageCode8: data.developLanguage3,
+        initDevelopLanguageCode9: data.developLanguage4,
+        initDevelopLanguageCode10: data.developLanguage5,
+        initDevelopLanguageCode11: data.developLanguage6,
+        initUnitPrice: data.unitPrice,
+        initRemark: data.remark,
+        initWellUseLanguagss: [
+          this.fromCodeToListLanguage(data.developLanguage1),
+          this.fromCodeToListLanguage(data.developLanguage2),
+          this.fromCodeToListLanguage(data.developLanguage3),
+          this.fromCodeToListLanguage(data.developLanguage4),
+          this.fromCodeToListLanguage(data.developLanguage5),
+          this.fromCodeToListLanguage(data.developLanguage6),
+        ].filter(function (s) {
+          return s; // 注：IE9(不包含IE9)以下的版本没有trim()方法
+        }),
+      },
+      () => {
+        if (callback instanceof Function) callback();
+        this.copyToClipboard();
+      }
+    );
+  };
+
+  getPersonalSalesInfo = async (callback) => {
+    let result = await axios.post(
+      this.state.serverIP + "salesSituation/getPersonalSalesInfo",
+      {
         employeeNo: this.props.sendValue.empNo,
-      })
-      .then((result) => {
-        console.log(result.data);
-        this.setState({
-          employeeName: result.data[0].employeeFullName,
-          projectPhase:
-            result.data[0].projectPhase === null ||
-            result.data[0].projectPhase === "" ||
-            result.data[0].projectPhase === undefined
-              ? this.getProjectPhase(result.data[0].siteRoleCode)
-              : result.data[0].projectPhase,
-          genderStatus: this.state.genders.find(
-            (v) => v.code === result.data[0].genderStatus
-          ).name,
-          nationalityName: result.data[0].nationalityName,
-          age:
-            result.data[0].age === null || result.data[0].age === undefined
-              ? ""
-              : result.data[0].age,
-          developLanguageCode6: result.data[0].developLanguage1,
-          developLanguageCode7: result.data[0].developLanguage2,
-          developLanguageCode8: result.data[0].developLanguage3,
-          developLanguageCode9: result.data[0].developLanguage4,
-          developLanguageCode10: result.data[0].developLanguage5,
-          developLanguageCode11: result.data[0].developLanguage6,
-          wellUseLanguagss: [
-            this.fromCodeToListLanguage(result.data[0].developLanguage1),
-            this.fromCodeToListLanguage(result.data[0].developLanguage2),
-            this.fromCodeToListLanguage(result.data[0].developLanguage3),
-            this.fromCodeToListLanguage(result.data[0].developLanguage4),
-            this.fromCodeToListLanguage(result.data[0].developLanguage5),
-            this.fromCodeToListLanguage(result.data[0].developLanguage6),
-          ].filter(function (s) {
-            return s; // 注：IE9(不包含IE9)以下的版本没有trim()方法
-          }),
-          disbleState:
-            this.fromCodeToListLanguage(result.data[0].developLanguage6) === ""
-              ? false
-              : true,
-          developLanguage: [
-            this.fromCodeToNameLanguage(result.data[0].developLanguage1),
-            this.fromCodeToNameLanguage(result.data[0].developLanguage2),
-            this.fromCodeToNameLanguage(result.data[0].developLanguage3),
-            this.fromCodeToNameLanguage(result.data[0].developLanguage4),
-            this.fromCodeToNameLanguage(result.data[0].developLanguage5),
-            this.fromCodeToNameLanguage(result.data[0].developLanguage6),
-          ]
-            .filter(function (s) {
-              return s && s.trim(); // 注：IE9(不包含IE9)以下的版本没有trim()方法
-            })
-            .join("、"),
-          yearsOfExperience:
-            result.data[0].yearsOfExperience === null ||
-            result.data[0].yearsOfExperience === undefined
-              ? ""
-              : result.data[0].yearsOfExperience,
-          japaneaseConversationLevel: result.data[0].japaneaseConversationLevel,
-          englishConversationLevel: result.data[0].englishConversationLevel,
-          beginMonth:
-            result.data[0].theMonthOfStartWork === null ||
-            result.data[0].theMonthOfStartWork === ""
-              ? !(
-                  this.state.admissionEndDate === null ||
-                  this.state.admissionEndDate === undefined ||
-                  this.state.admissionEndDate === ""
-                )
-                ? new Date(
-                    this.getNextMonth(
-                      publicUtils.converToLocalTime(
-                        this.state.admissionEndDate,
-                        false
-                      ),
-                      1
-                    )
-                  ).getTime()
-                : new Date(result.data[0].theMonthOfStartWork).getTime()
-              : new Date(result.data[0].theMonthOfStartWork).getTime(),
-          nearestStation: result.data[0].nearestStation,
-          stationCode: result.data[0].nearestStation,
-          employeeStatus: result.data[0].employeeStatus,
-          japaneseLevelCode:
-            this.state.japaneseLevels.find(
-              (v) => v.code === result.data[0].japaneseLevelCode
-            ) === undefined
-              ? ""
-              : this.state.japaneseLevels.find(
-                  (v) => v.code === result.data[0].japaneseLevelCode
-                ).name,
-          englishLevelCode:
-            this.state.englishLevels.find(
-              (v) => v.code === result.data[0].englishLevelCode
-            ) === undefined
-              ? ""
-              : this.state.englishLevels.find(
-                  (v) => v.code === result.data[0].englishLevelCode
-                ).name,
-          siteRoleCode: result.data[0].siteRoleCode,
-          unitPrice:
-            result.data[0].unitPrice === null ||
-            result.data[0].unitPrice === "" ||
-            result.data[0].unitPrice === undefined
-              ? this.state.unitPrice
-              : result.data[0].unitPrice,
-          unitPriceShow:
-            result.data[0].unitPrice === null ||
-            result.data[0].unitPrice === "" ||
-            result.data[0].unitPrice === undefined
-              ? utils.addComma(this.state.unitPrice)
-              : utils.addComma(result.data[0].unitPrice),
-          remark:
-            result.data[0].remark === null ||
-            result.data[0].remark === "" ||
-            result.data[0].remark === undefined
-              ? this.state.remark
-              : result.data[0].remark,
-          initAge: result.data[0].age,
-          initNearestStation: result.data[0].nearestStation,
-          initJapaneaseConversationLevel:
-            result.data[0].japaneaseConversationLevel,
-          initEnglishConversationLevel: result.data[0].englishConversationLevel,
-          initYearsOfExperience: result.data[0].yearsOfExperience,
-          initDevelopLanguageCode6: result.data[0].developLanguage1,
-          initDevelopLanguageCode7: result.data[0].developLanguage2,
-          initDevelopLanguageCode8: result.data[0].developLanguage3,
-          initDevelopLanguageCode9: result.data[0].developLanguage4,
-          initDevelopLanguageCode10: result.data[0].developLanguage5,
-          initDevelopLanguageCode11: result.data[0].developLanguage6,
-          initUnitPrice: result.data[0].unitPrice,
-          initRemark: result.data[0].remark,
-          initWellUseLanguagss: [
-            this.fromCodeToListLanguage(result.data[0].developLanguage1),
-            this.fromCodeToListLanguage(result.data[0].developLanguage2),
-            this.fromCodeToListLanguage(result.data[0].developLanguage3),
-            this.fromCodeToListLanguage(result.data[0].developLanguage4),
-            this.fromCodeToListLanguage(result.data[0].developLanguage5),
-            this.fromCodeToListLanguage(result.data[0].developLanguage6),
-          ].filter(function (s) {
-            return s; // 注：IE9(不包含IE9)以下的版本没有trim()方法
-          }),
-        });
-      });
+      }
+    );
+    if (result.data.length < 0) {
+      alert("データ存在していません");
+      return {};
+    }
+    this.setResDataToState(result.data[0], callback);
+    return result.data[0];
   };
 
   setEndDate = (date) => {
@@ -757,7 +757,7 @@ class salesContent extends React.Component {
                   style={{ display: "inherit", width: "150px", height: "30px" }}
                   onChange={this.valueChange}
                   name="japaneaseConversationLevel"
-                  value={this.state.japaneaseConversationLevel}
+                  value={this.state.japaneaseConversationLevel || ""}
                 >
                   {this.state.japaneaseConversationLevels.map((date) => (
                     <option key={date.code} value={date.code}>
@@ -959,7 +959,7 @@ class salesContent extends React.Component {
               <FontAwesomeIcon icon={faSave} /> {"更新"}
             </Button>{" "}
             <Button
-              id="copyUrl"
+              id="copyUrl2"
               size="sm"
               variant="info" /* onClick={this.copyToClipboard} */
             >

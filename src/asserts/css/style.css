@@ -219,7 +219,7 @@ body {
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: white;
-  width: 5.5rem !important;
+  /* width: 5.5rem !important; */
 }
 
 #datePicker-invoicePDF {
@@ -2171,7 +2171,7 @@ body {
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: white;
-    width: 5.5rem !important;
+    /* width: 5.5rem !important; */
   }
   #datePicker-invoicePDF {
     background-repeat: no-repeat;
@@ -2828,7 +2828,7 @@ body {
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: white;
-    width: 5.5rem !important;
+    /* width: 5.5rem !important; */
   }
 
   #datePicker-empInsert-right {

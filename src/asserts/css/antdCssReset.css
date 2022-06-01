@@ -1,6 +1,14 @@
 .ant-message-error {
   display: flex;
-  /* align-items: center; */
+  align-items: center;
+}
+.ant-message-info {
+  display: flex;
+  align-items: center;
+}
+.ant-message-success {
+  display: flex;
+  align-items: center;
 }
 .ant-message-notice {
   text-align: left !important;

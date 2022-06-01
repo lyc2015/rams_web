@@ -939,3 +939,10 @@ export function ToCDB(str) {
   }
   return tmp;
 }
+/**
+ * INPUT输入的时候全角自动转为半角
+ */
+export function enToManEn(en) {
+  let manEn = (en / 10000).toFixed(1).replace(".0", "") + "万円";
+  return en === "" ? "" : manEn;
+}

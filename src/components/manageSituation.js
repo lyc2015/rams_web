@@ -1553,6 +1553,7 @@ class manageSituation extends React.Component {
       })
       .then((result) => {
         if (result.data.length < 0) {
+          alert("データ存在していません");
           return;
         }
         let employeeStatus =

@@ -992,29 +992,28 @@ class dutyManagement extends React.Component {
             </Form.Group>
             <Form.Group>
               <Row>
-                <Col sm={2}>
+                <Col sm={3}>
                   <InputGroup size="sm" className="mb-2">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         年月
                       </InputGroup.Text>
-                      <DatePicker
-                        selected={this.state.yearAndMonth}
-                        onChange={this.inactiveYearAndMonth}
-                        autoComplete="off"
-                        locale="ja"
-                        dateFormat="yyyy/MM"
-                        showMonthYearPicker
-                        showFullMonthYearPicker
-                        maxDate={new Date()}
-                        id="datePicker"
-                        className="form-control form-control-sm"
-                      />
                     </InputGroup.Prepend>
+                    <DatePicker
+                      selected={this.state.yearAndMonth}
+                      onChange={this.inactiveYearAndMonth}
+                      autoComplete="off"
+                      locale="ja"
+                      dateFormat="yyyy/MM"
+                      showMonthYearPicker
+                      showFullMonthYearPicker
+                      maxDate={new Date()}
+                      id="datePicker"
+                      className="form-control form-control-sm"
+                    />
                   </InputGroup>
                 </Col>
-
-                <Col sm={2}>
+                <Col sm={3}>
                   <InputGroup size="sm" className="mb-3">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
