@@ -27,7 +27,13 @@ import * as publicUtils from "./utils/publicUtils.js";
 import MyToast from "./myToast";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import store from "./redux/store";
-import { message, Tooltip, Popover } from "antd";
+import {
+  message,
+  Tooltip,
+  Popover,
+  Row as AntdRow,
+  Col as AntdCol,
+} from "antd";
 registerLocale("ja", ja);
 axios.defaults.withCredentials = true;
 
@@ -991,9 +997,12 @@ class dutyManagement extends React.Component {
               </Row>
             </Form.Group>
             <Form.Group>
-              <Row>
-                <Col sm={3}>
-                  <InputGroup size="sm" className="mb-2">
+              <AntdRow
+                style={{ padding: "0 15px" }}
+                gutter={{ xs: 4, sm: 8, md: 12, lg: 16 }}
+              >
+                <AntdCol span={5}>
+                  <InputGroup size="sm" className="mb-2 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         年月
@@ -1012,9 +1021,9 @@ class dutyManagement extends React.Component {
                       className="form-control form-control-sm"
                     />
                   </InputGroup>
-                </Col>
-                <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+                </AntdCol>
+                <AntdCol span={4}>
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         社員区分
@@ -1041,10 +1050,9 @@ class dutyManagement extends React.Component {
                     </Form.Control>
                     <font className="site-mark"></font>
                   </InputGroup>
-                </Col>
-
-                <Col sm={3}>
-                  <InputGroup size="sm" className="mb-2">
+                </AntdCol>
+                <AntdCol span={4}>
+                  <InputGroup size="sm" className="mb-2 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="sixKanji">
                         ステータス
@@ -1067,9 +1075,9 @@ class dutyManagement extends React.Component {
                       <option value="4">承認済</option>
                     </Form.Control>
                   </InputGroup>
-                </Col>
-                <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+                </AntdCol>
+                <AntdCol span={5}>
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="sanKanji">お客様</InputGroup.Text>
                     </InputGroup.Prepend>
@@ -1102,8 +1110,8 @@ class dutyManagement extends React.Component {
                       )}
                     />
                   </InputGroup>
-                </Col>
-              </Row>
+                </AntdCol>
+              </AntdRow>
             </Form.Group>
           </div>
         </Form>

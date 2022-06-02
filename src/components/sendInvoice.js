@@ -1015,10 +1015,12 @@ P-mark:第21004525(02)号
                     </InputGroup.Prepend>
                   </InputGroup>
                 </Col>
-                <Col sm={3} style={{ marginLeft: "-80px" }}>
+                <Col sm={3}>
                   <InputGroup size="sm" className="mb-3">
                     <InputGroup.Prepend>
-                      <InputGroup.Text id="sanKanji">お客様</InputGroup.Text>
+                      <InputGroup.Text style={{ width: "auto" }} id="sanKanji">
+                        お客様
+                      </InputGroup.Text>
                     </InputGroup.Prepend>
                     <Autocomplete
                       id="customerAbbreviation"
