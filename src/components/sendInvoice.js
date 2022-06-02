@@ -566,6 +566,11 @@ P-mark:第21004525(02)号
             }
           }
 
+          let selectedMailCC = sendInvoiceList[i]?.mailCC?.join(",");
+          if (selectedMailCC) {
+            model.selectedMailCC = selectedMailCC;
+          }
+
           model = {
             yearAndMonth: publicUtils.formateDate(
               $("#datePicker").val(),
@@ -574,7 +579,6 @@ P-mark:第21004525(02)号
             // mailCC:this.state.mailCC
             customerAbbreviation: sendInvoiceList[i].customerAbbreviation,
             mail: sendInvoiceList[i].purchasingManagersMail,
-            selectedMailCC: sendInvoiceList[i].mailCC.join(","),
             purchasingManagers: sendInvoiceList[i].purchasingManagers,
             customerNo: sendInvoiceList[i].customerNo,
             customerName: sendInvoiceList[i].customerName,
