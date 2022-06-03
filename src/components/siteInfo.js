@@ -1469,6 +1469,10 @@ class siteInfo extends Component {
     return str;
   };
 
+  systemNameFormat = (cell, row) => {
+    return cell || "技術支援";
+  };
+
   render() {
     console.log(
       { state: this.state, propsState: this.props.location.state },
@@ -2473,6 +2477,7 @@ class siteInfo extends Component {
                 </TableHeaderColumn>
                 <TableHeaderColumn
                   dataField="systemName"
+                  dataFormat={this.systemNameFormat.bind(this)}
                   width="220"
                   tdStyle={{ padding: ".45em" }}
                 >

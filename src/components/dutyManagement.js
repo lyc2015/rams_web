@@ -1023,6 +1023,31 @@ class dutyManagement extends React.Component {
                   </InputGroup>
                 </AntdCol>
                 <AntdCol span={4}>
+                  <InputGroup size="sm" className="mb-2 flexWrapNoWrap">
+                    <InputGroup.Prepend>
+                      <InputGroup.Text id="sixKanji">
+                        ステータス
+                      </InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <Form.Control
+                      id="approvalStatus"
+                      as="select"
+                      size="sm"
+                      onChange={this.approvalStatusChange}
+                      style={{ width: "30px" }}
+                      name="approvalStatus"
+                      value={approvalStatus}
+                      autoComplete="off"
+                    >
+                      <option value="0">すべて</option>
+                      <option value="1">未登録</option>
+                      <option value="2">登録済</option>
+                      <option value="3">未承認</option>
+                      <option value="4">承認済</option>
+                    </Form.Control>
+                  </InputGroup>
+                </AntdCol>
+                <AntdCol span={4}>
                   <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
@@ -1049,31 +1074,6 @@ class dutyManagement extends React.Component {
                         : null}
                     </Form.Control>
                     <font className="site-mark"></font>
-                  </InputGroup>
-                </AntdCol>
-                <AntdCol span={4}>
-                  <InputGroup size="sm" className="mb-2 flexWrapNoWrap">
-                    <InputGroup.Prepend>
-                      <InputGroup.Text id="sixKanji">
-                        ステータス
-                      </InputGroup.Text>
-                    </InputGroup.Prepend>
-                    <Form.Control
-                      id="approvalStatus"
-                      as="select"
-                      size="sm"
-                      onChange={this.approvalStatusChange}
-                      style={{ width: "30px" }}
-                      name="approvalStatus"
-                      value={approvalStatus}
-                      autoComplete="off"
-                    >
-                      <option value="0">すべて</option>
-                      <option value="1">未登録</option>
-                      <option value="2">登録済</option>
-                      <option value="3">未承認</option>
-                      <option value="4">承認済</option>
-                    </Form.Control>
                   </InputGroup>
                 </AntdCol>
                 <AntdCol span={5}>

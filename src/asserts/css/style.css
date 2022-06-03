@@ -229,7 +229,7 @@ body {
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
-  background-color: white;
+  /* background-color: white; */
   width: 8rem !important;
 }
 
@@ -658,6 +658,7 @@ body {
 .dutyRegistration-DataTableEditingCell input {
   height: 24px;
   padding: 1px 1px 0px 4px;
+  width: 100%;
 }
 
 .dutyRegistration-DataTableEditingCell select {
@@ -2180,7 +2181,7 @@ body {
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
-    background-color: white;
+    /* background-color: white; */
     width: 7rem !important;
   }
 
@@ -3360,6 +3361,10 @@ body {
   margin-right: 5px;
 }
 
+.mr10 {
+  margin-right: 10px;
+}
+
 .w70 {
   width: 70px !important;
 }
@@ -3385,4 +3390,8 @@ body {
 
 .flexWrapNoWrap {
   flex-wrap: nowrap;
+}
+
+.fwb {
+  font-weight: bold;
 }

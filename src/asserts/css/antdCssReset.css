@@ -45,3 +45,11 @@
 .react-datepicker__navigation--next {
   border-left-color: black;
 }
+
+.ant-modal-confirm .ant-modal-body {
+  box-shadow: #007bff 0px 0px 10px;
+}
+
+.ant-popover-inner-content {
+  box-shadow: #007bff 0px 0px 12px;
+}

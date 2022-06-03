@@ -1,5 +1,9 @@
 # ChangeLog
 
+## 0.1.0（2022/06/03）by 樊崇鑫
+
+- 【修正】invoicePDF 調整
+
 ## 0.1.0（2022/06/01）by 樊崇鑫
 
 - 【修正】社員勤務管理ページ、popover がクリックした時外部への影響の消去（stopPropagation）
