@@ -28,6 +28,7 @@ import {
   faBook,
   faEdit,
 } from "@fortawesome/free-solid-svg-icons";
+import { notification } from "antd";
 axios.defaults.withCredentials = true;
 
 class certificatePrinting extends Component {
@@ -362,12 +363,20 @@ class certificatePrinting extends Component {
           //window.open(this.state.serverIP + "証明書.pdf", "_blank");
           //publicUtils.handleDownload(resultMap.data, this.state.serverIP);
         } else {
-          alert("更新失败");
+          notification.error({
+            message: "エラー",
+            description: "更新失败",
+            placement: "topLeft",
+          });
           this.setState({ loading: true });
         }
       })
       .catch(function () {
-        alert("更新错误，请检查程序");
+        notification.error({
+          message: "エラー",
+          description: "更新错误，请检查程序",
+          placement: "topLeft",
+        });
         this.setState({ loading: true });
       });
   };
@@ -432,7 +441,7 @@ class certificatePrinting extends Component {
                   id="employeeName"
                   name="employeeName"
                   options={this.state.employeeInfo}
-                  getOptionLabel={(option) => option.name}
+                  getOptionLabel={(option) => option.name || ""}
                   value={
                     this.state.employeeInfo.find(
                       (v) => v.name === this.state.employeeName

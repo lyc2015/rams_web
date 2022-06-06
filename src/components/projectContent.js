@@ -3,6 +3,7 @@ import { Form, Button, ListGroup, FormControl } from "react-bootstrap";
 import axios from "axios";
 import MyToast from "./myToast";
 import store from "./redux/store";
+import { notification } from "antd";
 axios.defaults.withCredentials = true;
 
 class ProjectContent extends Component {
@@ -172,7 +173,11 @@ class ProjectContent extends Component {
         }
       })
       .catch((error) => {
-        alert("检索错误，请检查程序");
+        notification.error({
+          message: "エラー",
+          description: "检索错误，请检查程序",
+          placement: "topLeft",
+        });
       });
   };
   componentDidMount() {

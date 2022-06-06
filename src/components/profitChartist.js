@@ -1977,7 +1977,7 @@ class profitChartist extends Component {
                 getOptionLabel={(option) => (option.text ? option.text : "")}
                 onChange={(event, values) => this.getCustomer(event, values)}
                 renderOption={(option) => {
-                  return <React.Fragment>{option.name}</React.Fragment>;
+                  return <React.Fragment>{option.name || ""}</React.Fragment>;
                 }}
                 renderInput={(params) => (
                   <div ref={params.InputProps.ref}>

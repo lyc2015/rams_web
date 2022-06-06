@@ -27,6 +27,7 @@ import * as publicUtils from "./utils/publicUtils.js";
 import store from "./redux/store";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import MyToast from "./myToast";
+import { message, notification } from "antd";
 axios.defaults.withCredentials = true;
 
 /**
@@ -122,7 +123,7 @@ class dataShare extends React.Component {
       fileName[fileName.length - 1] === "pdf"
     ) {
     } else {
-      alert("PDF或いはexcelをアップロードしてください");
+      message.error("PDF或いはexcelをアップロードしてください");
       return false;
     }
     const formData = new FormData();
@@ -142,7 +143,11 @@ class dataShare extends React.Component {
           this.setState({ myToastShow: true, message: "アップロード成功！" });
           setTimeout(() => this.setState({ myToastShow: false }), 3000);
         } else {
-          alert("err");
+          notification.error({
+            message: "エラー",
+            description: "アップロード失敗",
+            placement: "topLeft",
+          });
         }
       });
   };
@@ -394,7 +399,11 @@ class dataShare extends React.Component {
             this.setState({ myToastShow: true, message: "承認成功！" });
             setTimeout(() => this.setState({ myToastShow: false }), 3000);
           } else {
-            alert("err");
+            notification.error({
+              message: "エラー",
+              description: "承認失敗",
+              placement: "topLeft",
+            });
           }
         });
     } else if (shareStatus === "3") {
@@ -406,7 +415,11 @@ class dataShare extends React.Component {
             this.setState({ myToastShow: true, message: "承認成功！" });
             setTimeout(() => this.setState({ myToastShow: false }), 3000);
           } else {
-            alert("err");
+            notification.error({
+              message: "エラー",
+              description: "承認失敗",
+              placement: "topLeft",
+            });
           }
         });
     }
@@ -424,7 +437,11 @@ class dataShare extends React.Component {
           this.setState({ myToastShow: true, message: "共有成功！" });
           setTimeout(() => this.setState({ myToastShow: false }), 3000);
         } else {
-          alert("err");
+          notification.error({
+            message: "エラー",
+            description: "共有失敗",
+            placement: "topLeft",
+          });
         }
       });
   };
@@ -456,7 +473,11 @@ class dataShare extends React.Component {
               });
               setTimeout(() => this.setState({ myToastShow: false }), 3000);
             } else {
-              alert("err");
+              notification.error({
+                message: "エラー",
+                description: "削除失敗",
+                placement: "topLeft",
+              });
             }
           });
       } else {
@@ -486,7 +507,11 @@ class dataShare extends React.Component {
               });
               setTimeout(() => this.setState({ myToastShow: false }), 3000);
             } else {
-              alert("err");
+              notification.error({
+                message: "エラー",
+                description: "削除失敗",
+                placement: "topLeft",
+              });
             }
           });
       }
@@ -523,7 +548,11 @@ class dataShare extends React.Component {
         publicUtils.handleDownload(path, this.state.serverIP);
       })
       .catch(function (error) {
-        alert("ファイルが存在しません。");
+        notification.error({
+          message: "エラー",
+          description: "ファイルが存在しません。",
+          placement: "topLeft",
+        });
       });
   };
 
@@ -548,7 +577,11 @@ class dataShare extends React.Component {
           publicUtils.handleDownload(path, this.state.serverIP);
         })
         .catch(function (error) {
-          alert("ファイルが存在しません。");
+          notification.error({
+            message: "エラー",
+            description: "ファイルが存在しません。",
+            placement: "topLeft",
+          });
         });
     }
   };
@@ -601,7 +634,7 @@ class dataShare extends React.Component {
       this.state.dataShareList[this.state.rowNo - 1].fileName === null ||
       this.state.dataShareList[this.state.rowNo - 1].fileName === ""
     ) {
-      alert("ファイル名を入力してください。");
+      message.error("ファイル名を入力してください。");
       return;
     }
 
@@ -626,7 +659,11 @@ class dataShare extends React.Component {
           this.setState({ myToastShow: true, message: "更新成功！" });
           setTimeout(() => this.setState({ myToastShow: false }), 3000);
         } else {
-          alert("err");
+          notification.error({
+            message: "エラー",
+            description: "更新失敗",
+            placement: "topLeft",
+          });
         }
       });
   };
@@ -737,7 +774,7 @@ class dataShare extends React.Component {
             </Col>
 
             <Col sm={3}>
-              <InputGroup size="sm" className="mb-3">
+              <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                 <InputGroup.Prepend>
                   <InputGroup.Text>年月</InputGroup.Text>
                 </InputGroup.Prepend>
@@ -772,13 +809,13 @@ class dataShare extends React.Component {
                     ) || {}
                   }
                   options={this.state.employeeNameDrop}
-                  getOptionDisabled={(option) => option.name}
+                  getOptionDisabled={(option) => option.name || ""}
                   getOptionLabel={(option) => option.text}
                   onChange={(event, values) =>
                     this.employeeNameChange(event, values)
                   }
                   renderOption={(option) => {
-                    return <React.Fragment>{option.name}</React.Fragment>;
+                    return <React.Fragment>{option.name || ""}</React.Fragment>;
                   }}
                   renderInput={(params) => (
                     <div ref={params.InputProps.ref}>

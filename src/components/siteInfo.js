@@ -1609,7 +1609,7 @@ class siteInfo extends Component {
                   </InputGroup>
                 </Col>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="sixKanji">
                         社員名(BP名)
@@ -1629,7 +1629,9 @@ class siteInfo extends Component {
                         this.getEmployeeNo(event, values)
                       }
                       renderOption={(option) => {
-                        return <React.Fragment>{option.name}</React.Fragment>;
+                        return (
+                          <React.Fragment>{option.name || ""}</React.Fragment>
+                        );
                       }}
                       renderInput={(params) => (
                         <div ref={params.InputProps.ref}>
@@ -1750,7 +1752,7 @@ class siteInfo extends Component {
                   </InputGroup>
                 </Col>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="fiveKanji">
                         退場年月日
@@ -1827,7 +1829,7 @@ class siteInfo extends Component {
               </Row>
               <Row>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         場所
@@ -1976,7 +1978,7 @@ class siteInfo extends Component {
 											value={this.state.typeOfIndustryMaster.find(v => v.code === this.state.typeOfIndustryCode) || {}}
 											onChange={(event, values) => this.getIndustry(event, values)}
 											options={this.state.typeOfIndustryMaster}
-											getOptionLabel={(option) => option.name}
+											getOptionLabel={(option) => option.name||''}
 											renderInput={(params) => (
 												<div ref={params.InputProps.ref}>
 													<input type="text" {...params.inputProps} className="auto form-control Autocompletestyle-siteInfo"
@@ -1986,7 +1988,7 @@ class siteInfo extends Component {
 											disabled={pageDisabledFlag}
 										/>
 									</InputGroup>*/}
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         開発言語
@@ -2167,7 +2169,7 @@ class siteInfo extends Component {
               </Row>
               <Row>
                 <Col sm={6}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         関連社員
@@ -2196,7 +2198,9 @@ class siteInfo extends Component {
                         this.getRelated1Employees(event, values)
                       }
                       renderOption={(option) => {
-                        return <React.Fragment>{option.name}</React.Fragment>;
+                        return (
+                          <React.Fragment>{option.name || ""}</React.Fragment>
+                        );
                       }}
                       renderInput={(params) => (
                         <div ref={params.InputProps.ref}>
@@ -2231,7 +2235,9 @@ class siteInfo extends Component {
                         this.getRelated2Employees(event, values)
                       }
                       renderOption={(option) => {
-                        return <React.Fragment>{option.name}</React.Fragment>;
+                        return (
+                          <React.Fragment>{option.name || ""}</React.Fragment>
+                        );
                       }}
                       renderInput={(params) => (
                         <div ref={params.InputProps.ref}>
@@ -2266,7 +2272,9 @@ class siteInfo extends Component {
                         this.getRelated3Employees(event, values)
                       }
                       renderOption={(option) => {
-                        return <React.Fragment>{option.name}</React.Fragment>;
+                        return (
+                          <React.Fragment>{option.name || ""}</React.Fragment>
+                        );
                       }}
                       renderInput={(params) => (
                         <div ref={params.InputProps.ref}>
@@ -2301,7 +2309,9 @@ class siteInfo extends Component {
                         this.getRelated4Employees(event, values)
                       }
                       renderOption={(option) => {
-                        return <React.Fragment>{option.name}</React.Fragment>;
+                        return (
+                          <React.Fragment>{option.name || ""}</React.Fragment>
+                        );
                       }}
                       renderInput={(params) => (
                         <div ref={params.InputProps.ref}>
@@ -2316,7 +2326,7 @@ class siteInfo extends Component {
                   </InputGroup>
                 </Col>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="fiveKanji">
                         予定終了月

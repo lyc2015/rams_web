@@ -24,6 +24,7 @@ import {
 import * as publicUtils from "./utils/publicUtils.js";
 import store from "./redux/store";
 import MyToast from "./myToast";
+import { notification, message } from "antd";
 /**
  * 作業報告書登録画面
  */
@@ -236,7 +237,11 @@ class resume extends React.Component {
         }
       })
       .catch(function (error) {
-        alert("ファイルが存在しません。");
+        notification.error({
+          message: "エラー",
+          description: "ファイルが存在しません。",
+          placement: "topLeft",
+        });
       });
   };
 
@@ -295,7 +300,7 @@ class resume extends React.Component {
       fileName[fileName.length - 1] === "pdf"
     ) {
     } else {
-      alert("PDF或いはexcelをアップロードしてください");
+      message.error("PDF或いはexcelをアップロードしてください");
       var file = document.getElementById("UpButtonForm1");
       file.reset();
       var file = document.getElementById("UpButtonForm2");

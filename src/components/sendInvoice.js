@@ -90,7 +90,7 @@ class sendInvoice extends React.Component {
   // 初期化データ
   initialState = {
     dutyManagementSelectedEmployeeNo:
-      this.props.location.state.dutyManagementSelectedEmployeeNo || "",
+      this.props.location.state?.dutyManagementSelectedEmployeeNo || "",
     yearAndMonth: new Date(), // new Date(new Date().getMonth() === 0 ?
     // (new Date().getFullYear() - 1) + "/12" :
     // new Date().getFullYear() + "/" + new
@@ -1042,7 +1042,9 @@ P-mark:第21004525(02)号
                         this.getCustomer(event, values)
                       }
                       renderOption={(option) => {
-                        return <React.Fragment>{option.name}</React.Fragment>;
+                        return (
+                          <React.Fragment>{option.name || ""}</React.Fragment>
+                        );
                       }}
                       renderInput={(params) => (
                         <div ref={params.InputProps.ref}>

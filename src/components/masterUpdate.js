@@ -17,6 +17,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import store from "./redux/store";
+import { notification } from "antd";
 axios.defaults.withCredentials = true;
 
 // マスター修正
@@ -261,7 +262,11 @@ class masterUpdate extends Component {
             setTimeout(() => this.setState({ myToastShow: false }), 3000);
             this.refreshReducer();
           } else {
-            alert("対象データが使う済みでした、削除できないです");
+            notification.error({
+              message: "エラー",
+              description: "対象データが使う済みでした、削除できないです",
+              placement: "topLeft",
+            });
           }
           axios
             .post(this.state.serverIP + "masterUpdate/getMasterInfo", {
@@ -508,7 +513,7 @@ class masterUpdate extends Component {
                   }
                   onChange={(event, values) => this.selectMaster(event, values)}
                   options={this.state.masterStatus}
-                  getOptionLabel={(option) => option.name}
+                  getOptionLabel={(option) => option.name || ""}
                   clearOnBlur
                   renderInput={(params) => (
                     <div ref={params.InputProps.ref}>
@@ -538,7 +543,7 @@ class masterUpdate extends Component {
                       id="bankName"
                       name="bankName"
                       options={bankInfo}
-                      getOptionLabel={(option) => option.name}
+                      getOptionLabel={(option) => option.name || ""}
                       value={
                         bankInfo.find((v) => v.code === this.state.bankName) ||
                         {}

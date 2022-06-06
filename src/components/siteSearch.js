@@ -625,7 +625,9 @@ class siteSearch extends Component {
                         this.getEmployeeNo(event, values)
                       }
                       renderOption={(option) => {
-                        return <React.Fragment>{option.name}</React.Fragment>;
+                        return (
+                          <React.Fragment>{option.name || ""}</React.Fragment>
+                        );
                       }}
                       renderInput={(params) => (
                         <div ref={params.InputProps.ref}>
@@ -673,7 +675,7 @@ class siteSearch extends Component {
                         id="customerNo"
                         name="customerNo"
                         options={this.state.customerMaster}
-                        getOptionLabel={(option) => option.name}
+                        getOptionLabel={(option) => option.name || ""}
                         value={
                           this.state.customerMaster.find(
                             (v) => v.code === this.state.customerNo
@@ -698,7 +700,7 @@ class siteSearch extends Component {
 											id="typteOfContractStatus"
 											name="typteOfContractStatus"
 											options={this.state.typteOfContractStatus}
-											getOptionLabel={(option) => option.name}
+											getOptionLabel={(option) => option.name||''}
 											value={this.state.typteOfContractStatus.find(v => v.code === this.state.typteOfContract) || {}}
 											onChange={(event, values) => this.getTypteOfContract(event, values)}
 											renderInput={(params) => (
@@ -730,7 +732,7 @@ class siteSearch extends Component {
                         this.getTopCustomer(event, values)
                       }
                       options={this.state.topCustomerMaster}
-                      getOptionLabel={(option) => option.name}
+                      getOptionLabel={(option) => option.name || ""}
                       renderInput={(params) => (
                         <div ref={params.InputProps.ref}>
                           <input
@@ -764,7 +766,7 @@ class siteSearch extends Component {
                       }
                       options={this.state.customerMaster}
                       disabled={employeeStatus === "0" ? true : false}
-                      getOptionLabel={(option) => option.name}
+                      getOptionLabel={(option) => option.name || ""}
                       renderInput={(params) => (
                         <div ref={params.InputProps.ref}>
                           <input
@@ -799,7 +801,7 @@ class siteSearch extends Component {
                         this.getStation(event, values)
                       }
                       options={this.state.getstations}
-                      getOptionLabel={(option) => option.name}
+                      getOptionLabel={(option) => option.name || ""}
                       renderInput={(params) => (
                         <div ref={params.InputProps.ref}>
                           <input
@@ -814,7 +816,7 @@ class siteSearch extends Component {
                   </InputGroup>
                 </Col>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     {/*<InputGroup.Prepend>
 											<InputGroup.Text id="inputGroup-sizing-sm">業種</InputGroup.Text>
 										</InputGroup.Prepend>
@@ -824,7 +826,7 @@ class siteSearch extends Component {
 											value={this.state.typeOfIndustryMaster.find(v => v.code === this.state.typeOfIndustryCode) || {}}
 											onChange={(event, values) => this.getIndustry(event, values)}
 											options={this.state.typeOfIndustryMaster}
-											getOptionLabel={(option) => option.name}
+											getOptionLabel={(option) => option.name||''}
 											renderInput={(params) => (
 												<div ref={params.InputProps.ref}>
 													<input placeholder="  例：保険" type="text" {...params.inputProps} className="auto form-control Autocompletestyle-siteInfoSearch-customerNo"
@@ -841,7 +843,7 @@ class siteSearch extends Component {
                       id="typteOfContractStatus"
                       name="typteOfContractStatus"
                       options={this.state.typteOfContractStatus}
-                      getOptionLabel={(option) => option.name}
+                      getOptionLabel={(option) => option.name || ""}
                       value={
                         this.state.typteOfContractStatus.find(
                           (v) => v.code === this.state.typteOfContract
@@ -881,7 +883,7 @@ class siteSearch extends Component {
                         this.getDevelopLanguage(event, values)
                       }
                       options={this.state.developLanguageMaster}
-                      getOptionLabel={(option) => option.name}
+                      getOptionLabel={(option) => option.name || ""}
                       renderInput={(params) => (
                         <div ref={params.InputProps.ref}>
                           <input

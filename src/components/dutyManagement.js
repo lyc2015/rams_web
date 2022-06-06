@@ -33,6 +33,7 @@ import {
   Popover,
   Row as AntdRow,
   Col as AntdCol,
+  notification,
 } from "antd";
 registerLocale("ja", ja);
 axios.defaults.withCredentials = true;
@@ -374,7 +375,11 @@ class dutyManagement extends React.Component {
         }
       })
       .catch(function (error) {
-        alert("承認失败，请检查程序");
+        notification.error({
+          message: "エラー",
+          description: "承認失败，请检查程序",
+          placement: "topLeft",
+        });
       });
   };
   state = {
@@ -652,12 +657,20 @@ class dutyManagement extends React.Component {
           if (resultMap.data) {
             publicUtils.handleDownload(resultMap.data, this.state.serverIP);
           } else {
-            alert("download失败");
+            notification.error({
+              message: "エラー",
+              description: "download失败",
+              placement: "topLeft",
+            });
           }
           this.setState({ loading: true });
         })
         .catch(function () {
-          alert("download错误，请检查程序");
+          notification.error({
+            message: "エラー",
+            description: "download错误，请检查程序",
+            placement: "topLeft",
+          });
           this.setState({ loading: true });
         });
     } else {
@@ -680,7 +693,11 @@ class dutyManagement extends React.Component {
           publicUtils.handleDownload(path, this.state.serverIP);
         })
         .catch(function (error) {
-          alert("ファイルが存在しません。");
+          notification.error({
+            message: "エラー",
+            description: "ファイルが存在しません。",
+            placement: "topLeft",
+          });
         });
     }
   };
@@ -712,7 +729,11 @@ class dutyManagement extends React.Component {
         publicUtils.handleDownload(path, this.state.serverIP);
       })
       .catch(function (error) {
-        alert("ファイルが存在しません。");
+        notification.error({
+          message: "エラー",
+          description: "ファイルが存在しません。",
+          placement: "topLeft",
+        });
       });
   };
 
@@ -895,7 +916,7 @@ class dutyManagement extends React.Component {
       fileName[fileName.length - 1] === "pdf"
     ) {
     } else {
-      alert("PDF或いはexcelをアップロードしてください");
+      message.error("PDF或いはexcelをアップロードしてください");
       return false;
     }
     /*if($("#getFile").get(0).files[0].size>1048576){
@@ -919,7 +940,11 @@ class dutyManagement extends React.Component {
           this.setState({ myToastShow: true, message: "アップロード成功！" });
           setTimeout(() => this.setState({ myToastShow: false }), 3000);
         } else {
-          alert("err");
+          notification.error({
+            message: "エラー",
+            description: "アップロード失敗",
+            placement: "topLeft",
+          });
         }
       });
   };
@@ -1113,7 +1138,9 @@ class dutyManagement extends React.Component {
                         this.getCustomer(event, values)
                       }
                       renderOption={(option) => {
-                        return <React.Fragment>{option.name}</React.Fragment>;
+                        return (
+                          <React.Fragment>{option.name || ""}</React.Fragment>
+                        );
                       }}
                       renderInput={(params) => (
                         <div ref={params.InputProps.ref}>

@@ -33,6 +33,7 @@ import {
   faCheck,
   faTimes,
 } from "@fortawesome/free-solid-svg-icons";
+import { message } from "antd";
 axios.defaults.withCredentials = true;
 
 class salaryDetailSend extends Component {
@@ -699,7 +700,7 @@ P-mark：第21004525(02)号
       }
     }
     if (flag) {
-      alert("明細で存在しました、ご確認お願い致します。");
+      message.error("明細で存在しました、ご確認お願い致します。");
     } else {
       let newData = [];
       newData["rowNo"] = employeeList.length + 1;
@@ -909,13 +910,13 @@ P-mark：第21004525(02)号
                   ) || {}
                 }
                 options={this.state.employeeNameDrop}
-                getOptionDisabled={(option) => option.name}
+                getOptionDisabled={(option) => option.name || ""}
                 getOptionLabel={(option) => option.text}
                 onChange={(event, values) =>
                   this.employeeNameChange(event, values)
                 }
                 renderOption={(option) => {
-                  return <React.Fragment>{option.name}</React.Fragment>;
+                  return <React.Fragment>{option.name || ""}</React.Fragment>;
                 }}
                 renderInput={(params) => (
                   <div ref={params.InputProps.ref}>

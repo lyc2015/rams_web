@@ -16,6 +16,7 @@ import ErrorsMessageToast from "./errorsMessageToast";
 import "../asserts/css/style.css";
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
+import { notification, message } from "antd";
 axios.defaults.withCredentials = true;
 
 /**
@@ -149,7 +150,11 @@ class BreakTime extends Component {
         }
       })
       .catch(function (e) {
-        alert("error");
+        notification.error({
+          message: "サーバーエラー",
+          description: "error",
+          placement: "topLeft",
+        });
       });
   }
   calculateTime = () => {
@@ -193,11 +198,11 @@ class BreakTime extends Component {
 
   beferBreakTimeRegister = () => {
     if (Number($("#breakTimeDaybreakTimeHour").val()) <= 0) {
-      alert("昼休憩時間を0時間以上入力してください。");
+      message.info("昼休憩時間を0時間以上入力してください。");
       return;
     }
     if (Number($("#breakTimeNightbreakTimeHour").val()) < 0) {
-      alert("夜休憩時間を0時間以上入力してください。");
+      message.info("夜休憩時間を0時間以上入力してください。");
       return;
     }
 
@@ -275,7 +280,11 @@ class BreakTime extends Component {
           setTimeout(() => window.location.reload(), 1000);
         })
         .catch(function () {
-          alert("更新错误，请检查程序");
+          notification.error({
+            message: "サーバーエラー",
+            description: "更新错误，请检查程序",
+            placement: "topLeft",
+          });
         });
     }
   };
@@ -313,7 +322,7 @@ class BreakTime extends Component {
 
   changeToDutyRegistration = () => {
     if (this.state.breakTimeFlag === true) {
-      alert("休憩時間を登録してください。");
+      message.info("休憩時間を登録してください。");
       return;
     } else {
       var path = {};
@@ -408,7 +417,7 @@ class BreakTime extends Component {
               disabledFlag: true,
             });
           } else {
-            alert("データ存在していません");
+            message.info("データ存在していません");
             $("#breakTimeDayHourStart").val(0);
             $("#breakTimeDayMinuteStart").val(0);
             $("#breakTimeDayHourEnd").val(0);
@@ -429,7 +438,11 @@ class BreakTime extends Component {
           });
         })
         .catch(function () {
-          alert("更新错误，请检查程序");
+          notification.error({
+            message: "サーバーエラー",
+            description: "更新错误，请检查程序",
+            placement: "topLeft",
+          });
         });
     }
     if (tempDate > this.state.nowDate) {

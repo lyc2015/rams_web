@@ -1936,7 +1936,9 @@ class employeeUpdateNew extends React.Component {
                         this.getEmployeeName(event, values)
                       }
                       renderOption={(option) => {
-                        return <React.Fragment>{option.name}</React.Fragment>;
+                        return (
+                          <React.Fragment>{option.name || ""}</React.Fragment>
+                        );
                       }}
                       renderInput={(params) => (
                         <div ref={params.InputProps.ref}>
@@ -2522,7 +2524,7 @@ class employeeUpdateNew extends React.Component {
                         this.getDevelopLanguage1(event, values)
                       }
                       options={this.state.developLanguageMaster}
-                      getOptionLabel={(option) => option.name}
+                      getOptionLabel={(option) => option.name || ""}
                       renderInput={(params) => (
                         <div ref={params.InputProps.ref}>
                           <input
@@ -2548,7 +2550,7 @@ class employeeUpdateNew extends React.Component {
                         this.getDevelopLanguage2(event, values)
                       }
                       options={this.state.developLanguageMaster}
-                      getOptionLabel={(option) => option.name}
+                      getOptionLabel={(option) => option.name || ""}
                       renderInput={(params) => (
                         <div ref={params.InputProps.ref}>
                           <input
@@ -2579,7 +2581,7 @@ class employeeUpdateNew extends React.Component {
                         this.getDevelopLanguage3(event, values)
                       }
                       options={this.state.developLanguageMaster}
-                      getOptionLabel={(option) => option.name}
+                      getOptionLabel={(option) => option.name || ""}
                       renderInput={(params) => (
                         <div ref={params.InputProps.ref}>
                           <input
@@ -2604,7 +2606,7 @@ class employeeUpdateNew extends React.Component {
                         this.getDevelopLanguage4(event, values)
                       }
                       options={this.state.developLanguageMaster}
-                      getOptionLabel={(option) => option.name}
+                      getOptionLabel={(option) => option.name || ""}
                       renderInput={(params) => (
                         <div ref={params.InputProps.ref}>
                           <input
@@ -2637,7 +2639,7 @@ class employeeUpdateNew extends React.Component {
                         this.getFrameWork1(event, values)
                       }
                       options={this.state.frameWorkMaster}
-                      getOptionLabel={(option) => option.name}
+                      getOptionLabel={(option) => option.name || ""}
                       renderInput={(params) => (
                         <div ref={params.InputProps.ref}>
                           <input
@@ -2662,7 +2664,7 @@ class employeeUpdateNew extends React.Component {
                         this.getFrameWork2(event, values)
                       }
                       options={this.state.frameWorkMaster}
-                      getOptionLabel={(option) => option.name}
+                      getOptionLabel={(option) => option.name || ""}
                       renderInput={(params) => (
                         <div ref={params.InputProps.ref}>
                           <input
@@ -2751,7 +2753,7 @@ class employeeUpdateNew extends React.Component {
                         this.getStationCode(event, values)
                       }
                       options={this.state.station}
-                      getOptionLabel={(option) => option.name}
+                      getOptionLabel={(option) => option.name || ""}
                       renderInput={(params) => (
                         <div ref={params.InputProps.ref}>
                           <input
@@ -2778,7 +2780,7 @@ class employeeUpdateNew extends React.Component {
                     this.getDevelopLanguage5(event, values)
                   }
                   options={this.state.developLanguageMaster}
-                  getOptionLabel={(option) => option.name}
+                  getOptionLabel={(option) => option.name || ""}
                   renderInput={(params) => (
                     <div ref={params.InputProps.ref}>
                       <input
@@ -2897,7 +2899,7 @@ class employeeUpdateNew extends React.Component {
                       />
                     </InputGroup.Append>
                     <Autocomplete
-                      getOptionLabel={(option) => option.name}
+                      getOptionLabel={(option) => option.name || ""}
                       renderInput={(params) => (
                         <div ref={params.InputProps.ref}>
                           <Button
@@ -3004,7 +3006,7 @@ class employeeUpdateNew extends React.Component {
                       />
                     </InputGroup.Append>
                     <Autocomplete
-                      getOptionLabel={(option) => option.name}
+                      getOptionLabel={(option) => option.name || ""}
                       renderInput={(params) => (
                         <div ref={params.InputProps.ref}>
                           <Button
@@ -3416,8 +3418,8 @@ class employeeUpdateNew extends React.Component {
                 position: "absolute",
                 top: "60%",
                 left: "60%",
-                "margin-left": "-300px",
-                "margin-top": "-150px",
+                marginLeft: "-300px",
+                marginTop: "-150px",
               }}
             ></div>
           </Form.Group>

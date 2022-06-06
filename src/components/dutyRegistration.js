@@ -31,6 +31,7 @@ import MyToast from "./myToast";
 import BreakTime from "./breakTime";
 import * as DutyRegistrationJs from "./dutyRegistrationJs.js";
 import { string } from "prop-types";
+import { message, notification } from "antd";
 
 axios.defaults.withCredentials = true;
 
@@ -642,7 +643,8 @@ class DutyRegistration extends React.Component {
             breakTimeFlag: false,
           });
         } else {
-          if (!this.state.disabledFlag) alert("休憩時間を登録してください。");
+          if (!this.state.disabledFlag)
+            message.info("休憩時間を登録してください。");
           this.setState({
             breakTimeFlag: true,
           });
@@ -662,7 +664,12 @@ class DutyRegistration extends React.Component {
         .then((response) => response.data)
         .then((data) => {
           if (data) {
-            alert("作業報告書データすでに存在しています、クリアしてください。");
+            notification.error({
+              message: "エラー",
+              description:
+                "作業報告書データすでに存在しています、クリアしてください。",
+              placement: "topLeft",
+            });
           }
           this.setState({
             disabledFlag: data,
@@ -760,7 +767,11 @@ class DutyRegistration extends React.Component {
         })
         .catch(function () {
           this.setState({ loading: true });
-          alert("更新错误，请检查程序");
+          notification.error({
+            message: "エラー",
+            description: "更新错误，请检查程序",
+            placement: "topLeft",
+          });
         });
     }
   };
@@ -884,11 +895,19 @@ class DutyRegistration extends React.Component {
           publicUtils.handleDownload(resultMap.data, this.state.serverIP);
           // alert(resultMap.data);
         } else {
-          alert("更新失败");
+          notification.error({
+            message: "エラー",
+            description: "更新失败",
+            placement: "topLeft",
+          });
         }
       })
       .catch(function () {
-        alert("更新错误，请检查程序");
+        notification.error({
+          message: "エラー",
+          description: "更新错误，请检查程序",
+          placement: "topLeft",
+        });
       });
   };
   hasWorkFormatter = (cell, row) => {
@@ -2063,8 +2082,8 @@ class DutyRegistration extends React.Component {
             position: "absolute",
             top: "60%",
             left: "60%",
-            "margin-left": "-200px",
-            "margin-top": "-150px",
+            marginLeft: "-200px",
+            marginTop: "-150px",
           }}
         ></div>
       </div>

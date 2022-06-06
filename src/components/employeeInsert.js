@@ -1582,7 +1582,7 @@ class employeeInsert extends React.Component {
                     name="developLanguage1"
                     value={developLanguage1Value}
                     options={this.state.developLanguageMaster}
-                    getOptionLabel={(option) => option.name}
+                    getOptionLabel={(option) => option.name || ""}
                     renderInput={(params) => (
                       <div ref={params.InputProps.ref}>
                         <input
@@ -1600,7 +1600,7 @@ class employeeInsert extends React.Component {
                     name="developLanguage2"
                     value={developLanguage2Value}
                     options={this.state.developLanguageMaster}
-                    getOptionLabel={(option) => option.name}
+                    getOptionLabel={(option) => option.name || ""}
                     renderInput={(params) => (
                       <div ref={params.InputProps.ref}>
                         <input
@@ -1618,7 +1618,7 @@ class employeeInsert extends React.Component {
                     name="developLanguage3"
                     value={developLanguage4Value}
                     options={this.state.developLanguageMaster}
-                    getOptionLabel={(option) => option.name}
+                    getOptionLabel={(option) => option.name || ""}
                     renderInput={(params) => (
                       <div ref={params.InputProps.ref}>
                         <input
@@ -1636,7 +1636,7 @@ class employeeInsert extends React.Component {
                     name="developLanguage4"
                     value={developLanguage4Value}
                     options={this.state.developLanguageMaster}
-                    getOptionLabel={(option) => option.name}
+                    getOptionLabel={(option) => option.name || ""}
                     renderInput={(params) => (
                       <div ref={params.InputProps.ref}>
                         <input
@@ -1654,7 +1654,7 @@ class employeeInsert extends React.Component {
                     name="developLanguage5"
                     value={developLanguage5Value}
                     options={this.state.developLanguageMaster}
-                    getOptionLabel={(option) => option.name}
+                    getOptionLabel={(option) => option.name || ""}
                     renderInput={(params) => (
                       <div ref={params.InputProps.ref}>
                         <input
@@ -1770,7 +1770,7 @@ class employeeInsert extends React.Component {
                     name="stationCode"
                     value={stationCodeValue}
                     options={this.state.station}
-                    getOptionLabel={(option) => option.name}
+                    getOptionLabel={(option) => option.name || ""}
                     renderInput={(params) => (
                       <div ref={params.InputProps.ref}>
                         <input
@@ -1909,7 +1909,7 @@ class employeeInsert extends React.Component {
                   </InputGroup.Prepend>
 
                   <Autocomplete
-                    getOptionLabel={(option) => option.name}
+                    getOptionLabel={(option) => option.name || ""}
                     renderInput={(params) => (
                       <div ref={params.InputProps.ref}>
                         <Button
@@ -1947,7 +1947,7 @@ class employeeInsert extends React.Component {
                   </InputGroup.Prepend>
 
                   <Autocomplete
-                    getOptionLabel={(option) => option.name}
+                    getOptionLabel={(option) => option.name || ""}
                     renderInput={(params) => (
                       <div ref={params.InputProps.ref}>
                         <Button

@@ -778,7 +778,7 @@ class otherCost extends React.Component {
                     disabled={
                       this.state.costClassificationCode != 1 ? true : false
                     }
-                    getOptionLabel={(option) => option.name}
+                    getOptionLabel={(option) => option.name || ""}
                     renderInput={(params) => (
                       <div ref={params.InputProps.ref}>
                         <input
@@ -817,7 +817,7 @@ class otherCost extends React.Component {
                     disabled={
                       this.state.costClassificationCode != 1 ? true : false
                     }
-                    getOptionLabel={(option) => option.name}
+                    getOptionLabel={(option) => option.name || ""}
                     onChange={(event, values) =>
                       this.getStation4(event, values)
                     }
@@ -925,7 +925,7 @@ class otherCost extends React.Component {
                     disabled={
                       this.state.costClassificationCode > 1 ? false : true
                     }
-                    getOptionLabel={(option) => option.name}
+                    getOptionLabel={(option) => option.name || ""}
                     onChange={(event, values) =>
                       this.getStation5(event, values)
                     }

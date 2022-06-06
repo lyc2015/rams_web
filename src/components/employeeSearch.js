@@ -35,6 +35,7 @@ import MyToast from "./myToast";
 import ErrorsMessageToast from "./errorsMessageToast";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import store from "./redux/store";
+import { notification } from "antd";
 axios.defaults.withCredentials = true;
 registerLocale("ja", ja);
 
@@ -510,7 +511,11 @@ class employeeSearch extends React.Component {
         }
       })
       .catch(function (error) {
-        alert("删除错误，请检查程序");
+        notification.error({
+          message: "エラー",
+          description: "删除错误，请检查程序",
+          placement: "topLeft",
+        });
       });
   };
   // 削除前のデフォルトお知らせの削除
@@ -794,7 +799,11 @@ class employeeSearch extends React.Component {
         }
       })
       .catch(function (error) {
-        alert("ファイルが存在しません。");
+        notification.error({
+          message: "エラー",
+          description: "ファイルが存在しません。",
+          placement: "topLeft",
+        });
       });
   };
 
@@ -1177,7 +1186,9 @@ class employeeSearch extends React.Component {
                         this.getEmployeeName(event, values)
                       }
                       renderOption={(option) => {
-                        return <React.Fragment>{option.name}</React.Fragment>;
+                        return (
+                          <React.Fragment>{option.name || ""}</React.Fragment>
+                        );
                       }}
                       renderInput={(params) => (
                         <div ref={params.InputProps.ref}>
@@ -1303,7 +1314,7 @@ class employeeSearch extends React.Component {
                    * this.getCustomerNo(event, values)}
                    * options={this.state.customerMaster}
                    * getOptionLabel={(option) =>
-                   * option.name} renderInput={(params) => (
+                   * option.name||''} renderInput={(params) => (
                    * <div ref={params.InputProps.ref}>
                    * <input type="text"
                    * {...params.inputProps}
@@ -1447,7 +1458,7 @@ class employeeSearch extends React.Component {
                   </InputGroup>
                 </Col>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         開発言語
@@ -1465,7 +1476,7 @@ class employeeSearch extends React.Component {
                         this.getDevelopLanguage1(event, values)
                       }
                       options={this.state.developLanguageMaster}
-                      getOptionLabel={(option) => option.name}
+                      getOptionLabel={(option) => option.name || ""}
                       renderInput={(params) => (
                         <div ref={params.InputProps.ref}>
                           <input
@@ -1490,7 +1501,7 @@ class employeeSearch extends React.Component {
                         this.getDevelopLanguage2(event, values)
                       }
                       options={this.state.developLanguageMaster}
-                      getOptionLabel={(option) => option.name}
+                      getOptionLabel={(option) => option.name || ""}
                       renderInput={(params) => (
                         <div ref={params.InputProps.ref}>
                           <input

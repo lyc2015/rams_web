@@ -43,6 +43,7 @@ import Resume from "./resume";
 import store from "./redux/store";
 import BreakTime from "./breakTime";
 import ReactTooltip from "react-tooltip";
+import { message } from "antd";
 axios.defaults.withCredentials = true;
 
 /**
@@ -146,7 +147,7 @@ class SubMenu extends Component {
         flag: this.state.breakTimeFlag,
       };
       if (this.state.breakTimeFlag) {
-        alert("休憩時間を登録してください。");
+        message.info("休憩時間を登録してください。");
         this.shuseiTo({
           pathname: "/subMenuEmployee/breakTime",
           state: {

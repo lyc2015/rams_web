@@ -202,7 +202,11 @@ class invoicePDF extends React.Component {
         console.log(result.data, "result.data");
 
         if (result.data.length < 1) {
-          alert("データ存在していません。");
+          notification.error({
+            message: "エラー",
+            description: "データ存在していません。",
+            placement: "topLeft",
+          });
           this.setState({ loading: true });
           return;
         }
@@ -1089,7 +1093,11 @@ class invoicePDF extends React.Component {
           a.click();
           this.setState({ loading: true });
         } else {
-          alert("更新失败");
+          notification.error({
+            message: "エラー",
+            description: "更新失败",
+            placement: "topLeft",
+          });
           this.setState({ loading: true });
         }
       })
@@ -1426,7 +1434,7 @@ class invoicePDF extends React.Component {
                   this.getBankAccountInfo(event, values)
                 }
                 renderOption={(option) => {
-                  return <React.Fragment>{option.name}</React.Fragment>;
+                  return <React.Fragment>{option.name || ""}</React.Fragment>;
                 }}
                 renderInput={(params) => (
                   <div ref={params.InputProps.ref}>

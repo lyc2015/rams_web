@@ -25,6 +25,7 @@ import {
 import * as publicUtils from "./utils/publicUtils.js";
 import store from "./redux/store";
 import MyToast from "./myToast";
+import { notification, message } from "antd";
 axios.defaults.withCredentials = true;
 
 /**
@@ -236,7 +237,11 @@ class dataShareEmployee extends React.Component {
         publicUtils.handleDownload(path, this.state.serverIP);
       })
       .catch(function (error) {
-        alert("ファイルが存在しません。");
+        notification.error({
+          message: "エラー",
+          description: "ファイルが存在しません",
+          placement: "topLeft",
+        });
       });
   };
 
@@ -262,7 +267,7 @@ class dataShareEmployee extends React.Component {
       fileName[fileName.length - 1] === "pdf"
     ) {
     } else {
-      alert("PDF或いはexcelをアップロードしてください");
+      message.error("PDF或いはexcelをアップロードしてください");
       return false;
     }
     const formData = new FormData();
@@ -280,7 +285,11 @@ class dataShareEmployee extends React.Component {
           this.setState({ myToastShow: true, message: "アップロード成功！" });
           setTimeout(() => this.setState({ myToastShow: false }), 3000);
         } else {
-          alert("err");
+          notification.error({
+            message: "エラー",
+            description: "アップロード失敗",
+            placement: "topLeft",
+          });
         }
       });
   };
@@ -314,7 +323,11 @@ class dataShareEmployee extends React.Component {
             });
             setTimeout(() => this.setState({ myToastShow: false }), 3000);
           } else {
-            alert("err");
+            notification.error({
+              message: "エラー",
+              description: "削除失敗",
+              placement: "topLeft",
+            });
           }
         });
     }
@@ -344,7 +357,7 @@ class dataShareEmployee extends React.Component {
       this.state.dataShareList[this.state.rowNo - 1].fileName === null ||
       this.state.dataShareList[this.state.rowNo - 1].fileName === ""
     ) {
-      alert("ファイル名を入力してください。");
+      message.error("ファイル名を入力してください。");
       return;
     }
 
@@ -369,7 +382,11 @@ class dataShareEmployee extends React.Component {
           this.setState({ myToastShow: true, message: "更新成功！" });
           setTimeout(() => this.setState({ myToastShow: false }), 3000);
         } else {
-          alert("err");
+          notification.error({
+            message: "エラー",
+            description: "更新失敗",
+            placement: "topLeft",
+          });
         }
       });
   };

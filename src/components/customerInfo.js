@@ -1148,7 +1148,7 @@ class CustomerInfo extends Component {
                 </InputGroup>
               </Col>
               <Col sm={3}>
-                <InputGroup size="sm" className="mb-3">
+                <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                   <InputGroup.Prepend>
                     <InputGroup.Text>本社場所</InputGroup.Text>
                   </InputGroup.Prepend>
@@ -1197,7 +1197,7 @@ class CustomerInfo extends Component {
                 </InputGroup>
               </Col>
               <Col sm={3}>
-                <InputGroup size="sm" className="mb-3">
+                <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                   <InputGroup.Prepend>
                     <InputGroup.Text>設立</InputGroup.Text>
                   </InputGroup.Prepend>
@@ -1282,7 +1282,7 @@ class CustomerInfo extends Component {
                 </InputGroup>
               </Col>
               <Col sm={3}>
-                <InputGroup size="sm" className="mb-3">
+                <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                   <InputGroup.Prepend>
                     <InputGroup.Text id="fiveKanji">上位お客様</InputGroup.Text>
                   </InputGroup.Prepend>
@@ -1419,7 +1419,7 @@ class CustomerInfo extends Component {
                                         value={this.state.customerDepartmentNameDrop.find(v => v.code === this.state.customerDepartmentCode2) || {}}
                                         onChange={(event, values) => this.getCustomerDepartment2(event, values)}
                                         options={this.state.customerDepartmentNameDrop}
-                                        getOptionLabel={(option) => option.name}
+                                        getOptionLabel={(option) => option.name||''}
                                         renderInput={(params) => (
                                             <div ref={params.InputProps.ref}>
                                                 <input placeholder=" 例：第一営業部" type="text" {...params.inputProps} className="auto form-control Autocompletestyle-customerInfo"
@@ -1430,7 +1430,7 @@ class CustomerInfo extends Component {
                                 </InputGroup>
                             </Col>*/}
               <Col sm={3}>
-                <InputGroup size="sm" className="mb-3">
+                <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                   <InputGroup.Prepend>
                     <InputGroup.Text>職位</InputGroup.Text>
                   </InputGroup.Prepend>
@@ -1533,7 +1533,7 @@ class CustomerInfo extends Component {
                 </InputGroup>
               </Col>
               <Col sm={3}>
-                <InputGroup size="sm" className="mb-3">
+                <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                   <InputGroup.Prepend>
                     <InputGroup.Text>取引開始</InputGroup.Text>
                   </InputGroup.Prepend>
@@ -1565,7 +1565,7 @@ class CustomerInfo extends Component {
                 </InputGroup>
               </Col>
               <Col sm={3}>
-                <InputGroup size="sm" className="mb-3">
+                <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                   <InputGroup.Prepend>
                     <InputGroup.Text>連絡日</InputGroup.Text>
                   </InputGroup.Prepend>
@@ -1597,7 +1597,7 @@ class CustomerInfo extends Component {
               </Col>
 
               <Col sm={3}>
-                <InputGroup size="sm" className="mb-3">
+                <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                   <InputGroup.Prepend>
                     <InputGroup.Text>LYC担当</InputGroup.Text>
                   </InputGroup.Prepend>
@@ -1618,7 +1618,9 @@ class CustomerInfo extends Component {
                       this.getSalesStaff(event, values)
                     }
                     renderOption={(option) => {
-                      return <React.Fragment>{option.name}</React.Fragment>;
+                      return (
+                        <React.Fragment>{option.name || ""}</React.Fragment>
+                      );
                     }}
                     renderInput={(params) => (
                       <div ref={params.InputProps.ref}>

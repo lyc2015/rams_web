@@ -658,7 +658,7 @@ class CustomerInfoSearch extends Component {
         <Form id="conditionForm">
           <Row>
             <Col sm={3}>
-              <InputGroup size="sm" className="mb-3">
+              <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                 <InputGroup.Prepend>
                   <InputGroup.Text id="fiveKanji">お客様名</InputGroup.Text>
                 </InputGroup.Prepend>
@@ -675,7 +675,7 @@ class CustomerInfoSearch extends Component {
                   getOptionLabel={(option) => (option.text ? option.text : "")}
                   onChange={(event, values) => this.getCustomer(event, values)}
                   renderOption={(option) => {
-                    return <React.Fragment>{option.name}</React.Fragment>;
+                    return <React.Fragment>{option.name || ""}</React.Fragment>;
                   }}
                   renderInput={(params) => (
                     <div ref={params.InputProps.ref}>
@@ -690,7 +690,7 @@ class CustomerInfoSearch extends Component {
               </InputGroup>
             </Col>
             <Col sm={3}>
-              <InputGroup size="sm" className="mb-3">
+              <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                 <InputGroup.Prepend>
                   <InputGroup.Text id="fiveKanji">客様略称</InputGroup.Text>
                 </InputGroup.Prepend>
@@ -709,7 +709,7 @@ class CustomerInfoSearch extends Component {
                   getOptionLabel={(option) => (option.text ? option.text : "")}
                   onChange={(event, values) => this.getCustomer(event, values)}
                   renderOption={(option) => {
-                    return <React.Fragment>{option.name}</React.Fragment>;
+                    return <React.Fragment>{option.name || ""}</React.Fragment>;
                   }}
                   renderInput={(params) => (
                     <div ref={params.InputProps.ref}>
@@ -724,7 +724,7 @@ class CustomerInfoSearch extends Component {
               </InputGroup>
             </Col>
             <Col sm={3}>
-              <InputGroup size="sm" className="mb-3">
+              <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                 <InputGroup.Prepend>
                   <InputGroup.Text id="fiveKanji">LYC担当</InputGroup.Text>
                 </InputGroup.Prepend>
@@ -742,7 +742,7 @@ class CustomerInfoSearch extends Component {
                     this.getSalesStaff(event, values)
                   }
                   renderOption={(option) => {
-                    return <React.Fragment>{option.name}</React.Fragment>;
+                    return <React.Fragment>{option.name || ""}</React.Fragment>;
                   }}
                   renderInput={(params) => (
                     <div ref={params.InputProps.ref}>
@@ -872,7 +872,7 @@ class CustomerInfoSearch extends Component {
               </InputGroup>
             </Col>
             <Col sm={3}>
-              <InputGroup size="sm">
+              <InputGroup size="sm" className="flexWrapNoWrap">
                 <InputGroup.Prepend>
                   <InputGroup.Text id="fiveKanji">本社場所</InputGroup.Text>
                 </InputGroup.Prepend>
@@ -889,7 +889,7 @@ class CustomerInfoSearch extends Component {
                     this.getStationCode(event, values)
                   }
                   options={this.state.stationCodeDrop}
-                  getOptionLabel={(option) => option.name}
+                  getOptionLabel={(option) => option.name || ""}
                   renderInput={(params) => (
                     <div ref={params.InputProps.ref}>
                       <input
@@ -904,7 +904,7 @@ class CustomerInfoSearch extends Component {
               </InputGroup>
             </Col>
             <Col sm={3}>
-              <InputGroup size="sm">
+              <InputGroup size="sm " className="flexWrapNoWrap">
                 <InputGroup.Prepend>
                   <InputGroup.Text id="fiveKanji">上位お客様</InputGroup.Text>
                 </InputGroup.Prepend>
@@ -921,7 +921,7 @@ class CustomerInfoSearch extends Component {
                     this.getTopCustomer(event, values)
                   }
                   options={this.state.topCustomerDrop}
-                  getOptionLabel={(option) => option.name}
+                  getOptionLabel={(option) => option.name || ""}
                   renderInput={(params) => (
                     <div ref={params.InputProps.ref}>
                       <input
@@ -976,7 +976,7 @@ class CustomerInfoSearch extends Component {
             </Col>
 
             <Col sm={3}>
-              <InputGroup size="sm" className="mb-3">
+              <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                 <InputGroup.Prepend>
                   <InputGroup.Text id="fiveKanji">
                     {this.state.contactDateFlag ? "最終連絡日" : "取引開始日"}
@@ -1003,7 +1003,7 @@ class CustomerInfoSearch extends Component {
               </InputGroup>
             </Col>
             <Col sm={3}>
-              <InputGroup size="sm" className="mb-3">
+              <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                 <InputGroup.Prepend>
                   <InputGroup.Text id="fiveKanji">取引区分</InputGroup.Text>
                 </InputGroup.Prepend>

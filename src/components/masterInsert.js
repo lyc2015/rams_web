@@ -298,7 +298,7 @@ class masterInsert extends Component {
                   }
                   onChange={(event, values) => this.onchange(event, values)}
                   options={this.state.masterStatus}
-                  getOptionLabel={(option) => option.name}
+                  getOptionLabel={(option) => option.name || ""}
                   renderInput={(params) => (
                     <div ref={params.InputProps.ref}>
                       <input
@@ -327,7 +327,7 @@ class masterInsert extends Component {
                       id="bankName"
                       name="bankName"
                       options={bankInfo}
-                      getOptionLabel={(option) => option.name}
+                      getOptionLabel={(option) => option.name || ""}
                       value={
                         bankInfo.find((v) => v.code === this.state.bankName) ||
                         {}

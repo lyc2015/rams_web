@@ -32,6 +32,7 @@ import MyToast from "./myToast";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import ErrorsMessageToast from "./errorsMessageToast";
 import store from "./redux/store";
+import { notification } from "antd";
 
 axios.defaults.withCredentials = true;
 class employeeUpdate extends React.Component {
@@ -263,7 +264,11 @@ class employeeUpdate extends React.Component {
                 setTimeout(() => this.setState({ myToastShow: false }), 3000);
               })
               .catch(function (error) {
-                alert("删除错误，请检查程序");
+                notification.error({
+                  message: "エラー",
+                  description: "删除错误，请检查程序",
+                  placement: "topLeft",
+                });
               });
           }
         })
@@ -1828,7 +1833,7 @@ class employeeUpdate extends React.Component {
                       this.getDevelopLanguage1(event, values)
                     }
                     options={this.state.developLanguageMaster}
-                    getOptionLabel={(option) => option.name}
+                    getOptionLabel={(option) => option.name || ""}
                     renderInput={(params) => (
                       <div ref={params.InputProps.ref}>
                         <input
@@ -1854,7 +1859,7 @@ class employeeUpdate extends React.Component {
                       this.getDevelopLanguage2(event, values)
                     }
                     options={this.state.developLanguageMaster}
-                    getOptionLabel={(option) => option.name}
+                    getOptionLabel={(option) => option.name || ""}
                     renderInput={(params) => (
                       <div ref={params.InputProps.ref}>
                         <input
@@ -1879,7 +1884,7 @@ class employeeUpdate extends React.Component {
                       this.getDevelopLanguage3(event, values)
                     }
                     options={this.state.developLanguageMaster}
-                    getOptionLabel={(option) => option.name}
+                    getOptionLabel={(option) => option.name || ""}
                     renderInput={(params) => (
                       <div ref={params.InputProps.ref}>
                         <input
@@ -1904,7 +1909,7 @@ class employeeUpdate extends React.Component {
                       this.getDevelopLanguage4(event, values)
                     }
                     options={this.state.developLanguageMaster}
-                    getOptionLabel={(option) => option.name}
+                    getOptionLabel={(option) => option.name || ""}
                     renderInput={(params) => (
                       <div ref={params.InputProps.ref}>
                         <input
@@ -1929,7 +1934,7 @@ class employeeUpdate extends React.Component {
                       this.getDevelopLanguage5(event, values)
                     }
                     options={this.state.developLanguageMaster}
-                    getOptionLabel={(option) => option.name}
+                    getOptionLabel={(option) => option.name || ""}
                     renderInput={(params) => (
                       <div ref={params.InputProps.ref}>
                         <input
@@ -2049,7 +2054,7 @@ class employeeUpdate extends React.Component {
                       this.getStationCode(event, values)
                     }
                     options={this.state.station}
-                    getOptionLabel={(option) => option.name}
+                    getOptionLabel={(option) => option.name || ""}
                     renderInput={(params) => (
                       <div ref={params.InputProps.ref}>
                         <input
@@ -2191,7 +2196,7 @@ class employeeUpdate extends React.Component {
                     <InputGroup.Text id="fiveKanji">在留カード</InputGroup.Text>
                   </InputGroup.Prepend>
                   <Autocomplete
-                    getOptionLabel={(option) => option.name}
+                    getOptionLabel={(option) => option.name || ""}
                     renderInput={(params) => (
                       <div ref={params.InputProps.ref}>
                         <Button
@@ -2240,7 +2245,7 @@ class employeeUpdate extends React.Component {
                   </InputGroup.Prepend>
 
                   <Autocomplete
-                    getOptionLabel={(option) => option.name}
+                    getOptionLabel={(option) => option.name || ""}
                     renderInput={(params) => (
                       <div ref={params.InputProps.ref}>
                         <Button

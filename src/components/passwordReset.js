@@ -5,6 +5,7 @@ import { Row, Form, Col, InputGroup, Button } from "react-bootstrap";
 import axios from "axios";
 import $ from "jquery";
 import store from "./redux/store";
+import { message, notification } from "antd";
 axios.defaults.withCredentials = true;
 /**
  * パスワードリセット画面（パスワード忘れ用）
@@ -37,12 +38,24 @@ class passwordReset extends Component {
         .post(this.state.serverIP + "passwordReset/passwordReset", pswMod)
         .then((resultMap) => {
           if (resultMap.data === 0) {
-            alert("パスワードリセット成功しました");
+            notification.success({
+              message: "エラー",
+              description: "パスワードリセット成功しました",
+              placement: "topLeft",
+            });
             this.props.history.push("/");
           } else if (resultMap.data === 1) {
-            alert("パスワードリセット失敗しました");
+            notification.error({
+              message: "エラー",
+              description: "パスワードリセット失敗しました",
+              placement: "topLeft",
+            });
           } else if (resultMap.data === 2) {
-            alert("パスワードリセットIDが失効しました");
+            notification.error({
+              message: "エラー",
+              description: "パスワードリセットIDが失効しました",
+              placement: "topLeft",
+            });
           }
         });
     } else if (
@@ -51,9 +64,9 @@ class passwordReset extends Component {
       $("#passwordCheck").val() === null ||
       $("#passwordCheck").val() === ""
     ) {
-      alert("パスワードとパスワード確認を入力してください");
+      message.error("パスワードとパスワード確認を入力してください");
     } else if ($("#newPassword").val() !== $("#passwordCheck").val()) {
-      alert("パスワードとパスワード確認が間違いため");
+      message.error("パスワードとパスワード確認が間違いため");
     }
   };
   render() {

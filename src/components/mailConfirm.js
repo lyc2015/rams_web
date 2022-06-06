@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as publicUtils from "./utils/publicUtils.js";
 import axios from "axios";
 import store from "./redux/store";
+import { notification } from "antd";
 
 /**
  * メール確認
@@ -72,7 +73,11 @@ class mailConfirm extends React.Component {
             fileKey,
           });
         } catch (error) {
-          alert("ファイルが存在しません。");
+          notification.error({
+            message: "エラー",
+            description: "ファイルが存在しません。",
+            placement: "topLeft",
+          });
         }
         break;
 

@@ -8,6 +8,7 @@ import * as publicUtils from "./utils/publicUtils.js";
 import axios from "axios";
 import store from "./redux/store";
 import FileViewer from "react-file-viewer";
+import { notification } from "antd";
 
 /**
  * メール確認
@@ -107,7 +108,11 @@ class mailConfirm extends React.Component {
           resumeInfoName,
         });
       } else {
-        alert("ファイルが存在しません。");
+        notification.error({
+          message: "サーバーエラー",
+          description: "ファイルが存在しません。",
+          placement: "topLeft",
+        });
       }
       return;
     }
@@ -133,7 +138,11 @@ class mailConfirm extends React.Component {
 
       // this.setState({ fileBlobUrl }); // 预览
     } catch (error) {
-      alert("ファイルが存在しません。");
+      notification.error({
+        message: "サーバーエラー",
+        description: "ファイルが存在しません。",
+        placement: "topLeft",
+      });
     }
   };
 

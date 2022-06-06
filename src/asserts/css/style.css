@@ -330,7 +330,7 @@ body {
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: #e9ecef;
-  width: 14.4rem;
+  /* width: 14.4rem; */
 }
 
 #datePickerReadonly {
@@ -377,7 +377,7 @@ body {
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: #e9ecef;
-  width: 14.5rem;
+  /* width: 14.5rem; */
 }
 
 #scheduledEndDate {
@@ -470,7 +470,7 @@ body {
 
 #wagesInfoDatePickerReadOnly {
   background-repeat: no-repeat;
-  width: 7.7rem;
+  width: 6.7rem;
   background-position: 10px 7px;
   background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
     center transparent;
@@ -544,7 +544,7 @@ body {
 
 #customerInfoDatePicker {
   background-repeat: no-repeat;
-  width: 15rem;
+  /* width: 15rem; */
   background-position: 10px 7px;
   background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
     center transparent;
@@ -555,7 +555,7 @@ body {
 
 #customerInfoDatePicker-customerInfoSearch {
   background-repeat: no-repeat;
-  width: 14rem;
+  /* width: 14rem; */
   background-position: 10px 7px;
   background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
     center transparent;
@@ -566,7 +566,7 @@ body {
 
 #customerInfoDatePicker-establishmentDate {
   background-repeat: no-repeat;
-  width: 15rem;
+  /* width: 15rem; */
   background-position: 10px 7px;
   background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
     center transparent;
@@ -588,7 +588,7 @@ body {
 
 #customerInfoDatePickerReadOnly {
   background-repeat: no-repeat;
-  width: 15rem;
+  /* width: 15rem; */
   background-position: 10px 7px;
   background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
     center transparent;
@@ -826,7 +826,7 @@ body {
 #datePicker-empInsert-right-stayPeriod {
   background-repeat: no-repeat;
   background-position: 10px 7px;
-  width: 9.6rem;
+  width: 7.6rem;
   background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
@@ -952,6 +952,10 @@ body {
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: #e9ecef;
+}
+
+.input-group {
+  /* flex-wrap: nowrap; */
 }
 
 .input-group-text {
@@ -1154,7 +1158,7 @@ body {
 }
 
 #empinsert-right-kanji {
-  width: 7.7rem;
+  width: 5.7rem;
 }
 
 .fileUploader .fileContainer {
@@ -1223,7 +1227,7 @@ body {
 }
 
 .Autocompletestyle-siteInfo {
-  width: 15rem;
+  /* width: 15rem; */
   height: 31px;
   border-color: "#ced4da";
   border-width: 1;
@@ -1253,7 +1257,7 @@ body {
 }
 
 .Autocompletestyle-siteInfo-topCustomer {
-  width: 13.5rem;
+  /* width: 13.5rem; */
   height: 31px;
   border-color: "#ced4da";
   border-width: 1;
@@ -1303,7 +1307,7 @@ body {
 }
 
 .Autocompletestyle-siteInfo-relatedEmployees {
-  width: 9.2rem;
+  /* width: 7.2rem; */
   height: 31px;
   border-color: "#ced4da";
   border-width: 1;
@@ -1313,7 +1317,7 @@ body {
 }
 
 .Autocompletestyle-customerInfo {
-  width: 15.1rem;
+  /* width: 15.1rem; */
   height: 31px;
   border-color: "#ced4da";
   border-width: 1;
@@ -1336,7 +1340,7 @@ body {
 }
 
 .Autocompletestyle-emp-station {
-  width: 20.58rem;
+  width: 16.58rem;
   height: 31px;
   border-color: "#ced4da";
   border-width: 1;
@@ -1366,7 +1370,7 @@ body {
 }
 
 .Autocompletestyle-customerInfoSearch {
-  width: 14.4rem;
+  /* width: 14.4rem; */
   height: 31px;
   border-color: "#ced4da";
   border-width: 1;
@@ -1396,7 +1400,7 @@ body {
 }
 
 .Autocompletestyle-developLanguage {
-  width: 7.59rem;
+  /* width: 7.59rem; */
   height: 31px;
   border-color: "#ced4da";
   border-width: 1;
@@ -1406,7 +1410,7 @@ body {
 }
 
 .Autocompletestyle-customerInfo-topCustomer {
-  width: 14.4rem;
+  /* width: 14.4rem; */
   height: 31px;
   border-color: "#ced4da";
   border-width: 1;
@@ -1488,7 +1492,7 @@ body {
 }
 
 .Autocompletestyle-projectInfo-siteLocation {
-  width: 15.2rem;
+  /* width: 15.2rem; */
   height: 31px;
   border-color: "#ced4da";
   border-width: 1;
@@ -1498,7 +1502,7 @@ body {
 }
 
 .Autocompletestyle-projectInfo-keyWordOfLanagurue {
-  width: 7.6rem;
+  width: 6.6rem;
   height: 31px;
   border-color: "#ced4da";
   border-width: 1;
@@ -1508,7 +1512,7 @@ body {
 }
 
 .Autocompletestyle-experienceYear {
-  width: 11.5rem;
+  /* width: 11.5rem; */
   height: 31px;
   border-color: "#ced4da";
   border-width: 1;
@@ -1519,7 +1523,7 @@ body {
 
 #workStartPeriodDatePicker {
   background-repeat: no-repeat;
-  width: 8rem;
+  /* width: 8rem; */
   background-position: 10px 7px;
   background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
     center transparent;
@@ -1626,7 +1630,7 @@ body {
 }
 
 .Autocompletestyle-siteInfo-employeeNo {
-  width: 13rem;
+  /* width: 13rem; */
   height: 31px;
   border-color: "#ced4da";
   border-width: 1;
@@ -1641,7 +1645,7 @@ body {
 }
 
 .Autocompletestyle-siteInfoSearch-customerNo {
-  width: 15.1rem;
+  /* width: 15.1rem; */
   height: 31px;
   border-color: "#ced4da";
   border-width: 1;
@@ -1651,7 +1655,7 @@ body {
 }
 
 .Autocompletestyle-individualSales {
-  width: 12.1rem;
+  /* width: 12.1rem; */
   height: 31px;
   border-color: "#ced4da";
   border-width: 1;
@@ -1711,7 +1715,7 @@ body {
 }
 
 .Autocompletestyle-employeeInsert-developLanguage {
-  width: 10.29rem;
+  width: 8.29rem;
   height: 31px;
   border-color: "#ced4da";
   border-width: 1;
@@ -1814,7 +1818,7 @@ body {
 
 #wagesInfoDatePicker-nextRaiseMonth-readOnly {
   background-repeat: no-repeat;
-  width: 13.55rem;
+  /* width: 13.55rem; */
   background-position: 10px 7px;
   background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
     center transparent;
@@ -1825,7 +1829,7 @@ body {
 
 #wagesInfoDatePicker-reflectYearAndMonth-readOnly {
   background-repeat: no-repeat;
-  width: 15.1rem;
+  /* width: 15.1rem; */
   background-position: 10px 7px;
   background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
     center transparent;
@@ -2053,7 +2057,7 @@ body {
   }
 
   .Autocompletestyle-experienceYear {
-    width: 6.8rem;
+    /* width: 6.8rem; */
     height: 31px;
     border-color: "#ced4da";
     border-width: 1;
@@ -2247,7 +2251,7 @@ body {
   }
   #workStartPeriodDatePicker {
     background-repeat: no-repeat;
-    width: 6rem;
+    /* width: 6rem; */
     background-position: 10px 7px;
     background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
       center transparent;
@@ -2481,7 +2485,7 @@ body {
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: #e9ecef;
-    width: 10rem;
+    /* width: 10rem; */
   }
   #scheduledEndDate {
     background-repeat: no-repeat;
@@ -2550,7 +2554,7 @@ body {
     color: "#495057";
   }
   .Autocompletestyle-siteInfoSearch-customerNo {
-    width: 10.4rem;
+    /* width: 10.4rem; */
     height: 31px;
     border-color: "#ced4da";
     border-width: 1;
@@ -2645,7 +2649,7 @@ body {
     color: "#495057";
   }
   .Autocompletestyle-developLanguage {
-    width: 5.2rem;
+    /* width: 5.2rem; */
     height: 31px;
     border-color: "#ced4da";
     border-width: 1;
@@ -2925,7 +2929,7 @@ body {
   }
   #workStartPeriodDatePicker {
     background-repeat: no-repeat;
-    width: 6rem;
+    /* width: 6rem; */
     background-position: 10px 7px;
     background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
       center transparent;
@@ -3119,7 +3123,7 @@ body {
   }
   #wagesInfoDatePicker-reflectYearAndMonth-readOnly {
     background-repeat: no-repeat;
-    width: 10.35rem;
+    /* width: 10.35rem; */
     background-position: 10px 7px;
     background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
       center transparent;

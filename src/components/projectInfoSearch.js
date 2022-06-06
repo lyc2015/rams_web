@@ -30,6 +30,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import DatePicker, { registerLocale } from "react-datepicker";
 import store from "./redux/store";
 import ProjectContent from "./projectContent";
+import { notification } from "antd";
 axios.defaults.withCredentials = true;
 
 class ProjectInfoSearch extends Component {
@@ -267,7 +268,11 @@ class ProjectInfoSearch extends Component {
         }
       })
       .catch((error) => {
-        alert("删除错误，请检查程序");
+        notification.error({
+          message: "サーバーエラー",
+          description: "删除错误，请检查程序",
+          placement: "topLeft",
+        });
       });
   };
 
@@ -427,7 +432,11 @@ class ProjectInfoSearch extends Component {
         }
       })
       .catch((error) => {
-        alert("删除错误，请检查程序");
+        notification.error({
+          message: "サーバーエラー",
+          description: "删除错误，请检查程序",
+          placement: "topLeft",
+        });
       });
   };
   //　　削除前のデフォルトお知らせの削除
@@ -508,7 +517,11 @@ class ProjectInfoSearch extends Component {
         });
       })
       .catch((error) => {
-        alert("检索错误，请检查程序");
+        notification.error({
+          message: "サーバーエラー",
+          description: "检索错误，请检查程序",
+          placement: "topLeft",
+        });
       });
   };
   admissionPeriodChange = (date) => {
@@ -751,7 +764,7 @@ class ProjectInfoSearch extends Component {
                         projectNoDrop.find((v) => v.code === projectNo) || {}
                       }
                       options={projectNoDrop}
-                      getOptionLabel={(option) => option.name}
+                      getOptionLabel={(option) => option.name || ""}
                       onChange={(event, values) =>
                         this.getProjectNo(event, values)
                       }
@@ -782,7 +795,7 @@ class ProjectInfoSearch extends Component {
                         ) || {}
                       }
                       options={developLanguageDrop}
-                      getOptionLabel={(option) => option.name}
+                      getOptionLabel={(option) => option.name || ""}
                       onChange={(event, values) =>
                         this.getJapanese1(event, values)
                       }
@@ -806,7 +819,7 @@ class ProjectInfoSearch extends Component {
                         ) || {}
                       }
                       options={developLanguageDrop}
-                      getOptionLabel={(option) => option.name}
+                      getOptionLabel={(option) => option.name || ""}
                       onChange={(event, values) =>
                         this.getJapanese2(event, values)
                       }
@@ -831,7 +844,7 @@ class ProjectInfoSearch extends Component {
                         ) || {}
                       }
                       options={developLanguageDrop}
-                      getOptionLabel={(option) => option.name}
+                      getOptionLabel={(option) => option.name || ""}
                       onChange={(event, values) =>
                         this.getJapanese3(event, values)
                       }
@@ -889,7 +902,7 @@ class ProjectInfoSearch extends Component {
                   </InputGroup>
                 </Col>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text>入場時期</InputGroup.Text>
                     </InputGroup.Prepend>

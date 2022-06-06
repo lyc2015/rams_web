@@ -24,6 +24,7 @@ import MyToast from "./myToast";
 import ErrorsMessageToast from "./errorsMessageToast";
 import store from "./redux/store";
 import Autocomplete from "@material-ui/lab/Autocomplete";
+import { notification } from "antd";
 
 axios.defaults.withCredentials = true;
 /**
@@ -144,7 +145,11 @@ class BankInfo extends Component {
             }
           })
           .catch(function (error) {
-            alert("口座情報获取错误，请检查程序");
+            notification.error({
+              message: "サーバーエラー",
+              description: "口座情報获取错误，请检查程序",
+              placement: "topLeft",
+            });
           });
         if (actionType === "detail") {
           //詳細の場合
@@ -223,7 +228,11 @@ class BankInfo extends Component {
           }
         })
         .catch((error) => {
-          alert("支店信息获取错误，请检查程序");
+          notification.error({
+            message: "サーバーエラー",
+            description: "支店信息获取错误，请检查程序",
+            placement: "topLeft",
+          });
         });
     } else {
       $("#bankBranchCode").val("");
@@ -507,13 +516,15 @@ class BankInfo extends Component {
                       ) || {}
                     }
                     options={this.state.bankBranchDrop}
-                    getOptionDisabled={(option) => option.name}
-                    getOptionLabel={(option) => option.name}
+                    getOptionDisabled={(option) => option.name || ""}
+                    getOptionLabel={(option) => option.name || ""}
                     onChange={(event, values) =>
                       this.bankBranchChange(event, values)
                     }
                     renderOption={(option) => {
-                      return <React.Fragment>{option.name}</React.Fragment>;
+                      return (
+                        <React.Fragment>{option.name || ""}</React.Fragment>
+                      );
                     }}
                     renderInput={(params) => (
                       <div ref={params.InputProps.ref}>
@@ -550,7 +561,7 @@ class BankInfo extends Component {
                     }
                     options={this.state.bankBranchDrop}
                     getOptionDisabled={(option) => option.code}
-                    getOptionLabel={(option) => option.code}
+                    getOptionLabel={(option) => option.code || ""}
                     onChange={(event, values) =>
                       this.bankBranchChange(event, values)
                     }

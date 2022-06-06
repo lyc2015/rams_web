@@ -30,6 +30,7 @@ import ErrorsMessageToast from "./errorsMessageToast";
 import store from "./redux/store";
 import OtherCostModel from "./otherCost";
 import * as utils from "./utils/publicUtils.js";
+import { message, notification } from "antd";
 axios.defaults.withCredentials = true;
 
 /**
@@ -236,7 +237,7 @@ class costRegistration extends React.Component {
       ($("#costRegistrationFile").get(0).files[0] === undefined ||
         $("#costRegistrationFile").get(0).files[0] === null)
     ) {
-      alert("領収書を添付してください");
+      message.error("領収書を添付してください");
       return;
     }
     const formData = new FormData();
@@ -481,7 +482,11 @@ class costRegistration extends React.Component {
         }
       })
       .catch((error) => {
-        alert(error);
+        notification.error({
+          message: "エラー",
+          description: "削除失敗，请检查程序",
+          placement: "topLeft",
+        });
         console.error("Error - " + error);
       });
   };
@@ -1193,7 +1198,7 @@ class costRegistration extends React.Component {
                       this.state.rowSelectCostClassificationCode === "0"
                     )
                   }
-                  getOptionLabel={(option) => option.name}
+                  getOptionLabel={(option) => option.name || ""}
                   renderInput={(params) => (
                     <div ref={params.InputProps.ref}>
                       <input
@@ -1236,7 +1241,7 @@ class costRegistration extends React.Component {
                       this.state.rowSelectCostClassificationCode === "0"
                     )
                   }
-                  getOptionLabel={(option) => option.name}
+                  getOptionLabel={(option) => option.name || ""}
                   renderInput={(params) => (
                     <div ref={params.InputProps.ref}>
                       <input

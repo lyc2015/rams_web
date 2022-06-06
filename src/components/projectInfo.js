@@ -680,7 +680,7 @@ class projectInfo extends Component {
                   </InputGroup>
                 </Col>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text>入場時期</InputGroup.Text>
                     </InputGroup.Prepend>
@@ -716,17 +716,12 @@ class projectInfo extends Component {
                       locale="ja"
                       disabled={actionType === "detail" ? true : false}
                     />
-                    <font
-                      id="mark"
-                      color="red"
-                      style={{ marginLeft: "10px", marginRight: "10px" }}
-                    >
-                      ★
-                    </font>
+
                     <FormControl
                       as="select"
                       value={admissionMonthCode}
                       name="admissionMonthCode"
+                      style={{ minWidth: "4rem" }}
                       onChange={this.valueChange}
                       disabled={actionType === "detail" ? true : false}
                     >
@@ -736,6 +731,13 @@ class projectInfo extends Component {
                         </option>
                       ))}
                     </FormControl>
+                    <font
+                      id="mark"
+                      color="red"
+                      style={{ marginLeft: "10px", marginRight: "10px" }}
+                    >
+                      ★
+                    </font>
                   </InputGroup>
                 </Col>
                 <Col sm={3}>
@@ -766,7 +768,7 @@ class projectInfo extends Component {
                     ></FormControl>
                   </InputGroup>
                 </Col>
-                <Col sm={3}>
+                <Col sm={2}>
                   <InputGroup size="sm" className="mb-3">
                     <InputGroup.Prepend>
                       <InputGroup.Text>募集人数</InputGroup.Text>
@@ -919,7 +921,7 @@ class projectInfo extends Component {
                   </InputGroup>
                 </Col>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text>現場場所</InputGroup.Text>
                     </InputGroup.Prepend>
@@ -930,7 +932,7 @@ class projectInfo extends Component {
                         stationDrop.find((v) => v.code === siteLocation) || {}
                       }
                       options={stationDrop}
-                      getOptionLabel={(option) => option.name}
+                      getOptionLabel={(option) => option.name || ""}
                       disabled={actionType === "detail" ? true : false}
                       onChange={(event, values) =>
                         this.getStation(event, values)
@@ -949,20 +951,21 @@ class projectInfo extends Component {
                   </InputGroup>
                 </Col>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text>年数要求</InputGroup.Text>
                     </InputGroup.Prepend>
                     <Autocomplete
                       id="experienceYear"
                       name="experienceYear"
+                      style={{ width: "5rem" }}
                       value={
                         experienceYearDrop.find(
                           (v) => v.code === experienceYear
                         ) || {}
                       }
                       options={experienceYearDrop}
-                      getOptionLabel={(option) => option.name}
+                      getOptionLabel={(option) => option.name || ""}
                       disabled={actionType === "detail" ? true : false}
                       onChange={(event, values) =>
                         this.getYearChange(event, values)
@@ -1020,11 +1023,12 @@ class projectInfo extends Component {
               </Row>
               <Row>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text>作業期限</InputGroup.Text>
                     </InputGroup.Prepend>
                     <FormControl
+                      style={{ width: "10rem" }}
                       as="select"
                       value={workStartPeriod}
                       name="workStartPeriod"
@@ -1088,7 +1092,7 @@ class projectInfo extends Component {
                   </InputGroup>
                 </Col>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text>開発言語</InputGroup.Text>
                     </InputGroup.Prepend>
@@ -1101,7 +1105,7 @@ class projectInfo extends Component {
                         ) || {}
                       }
                       options={developLanguageDrop}
-                      getOptionLabel={(option) => option.name}
+                      getOptionLabel={(option) => option.name || ""}
                       disabled={actionType === "detail" ? true : false}
                       onChange={(event, values) =>
                         this.getJapanese1(event, values)
@@ -1126,7 +1130,7 @@ class projectInfo extends Component {
                         ) || {}
                       }
                       options={developLanguageDrop}
-                      getOptionLabel={(option) => option.name}
+                      getOptionLabel={(option) => option.name || ""}
                       disabled={actionType === "detail" ? true : false}
                       onChange={(event, values) =>
                         this.getJapanese2(event, values)
@@ -1152,7 +1156,7 @@ class projectInfo extends Component {
                         ) || {}
                       }
                       options={developLanguageDrop}
-                      getOptionLabel={(option) => option.name}
+                      getOptionLabel={(option) => option.name || ""}
                       disabled={actionType === "detail" ? true : false}
                       onChange={(event, values) =>
                         this.getJapanese3(event, values)
@@ -1171,7 +1175,7 @@ class projectInfo extends Component {
                   </InputGroup>
                 </Col>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         営業担当
@@ -1194,7 +1198,9 @@ class projectInfo extends Component {
                         option.text ? option.text : ""
                       }
                       renderOption={(option) => {
-                        return <React.Fragment>{option.name}</React.Fragment>;
+                        return (
+                          <React.Fragment>{option.name || ""}</React.Fragment>
+                        );
                       }}
                       renderInput={(params) => (
                         <div ref={params.InputProps.ref}>
@@ -1247,7 +1253,7 @@ class projectInfo extends Component {
               </Row>
               <Row>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text>お客様</InputGroup.Text>
                     </InputGroup.Prepend>
@@ -1258,7 +1264,7 @@ class projectInfo extends Component {
                         customerDrop.find((v) => v.code === customerNo) || {}
                       }
                       options={customerDrop}
-                      getOptionLabel={(option) => option.name}
+                      getOptionLabel={(option) => option.name || ""}
                       disabled={actionType === "detail" ? true : false}
                       onChange={(event, values) =>
                         this.getCustomer(event, values)
@@ -1277,7 +1283,7 @@ class projectInfo extends Component {
                   </InputGroup>
                 </Col>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text>担当者</InputGroup.Text>
                     </InputGroup.Prepend>
@@ -1290,7 +1296,7 @@ class projectInfo extends Component {
                         ) || {}
                       }
                       options={personInChargeDrop}
-                      getOptionLabel={(option) => option.name}
+                      getOptionLabel={(option) => option.name || ""}
                       disabled={actionType === "detail" ? true : false}
                       onChange={(event, values) =>
                         this.getPersonInChange(event, values)

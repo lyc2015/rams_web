@@ -34,6 +34,7 @@ import ErrorsMessageToast from "./errorsMessageToast";
 import SalesContent from "./salesContent";
 import InterviewInformation from "./interviewInformation";
 import store from "./redux/store";
+import { notification } from "antd";
 axios.defaults.withCredentials = true;
 /**
  * 営業状況画面
@@ -1553,7 +1554,11 @@ class manageSituation extends React.Component {
       })
       .then((result) => {
         if (result.data.length < 0) {
-          alert("データ存在していません");
+          notification.error({
+            message: "エラー",
+            description: "データ存在していません",
+            placement: "topLeft",
+          });
           return;
         }
         let employeeStatus =
@@ -1756,7 +1761,11 @@ class manageSituation extends React.Component {
         }
       })
       .catch(function (error) {
-        alert("ファイルが存在しません。");
+        notification.error({
+          message: "サーバーエラー",
+          description: "ファイルが存在しません。",
+          placement: "topLeft",
+        });
       });
   };
 
