@@ -265,9 +265,25 @@ class dutyManagement extends React.Component {
                 $("#syounin").attr("disabled", true);
                 $("#upload").attr("disabled", true);
               } else {
+                let row = response.data[rowNo - 1];
                 this.setState({
-                  rowApprovalStatus: response.data[rowNo - 1].approvalStatus,
+                  rowNo,
+                  rowApprovalStatus: row.approvalStatus,
                   currentPage: Math.ceil(rowNo / SIZE_PRE_PAGE),
+                  rowSelectEmployeeNo: row.employeeNo,
+                  rowSelectEmployeeName: row.employeeName,
+                  rowSelectCheckSection: row.checkSection,
+                  rowSelectDeductionsAndOvertimePay:
+                    row.deductionsAndOvertimePay,
+                  rowSelectDeductionsAndOvertimePayOfUnitPrice:
+                    row.deductionsAndOvertimePayOfUnitPrice,
+                  rowWorkTime: row.workTime,
+                  rowSelectWorkingTimeReport: row.workingTimeReport,
+                  downloadEmployeeNo: row.employeeNo,
+                  downloadEmployeeName: row.employeeName.replaceAll(
+                    "\n\t\t",
+                    ""
+                  ),
                 });
                 $("#workRepot").attr("disabled", false);
                 $("#upload").attr("disabled", false);

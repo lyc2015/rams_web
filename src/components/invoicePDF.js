@@ -152,7 +152,7 @@ class invoicePDF extends React.Component {
     currentPage: 1,
     rowRowNo: "",
     invoiceNo: "",
-    systemNameFlag: true,
+    systemNameFlag: false,
     workTimeFlag: false,
     employeeNameFlag: false,
     loading: true,
@@ -448,21 +448,21 @@ class invoicePDF extends React.Component {
         <div>
           <div className="df">
             <div className="wordBreak">
-              {this.state.systemNameFlag ? row.workContents : ""}
-              {/* {row.systemName === null || row.systemName === ""
+              {/* {this.state.systemNameFlag ? row.workContents : ""} */}
+              {row.systemName === null || row.systemName === ""
                 ? "技術支援"
                 : this.state.systemNameFlag ||
                   row.systemName.search("出張") !== -1 ||
                   row.systemName.search("食事") !== -1 ||
                   row.systemName.search("宿泊") !== -1 ||
                   row.systemName.search("他の") !== -1
-                ? row.systemName
-                : "技術支援"} */}
+                ? row.workContents
+                : "技術支援"}
               <span>
                 {this.state.employeeNameFlag
                   ? this.state.systemNameFlag
                     ? `(${cell})`
-                    : cell || ""
+                    : `(${cell})` || ""
                   : ""}
               </span>
             </div>
@@ -563,7 +563,7 @@ class invoicePDF extends React.Component {
 
   lowerLimitFormat = (cell, row) => {
     let payOffRange = "";
-    let deductionsAndOvertimePayOfUnitPrice = "";
+    let showSeiSanPrice = "";
     if (
       row.payOffRange1 == undefined ||
       row.payOffRange1 == null ||
@@ -582,19 +582,18 @@ class invoicePDF extends React.Component {
       );
     } else {
       payOffRange = row.payOffRange1 + "H";
-      deductionsAndOvertimePayOfUnitPrice = (
-        Number(row.unitPrice) / Number(row.payOffRange1)
+      showSeiSanPrice = (
+        (Number(row.unitPrice) +
+          Number(row.deductionsAndOvertimePayOfUnitPrice) || 0) /
+        Number(row.payOffRange1)
       ).toFixed(0);
-      deductionsAndOvertimePayOfUnitPrice =
-        deductionsAndOvertimePayOfUnitPrice.substring(
-          0,
-          deductionsAndOvertimePayOfUnitPrice.length - 1
-        ) + "0";
+      showSeiSanPrice =
+        showSeiSanPrice.substring(0, showSeiSanPrice.length - 1) + "0";
     }
     // return
-    // (<div><Row><font>{payOffRange}</font></Row><Row><font>{Number(row.deductionsAndOvertimePayOfUnitPrice)
+    // (<div><Row><font>{payOffRange}</font></Row><Row><font>{Number(row.showSeiSanPrice)
     // < 0 ? ("￥" +
-    // publicUtils.addComma(row.deductionsAndOvertimePayOfUnitPrice)) :
+    // publicUtils.addComma(row.showSeiSanPrice)) :
     // ""}</font></Row></div>);
     return (
       <div>
@@ -602,11 +601,7 @@ class invoicePDF extends React.Component {
           <font>{payOffRange}</font>
         </Row>
         <Row>
-          <font>
-            {"￥" +
-              publicUtils.addComma(deductionsAndOvertimePayOfUnitPrice) +
-              "/H"}
-          </font>
+          <font>{"￥" + publicUtils.addComma(showSeiSanPrice) + "/H"}</font>
         </Row>
       </div>
     );
@@ -614,7 +609,7 @@ class invoicePDF extends React.Component {
 
   upperLimitFormat = (cell, row) => {
     let payOffRange = "";
-    let deductionsAndOvertimePayOfUnitPrice = "";
+    let showSeiSanPrice = "";
     if (
       row.payOffRange2 == undefined ||
       row.payOffRange2 == null ||
@@ -633,19 +628,18 @@ class invoicePDF extends React.Component {
       );
     } else {
       payOffRange = row.payOffRange2 + "H";
-      deductionsAndOvertimePayOfUnitPrice = (
-        Number(row.unitPrice) / Number(row.payOffRange2)
+      showSeiSanPrice = (
+        (Number(row.unitPrice) +
+          Number(row.deductionsAndOvertimePayOfUnitPrice)) /
+        Number(row.payOffRange2)
       ).toFixed(0);
-      deductionsAndOvertimePayOfUnitPrice =
-        deductionsAndOvertimePayOfUnitPrice.substring(
-          0,
-          deductionsAndOvertimePayOfUnitPrice.length - 1
-        ) + "0";
+      showSeiSanPrice =
+        showSeiSanPrice.substring(0, showSeiSanPrice.length - 1) + "0";
     }
     // return
-    // (<div><Row><font>{payOffRange}</font></Row><Row><font>{Number(row.deductionsAndOvertimePayOfUnitPrice)
+    // (<div><Row><font>{payOffRange}</font></Row><Row><font>{Number(row.showSeiSanPrice)
     // > 0 ? ("￥" +
-    // publicUtils.addComma(row.deductionsAndOvertimePayOfUnitPrice)) :
+    // publicUtils.addComma(row.showSeiSanPrice)) :
     // ""}</font></Row></div>);
     return (
       <div>
@@ -653,11 +647,7 @@ class invoicePDF extends React.Component {
           <font>{payOffRange}</font>
         </Row>
         <Row>
-          <font>
-            {"￥" +
-              publicUtils.addComma(deductionsAndOvertimePayOfUnitPrice) +
-              "/H"}
-          </font>
+          <font>{"￥" + publicUtils.addComma(showSeiSanPrice) + "/H"}</font>
         </Row>
       </div>
     );
@@ -861,9 +851,10 @@ class invoicePDF extends React.Component {
           message.success("登録成功！");
           this.setState({ selected: [] });
         }
-        this.setState({ updateLoading: false });
         this.searchSendInvoiceList();
       }
+
+      this.setState({ updateLoading: false });
     } catch (error) {
       console.log("SERVER ERROR:", error);
       notification.error({
@@ -1073,6 +1064,7 @@ class invoicePDF extends React.Component {
       customerNo: this.state.customerNo,
       invoiceNo: this.state.invoiceNo,
       taxRate: this.state.taxRate * 100,
+      systemNameFlag: this.state.systemNameFlag,
       workTimeFlag: this.state.workTimeFlag,
       employeeNameFlag: this.state.employeeNameFlag,
       customerAbbreviation: this.state.customerAbbreviation,
