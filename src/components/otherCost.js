@@ -39,6 +39,7 @@ class otherCost extends React.Component {
   }
   //初期化
   initialState = {
+    otherCostFileName: this.props?.oldCostFile1,
     salesProgressCodes: [],
     costClassificationCode: "", //選択中の区分
     transportationCode: "", //選択中の交通手段
@@ -616,10 +617,33 @@ class otherCost extends React.Component {
       });
   };
   render() {
-    const { cost1, cost2, remark, costClassificationsts, otherCostFileFlag } =
-      this.state;
+    const {
+      cost1,
+      cost2,
+      remark,
+      costClassificationsts,
+      otherCostFileFlag,
+      oldCostFile,
+      otherCostFileName,
+    } = this.state;
+
+    console.log(
+      {
+        state: this.state,
+        props: this?.props,
+        otherCostFileName,
+      },
+      "render"
+    );
     const station = this.state.station;
     const round = this.state.round;
+
+    let showCostFileName = otherCostFileName || oldCostFile;
+    if (showCostFileName?.includes("\\")) {
+      showCostFileName =
+        showCostFileName.split("\\")[showCostFileName.split("\\").length - 1];
+    }
+
     return (
       <div>
         <div hidden>
@@ -661,7 +685,7 @@ class otherCost extends React.Component {
         <Form>
           <Form.Group>
             <Row>
-              <Col>
+              <Col sm={6}>
                 <InputGroup size="sm" className="mb-3">
                   <InputGroup.Prepend>
                     <InputGroup.Text id="niKanjiFor150">区分</InputGroup.Text>
@@ -687,7 +711,7 @@ class otherCost extends React.Component {
                   </Form.Control>
                 </InputGroup>
               </Col>
-              <Col>
+              <Col sm={6}>
                 <InputGroup size="sm" className="mb-3">
                   <InputGroup.Prepend>
                     <InputGroup.Text id="threeKanjiFor150">
@@ -714,7 +738,6 @@ class otherCost extends React.Component {
                   </InputGroup.Prepend>
                 </InputGroup>
               </Col>
-              <Col sm={6}></Col>
             </Row>
             <Row>
               <Col>
@@ -724,7 +747,7 @@ class otherCost extends React.Component {
               </Col>
             </Row>
             <Row>
-              <Col>
+              <Col sm={3}>
                 <InputGroup size="sm" className="mb-3">
                   <InputGroup.Prepend>
                     <InputGroup.Text id="fourKanjiFor150">
@@ -755,8 +778,8 @@ class otherCost extends React.Component {
                   </Form.Control>
                 </InputGroup>
               </Col>
-              <Col>
-                <InputGroup size="sm" className="mb-3">
+              <Col sm={3}>
+                <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                   <InputGroup.Prepend>
                     <InputGroup.Text id="threeKanjiFor150">
                       出発
@@ -798,8 +821,8 @@ class otherCost extends React.Component {
                   />
                 </InputGroup>
               </Col>
-              <Col>
-                <InputGroup size="sm" className="mb-3">
+              <Col sm={3}>
+                <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                   <InputGroup.Prepend>
                     <InputGroup.Text id="threeKanjiFor150">
                       到着
@@ -841,7 +864,7 @@ class otherCost extends React.Component {
                   />
                 </InputGroup>
               </Col>
-              <Col>
+              <Col sm={3}>
                 <InputGroup size="sm" className="mb-3">
                   <InputGroup.Prepend>
                     <InputGroup.Text id="threeKanjiFor150">
@@ -879,7 +902,7 @@ class otherCost extends React.Component {
               </Col>
             </Row>
             <Row>
-              <Col>
+              <Col sm={4}>
                 <InputGroup size="sm" className="mb-3">
                   <InputGroup.Prepend>
                     <InputGroup.Text id="niKanjiFor150">名称</InputGroup.Text>
@@ -906,8 +929,8 @@ class otherCost extends React.Component {
                   />
                 </InputGroup>
               </Col>
-              <Col>
-                <InputGroup size="sm" className="mb-3">
+              <Col sm={4}>
+                <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                   <InputGroup.Prepend>
                     <InputGroup.Text id="threeKanjiFor150">
                       場所
@@ -949,7 +972,7 @@ class otherCost extends React.Component {
                   />
                 </InputGroup>
               </Col>
-              <Col>
+              <Col sm={4}>
                 <InputGroup size="sm" className="mb-3">
                   <InputGroup.Prepend>
                     <InputGroup.Text id="threeKanjiFor150">
@@ -979,10 +1002,9 @@ class otherCost extends React.Component {
                   />
                 </InputGroup>
               </Col>
-              <Col></Col>
             </Row>
             <Row>
-              <Col>
+              <Col sm={6}>
                 <InputGroup size="sm" className="mb-3">
                   <InputGroup.Prepend>
                     <InputGroup.Text id="niKanjiFor150">備考</InputGroup.Text>
@@ -999,6 +1021,27 @@ class otherCost extends React.Component {
                     aria-label="Small"
                     size="sm"
                     aria-describedby="inputGroup-sizing-sm"
+                  />
+                </InputGroup>
+              </Col>
+              <Col sm={6}>
+                <InputGroup size="sm" className="mb-3">
+                  <InputGroup.Prepend>
+                    <InputGroup.Text id="tenpu">添付</InputGroup.Text>
+                  </InputGroup.Prepend>
+                  <FormControl
+                    placeholder="例：XXXXX"
+                    name="remark"
+                    value={showCostFileName}
+                    autoComplete="off"
+                    // disabled={this.state.costClassificationCode === ""}
+                    // maxLength="20"
+                    // onChange={this.valueChange}
+                    type="text"
+                    aria-label="Small"
+                    size="sm"
+                    aria-describedby="inputGroup-sizing-sm"
+                    disabled
                   />
                 </InputGroup>
               </Col>

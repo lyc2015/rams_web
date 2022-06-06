@@ -726,7 +726,7 @@ class dutyManagement extends React.Component {
       })
       .then((result) => {
         let path = downLoadPath.replaceAll("//", "/");
-        publicUtils.handleDownload(path, this.state.serverIP);
+        publicUtils.handleDownload(path, this.state.serverIP, fileKey);
       })
       .catch(function (error) {
         notification.error({

@@ -129,7 +129,7 @@ class workRepot extends React.Component {
       .post(this.state.serverIP + "workRepot/selectWorkRepot", workRepotModel)
       .then((response) => response.data)
       .then((data) => {
-        if (data.length != 0) {
+        if (data?.length > 0) {
           for (var i = 0; i < data.length; i++) {
             if (data[i].workingTimeReport != null) {
               let fileName = data[i].workingTimeReport.split("/");
@@ -154,6 +154,7 @@ class workRepot extends React.Component {
             }
           }
         } else {
+          data = [];
           data.push({
             approvalStatus: 0,
             approvalStatusName: "アップロード済み",
@@ -516,6 +517,13 @@ class workRepot extends React.Component {
 
   render() {
     const { employeeList } = this.state;
+    console.log(
+      {
+        state: this.state,
+        props: this.props,
+      },
+      "render"
+    );
     //　テーブルの行の選択
     const selectRow = {
       mode: "radio",

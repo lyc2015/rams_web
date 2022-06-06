@@ -605,7 +605,7 @@ class siteSearch extends Component {
                   </InputGroup>
                 </Col>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="fiveKanji">
                         社員名(BP)
@@ -714,7 +714,7 @@ class siteSearch extends Component {
                   </InputGroup>
                 </Col>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="sixKanji">
                         トップお客様
@@ -747,7 +747,7 @@ class siteSearch extends Component {
                   </InputGroup>
                 </Col>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         BP会社
@@ -783,7 +783,7 @@ class siteSearch extends Component {
               </Row>
               <Row>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         場所
@@ -815,7 +815,7 @@ class siteSearch extends Component {
                     />
                   </InputGroup>
                 </Col>
-                <Col sm={3}>
+                <Col sm={2}>
                   <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     {/*<InputGroup.Prepend>
 											<InputGroup.Text id="inputGroup-sizing-sm">業種</InputGroup.Text>
@@ -864,7 +864,7 @@ class siteSearch extends Component {
                     />
                   </InputGroup>
                 </Col>
-                <Col sm={3}>
+                <Col sm={4}>
                   <InputGroup size="sm">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="siteInfo-siteRoleCode">
@@ -917,7 +917,7 @@ class siteSearch extends Component {
                   </InputGroup>
                 </Col>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="sixKanji">
                         退場・予定月
@@ -943,7 +943,7 @@ class siteSearch extends Component {
               </Row>
               <Row>
                 <Col sm={3}>
-                  <InputGroup size="sm">
+                  <InputGroup size="sm" className="flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="fiveKanji">
                         入場年月日

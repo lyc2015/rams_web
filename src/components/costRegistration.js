@@ -6,8 +6,8 @@ import {
   Row,
   InputGroup,
   FormControl,
-  Modal,
 } from "react-bootstrap";
+import { InputNumber, Modal } from "antd";
 import axios from "axios";
 import "../asserts/css/development.css";
 import "../asserts/css/style.css";
@@ -30,7 +30,7 @@ import ErrorsMessageToast from "./errorsMessageToast";
 import store from "./redux/store";
 import OtherCostModel from "./otherCost";
 import * as utils from "./utils/publicUtils.js";
-import { message, notification } from "antd";
+import { message, notification, Input } from "antd";
 axios.defaults.withCredentials = true;
 
 /**
@@ -110,22 +110,9 @@ class costRegistration extends React.Component {
       detailedNameOrLine: "",
     });
   };
-  costValueChange = (e) => {
-    let cost = e.target.value;
-    if (cost.length > 7) return cost;
-    let result = "";
-    for (let i = 0; i < cost.length; i++) {
-      if (cost.charCodeAt(i) == 12288) {
-        result += String.fromCharCode(cost.charCodeAt(i) - 12256);
-        continue;
-      }
-      if (cost.charCodeAt(i) > 65280 && cost.charCodeAt(i) < 65375)
-        result += String.fromCharCode(cost.charCodeAt(i) - 65248);
-      else result += String.fromCharCode(cost.charCodeAt(i));
-    }
-    cost = utils.addComma(result);
+  costValueChange = (v, name) => {
     this.setState({
-      [e.target.name]: cost,
+      [name]: utils.costValueChange(v),
     });
   };
   //　初期化データ
@@ -663,6 +650,7 @@ class costRegistration extends React.Component {
   handleRowSelect = (row, isSelected, e) => {
     if (isSelected) {
       this.setState({
+        selectedRow: row,
         rowSelectHappendDate: row.happendDate,
         rowSelectCostClassificationCode: row.costClassificationCode,
         rowSelectDetailedNameOrLine: row.detailedNameOrLine,
@@ -689,6 +677,7 @@ class costRegistration extends React.Component {
         });
       } else {
         this.setState({
+          selectedRow: {},
           rowRemark: "",
           regularStatus: "0",
           stationCode1: "",
@@ -995,6 +984,14 @@ class costRegistration extends React.Component {
     const { employeeList } = this.state;
     const station = this.state.station;
 
+    console.log(
+      {
+        state: this.state,
+        propsState: this.props.location.state,
+      },
+      "render"
+    );
+
     //　テーブルの行の選択
     const selectRow = {
       mode: "radio",
@@ -1031,42 +1028,38 @@ class costRegistration extends React.Component {
       <div>
         {/*　 他の費用*/}
         <Modal
-          aria-labelledby="contained-modal-title-vcenter"
-          centered
-          backdrop="static"
-          onHide={this.handleHideModal.bind(this)}
-          show={this.state.showOtherCostModal}
-          dialogClassName="modal-otherCost"
+          width="50%"
+          visible={this.state.showOtherCostModal}
+          footer={null}
+          onCancel={this.handleHideModal.bind(this)}
         >
-          <Modal.Header closeButton></Modal.Header>
-          <Modal.Body size="sm">
-            <OtherCostModel
-              yearMonth={this.state.yearMonth}
-              yearAndMonth={this.state.yearAndMonth}
-              transportationCode={this.state.transportationCode}
-              stationCode3={this.state.stationCode3}
-              stationCode4={this.state.stationCode4}
-              cost1={this.state.cost1}
-              oldCostClassification1={this.state.oldCostClassification1}
-              costClassification={this.state.oldCostClassification1}
-              oldHappendDate1={this.state.oldHappendDate1}
-              detailedNameOrLine2={this.state.detailedNameOrLine2}
-              stationCode5={this.state.stationCode5}
-              originCode={this.state.rowSelectOriginCode}
-              remark={this.state.rowRemark}
-              cost2={this.state.cost2}
-              oldCostFile1={this.state.oldCostFile}
-              changeData1={this.state.changeData1}
-              changeFile1={this.state.changeFile1}
-              costRegistrationFileFlag1={this.state.costRegistrationFileFlag1}
-              otherCostToroku={this.otherCostGet}
-              minDate={this.state.minDate}
-              otherCostFile={this.state.oldCostFile}
-              employeeNo={this.state.employeeNo}
-              employeeName={this.state.employeeName}
-            />
-          </Modal.Body>
+          <OtherCostModel
+            yearMonth={this.state.yearMonth}
+            yearAndMonth={this.state.yearAndMonth}
+            transportationCode={this.state.transportationCode}
+            stationCode3={this.state.stationCode3}
+            stationCode4={this.state.stationCode4}
+            cost1={this.state.cost1}
+            oldCostClassification1={this.state.oldCostClassification1}
+            costClassification={this.state.oldCostClassification1}
+            oldHappendDate1={this.state.oldHappendDate1}
+            detailedNameOrLine2={this.state.detailedNameOrLine2}
+            stationCode5={this.state.stationCode5}
+            originCode={this.state.rowSelectOriginCode}
+            remark={this.state.rowRemark}
+            cost2={this.state.cost2}
+            oldCostFile1={this.state.oldCostFile}
+            changeData1={this.state.changeData1}
+            changeFile1={this.state.changeFile1}
+            costRegistrationFileFlag1={this.state.costRegistrationFileFlag1}
+            otherCostToroku={this.otherCostGet}
+            minDate={this.state.minDate}
+            otherCostFile={this.state.oldCostFile}
+            employeeNo={this.state.employeeNo}
+            employeeName={this.state.employeeName}
+          />
         </Modal>
+
         <div style={{ display: this.state.myToastShow ? "block" : "none" }}>
           <MyToast
             myToastShow={this.state.myToastShow}
@@ -1176,7 +1169,7 @@ class costRegistration extends React.Component {
           </Row>
           <Row>
             <Col sm={2}>
-              <InputGroup size="sm" className="mb-3">
+              <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                 <InputGroup.Prepend>
                   <InputGroup.Text id="niKanjiFor150">出発</InputGroup.Text>
                 </InputGroup.Prepend>
@@ -1219,7 +1212,7 @@ class costRegistration extends React.Component {
               </InputGroup>
             </Col>
             <Col sm={2}>
-              <InputGroup size="sm" className="mb-3">
+              <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                 <InputGroup.Prepend>
                   <InputGroup.Text id="niKanjiFor150">到着</InputGroup.Text>
                 </InputGroup.Prepend>
@@ -1310,7 +1303,33 @@ class costRegistration extends React.Component {
                     {this.state.regularStatus === "0" ? "料金" : "合計料金"}
                   </InputGroup.Text>
                 </InputGroup.Prepend>
-                <Form.Control
+                <InputNumber
+                  ref="unitPrice"
+                  id="cost"
+                  min={0}
+                  name="unitPrice"
+                  maxLength="8"
+                  onChange={(v) => this.costValueChange(v, "unitPrice")}
+                  placeholder={
+                    this.state.regularStatus === "0" ? "料金" : "回数合計料金"
+                  }
+                  // formatter={(value) => `${utils.addComma(value)}`}
+                  value={this.state.unitPrice}
+                  disabled={
+                    this.state.disabledFlag ||
+                    !(
+                      this.state.rowSelectCostClassificationCode === "" ||
+                      this.state.rowSelectCostClassificationCode === "0"
+                    )
+                  }
+                  controls={false}
+                  style={
+                    this.state.errorItem === "cost"
+                      ? { borderColor: "red" }
+                      : { borderColor: "" }
+                  }
+                />
+                {/* <Form.Control
                   type="text"
                   value={this.state.cost}
                   style={
@@ -1333,7 +1352,7 @@ class costRegistration extends React.Component {
                   placeholder={
                     this.state.regularStatus === "0" ? "料金" : "回数合計料金"
                   }
-                />
+                /> */}
               </InputGroup>
             </Col>
             <Col sm={4}>

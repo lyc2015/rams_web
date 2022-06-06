@@ -1,3 +1,4 @@
+import { message } from "antd";
 import JapaneseHolidays from "japanese-holidays";
 const $ = require("jquery");
 // 時間段を取得
@@ -459,10 +460,11 @@ export function valueGetText(code, list) {
 // Download 方法
 // param path 備考：ファイルのフォーマットは下記です
 // c:/file/LYC124_12/12_履歴書1.xlsx
-export function handleDownload(path, serverIP) {
+export function handleDownload(path, serverIP, fileKey) {
   if (path !== undefined && path !== null && path !== "") {
     var NewPath = new Array();
     NewPath = path.split("/");
+    let fileKeyArr = fileKey.split("/");
     if (NewPath.length == 1) {
       NewPath = path.split("\\");
     }
@@ -481,7 +483,7 @@ export function handleDownload(path, serverIP) {
           var url = window.URL.createObjectURL(blob);
           a.href = url;
           // 设置文件名称
-          a.download = NewPath[NewPath.length - 1];
+          a.download = fileKeyArr[fileKeyArr.length - 1];
           a.click();
           a.remove();
         }
@@ -924,25 +926,30 @@ export function trim(str, pos = "both") {
 /**
  * INPUT输入的时候全角自动转为半角
  */
-export function ToCDB(str) {
-  var tmp = "";
-  for (var i = 0; i < str.length; i++) {
-    if (str.charCodeAt(i) == 12288) {
-      tmp += String.fromCharCode(str.charCodeAt(i) - 12256);
-      continue;
-    }
-    if (str.charCodeAt(i) > 65280 && str.charCodeAt(i) < 65375) {
-      tmp += String.fromCharCode(str.charCodeAt(i) - 65248);
-    } else {
-      tmp += String.fromCharCode(str.charCodeAt(i));
-    }
-  }
-  return tmp;
-}
-/**
- * INPUT输入的时候全角自动转为半角
- */
 export function enToManEn(en) {
   let manEn = (en / 10000).toFixed(1).replace(".0", "") + "万円";
   return en === "" ? "" : manEn;
+}
+
+/**
+ * INPUT输入的时候全角自动转为半角
+ */
+export function costValueChange(v) {
+  let cost = v + "";
+  if (cost.length > 7) {
+    message.error("入力された金額は合理的ではありません！");
+    return "";
+  }
+  let result = "";
+  for (let i = 0; i < cost.length; i++) {
+    if (cost.charCodeAt(i) === 12288) {
+      result += String.fromCharCode(cost.charCodeAt(i) - 12256);
+      continue;
+    }
+    if (cost.charCodeAt(i) > 65280 && cost.charCodeAt(i) < 65375)
+      result += String.fromCharCode(cost.charCodeAt(i) - 65248);
+    else result += String.fromCharCode(cost.charCodeAt(i));
+  }
+  cost = addComma(result);
+  return cost;
 }

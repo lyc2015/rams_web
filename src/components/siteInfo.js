@@ -94,7 +94,7 @@ class siteInfo extends Component {
 
   onUnitPriceChange = (value, name) => {
     this.setState({
-      [name]: value,
+      [name]: utils.costValueChange(value),
     });
   };
 
@@ -1725,7 +1725,6 @@ class siteInfo extends Component {
                       onChange={(value) =>
                         this.onUnitPriceChange(value, "unitPrice")
                       }
-                      formatter={(value) => `${utils.addComma(value)}`}
                       value={unitPrice}
                       disabled={pageDisabledFlag}
                       controls={false}
