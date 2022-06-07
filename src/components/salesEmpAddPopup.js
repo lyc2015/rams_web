@@ -98,7 +98,7 @@ class salesEmpAddPopup extends React.Component {
                   id="employeeName"
                   name="employeeName"
                   options={this.state.appendEmps}
-                  getOptionLabel={(option) => option.employeeName}
+                  getOptionLabel={(option) => option.employeeName || ""}
                   value={
                     this.state.appendEmps.find(
                       (v) => v.employeeName === this.state.employeeName

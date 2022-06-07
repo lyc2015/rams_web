@@ -503,7 +503,7 @@ class salesProfit extends React.Component {
                         ) || {}
                       }
                       options={this.state.customerDrop}
-                      getOptionLabel={(option) => option.text}
+                      getOptionLabel={(option) => option.text || ""}
                       onChange={(event, values) =>
                         this.getCustomer(event, values)
                       }

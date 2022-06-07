@@ -53,3 +53,7 @@
 .ant-popover-inner-content {
   box-shadow: #007bff 0px 0px 12px;
 }
+
+.ant-tag {
+  font-size: 14px;
+}

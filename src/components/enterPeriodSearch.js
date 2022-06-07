@@ -543,7 +543,7 @@ class EnterPeriodSearch extends React.Component {
                       ? this.state.employeeNameDropBp
                       : this.state.employeeNameDrop
                   }
-                  getOptionLabel={(option) => option.text}
+                  getOptionLabel={(option) => option.text || ""}
                   onChange={(event, values) =>
                     this.getEmployeeName(event, values)
                   }

@@ -615,7 +615,7 @@ class siteSearch extends Component {
                       id="employeeName"
                       name="employeeName"
                       options={this.state.employeeInfo}
-                      getOptionLabel={(option) => option.text}
+                      getOptionLabel={(option) => option.text || ""}
                       value={
                         this.state.employeeInfo.find(
                           (v) => v.code === this.state.employeeName

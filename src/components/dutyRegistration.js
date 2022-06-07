@@ -897,7 +897,7 @@ class DutyRegistration extends React.Component {
         } else {
           notification.error({
             message: "エラー",
-            description: "更新失败",
+            description: "PDF作成失敗",
             placement: "topLeft",
           });
         }
@@ -905,7 +905,7 @@ class DutyRegistration extends React.Component {
       .catch(function () {
         notification.error({
           message: "エラー",
-          description: "更新错误，请检查程序",
+          description: "PDF作成エラー",
           placement: "topLeft",
         });
       });

@@ -911,7 +911,7 @@ P-mark：第21004525(02)号
                 }
                 options={this.state.employeeNameDrop}
                 getOptionDisabled={(option) => option.name || ""}
-                getOptionLabel={(option) => option.text}
+                getOptionLabel={(option) => option.text || ""}
                 onChange={(event, values) =>
                   this.employeeNameChange(event, values)
                 }

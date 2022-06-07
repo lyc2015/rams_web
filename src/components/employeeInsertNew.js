@@ -2223,7 +2223,7 @@ class employeeInsertNew extends React.Component {
                       name="developLanguage1"
                       value={developLanguage1Value}
                       options={this.state.developLanguageMaster}
-                      getOptionLabel={(option) => option.name}
+                      getOptionLabel={(option) => option.name||''}
                       renderInput={(params) => (
                         <div ref={params.InputProps.ref}>
                           <input
@@ -2241,7 +2241,7 @@ class employeeInsertNew extends React.Component {
                       name="developLanguage2"
                       value={developLanguage2Value}
                       options={this.state.developLanguageMaster}
-                      getOptionLabel={(option) => option.name}
+                      getOptionLabel={(option) => option.name||''}
                       renderInput={(params) => (
                         <div ref={params.InputProps.ref}>
                           <input
@@ -2265,7 +2265,7 @@ class employeeInsertNew extends React.Component {
                       name="developLanguage3"
                       value={developLanguage3Value}
                       options={this.state.developLanguageMaster}
-                      getOptionLabel={(option) => option.name}
+                      getOptionLabel={(option) => option.name||''}
                       renderInput={(params) => (
                         <div ref={params.InputProps.ref}>
                           <input
@@ -2283,7 +2283,7 @@ class employeeInsertNew extends React.Component {
                       name="developLanguage4"
                       value={developLanguage4Value}
                       options={this.state.developLanguageMaster}
-                      getOptionLabel={(option) => option.name}
+                      getOptionLabel={(option) => option.name||''}
                       renderInput={(params) => (
                         <div ref={params.InputProps.ref}>
                           <input
@@ -2309,7 +2309,7 @@ class employeeInsertNew extends React.Component {
                       name="frameWork1"
                       value={frameWork1Value}
                       options={this.state.frameWorkMaster}
-                      getOptionLabel={(option) => option.name}
+                      getOptionLabel={(option) => option.name||''}
                       renderInput={(params) => (
                         <div ref={params.InputProps.ref}>
                           <input
@@ -2327,7 +2327,7 @@ class employeeInsertNew extends React.Component {
                       name="frameWork2"
                       value={frameWork2Value}
                       options={this.state.frameWorkMaster}
-                      getOptionLabel={(option) => option.name}
+                      getOptionLabel={(option) => option.name||''}
                       renderInput={(params) => (
                         <div ref={params.InputProps.ref}>
                           <input
@@ -2412,7 +2412,7 @@ class employeeInsertNew extends React.Component {
                       name="stationCode"
                       value={stationCodeValue}
                       options={this.state.station}
-                      getOptionLabel={(option) => option.name}
+                      getOptionLabel={(option) => option.name||''}
                       onInput={this.getStation}
                       renderInput={(params) => (
                         <div ref={params.InputProps.ref}>
@@ -2433,7 +2433,7 @@ class employeeInsertNew extends React.Component {
                   value={developLanguage5Value}
                   hidden
                   options={this.state.developLanguageMaster}
-                  getOptionLabel={(option) => option.name}
+                  getOptionLabel={(option) => option.name||''}
                   renderInput={(params) => (
                     <div ref={params.InputProps.ref}>
                       <input
@@ -2553,7 +2553,7 @@ class employeeInsertNew extends React.Component {
                       />
                     </InputGroup.Append>
                     <Autocomplete
-                      getOptionLabel={(option) => option.name}
+                      getOptionLabel={(option) => option.name||''}
                       renderInput={(params) => (
                         <div ref={params.InputProps.ref}>
                           <Button
@@ -2655,7 +2655,7 @@ class employeeInsertNew extends React.Component {
                       />
                     </InputGroup.Append>
                     <Autocomplete
-                      getOptionLabel={(option) => option.name}
+                      getOptionLabel={(option) => option.name||''}
                       renderInput={(params) => (
                         <div ref={params.InputProps.ref}>
                           <Button

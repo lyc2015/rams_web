@@ -358,7 +358,7 @@ class dutyManagement extends React.Component {
     axios
       .post(this.state.serverIP + "dutyManagement/updateDutyManagement", emp)
       .then((result) => {
-        if (result.data == true) {
+        if (result.data) {
           this.searchDutyManagement();
           this.setState({
             myToastShow: true,
@@ -370,8 +370,9 @@ class dutyManagement extends React.Component {
                 : "承認成功!",
           });
           setTimeout(() => this.setState({ myToastShow: false }), 3000);
-        } else if (result.data == false) {
+        } else {
           this.setState({ myToastShow: false });
+          message.error("承認失敗");
         }
       })
       .catch(function (error) {
