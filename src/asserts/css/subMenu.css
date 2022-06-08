@@ -14,7 +14,7 @@ html,
   bottom: 0px;
   background-size: cover;
   background-attachment: fixed;
-  min-width: 1670px;
+  /* min-width: 1670px; */
 }
 
 .row {
@@ -276,3 +276,13 @@ h2 {
     margin-left: -1.6rem;
   }
 } */
+
+@media screen and (max-width: 750px) {
+  .loginMark {
+    font-size: 35px;
+  }
+
+  .loginPeople {
+    font-size: 12px;
+  }
+}

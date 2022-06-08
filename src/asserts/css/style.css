@@ -3346,12 +3346,40 @@ body {
   border-bottom: 0px !important;
 }
 
+.text-center {
+  text-align: center;
+}
+
 .verticalAlignMiddle {
   vertical-align: middle !important;
 }
 
+.align-center {
+  align-items: center;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-end {
+  justify-content: flex-end;
+}
+
+.justify-start {
+  justify-content: flex-start;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
 .w40p {
   width: 40%;
+}
+
+.w100p {
+  width: 100%;
 }
 
 .h100p {
@@ -3361,12 +3389,37 @@ body {
 .h70p {
   height: 70%;
 }
+
+.pl15 {
+  padding-left: 15px;
+}
+
+.pr15 {
+  padding-right: 15px;
+}
+
+.pl0 {
+  padding-left: 0 !important;
+}
+
+.pr0 {
+  padding-right: 0 !important;
+}
+
+.mr0 {
+  margin-right: 0px !important;
+}
+
 .mr5 {
-  margin-right: 5px;
+  margin-right: 5px !important;
 }
 
 .mr10 {
   margin-right: 10px;
+}
+
+.mb20 {
+  margin-bottom: 20px !important;
 }
 
 .w70 {
@@ -3375,6 +3428,10 @@ body {
 
 .w50p {
   width: 50% !important;
+}
+
+.min-width1670 {
+  min-width: 1670px;
 }
 
 .df {
@@ -3398,4 +3455,16 @@ body {
 
 .fwb {
   font-weight: bold;
+}
+
+.fz35 {
+  font-size: 35px;
+}
+
+.fz30 {
+  font-size: 30px !important;
+}
+
+.w40 {
+  width: 40px !important;
 }

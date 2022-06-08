@@ -1702,26 +1702,28 @@ class DutyRegistration extends React.Component {
             <Row className="align-items-center">
               <Col sm={4}></Col>
               <Col sm={5}>
-                <InputGroup.Append>
-                  <DatePicker
-                    selected={this.state.yearMonth}
-                    onChange={this.setYearMonth}
-                    autoComplete="off"
-                    locale="ja"
-                    showMonthYearPicker
-                    showFullMonthYearPicker
-                    className="form-control form-control-sm"
-                    dateFormat="yyyy年MM月"
-                    maxDate={new Date()}
-                    disabled={this.state.isConfirmedPage}
-                    id={
-                      this.state.isConfirmedPage
-                        ? "datePickerReadonlyDefault-duty"
-                        : "datePicker-duty"
-                    }
-                  />
+                <div className="df">
+                  <div style={{ width: "120px" }}>
+                    <DatePicker
+                      selected={this.state.yearMonth}
+                      onChange={this.setYearMonth}
+                      autoComplete="off"
+                      locale="ja"
+                      showMonthYearPicker
+                      showFullMonthYearPicker
+                      className="form-control form-control-sm"
+                      dateFormat="yyyy年MM月"
+                      maxDate={new Date()}
+                      disabled={this.state.isConfirmedPage}
+                      id={
+                        this.state.isConfirmedPage
+                          ? "datePickerReadonlyDefault-duty"
+                          : "datePicker-duty"
+                      }
+                    />
+                  </div>
                   <h3>作業報告書</h3>
-                </InputGroup.Append>
+                </div>
                 {/*
                  * <span size="lg" className="mb-3">
                  * {this.state.year}年{this.state.month}月

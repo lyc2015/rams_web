@@ -59,6 +59,18 @@ class costRegistration extends React.Component {
   }
 
   componentDidMount() {
+    var sUserAgent = navigator.userAgent;
+    if (
+      sUserAgent.indexOf("Android") > -1 ||
+      sUserAgent.indexOf("iPhone") > -1 ||
+      sUserAgent.indexOf("iPad") > -1 ||
+      sUserAgent.indexOf("iPod") > -1 ||
+      sUserAgent.indexOf("Symbian") > -1
+    ) {
+      this.setState({ isMobileDevice: true });
+    } else {
+      this.setState({ isMobileDevice: false });
+    }
     if (
       this.props.location.state !== undefined &&
       this.props.location.state.employeeNo !== undefined
@@ -981,7 +993,7 @@ class costRegistration extends React.Component {
   };
 
   render() {
-    const { employeeList } = this.state;
+    const { employeeList, isMobileDevice } = this.state;
     const station = this.state.station;
 
     console.log(
@@ -1096,9 +1108,10 @@ class costRegistration extends React.Component {
           </div>
         </Form>
         <div disabled={true}>
+          {/* {this.isMobileDevice?:} */}
           <Row>
-            <Col sm={4}>
-              <InputGroup size="sm" className="mb-3">
+            <Col xs={6} sm={3}>
+              <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                 <InputGroup.Prepend>
                   <InputGroup.Text id="niKanjiFor150">年月</InputGroup.Text>
                 </InputGroup.Prepend>
@@ -1115,9 +1128,10 @@ class costRegistration extends React.Component {
                     id="datePicker"
                   />
                 </InputGroup.Append>
-
-                <font style={{ marginRight: "30px" }}></font>
-
+              </InputGroup>
+            </Col>
+            <Col xs={6} sm={2}>
+              <InputGroup size="sm" className="mb-3">
                 <InputGroup.Prepend>
                   <InputGroup.Text
                     id="niKanjiFor150"
@@ -1174,10 +1188,11 @@ class costRegistration extends React.Component {
                   <InputGroup.Text id="niKanjiFor150">出発</InputGroup.Text>
                 </InputGroup.Prepend>
                 <Autocomplete
+                  className="w100p"
                   id="stationCode1"
                   name="stationCode1"
                   value={
-                    this.state.station.find(
+                    this.state.station?.find(
                       (v) => v.code === this.state.stationCode1
                     ) || {}
                   }
@@ -1203,7 +1218,7 @@ class costRegistration extends React.Component {
                             ? { borderColor: "red" }
                             : { borderColor: "" }
                         }
-                        className="auto form-control Autocompletestyle-costRegistration"
+                        className="auto form-control Autocompletestyle-costRegistration "
                         id="stationCode1"
                       />
                     </div>
@@ -1217,6 +1232,7 @@ class costRegistration extends React.Component {
                   <InputGroup.Text id="niKanjiFor150">到着</InputGroup.Text>
                 </InputGroup.Prepend>
                 <Autocomplete
+                  className="w100p"
                   id="stationCode2"
                   name="stationCode2"
                   value={
@@ -1297,13 +1313,14 @@ class costRegistration extends React.Component {
               </InputGroup>
             </Col>
             <Col sm={2}>
-              <InputGroup size="sm" className="mb-3">
+              <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                 <InputGroup.Prepend>
                   <InputGroup.Text id="niKanjiFor150">
                     {this.state.regularStatus === "0" ? "料金" : "合計料金"}
                   </InputGroup.Text>
                 </InputGroup.Prepend>
                 <InputNumber
+                  className="w100p"
                   ref="unitPrice"
                   id="cost"
                   min={0}
@@ -1382,7 +1399,7 @@ class costRegistration extends React.Component {
           </Row>
           <Row>
             <Col>
-              <div style={{ textAlign: "center" }}>
+              <div style={{ textAlign: "center", marginBottom: "10px" }}>
                 <Button
                   size="sm"
                   variant="info"
@@ -1456,16 +1473,14 @@ class costRegistration extends React.Component {
             </Col>
           </Row>
           <div>
-            <Row>
-              <Col sm={4}>
-                <div style={{ float: "left" }}>
-                  <font style={{ whiteSpace: "nowrap" }}>
-                    総額：{this.state.sumCost}
-                  </font>
-                </div>
+            <Row className="align-center">
+              <Col xs={6} sm={4}>
+                <span style={{ float: "left" }}>
+                  総額：{this.state.sumCost}
+                </span>
               </Col>
 
-              <Col sm={8}>
+              <Col xs={6} sm={8}>
                 <div style={{ float: "right" }}>
                   <Button
                     size="sm"
@@ -1542,6 +1557,7 @@ class costRegistration extends React.Component {
                   tdStyle={{ padding: ".45em" }}
                   dataField="rowNo"
                   isKey
+                  hidden={isMobileDevice}
                 >
                   番号
                 </TableHeaderColumn>
@@ -1572,6 +1588,7 @@ class costRegistration extends React.Component {
                   tdStyle={{ padding: ".45em" }}
                   dataField="detailedNameOrLine"
                   dataFormat={this.detailedNameOrLine.bind(this)}
+                  hidden={isMobileDevice}
                 >
                   名称（線路）
                 </TableHeaderColumn>
@@ -1581,6 +1598,7 @@ class costRegistration extends React.Component {
                   width="20%"
                   headerAlign="center"
                   dataAlign="center"
+                  hidden={isMobileDevice}
                 >
                   場所
                 </TableHeaderColumn>
@@ -1590,6 +1608,7 @@ class costRegistration extends React.Component {
                   dataField="stationCode"
                   dataAlign="center"
                   dataFormat={this.testSpan}
+                  hidden={isMobileDevice}
                 >
                   <th
                     style={{
@@ -1631,6 +1650,7 @@ class costRegistration extends React.Component {
                   width="15%"
                   tdStyle={{ padding: ".45em" }}
                   dataField="remark"
+                  hidden={isMobileDevice}
                 >
                   備考
                 </TableHeaderColumn>
@@ -1640,6 +1660,7 @@ class costRegistration extends React.Component {
                   width="15%"
                   tdStyle={{ padding: ".45em" }}
                   dataField="costFileForShow"
+                  hidden={isMobileDevice}
                 >
                   添付
                 </TableHeaderColumn>
