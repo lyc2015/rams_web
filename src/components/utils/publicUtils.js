@@ -1,5 +1,6 @@
 import { message } from "antd";
 import JapaneseHolidays from "japanese-holidays";
+import axios from "axios";
 const $ = require("jquery");
 // 時間段を取得
 export function getFullYearMonth(date, now) {
@@ -457,46 +458,79 @@ export function valueGetText(code, list) {
   }
 }
 
-// Download 方法
-// param path 備考：ファイルのフォーマットは下記です
-// c:/file/LYC124_12/12_履歴書1.xlsx
-export function handleDownload(path, serverIP, fileKey) {
-  if (path !== undefined && path !== null && path !== "") {
-    var NewPath = new Array();
-    NewPath = path.split("/");
-    let fileKeyArr = fileKey.split("/");
-    if (NewPath.length == 1) {
-      NewPath = path.split("\\");
-    }
-    var xhr = new XMLHttpRequest();
-    xhr.open("post", serverIP + "download", true);
-    xhr.responseType = "blob";
-    xhr.setRequestHeader("Content-Type", "application/json;charset=utf-8");
-    xhr.withCredentials = true;
-    xhr.onload = function () {
-      if (this.status === 200) {
-        var blob = this.response;
-        if (blob.size === 0) {
-          alert("no resume");
-        } else {
-          var a = document.createElement("a");
-          var url = window.URL.createObjectURL(blob);
-          a.href = url;
-          // 设置文件名称
-          a.download = fileKeyArr[fileKeyArr.length - 1];
-          a.click();
-          a.remove();
-        }
-      }
-    };
-    xhr.send(
-      JSON.stringify({
-        name: path,
-      })
-    );
-  } else {
-    alert("ファイルが存在しません。");
+// // Download 方法
+// // param path 備考：ファイルのフォーマットは下記です
+// // c:/file/LYC124_12/12_履歴書1.xlsx
+// export function handleDownload(path, serverIP, fileKey) {
+//   if (path !== undefined && path !== null && path !== "") {
+//     var NewPath = new Array();
+//     NewPath = path.split("/");
+//     let fileKeyArr = fileKey.split("/");
+//     if (NewPath.length == 1) {
+//       NewPath = path.split("\\");
+//     }
+//     var xhr = new XMLHttpRequest();
+//     xhr.open("post", serverIP + "download", true);
+//     xhr.responseType = "blob";
+//     xhr.setRequestHeader("Content-Type", "application/json;charset=utf-8");
+//     xhr.withCredentials = true;
+//     xhr.onload = function () {
+//       if (this.status === 200) {
+//         var blob = this.response;
+//         if (blob.size === 0) {
+//           alert("no resume");
+//         } else {
+//           var a = document.createElement("a");
+//           var url = window.URL.createObjectURL(blob);
+//           a.href = url;
+//           // 设置文件名称
+//           a.download = fileKeyArr[fileKeyArr.length - 1];
+//           a.click();
+//           a.remove();
+//         }
+//       }
+//     };
+//     xhr.send(
+//       JSON.stringify({
+//         name: path,
+//       })
+//     );
+//   } else {
+//     alert("ファイルが存在しません。");
+//   }
+// }
+
+// 浏览器下载附件
+function showDownloadResume(fileBlobUrl, path) {
+  var a = document.createElement("a");
+
+  a.href = fileBlobUrl;
+  if (!path) return;
+  let pathArr = [];
+  if (path.includes("/")) {
+    pathArr = path.split("/");
+  } else if (path.includes("\\")) {
+    pathArr = path.split("\\");
   }
+
+  a.download = pathArr[pathArr.length - 1];
+  a.click();
+  a.remove();
+}
+
+// Download 方法 by:FanChongXin
+export async function handleDownload(path, serverIP) {
+  let res = await axios.post(
+    serverIP + "download",
+    {
+      name: path,
+    },
+    {
+      responseType: "blob",
+    }
+  );
+  let fileBlobUrl = window.URL.createObjectURL(res.data);
+  showDownloadResume(fileBlobUrl, path);
 }
 
 // Download 方法

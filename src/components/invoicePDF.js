@@ -1072,22 +1072,19 @@ class invoicePDF extends React.Component {
       workTimeFlag: this.state.workTimeFlag,
       employeeNameFlag: this.state.employeeNameFlag,
       customerAbbreviation: this.state.customerAbbreviation,
+      customerName: this.state.customerName,
     };
     axios
       .post(this.state.serverIP + "sendInvoice/downloadPDF", model)
       .then((result) => {
         if (result.data) {
+          let pathArr = result.data.split("\\");
+          let pathName = "";
+          if (pathArr) {
+            pathName = pathArr[pathArr.length - 1];
+          }
           var a = document.createElement("a");
-          a.setAttribute(
-            "href",
-            this.state.serverIP +
-              publicUtils.formateDate(this.state.yearAndMonth, false) +
-              "_" +
-              this.state.customerNo +
-              "_" +
-              this.state.customerAbbreviation +
-              ".pdf"
-          );
+          a.setAttribute("href", this.state.serverIP + pathName);
           a.setAttribute("target", "_blank");
           document.body.appendChild(a);
           a.click();
@@ -1329,11 +1326,11 @@ class invoicePDF extends React.Component {
                 isKey
                 hidden
               ></TableHeaderColumn>
-              <TableHeaderColumn width="5%" dataField="showNo">
+              <TableHeaderColumn width="60" dataField="showNo">
                 番号
               </TableHeaderColumn>
               <TableHeaderColumn
-                // width="18%"
+                width="220"
                 dataField="employeeName"
                 dataFormat={this.employeeNameFormat}
               >
@@ -1349,28 +1346,28 @@ class invoicePDF extends React.Component {
                 }
               </TableHeaderColumn>
               <TableHeaderColumn
-                width="8%"
+                width="90"
                 dataField="requestUnitCode"
                 dataFormat={this.requestUnitCodeFormat}
               >
                 単位
               </TableHeaderColumn>
               <TableHeaderColumn
-                width="6%"
+                width="70"
                 dataField="quantity"
                 dataFormat={this.quantityFormat}
               >
                 数量
               </TableHeaderColumn>
               <TableHeaderColumn
-                width="10%"
+                width="110"
                 dataField="unitPrice"
                 dataFormat={this.unitPriceFormat}
               >
                 単価
               </TableHeaderColumn>
               <TableHeaderColumn
-                width="10%"
+                width="110"
                 dataField="lowerLimit"
                 dataFormat={this.lowerLimitFormat}
               >
@@ -1386,7 +1383,7 @@ class invoicePDF extends React.Component {
                 }
               </TableHeaderColumn>
               <TableHeaderColumn
-                width="10%"
+                width="110"
                 dataField="upperLimit"
                 dataFormat={this.upperLimitFormat}
               >
@@ -1402,13 +1399,13 @@ class invoicePDF extends React.Component {
                 }
               </TableHeaderColumn>
               <TableHeaderColumn
-                width="12%"
+                width="140"
                 dataField="billingAmount"
                 dataFormat={this.billingAmountFormat}
               >
                 請求額
               </TableHeaderColumn>
-              <TableHeaderColumn width="10%" dataFormat={this.optionsFormat}>
+              <TableHeaderColumn width="130" dataFormat={this.optionsFormat}>
                 オプション
               </TableHeaderColumn>
             </BootstrapTable>

@@ -630,6 +630,7 @@ P-mark:第21004525(02)号
           ? "0" + String(this.state.yearAndMonth.getMonth() + 1)
           : String(this.state.yearAndMonth.getMonth() + 1));
       dataInfo["employeeName"] = employeeName;
+      dataInfo.customerNo = this.state.customerNo;
       axios
         .post(this.state.serverIP + "dutyRegistration/downloadPDF", dataInfo)
         .then((resultMap) => {})
