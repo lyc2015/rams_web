@@ -143,6 +143,7 @@ class sendInvoice extends React.Component {
             } else {
               this.setState({
                 currentPage: Math.ceil(rowNo / SIZE_PRE_PAGE),
+                sendFlag: response.data.havePDF === "false",
               });
             }
           }
