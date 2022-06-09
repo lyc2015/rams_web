@@ -7,6 +7,7 @@ import { Row, Col, Form, Button } from "react-bootstrap";
 import MyToast from "./myToast";
 import ErrorsMessageToast from "./errorsMessageToast";
 import store from "./redux/store";
+import { message, notification } from "antd";
 axios.defaults.withCredentials = true;
 /**
  * 社員ログイン画面
@@ -93,6 +94,7 @@ class Login2 extends Component {
           result.data.errorsMessage === null ||
           result.data.errorsMessage === undefined
         ) {
+          message.success("ログイン成功");
           //ログイン成功
           if (this.state.remberPassWord) {
             let accoutInfo =
@@ -122,17 +124,15 @@ class Login2 extends Component {
           this.props.history.push("/subMenuEmployee");
         } else {
           //ログイン失敗
-          this.setState({
-            errorsMessageShow: true,
-            errorsMessageValue: result.data.errorsMessage,
-          });
+          message.error(result.data.errorsMessage);
         }
       })
       .catch(function (error) {
-        this.setState({
-          errorsMessageShow: true,
-          errorsMessageValue:
+        notification.error({
+          message: "サーバーエラー",
+          description:
             "エラーが発生してしまいました、画面をリフレッシュしてください",
+          placement: "topLeft",
         });
       });
   };

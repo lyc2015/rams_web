@@ -23,10 +23,8 @@ import {
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import * as publicUtils from "./utils/publicUtils.js";
 import store from "./redux/store";
-import MyToast from "./myToast";
-import ErrorsMessageToast from "./errorsMessageToast";
-import costRegistration from "./costRegistration";
 import * as utils from "./utils/publicUtils.js";
+import { message } from "antd";
 axios.defaults.withCredentials = true;
 /**1
  * 他の費用画面
@@ -65,7 +63,7 @@ class otherCost extends React.Component {
     if (cost.length > 7) return cost;
     let result = "";
     for (let i = 0; i < cost.length; i++) {
-      if (cost.charCodeAt(i) == 12288) {
+      if (cost.charCodeAt(i) === 12288) {
         result += String.fromCharCode(cost.charCodeAt(i) - 12256);
         continue;
       }
@@ -100,8 +98,6 @@ class otherCost extends React.Component {
   //初期化メソッド
   componentDidMount() {
     this.setState({
-      errorsMessageShow: false,
-      myToastShow: false,
       minDate: this.props.minDate,
       deleteFile: false,
     });
@@ -204,7 +200,6 @@ class otherCost extends React.Component {
   //reset
   resetBook = () => {
     this.setState(() => this.resetStates);
-    this.setState({ errorsMessageShow: false, myToastShow: false });
   };
   //リセット　reset
   resetStates = {
@@ -227,7 +222,6 @@ class otherCost extends React.Component {
   };
   resetBook2 = () => {
     this.setState(() => this.changeCostClassificationCode);
-    this.setState({ errorsMessageShow: false, myToastShow: false });
   };
   changeCostClassificationCode = {
     stationCode2: "",
@@ -399,20 +393,18 @@ class otherCost extends React.Component {
   };
   //登録と修正
   InsertCost = () => {
-    this.setState({ errorsMessageShow: false, myToastShow: false });
     const formData = new FormData();
+    let theUrl = "";
     if (this.props.changeData1) {
-      var theUrl = "costRegistration/updateCostRegistration";
+      theUrl = "costRegistration/updateCostRegistration";
     } else {
-      var theUrl = "costRegistration/insertCostRegistration";
+      theUrl = "costRegistration/insertCostRegistration";
     }
     if (this.state.costClassificationCode < 1) {
       this.setState({ errorItem: "costClassificationCode" });
+      message.error("区分を入力してください");
       this.setState({
-        errorsMessageShow: true,
-        type: "fail",
         method: "put",
-        message: "区分を入力してください",
       });
       return;
     }
@@ -426,13 +418,12 @@ class otherCost extends React.Component {
         this.state.stationCode3 == "" ||
         this.state.stationCode4 == ""
       ) {
+        message.error(
+          this.costClassificationCode(this.state.costClassificationCode) +
+            "関連の項目入力してください"
+        );
         this.setState({
-          errorsMessageShow: true,
-          type: "fail",
           method: "put",
-          message:
-            this.costClassificationCode(this.state.costClassificationCode) +
-            "関連の項目入力してください",
         });
         if (this.state.yearAndMonth == "" || this.state.yearAndMonth == null) {
           this.setState({ errorItem: "yearAndMonth" });
@@ -458,19 +449,16 @@ class otherCost extends React.Component {
       }
       if (isNaN(utils.deleteComma(this.state.cost1))) {
         this.setState({ errorItem: "cost1" });
+        message.error("料金は半角数字のみ入力してください。");
         this.setState({
-          errorsMessageShow: true,
-          type: "fail",
           method: "put",
-          message: "料金は半角数字のみ入力してください。",
         });
         return;
       }
       if (Number(utils.deleteComma(this.state.cost1)) <= 0) {
+        message.error("料金は0以上を入力してください。");
         this.setState({
-          errorsMessageShow: true,
           method: "put",
-          message: "料金は0以上を入力してください。",
         });
         this.setState({ errorItem: "cost1" });
         return;
@@ -514,12 +502,12 @@ class otherCost extends React.Component {
         this.state.cost2 == "" ||
         this.state.cost2 == null
       ) {
+        message.error(
+          this.costClassificationCode(this.state.costClassificationCode) +
+            "関連の項目入力してください"
+        );
         this.setState({
-          errorsMessageShow: true,
           method: "put",
-          message:
-            this.costClassificationCode(this.state.costClassificationCode) +
-            "関連の項目入力してください",
         });
         if (this.state.yearAndMonth == "" || this.state.yearAndMonth == null) {
           this.setState({ errorItem: "yearAndMonth" });
@@ -544,19 +532,16 @@ class otherCost extends React.Component {
       }
       if (isNaN(utils.deleteComma(this.state.cost2))) {
         this.setState({ errorItem: "cost2" });
+        message.error("料金は半角数字のみ入力してください。");
         this.setState({
-          errorsMessageShow: true,
-          type: "fail",
           method: "put",
-          message: "料金は半角数字のみ入力してください。",
         });
         return;
       }
       if (Number(utils.deleteComma(this.state.cost2)) <= 0) {
+        message.error("料金は0以上を入力してください。");
         this.setState({
-          errorsMessageShow: true,
           method: "put",
-          message: "料金は0以上を入力してください。",
         });
         this.setState({ errorItem: "cost2" });
         return;
@@ -595,21 +580,16 @@ class otherCost extends React.Component {
       .post(this.state.serverIP + theUrl, formData)
       .then((response) => {
         if (response.data) {
+          message.success("登録完了");
           this.setState({
-            myToastShow: true,
             method: "put",
-            message: "登録完了",
           });
-          setTimeout(() => this.setState({ myToastShow: false }), 3000);
           this.props.otherCostToroku();
         } else {
-          this.setState({
-            errorsMessageShow: true,
-            message:
-              this.costClassificationCode(this.state.costClassificationCode) +
-              "データはすでに存在している",
-          });
-          setTimeout(() => this.setState({ myToastShow: false }), 3000);
+          message.error(
+            this.costClassificationCode(this.state.costClassificationCode) +
+              "データはすでに存在している"
+          );
         }
       })
       .catch((error) => {
@@ -655,22 +635,6 @@ class otherCost extends React.Component {
             onChange={this.fileUpload}
           />
         </div>
-        <div style={{ display: this.state.myToastShow ? "block" : "none" }}>
-          <MyToast
-            myToastShow={this.state.myToastShow}
-            message={this.state.message}
-            type={"success"}
-          />
-        </div>
-        <div
-          style={{ display: this.state.errorsMessageShow ? "block" : "none" }}
-        >
-          <ErrorsMessageToast
-            errorsMessageShow={this.state.errorsMessageShow}
-            message={this.state.message}
-            type={"danger"}
-          />
-        </div>
         <Form>
           <div>
             <Form.Group>
@@ -714,9 +678,7 @@ class otherCost extends React.Component {
               <Col sm={6}>
                 <InputGroup size="sm" className="mb-3">
                   <InputGroup.Prepend>
-                    <InputGroup.Text id="threeKanjiFor150">
-                      日付
-                    </InputGroup.Text>
+                    <InputGroup.Text id="niKanjiFor150">日付</InputGroup.Text>
                     <DatePicker
                       value={this.state.yearAndMonth}
                       selected={this.state.yearAndMonth}
@@ -781,9 +743,7 @@ class otherCost extends React.Component {
               <Col sm={3}>
                 <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                   <InputGroup.Prepend>
-                    <InputGroup.Text id="threeKanjiFor150">
-                      出発
-                    </InputGroup.Text>
+                    <InputGroup.Text id="niKanjiFor150">出発</InputGroup.Text>
                   </InputGroup.Prepend>
                   <Autocomplete
                     id="stationCode3"
@@ -824,9 +784,7 @@ class otherCost extends React.Component {
               <Col sm={3}>
                 <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                   <InputGroup.Prepend>
-                    <InputGroup.Text id="threeKanjiFor150">
-                      到着
-                    </InputGroup.Text>
+                    <InputGroup.Text id="niKanjiFor150">到着</InputGroup.Text>
                   </InputGroup.Prepend>
                   <Autocomplete
                     value={
@@ -867,9 +825,7 @@ class otherCost extends React.Component {
               <Col sm={3}>
                 <InputGroup size="sm" className="mb-3">
                   <InputGroup.Prepend>
-                    <InputGroup.Text id="threeKanjiFor150">
-                      料金
-                    </InputGroup.Text>
+                    <InputGroup.Text id="niKanjiFor150">料金</InputGroup.Text>
                   </InputGroup.Prepend>
                   <FormControl
                     value={cost1}
@@ -932,9 +888,7 @@ class otherCost extends React.Component {
               <Col sm={4}>
                 <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                   <InputGroup.Prepend>
-                    <InputGroup.Text id="threeKanjiFor150">
-                      場所
-                    </InputGroup.Text>
+                    <InputGroup.Text id="niKanjiFor150">場所</InputGroup.Text>
                   </InputGroup.Prepend>
                   <Autocomplete
                     value={
@@ -975,9 +929,7 @@ class otherCost extends React.Component {
               <Col sm={4}>
                 <InputGroup size="sm" className="mb-3">
                   <InputGroup.Prepend>
-                    <InputGroup.Text id="threeKanjiFor150">
-                      料金
-                    </InputGroup.Text>
+                    <InputGroup.Text id="niKanjiFor150">料金</InputGroup.Text>
                   </InputGroup.Prepend>
                   <FormControl
                     value={cost2}
@@ -1027,7 +979,7 @@ class otherCost extends React.Component {
               <Col sm={6}>
                 <InputGroup size="sm" className="mb-3">
                   <InputGroup.Prepend>
-                    <InputGroup.Text id="tenpu">添付</InputGroup.Text>
+                    <InputGroup.Text id="niKanjiFor150">添付</InputGroup.Text>
                   </InputGroup.Prepend>
                   <FormControl
                     placeholder="例：XXXXX"
