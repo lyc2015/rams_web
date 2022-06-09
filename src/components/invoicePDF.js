@@ -976,9 +976,9 @@ class invoicePDF extends React.Component {
       deadLine: publicUtils.formateDate(this.state.deadLine, true),
       bankCode: this.state.bankAccountInfo,
       remark: this.state.remark,
-      employeeNameFlag: this.state.employeeNameFlag,
-      systemNameFlag: this.state.systemNameFlag,
-      workTimeFlag: this.state.workTimeFlag,
+      employeeNameFlag: this.state.employeeNameFlag ? "1" : "0",
+      systemNameFlag: this.state.systemNameFlag ? "1" : "0",
+      workTimeFlag: this.state.workTimeFlag ? "1" : "0",
     };
     let result = await axios.post(
       this.state.serverIP + "sendInvoice/updateAllInvoiceData",
