@@ -284,7 +284,7 @@ class envelopePrinting extends Component {
         <div className="container col-3">
           <Row>
             <Col>
-              <InputGroup size="sm" className="mb-3">
+              <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                 <InputGroup.Prepend>
                   <InputGroup.Text id="fiveKanji">氏名</InputGroup.Text>
                 </InputGroup.Prepend>

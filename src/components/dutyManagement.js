@@ -39,6 +39,7 @@ registerLocale("ja", ja);
 axios.defaults.withCredentials = true;
 
 const SIZE_PRE_PAGE = 12;
+const MIN_WIDTH = 1650;
 
 /**
  * 社員勤務管理画面
@@ -51,7 +52,27 @@ class dutyManagement extends React.Component {
     this.approvalStatusChange = this.approvalStatusChange.bind(this);
     this.searchEmployee = this.searchDutyManagement.bind(this);
   }
+
+  setStyleObjByWidth = (width) => {
+    let styleObj = {};
+    if (width < MIN_WIDTH) {
+      styleObj.padding = "0 15px";
+      styleObj.marginTop = "-1rem";
+    }
+    this.setState({ innerWidth: width, styleObj });
+  };
+
+  handleResize = (e) => {
+    this.setStyleObjByWidth(e.target.innerWidth);
+  };
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.handleResize.bind(this));
+  }
+
   componentDidMount() {
+    window.addEventListener("resize", this.handleResize.bind(this));
+    this.setStyleObjByWidth(document.body.offsetWidth);
     $("#update").attr("disabled", true);
     $("#syounin").attr("disabled", true);
     $("#upload").attr("disabled", true);
@@ -950,6 +971,49 @@ class dutyManagement extends React.Component {
       });
   };
 
+  renderTimeRow = () => {
+    return (
+      <div className="df mb5" style={this.state.styleObj}>
+        <InputGroup className="mr5 " size="sm">
+          <InputGroup.Prepend>
+            <InputGroup.Text id="sixKanji" className="input-group-indiv">
+              最小稼働時間
+            </InputGroup.Text>
+          </InputGroup.Prepend>
+          <FormControl
+            className="w70"
+            defaultValue={this.state.minWorkingTime}
+            disabled
+          />
+        </InputGroup>
+        <InputGroup className="mr5" size="sm">
+          <InputGroup.Prepend>
+            <InputGroup.Text id="sixKanji" className="input-group-indiv">
+              最大稼働時間
+            </InputGroup.Text>
+          </InputGroup.Prepend>
+          <FormControl
+            className="w70"
+            defaultValue={this.state.totalWorkingTime}
+            disabled
+          />
+        </InputGroup>
+        <InputGroup size="sm">
+          <InputGroup.Prepend>
+            <InputGroup.Text id="sixKanji" className="input-group-indiv">
+              平均稼働時間
+            </InputGroup.Text>
+          </InputGroup.Prepend>
+          <FormControl
+            className="w70"
+            defaultValue={this.state.averageWorkingTime}
+            disabled
+          />
+        </InputGroup>
+      </div>
+    );
+  };
+
   render() {
     const {
       approvalStatus,
@@ -1064,7 +1128,7 @@ class dutyManagement extends React.Component {
                     />
                   </InputGroup>
                 </AntdCol>
-                <AntdCol span={4}>
+                <AntdCol span={5}>
                   <InputGroup size="sm" className="mb-2 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="sixKanji">
@@ -1160,6 +1224,10 @@ class dutyManagement extends React.Component {
           </div>
         </Form>
         <div>
+          {this.state.innerWidth > MIN_WIDTH ? null : (
+            <Row>{this.renderTimeRow()} </Row>
+          )}
+
           <Row>
             <Col>
               <div
@@ -1229,53 +1297,9 @@ class dutyManagement extends React.Component {
                     請求書一覧
                   </Button>{" "}
                 </div>
-                <div style={{ display: "flex", marginBottom: "5px" }}>
-                  <InputGroup className="mr5 " size="sm">
-                    <InputGroup.Prepend>
-                      <InputGroup.Text
-                        id="sixKanji"
-                        className="input-group-indiv"
-                      >
-                        最小稼働時間
-                      </InputGroup.Text>
-                    </InputGroup.Prepend>
-                    <FormControl
-                      className="w70"
-                      value={this.state.minWorkingTime}
-                      disabled
-                    />
-                  </InputGroup>
-                  <InputGroup className="mr5" size="sm">
-                    <InputGroup.Prepend>
-                      <InputGroup.Text
-                        id="sixKanji"
-                        className="input-group-indiv"
-                      >
-                        最大稼働時間
-                      </InputGroup.Text>
-                    </InputGroup.Prepend>
-                    <FormControl
-                      className="w70"
-                      value={this.state.totalWorkingTime}
-                      disabled
-                    />
-                  </InputGroup>
-                  <InputGroup size="sm">
-                    <InputGroup.Prepend>
-                      <InputGroup.Text
-                        id="sixKanji"
-                        className="input-group-indiv"
-                      >
-                        平均稼働時間
-                      </InputGroup.Text>
-                    </InputGroup.Prepend>
-                    <FormControl
-                      className="w70"
-                      value={this.state.averageWorkingTime}
-                      disabled
-                    />
-                  </InputGroup>
-                </div>
+                {this.state.innerWidth > MIN_WIDTH
+                  ? this.renderTimeRow()
+                  : null}
                 <div>
                   <Button
                     variant="info"
@@ -1321,6 +1345,7 @@ class dutyManagement extends React.Component {
               </div>
             </Col>
           </Row>
+
           <Col>
             <BootstrapTable
               data={employeeList}

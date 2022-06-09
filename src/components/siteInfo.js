@@ -1712,7 +1712,7 @@ class siteInfo extends Component {
                   </InputGroup>
                 </Col>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="cssNikanji">単価</InputGroup.Text>
                     </InputGroup.Prepend>

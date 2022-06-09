@@ -433,7 +433,7 @@ class certificatePrinting extends Component {
                 <div className="container col-5">*/}
           <Row>
             <Col>
-              <InputGroup size="sm" className="mb-3">
+              <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                 <InputGroup.Prepend>
                   <InputGroup.Text id="fiveKanji">氏名</InputGroup.Text>
                 </InputGroup.Prepend>
@@ -482,7 +482,7 @@ class certificatePrinting extends Component {
           </Row>
           <Row>
             <Col>
-              <InputGroup size="sm" className="mb-3">
+              <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                 <InputGroup.Prepend>
                   <InputGroup.Text id="fiveKanji">生年月日</InputGroup.Text>
                 </InputGroup.Prepend>
@@ -508,7 +508,7 @@ class certificatePrinting extends Component {
             <div>
               <Row>
                 <Col>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="fiveKanji">
                         就職年月日

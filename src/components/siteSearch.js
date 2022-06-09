@@ -864,8 +864,8 @@ class siteSearch extends Component {
                     />
                   </InputGroup>
                 </Col>
-                <Col sm={4}>
-                  <InputGroup size="sm">
+                <Col sm={2}>
+                  <InputGroup size="sm flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="siteInfo-siteRoleCode">
                         言語
@@ -895,6 +895,10 @@ class siteSearch extends Component {
                         </div>
                       )}
                     />
+                  </InputGroup>
+                </Col>
+                <Col sm={2}>
+                  <InputGroup size="sm">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="siteInfo-siteRoleCode">
                         役割

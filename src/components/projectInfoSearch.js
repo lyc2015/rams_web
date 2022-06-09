@@ -753,7 +753,7 @@ class ProjectInfoSearch extends Component {
                   </InputGroup>
                 </Col>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text>案件番号</InputGroup.Text>
                     </InputGroup.Prepend>
@@ -782,7 +782,7 @@ class ProjectInfoSearch extends Component {
                   </InputGroup>
                 </Col>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text>開発言語</InputGroup.Text>
                     </InputGroup.Prepend>
