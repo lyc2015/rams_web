@@ -5,6 +5,7 @@ import ReactDOM from "react-dom";
 
 import "./asserts/css/index.css";
 import "./asserts/css/antdCssReset.css";
+import "./asserts/css/tagClass.css";
 import "antd/dist/antd.css";
 import App from "./App";
 import { Provider } from "react-redux";

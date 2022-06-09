@@ -95,6 +95,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import "../asserts/css/subMenu.css";
 import store from "./redux/store";
+import { message } from "antd";
 axios.defaults.withCredentials = true;
 
 /**
@@ -104,6 +105,7 @@ class SubMenu extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isMobileDevice: store.getState().isMobileDevice,
       serverIP: store.getState().dropDown[store.getState().dropDown.length - 1], // 劉林涛
       // テスト
       companyName: "",
@@ -122,6 +124,10 @@ class SubMenu extends Component {
           alert("権限不足");
           return;
         }
+        store.dispatch({
+          type: "UPDATE_INIT_EMPLOYEE",
+          data: resultMap.data,
+        });
         this.setState({
           authorityCode: resultMap.data["authorityCode"],
         });
@@ -169,7 +175,11 @@ class SubMenu extends Component {
 
   logout = () => {
     axios.post(this.state.serverIP + "subMenu/logout").then((resultMap) => {
-      alert("ログアウトしました");
+      message.success("ログアウト成功");
+      store.dispatch({
+        type: "UPDATE_INIT_EMPLOYEE",
+        data: {},
+      });
     });
   };
   click = (name) => {
@@ -277,6 +287,49 @@ class SubMenu extends Component {
     }
   };
 
+  renderTop = () => {
+    const { isMobileDevice } = this.state;
+    return (
+      <>
+        <div className="df justify-between">
+          <Navbar inline="true">
+            <img
+              className={"titleImg " + (isMobileDevice ? "w40" : "")}
+              alt="title"
+              src={title}
+            />
+            <span className={"loginMark " + (isMobileDevice ? "fz30" : "")}>
+              LYC株式会社
+            </span>
+          </Navbar>
+        </div>
+        <div className="df justify-end">
+          <div
+            className={"loginPeople df mr5 " + (isMobileDevice ? "fz12" : "")}
+          >
+            {this.state.nowDate}{" "}
+            <FontAwesomeIcon className="fa-fw" size="lg" icon={faUser} />
+            <div id="kanriSha"></div>
+          </div>
+          <Link
+            as="button"
+            className={"loginPeople " + (isMobileDevice ? "fz12" : "")}
+            to="/"
+            id="logout"
+            onClick={this.logout}
+          >
+            <FontAwesomeIcon
+              className="fa-fw"
+              size="lg"
+              icon={faCaretSquareLeft}
+            />
+            sign out
+          </Link>
+        </div>
+      </>
+    );
+  };
+
   render() {
     // お客様情報画面の追加パラメータ
     var customerInfoPath = {
@@ -306,46 +359,18 @@ class SubMenu extends Component {
       backgroundColor: "#4a4a4a",
     };
 
+    const { isMobileDevice } = this.state;
+
     return (
-      <div className="mainBody">
+      <div
+        className={"mainBody " + (isMobileDevice ? "" : " mainBodyMinWidth")}
+      >
         <div id="popu_div"></div>
-        <Row style={{ backgroundColor: "#FFFAF0" }}>
-          <Col>
-            <div style={{ float: "left" }}>
-              <Navbar>
-                <img
-                  className="titleImg"
-                  alt="title"
-                  src={this.state.pic}
-                  style={{ width: "65px" }}
-                />
-                <a className="loginMark">{this.state.companyName}</a>{" "}
-              </Navbar>
-            </div>
-            <div style={{ marginTop: "50px", float: "right" }}>
-              <font className="loginPeople">
-                {this.state.nowDate}{" "}
-                <FontAwesomeIcon className="fa-fw" size="lg" icon={faUser} />
-                <a id="kanriSha"></a>
-              </font>{" "}
-              <Link
-                as="button"
-                className="loginPeople"
-                to="/"
-                id="logout"
-                onClick={this.logout}
-              >
-                <FontAwesomeIcon
-                  className="fa-fw"
-                  size="lg"
-                  icon={faCaretSquareLeft}
-                />
-                sign out
-              </Link>
-            </div>
-          </Col>
+        <Row className="myCss" style={{ backgroundColor: "#FFFAF0" }}>
+          <Col sm={11}>{this.renderTop()}</Col>
           <Col sm={1}></Col>
         </Row>
+
         <Row onClick={() => this.checkSession()}>
           <Col sm={2}>
             <br />

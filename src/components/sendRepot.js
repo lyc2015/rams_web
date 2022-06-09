@@ -1476,8 +1476,8 @@ Email：` +
               </Col>
             </Row>
             <Row>
-              <Col sm={6}>
-                <InputGroup size="sm" className="mb-3">
+              <Col sm={3}>
+                <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                   <InputGroup.Prepend>
                     <InputGroup.Text id="inputGroup-sizing-sm">
                       お客様名
@@ -1513,6 +1513,10 @@ Email：` +
                       </div>
                     )}
                   />
+                </InputGroup>
+              </Col>
+              <Col sm={3}>
+                <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                   <InputGroup.Prepend>
                     <InputGroup.Text id="sanKanji">担当者</InputGroup.Text>
                   </InputGroup.Prepend>
@@ -1546,25 +1550,27 @@ Email：` +
                       </div>
                     )}
                   />
-                  <Button
-                    size="sm"
-                    variant="info"
-                    onClick={this.addClick}
-                    disabled={
-                      this.state.customerCode !== "" ||
-                      this.state.purchasingManagers !== ""
-                        ? false
-                        : true
-                    }
-                  >
-                    <FontAwesomeIcon icon={faPlusCircle} />
-                    追加
-                  </Button>
                 </InputGroup>
               </Col>
-              <Col sm={3}>
+              <Col sm={1}>
+                <Button
+                  size="sm"
+                  variant="info"
+                  onClick={this.addClick}
+                  disabled={
+                    this.state.customerCode !== "" ||
+                    this.state.purchasingManagers !== ""
+                      ? false
+                      : true
+                  }
+                >
+                  <FontAwesomeIcon icon={faPlusCircle} />
+                  追加
+                </Button>
+              </Col>
+              <Col sm={2}>
                 <div style={{ position: "absolute", right: "0px" }}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="fiveKanji">
                         格納リスト

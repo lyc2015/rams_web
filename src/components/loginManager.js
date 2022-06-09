@@ -5,6 +5,7 @@ import $ from "jquery";
 import axios from "axios";
 import { Form, Button, InputGroup, FormControl } from "react-bootstrap";
 import ErrorsMessageToast from "./errorsMessageToast";
+import { message } from "antd";
 import store from "./redux/store";
 
 axios.defaults.withCredentials = true;
@@ -96,6 +97,7 @@ class Login extends Component {
           result.data.errorsMessage === null ||
           result.data.errorsMessage === undefined
         ) {
+          message.success("ログイン成功");
           if (this.state.remberPassWord) {
             let accoutInfo =
               $("#employeeNo").val() + "&" + $("#password").val();
