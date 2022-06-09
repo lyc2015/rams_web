@@ -59,6 +59,7 @@ import projectInfo from "./projectInfo";
 import sendRepotConfirm from "./sendRepotConfirm";
 import customerSalesList from "./customerSalesList";
 import ReactTooltip from "react-tooltip";
+import { connect } from "react-redux";
 
 import {
   faAddressBook,
@@ -124,10 +125,8 @@ class SubMenu extends Component {
           alert("権限不足");
           return;
         }
-        store.dispatch({
-          type: "UPDATE_INIT_EMPLOYEE",
-          data: resultMap.data,
-        });
+        this.props.updateInitEmployee(resultMap.data);
+
         this.setState({
           authorityCode: resultMap.data["authorityCode"],
         });
@@ -176,10 +175,7 @@ class SubMenu extends Component {
   logout = () => {
     axios.post(this.state.serverIP + "subMenu/logout").then((resultMap) => {
       message.success("ログアウト成功");
-      store.dispatch({
-        type: "UPDATE_INIT_EMPLOYEE",
-        data: {},
-      });
+      this.props.updateInitEmployee({});
     });
   };
   click = (name) => {
@@ -2509,4 +2505,17 @@ class SubMenu extends Component {
     );
   }
 }
-export default SubMenu;
+export default connect(
+  (state) => {
+    return {
+      state,
+    };
+  },
+  (dispatch) => {
+    return {
+      updateInitEmployee: (data) => {
+        dispatch({ type: "UPDATE_INIT_EMPLOYEE", data });
+      },
+    };
+  }
+)(SubMenu);
