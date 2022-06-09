@@ -863,36 +863,36 @@ class salesContent extends React.Component {
                 円
               </ListGroup.Item>
             </span>
-            <span style={{ flexFlow: "nowrap" }}>
+            <span style={{ flexFlow: "nowrap", flexWrap: "nowrap" }}>
               <ListGroup.Item style={{ padding: ".3rem 1.25rem" }}>
-                【稼働開始】：
-                {(this.state.admissionEndDate === undefined ||
-                this.state.admissionEndDate === null ||
-                this.state.admissionEndDate === ""
-                  ? 0
-                  : this.state.admissionEndDate.substring(4, 6) === "12"
-                  ? Number(
-                      Number(this.state.admissionEndDate.substring(0, 4)) +
-                        1 +
-                        "01"
-                    )
-                  : Number(this.state.admissionEndDate) + 1) <
-                Number(this.getNextMonth(new Date(), 1).replace("/", "")) ? (
-                  "即日"
-                ) : (
-                  <DatePicker
-                    selected={this.state.beginMonth}
-                    onChange={this.setEndDate}
-                    autoComplete="off"
-                    locale="ja"
-                    showMonthYearPicker
-                    showFullMonthYearPicker
-                    className="form-control form-control-sm"
-                    dateFormat="yyyy/MM"
-                    id="datePicker"
-                    //disabled
-                  />
-                )}
+                <span>【稼働開始】：</span>
+                <div style={{ display: "inline-block" }}>
+                  {(!this.state.admissionEndDate
+                    ? 0
+                    : this.state.admissionEndDate.substring(4, 6) === "12"
+                    ? Number(
+                        Number(this.state.admissionEndDate.substring(0, 4)) +
+                          1 +
+                          "01"
+                      )
+                    : Number(this.state.admissionEndDate) + 1) <
+                  Number(this.getNextMonth(new Date(), 1).replace("/", "")) ? (
+                    "即日"
+                  ) : (
+                    <DatePicker
+                      selected={this.state.beginMonth}
+                      onChange={this.setEndDate}
+                      autoComplete="off"
+                      locale="ja"
+                      showMonthYearPicker
+                      showFullMonthYearPicker
+                      className="form-control form-control-sm"
+                      dateFormat="yyyy/MM"
+                      id="datePicker"
+                      //disabled
+                    />
+                  )}
+                </div>
               </ListGroup.Item>
             </span>
             <ListGroup.Item style={{ padding: ".3rem 1.25rem" }}>
