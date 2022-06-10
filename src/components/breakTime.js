@@ -15,8 +15,9 @@ import MyToast from "./myToast";
 import ErrorsMessageToast from "./errorsMessageToast";
 import "../asserts/css/style.css";
 import "react-datepicker/dist/react-datepicker.css";
-import DatePicker from "react-datepicker";
-import { notification, message } from "antd";
+import { notification, message, DatePicker, TimePicker } from "antd";
+import moment from "moment";
+moment.locale("ja");
 axios.defaults.withCredentials = true;
 
 /**
@@ -27,6 +28,7 @@ class BreakTime extends Component {
   constructor() {
     super();
     this.state = {
+      isMobileDevice: store.getState().isMobileDevice,
       actionType: "", //処理区分
       breakTimeDate: new Date(),
       breakTimeDayHourStart: [], //　　お昼時から
@@ -480,9 +482,9 @@ class BreakTime extends Component {
   };
 
   render() {
-    const { actionType } = this.state;
+    const { actionType, isMobileDevice } = this.state;
     return (
-      <div>
+      <div className={isMobileDevice ? "clear-grid-padding" : ""}>
         <div style={{ display: this.state.myToastShow ? "block" : "none" }}>
           <MyToast
             myToastShow={this.state.myToastShow}
@@ -529,8 +531,8 @@ class BreakTime extends Component {
               </Col>
             </Row>
             <Row>
-              <Col sm={2}></Col>
-              <Col sm={2}>
+              <Col xs={0} sm={2}></Col>
+              <Col xs={6} sm={2}>
                 <InputGroup size="sm" className="mb-3">
                   <InputGroup.Prepend>
                     <InputGroup.Text id="niKanjiFor150">氏名</InputGroup.Text>
@@ -543,21 +545,27 @@ class BreakTime extends Component {
                   />
                 </InputGroup>
               </Col>
-              <Col sm={3}>
-                <InputGroup size="sm" className="mb-3">
+              <Col xs={6} sm={3}>
+                <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                   <InputGroup.Prepend>
                     <InputGroup.Text id="niKanjiFor150">年月</InputGroup.Text>
                   </InputGroup.Prepend>
                   <InputGroup.Append>
                     <DatePicker
-                      selected={this.state.breakTimeDate}
+                      allowClear={false}
+                      suffixIcon={false}
+                      placeholder="年月"
+                      value={
+                        this.state.breakTimeDate
+                          ? moment(this.state.breakTimeDate)
+                          : ""
+                      }
                       onChange={this.setBreakTime}
+                      format="YYYY/MM"
+                      picker="month"
                       locale="ja"
-                      dateFormat="yyyy/MM"
-                      showMonthYearPicker
-                      id="datePicker"
-                      className="form-control form-control-sm"
-                      autoComplete="off"
+                      className={"bg-datePicker w100p "}
+                      size="small"
                     />
                   </InputGroup.Append>
                 </InputGroup>
@@ -568,7 +576,7 @@ class BreakTime extends Component {
                     style={{
                       color: "grey",
                       fontSize: "14px",
-                      marginLeft: "-50px",
+                      // marginLeft: "-50px",
                     }}
                   >
                     現場の固定休憩を時間入力してください{" "}
@@ -584,9 +592,25 @@ class BreakTime extends Component {
                 </div>
               </Col>
             </Row>
+
             <Row>
-              <Col sm={2}></Col>
+              <Col xs={0} sm={2}></Col>
               <Col>
+                <TimePicker
+                  id="breakTimeDayHourStart"
+                  name="breakTimeDayHourStart"
+                  disabled={this.state.dateDisabledFlag}
+                  minuteStep={15}
+                  showSecond={false}
+                />{" "}
+                ～{" "}
+                <TimePicker
+                  id="breakTimeDayHourEnd"
+                  name="breakTimeDayHourEnd"
+                  disabled={this.state.dateDisabledFlag}
+                  minuteStep={15}
+                  showSecond={false}
+                />
                 <InputGroup size="sm" className="mb-3">
                   <InputGroup.Prepend>
                     <InputGroup.Text id="niKanjiFor150">お昼</InputGroup.Text>
@@ -665,7 +689,7 @@ class BreakTime extends Component {
             <Row>
               <Col sm={2}></Col>
               <Col>
-                <InputGroup size="sm" className="mb-3">
+                <InputGroup size="sm" className="mb-3 ">
                   <InputGroup.Prepend>
                     <InputGroup.Text id="niKanjiFor150">夜　</InputGroup.Text>
                   </InputGroup.Prepend>
@@ -743,8 +767,8 @@ class BreakTime extends Component {
             <Row>
               <Col sm={2}></Col>
 
-              <Col>
-                <InputGroup size="sm" className="mb-3">
+              <Col xs={6} sm={3}>
+                <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                   <InputGroup.Prepend>
                     <InputGroup.Text id="fiveKanji">昼休憩時間</InputGroup.Text>
                   </InputGroup.Prepend>
@@ -757,8 +781,8 @@ class BreakTime extends Component {
                 </InputGroup>
               </Col>
 
-              <Col>
-                <InputGroup size="sm" className="mb-3">
+              <Col xs={6} sm={3}>
+                <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                   <InputGroup.Prepend>
                     <InputGroup.Text id="fiveKanji">夜休憩時間</InputGroup.Text>
                   </InputGroup.Prepend>
@@ -771,8 +795,8 @@ class BreakTime extends Component {
                 </InputGroup>
               </Col>
 
-              <Col>
-                <InputGroup size="sm" className="mb-3">
+              <Col xs={6} sm={3}>
+                <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                   <InputGroup.Prepend>
                     <InputGroup.Text id="inputGroup-sizing-sm">
                       合計

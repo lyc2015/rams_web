@@ -13,7 +13,6 @@ import "../asserts/css/development.css";
 import "../asserts/css/style.css";
 import $ from "jquery";
 import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -30,6 +29,10 @@ import ErrorsMessageToast from "./errorsMessageToast";
 import store from "./redux/store";
 import OtherCostModel from "./otherCost";
 import * as utils from "./utils/publicUtils.js";
+import { isMobileDevice } from "./redux/init";
+import { message, DatePicker } from "antd";
+import moment from "moment";
+moment.locale("ja");
 axios.defaults.withCredentials = true;
 
 /**
@@ -60,6 +63,7 @@ class workTimeSearch extends React.Component {
   };
   // 初期化データ
   initialState = {
+    isMobileDevice: store.getState().isMobileDevice,
     station: store.getState().dropDown[14],
     serverIP: store.getState().dropDown[store.getState().dropDown.length - 1],
   };
@@ -141,7 +145,7 @@ class workTimeSearch extends React.Component {
     }
   }
   render() {
-    const { employeeList } = this.state;
+    const { employeeList, isMobileDevice } = this.state;
     const station = this.state.station;
 
     // テーブルの行の選択
@@ -195,35 +199,45 @@ class workTimeSearch extends React.Component {
         <div>
           <Row>
             <Col sm={5}>
-              <InputGroup size="sm" className="mb-3">
+              <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                 <InputGroup.Prepend>
                   <InputGroup.Text id="inputGroup-sizing-sm">
                     期間
                   </InputGroup.Text>
                 </InputGroup.Prepend>
-                <InputGroup.Prepend>
-                  <DatePicker
-                    selected={this.state.yearAndMonth1}
-                    onChange={this.inactiveYearAndMonth1}
-                    autoComplete="off"
-                    locale="ja"
-                    dateFormat="yyyy/MM"
-                    showMonthYearPicker
-                    id="datePicker"
-                    className="form-control form-control-sm"
-                  />
-                  ～
-                  <DatePicker
-                    selected={this.state.yearAndMonth2}
-                    onChange={this.inactiveYearAndMonth2}
-                    autoComplete="off"
-                    locale="ja"
-                    dateFormat="yyyy/MM"
-                    showMonthYearPicker
-                    id="datePicker"
-                    className="form-control form-control-sm"
-                  />
-                </InputGroup.Prepend>
+                <DatePicker
+                  allowClear={false}
+                  suffixIcon={false}
+                  placeholder=""
+                  value={
+                    this.state.yearAndMonth1
+                      ? moment(this.state.yearAndMonth1)
+                      : ""
+                  }
+                  onChange={this.inactiveYearAndMonth1}
+                  format="YYYY/MM"
+                  picker="month"
+                  locale="ja"
+                  className={"bg-datePicker w100p "}
+                  size="small"
+                />{" "}
+                ～{" "}
+                <DatePicker
+                  allowClear={false}
+                  suffixIcon={false}
+                  placeholder=""
+                  value={
+                    this.state.yearAndMonth2
+                      ? moment(this.state.yearAndMonth2)
+                      : ""
+                  }
+                  onChange={this.inactiveYearAndMonth2}
+                  format="YYYY/MM"
+                  picker="month"
+                  locale="ja"
+                  className={"bg-datePicker w100p"}
+                  size="small"
+                />
               </InputGroup>
             </Col>
           </Row>
@@ -244,7 +258,7 @@ class workTimeSearch extends React.Component {
               condensed
             >
               <TableHeaderColumn
-                width="5%"
+                width="7%"
                 tdStyle={{ padding: ".45em" }}
                 dataField="rowNo"
                 isKey
@@ -270,6 +284,7 @@ class workTimeSearch extends React.Component {
                 tdStyle={{ padding: ".45em" }}
                 dataField="stationName"
                 dataFormat={this.stationCode.bind(this)}
+                hidden={isMobileDevice}
               >
                 場所
               </TableHeaderColumn>
@@ -277,6 +292,7 @@ class workTimeSearch extends React.Component {
                 width="10%"
                 tdStyle={{ padding: ".45em" }}
                 dataField="payOffRange"
+                hidden={isMobileDevice}
               >
                 精算時間
               </TableHeaderColumn>
@@ -284,7 +300,7 @@ class workTimeSearch extends React.Component {
                 width="5%"
                 tdStyle={{ padding: ".45em" }}
                 dataField="attendanceDays"
-                hidden
+                hidden={isMobileDevice}
               >
                 出勤日数
               </TableHeaderColumn>
@@ -299,6 +315,7 @@ class workTimeSearch extends React.Component {
                 width="10%"
                 tdStyle={{ padding: ".45em" }}
                 dataField="averageSumWorkTime"
+                hidden={isMobileDevice}
               >
                 平均稼働
               </TableHeaderColumn>
@@ -306,6 +323,7 @@ class workTimeSearch extends React.Component {
                 width="10%"
                 tdStyle={{ padding: ".45em" }}
                 dataField="workTimeRank"
+                hidden={isMobileDevice}
               >
                 稼働ranking
               </TableHeaderColumn>
@@ -314,6 +332,7 @@ class workTimeSearch extends React.Component {
                 tdStyle={{ padding: ".45em" }}
                 dataField="carCost"
                 dataFormat={publicUtils.addComma.bind(this)}
+                hidden={isMobileDevice}
               >
                 交通費用
               </TableHeaderColumn>
@@ -322,6 +341,7 @@ class workTimeSearch extends React.Component {
                 tdStyle={{ padding: ".45em" }}
                 dataField="otherCost"
                 dataFormat={publicUtils.addComma.bind(this)}
+                hidden={isMobileDevice}
               >
                 他の費用
               </TableHeaderColumn>
