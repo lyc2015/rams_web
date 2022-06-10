@@ -273,6 +273,14 @@ class invoicePDF extends React.Component {
           ),
           bankAccountInfo: result.data[0].bankCode,
           loading: true,
+          systemNameFlag: result.data[0].systemNameFlag,
+          workTimeFlag: result.data[0].workTimeFlag,
+          employeeNameFlag: result.data[0].employeeNameFlag,
+          originalFlag: {
+            systemNameFlag: result.data[0].systemNameFlag,
+            workTimeFlag: result.data[0].workTimeFlag,
+            employeeNameFlag: result.data[0].employeeNameFlag,
+          },
         });
         this.refs.table.setState({
           selectedRowKeys: [],
@@ -706,19 +714,19 @@ class invoicePDF extends React.Component {
 
   systemNameFlagChange = () => {
     this.setState({
-      systemNameFlag: !this.state.systemNameFlag,
+      systemNameFlag: !this.state.systemNameFlag ? 1 : 0,
     });
   };
 
   workTimeFlagChange = () => {
     this.setState({
-      workTimeFlag: !this.state.workTimeFlag,
+      workTimeFlag: !this.state.workTimeFlag ? 1 : 0,
     });
   };
 
   employeeNameFlagChange = () => {
     this.setState({
-      employeeNameFlag: !this.state.employeeNameFlag,
+      employeeNameFlag: !this.state.employeeNameFlag ? 1 : 0,
     });
   };
 
@@ -1068,9 +1076,7 @@ class invoicePDF extends React.Component {
       customerNo: this.state.customerNo,
       invoiceNo: this.state.invoiceNo,
       taxRate: this.state.taxRate * 100,
-      systemNameFlag: this.state.systemNameFlag,
-      workTimeFlag: this.state.workTimeFlag,
-      employeeNameFlag: this.state.employeeNameFlag,
+      ...this.state.originalFlag,
       customerAbbreviation: this.state.customerAbbreviation,
       customerName: this.state.customerName,
     };
