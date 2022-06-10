@@ -6,7 +6,6 @@ import {
   Row,
   InputGroup,
   FormControl,
-  Modal,
 } from "react-bootstrap";
 import axios from "axios";
 import "../asserts/css/development.css";
@@ -24,8 +23,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import * as publicUtils from "./utils/publicUtils.js";
 import store from "./redux/store";
-import MyToast from "./myToast";
-import { notification, message } from "antd";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
+import { notification, message, Modal } from "antd";
 axios.defaults.withCredentials = true;
 
 /**
@@ -282,8 +281,7 @@ class dataShareEmployee extends React.Component {
       .then((response) => {
         if (response.data != null) {
           this.searchData();
-          this.setState({ myToastShow: true, message: "アップロード成功！" });
-          setTimeout(() => this.setState({ myToastShow: false }), 3000);
+          message.success("アップロード成功！");
         } else {
           notification.error({
             message: "エラー",
@@ -295,42 +293,43 @@ class dataShareEmployee extends React.Component {
   };
 
   dataDelete = () => {
-    var a = window.confirm("削除していただきますか？");
-    if (a) {
-      var model = {};
-      model["fileNo"] = this.state.fileNo;
-      axios
-        .post(this.state.serverIP + "dataShare/deleteDataShare", model)
-        .then((response) => {
-          if (response.data != null) {
-            this.setState(
-              {
-                rowNo: "",
-                fileNo: "",
-                rowShareStatus: "",
-              },
-              () => {
-                this.refs.table.setState({
-                  selectedRowKeys: [],
-                });
-                this.searchData();
-              }
-            );
-            this.setState({
-              myToastShow: true,
-              message: "削除成功！",
-              rowClickFlag: true,
-            });
-            setTimeout(() => this.setState({ myToastShow: false }), 3000);
-          } else {
-            notification.error({
-              message: "エラー",
-              description: "削除失敗",
-              placement: "topLeft",
-            });
-          }
-        });
-    }
+    Modal.confirm({
+      title: "削除していただきますか？",
+      icon: <ExclamationCircleOutlined />,
+      onOk: () => {
+        var model = {};
+        model["fileNo"] = this.state.fileNo;
+        axios
+          .post(this.state.serverIP + "dataShare/deleteDataShare", model)
+          .then((response) => {
+            if (response.data != null) {
+              this.setState(
+                {
+                  rowNo: "",
+                  fileNo: "",
+                  rowShareStatus: "",
+                },
+                () => {
+                  this.refs.table.setState({
+                    selectedRowKeys: [],
+                  });
+                  this.searchData();
+                }
+              );
+              message.success("削除成功！");
+              this.setState({
+                rowClickFlag: true,
+              });
+            } else {
+              notification.error({
+                message: "エラー",
+                description: "削除失敗",
+                placement: "topLeft",
+              });
+            }
+          });
+      },
+    });
   };
 
   //onChange
@@ -379,8 +378,7 @@ class dataShareEmployee extends React.Component {
               this.searchData();
             }
           );
-          this.setState({ myToastShow: true, message: "更新成功！" });
-          setTimeout(() => this.setState({ myToastShow: false }), 3000);
+          message.success("更新成功！");
         } else {
           notification.error({
             message: "エラー",
@@ -442,13 +440,6 @@ class dataShareEmployee extends React.Component {
     };
     return (
       <div>
-        <div style={{ display: this.state.myToastShow ? "block" : "none" }}>
-          <MyToast
-            myToastShow={this.state.myToastShow}
-            message={this.state.message}
-            type={"success"}
-          />
-        </div>
         <Form>
           <div>
             <Form.Group>
@@ -469,7 +460,7 @@ class dataShareEmployee extends React.Component {
             onChange={this.workRepotUpload}
           />
           <Row>
-            <Col sm={2}>
+            <Col sm={3}>
               <InputGroup size="sm" className="mb-3">
                 <InputGroup.Prepend>
                   <InputGroup.Text id="fourKanji">共有区分</InputGroup.Text>

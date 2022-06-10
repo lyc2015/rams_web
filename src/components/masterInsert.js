@@ -284,13 +284,14 @@ class masterInsert extends Component {
         <Form id="masterInsertForm">
           <Row>
             <Col>
-              <InputGroup size="sm" className="mb-3">
+              <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                 <InputGroup.Prepend>
                   <InputGroup.Text id="inputGroup-sizing-sm">
                     名　称
                   </InputGroup.Text>
                 </InputGroup.Prepend>
                 <Autocomplete
+                  className="w100p"
                   id="master"
                   name="master"
                   value={
