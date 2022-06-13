@@ -468,7 +468,7 @@ class salesContent extends React.Component {
           this.fromCodeToListLanguage(data.developLanguage5),
           this.fromCodeToListLanguage(data.developLanguage6),
         ].filter(function (s) {
-          return s; // 注：IE9(不包含IE9)以下的版本没有trim()方法
+          return s && s.code !== "0"; // 注：IE9(不包含IE9)以下的版本没有trim()方法
         }),
         disbleState:
           this.fromCodeToListLanguage(data.developLanguage6) === ""
