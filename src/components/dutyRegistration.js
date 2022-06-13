@@ -42,6 +42,7 @@ class DutyRegistration extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      isMobileDevice: store.getState().isMobileDevice,
       weekDay: {
         0: "日",
         1: "月",
@@ -952,6 +953,7 @@ class DutyRegistration extends React.Component {
     return returnItem;
   };
   startTimeFormatter = (cell, row) => {
+    const { isMobileDevice } = this.state;
     let returnItem = cell;
     if (
       !this.state.isConfirmedPage &&
@@ -1005,7 +1007,7 @@ class DutyRegistration extends React.Component {
                   row.startTimeMinutes === "00")
               }
             >
-              ：
+              {isMobileDevice ? null : "："}
             </font>
             <Col style={{ padding: "0px", margin: "0px" }}>
               <span
@@ -1144,6 +1146,7 @@ class DutyRegistration extends React.Component {
   };
 
   endTimeFormatter = (cell, row) => {
+    const { isMobileDevice } = this.state;
     let returnItem = cell;
     if (
       !this.state.isConfirmedPage &&
@@ -1191,7 +1194,7 @@ class DutyRegistration extends React.Component {
                   row.endTimeMinutes === "00")
               }
             >
-              ：
+              {isMobileDevice ? null : "："}
             </font>
             <Col style={{ padding: "0px", margin: "0px" }}>
               <span
@@ -1586,6 +1589,7 @@ class DutyRegistration extends React.Component {
   };
 
   render() {
+    const { isMobileDevice } = this.state;
     const selectRow = {
       mode: "checkbox",
       bgColor: "pink",
@@ -1595,7 +1599,7 @@ class DutyRegistration extends React.Component {
       onSelect: this.handleRowSelect,
     };
     return (
-      <div>
+      <div className={isMobileDevice ? "clear-grid-padding" : ""}>
         <div
           style={{ display: this.state.errorsMessageShow ? "block" : "none" }}
         >
@@ -1639,6 +1643,52 @@ class DutyRegistration extends React.Component {
         </div>
         <div>
           <Form.Group>
+            <Row>
+              <Col sm={4}></Col>
+              {/* <Col xs={5} sm={4}>
+                <div className="mb5">
+                  <Button
+                    size="sm"
+                    variant="info"
+                    name="clickButton"
+                    title="月に一回のみ登録してください"
+                    disabled={
+                      this.state.disabledFlag || this.state.isConfirmedPage
+                    }
+                    onClick={this.shuseiTo.bind(this, "breakTime")}
+                    variant="info"
+                    id="employeeInfo"
+                  >
+                    休憩時間登録
+                  </Button>
+                </div>
+              </Col> */}
+              <Col xs={12} sm={4}>
+                <div className="df justify-center">
+                  <div style={{ width: "120px" }}>
+                    <DatePicker
+                      selected={this.state.yearMonth}
+                      onChange={this.setYearMonth}
+                      autoComplete="off"
+                      locale="ja"
+                      showMonthYearPicker
+                      showFullMonthYearPicker
+                      className="form-control form-control-sm"
+                      dateFormat="yyyy年MM月"
+                      maxDate={new Date()}
+                      disabled={this.state.isConfirmedPage}
+                      id={
+                        this.state.isConfirmedPage
+                          ? "datePickerReadonlyDefault-duty"
+                          : "datePicker-duty"
+                      }
+                    />
+                  </div>
+                  <h3>作業報告書</h3>{" "}
+                </div>
+              </Col>
+              <Col sm={4}></Col>
+            </Row>
             <Row>
               {/*
                * <Col sm={3} hidden> <InputGroup size="sm"
@@ -1702,7 +1752,7 @@ class DutyRegistration extends React.Component {
             <Row className="align-items-center">
               <Col sm={4}></Col>
               <Col sm={5}>
-                <div className="df">
+                {/* <div className="df">
                   <div style={{ width: "120px" }}>
                     <DatePicker
                       selected={this.state.yearMonth}
@@ -1723,7 +1773,7 @@ class DutyRegistration extends React.Component {
                     />
                   </div>
                   <h3>作業報告書</h3>
-                </div>
+                </div> */}
                 {/*
                  * <span size="lg" className="mb-3">
                  * {this.state.year}年{this.state.month}月
@@ -1836,20 +1886,22 @@ class DutyRegistration extends React.Component {
                 >
                   初期化
                 </Button>{" "}
-                <Button
-                  size="sm"
-                  variant="info"
-                  name="clickButton"
-                  title="月に一回のみ登録してください"
-                  disabled={
-                    this.state.disabledFlag || this.state.isConfirmedPage
-                  }
-                  onClick={this.shuseiTo.bind(this, "breakTime")}
-                  variant="info"
-                  id="employeeInfo"
-                >
-                  休憩時間登録
-                </Button>{" "}
+                {isMobileDevice ? null : (
+                  <Button
+                    size="sm"
+                    variant="info"
+                    name="clickButton"
+                    title="月に一回のみ登録してください"
+                    disabled={
+                      this.state.disabledFlag || this.state.isConfirmedPage
+                    }
+                    onClick={this.shuseiTo.bind(this, "breakTime")}
+                    variant="info"
+                    id="employeeInfo"
+                  >
+                    休憩時間登録
+                  </Button>
+                )}{" "}
                 <Button
                   variant="info"
                   size="sm"
@@ -1901,7 +1953,7 @@ class DutyRegistration extends React.Component {
                       padding: ".20em",
                       border: "0.01rem solid black",
                     }}
-                    width="50"
+                    width="58"
                     dataField="hasWork"
                     dataFormat={this.hasWorkFormatter}
                   >
@@ -1912,7 +1964,7 @@ class DutyRegistration extends React.Component {
                       padding: ".20em",
                       border: "0.01rem solid black",
                     }}
-                    width="30"
+                    width="40"
                     dataField="day"
                     isKey
                   >
@@ -1925,6 +1977,7 @@ class DutyRegistration extends React.Component {
                     }}
                     width="40"
                     dataField="week"
+                    hidden={isMobileDevice}
                   >
                     曜日
                   </TableHeaderColumn>
@@ -1934,7 +1987,7 @@ class DutyRegistration extends React.Component {
                       padding: ".20em",
                       border: "0.01rem solid black",
                     }}
-                    width="100"
+                    width="90"
                     dataField="startTime"
                     dataFormat={this.startTimeFormatter}
                   >
@@ -1960,7 +2013,7 @@ class DutyRegistration extends React.Component {
                       padding: ".20em",
                       border: "0.01rem solid black",
                     }}
-                    width="100"
+                    width="90"
                     dataField="endTime"
                     dataFormat={this.endTimeFormatter}
                   >
@@ -1998,7 +2051,7 @@ class DutyRegistration extends React.Component {
                       padding: ".20em",
                       border: "0.01rem solid black",
                     }}
-                    width="60"
+                    width="80"
                     dataField="workHour"
                     dataFormat={this.workHourFormatter}
                   >
@@ -2030,33 +2083,25 @@ class DutyRegistration extends React.Component {
               </Col>
             </Row>
             <Row>
-              <Col sm={4}>
+              <Col xs={6} sm={2}>
                 <font>{"出勤：" + this.state.workDays + "日"}</font>
               </Col>
-              <Col sm={4}>
-                <font style={{ marginLeft: "70px" }}>
-                  {"合計：" + this.state.workHours + "H"}
-                </font>
+              <Col className="text-right" xs={6} sm={2}>
+                <font>{"合計：" + this.state.workHours + "H"}</font>
               </Col>
             </Row>
             <br />
             <Row>
-              <Col
-                style={{ textAlign: "right" }}
-                sm={3}
-                md={{ span: 0, offset: 3 }}
-              >
-                <div hidden={this.state.isConfirmedPage}>
-                  <Button
-                    size="sm"
-                    className="btn btn-info btn-sm"
-                    disabled={this.state.disabledFlag}
-                    onClick={this.beforeSubmit.bind(this)}
-                  >
-                    <FontAwesomeIcon icon={faUpload} /> 提出
-                  </Button>
-                </div>
-                <div hidden={!this.state.isConfirmedPage}>
+              <Col style={{ textAlign: "center" }}>
+                <Button
+                  size="sm"
+                  className="btn btn-info btn-sm"
+                  disabled={this.state.disabledFlag}
+                  onClick={this.beforeSubmit.bind(this)}
+                >
+                  <FontAwesomeIcon icon={faUpload} /> 提出
+                </Button>{" "}
+                {this.state.isConfirmedPage ? (
                   <Button
                     size="sm"
                     className="btn btn-info btn-sm"
@@ -2064,7 +2109,8 @@ class DutyRegistration extends React.Component {
                   >
                     <FontAwesomeIcon icon={faUndo} /> 戻る
                   </Button>
-                  &nbsp;&nbsp;
+                ) : null}{" "}
+                {this.state.isConfirmedPage ? (
                   <Button
                     size="sm"
                     className="btn btn-info btn-sm"
@@ -2072,7 +2118,7 @@ class DutyRegistration extends React.Component {
                   >
                     <FontAwesomeIcon icon={faUpload} /> 確認
                   </Button>
-                </div>
+                ) : null}
               </Col>
             </Row>
           </Form.Group>
