@@ -31,6 +31,7 @@ import DatePicker, { registerLocale } from "react-datepicker";
 import store from "./redux/store";
 import ProjectContent from "./projectContent";
 import { notification } from "antd";
+import Clipboard from "clipboard";
 axios.defaults.withCredentials = true;
 
 class ProjectInfoSearch extends Component {
@@ -210,6 +211,7 @@ class ProjectInfoSearch extends Component {
     }
   };
   componentDidMount() {
+    this.initCopy();
     let stationDrop = this.state.stationDrop;
     stationDrop.push({ code: String(stationDrop.length), name: "テレワーク" });
     this.setState({ stationDrop: stationDrop });
@@ -359,7 +361,7 @@ class ProjectInfoSearch extends Component {
       $('button[name="clickButton"]').attr("disabled", false);
     } else {
       this.setState({
-        selectedProjectNo: "",
+        selectedRow: {},
       });
       $('button[name="clickButton"]').attr("disabled", true);
     }
@@ -633,6 +635,108 @@ class ProjectInfoSearch extends Component {
     }
   };
 
+  /**
+   * 根据传入的值拼接字符串
+   * 【name】：value1 joinWith value2 joinWith value3
+   * @param {} name eq:【言　語】, joinWith eq: `、`, values eq:['C#','VB.net']
+   * @returns 【言　語】: C#、VB.net
+   */
+  formatText = ({ name, joinWith, values }) => {
+    let str = "";
+    let nameIsIn = false;
+
+    if (values.length > 0) {
+      values.forEach((value) => {
+        if (!nameIsIn && value) {
+          str += `${name}: `;
+          nameIsIn = true;
+        }
+        if (value !== null && value !== undefined) {
+          str += `${value}${joinWith || ""}`;
+        } else {
+          str = str.slice(0, str.length - joinWith.length);
+        }
+      });
+    }
+    if (str.endsWith(joinWith)) {
+      str = str.slice(0, str.length - joinWith.length);
+    }
+    return str;
+  };
+
+  getCopyText = () => {
+    const { selectedProjectNo, projectInfoList } = this.state;
+    let selectedProjectInfo = {};
+    let item = utils.findItemByKey(
+      projectInfoList,
+      "projectNo",
+      selectedProjectNo
+    );
+    selectedProjectInfo = item;
+
+    let textObjs = [
+      {
+        name: `【案件名】`,
+        joinWith: undefined,
+        values: [selectedProjectInfo.projectName],
+      },
+      {
+        name: `【期　間】`,
+        joinWith: undefined,
+        values: [selectedProjectInfo.admissionPeriodReset],
+      },
+      {
+        name: `【場　所】`,
+        joinWith: undefined,
+        values: [selectedProjectInfo.siteLocationName],
+      },
+      {
+        name: `【工　程】`,
+        joinWith: `～`,
+        values: [
+          selectedProjectInfo.projectPhaseNameStart,
+          selectedProjectInfo.projectPhaseNameEnd,
+        ],
+      },
+      {
+        name: `【言　語】`,
+        joinWith: `、`,
+        values: [
+          selectedProjectInfo.keyWordOfLanagurueName1,
+          selectedProjectInfo.keyWordOfLanagurueName2,
+        ],
+      },
+      {
+        name: `【日本語】`,
+        joinWith: undefined,
+        values: [selectedProjectInfo.japaneaseConversationName],
+      },
+      {
+        name: `【面　談】`,
+        joinWith: undefined,
+        values: [selectedProjectInfo.noOfInterviewName],
+      },
+    ];
+    return utils.formatCopyByTextObjs(textObjs);
+  };
+
+  initCopy = () => {
+    let myThis = this;
+    var clipboard = new Clipboard("#copyBtn", {
+      text: function () {
+        return myThis.getCopyText();
+      },
+    });
+
+    clipboard.on("success", function (e) {
+      console.log(e);
+    });
+
+    clipboard.on("error", function (e) {
+      console.log(e);
+    });
+  };
+
   render() {
     const {
       actionType,
@@ -670,6 +774,8 @@ class ProjectInfoSearch extends Component {
       developLanguageDrop,
       theSelectProjectperiodStatusDrop,
     } = this.state;
+    console.log({ state: this.state }, "render");
+
     //テーブルの定義
     const options = {
       noDataText: <i>データなし</i>,
@@ -862,17 +968,17 @@ class ProjectInfoSearch extends Component {
                   </InputGroup>
                 </Col>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
-                      <InputGroup.Text>確率</InputGroup.Text>
+                      <InputGroup.Text>面談回数</InputGroup.Text>
                     </InputGroup.Prepend>
                     <FormControl
                       as="select"
-                      value={successRate}
-                      name="successRate"
+                      value={noOfInterviewCode}
+                      name="noOfInterviewCode"
                       onChange={this.valueChange}
                     >
-                      {successRateDrop.map((date) => (
+                      {noOfInterviewDrop.map((date) => (
                         <option key={date.code} value={date.code}>
                           {date.name}
                         </option>
@@ -885,15 +991,15 @@ class ProjectInfoSearch extends Component {
                 <Col sm={3}>
                   <InputGroup size="sm" className="mb-3">
                     <InputGroup.Prepend>
-                      <InputGroup.Text>案件種別</InputGroup.Text>
+                      <InputGroup.Text>日本語</InputGroup.Text>
                     </InputGroup.Prepend>
                     <FormControl
                       as="select"
-                      value={projectType}
-                      name="projectType"
+                      value={japaneaseConversationLevel}
+                      name="japaneaseConversationLevel"
                       onChange={this.valueChange}
                     >
-                      {projectTypeDrop.map((date) => (
+                      {japaneaseConversationLevelDrop.map((date) => (
                         <option key={date.code} value={date.code}>
                           {date.name}
                         </option>
@@ -953,6 +1059,66 @@ class ProjectInfoSearch extends Component {
                 <Col sm={3}>
                   <InputGroup size="sm" className="mb-3">
                     <InputGroup.Prepend>
+                      <InputGroup.Text>作業工程</InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <FormControl
+                      as="select"
+                      value={projectPhaseStart}
+                      name="projectPhaseStart"
+                      onChange={this.valueChange}
+                    >
+                      {projectPhaseDrop.map((date) => (
+                        <option key={date.code} value={date.code}>
+                          {date.name}
+                        </option>
+                      ))}
+                    </FormControl>
+                    <font style={{ marginTop: "5px" }}>から</font>
+                  </InputGroup>
+                </Col>
+              </Row>
+              <Row hidden>
+                <Col sm={3}>
+                  <InputGroup size="sm" className="mb-3">
+                    <InputGroup.Prepend>
+                      <InputGroup.Text>確率</InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <FormControl
+                      as="select"
+                      value={successRate}
+                      name="successRate"
+                      onChange={this.valueChange}
+                    >
+                      {successRateDrop.map((date) => (
+                        <option key={date.code} value={date.code}>
+                          {date.name}
+                        </option>
+                      ))}
+                    </FormControl>
+                  </InputGroup>
+                </Col>
+                <Col sm={3}>
+                  <InputGroup size="sm" className="mb-3">
+                    <InputGroup.Prepend>
+                      <InputGroup.Text>案件種別</InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <FormControl
+                      as="select"
+                      value={projectType}
+                      name="projectType"
+                      onChange={this.valueChange}
+                    >
+                      {projectTypeDrop.map((date) => (
+                        <option key={date.code} value={date.code}>
+                          {date.name}
+                        </option>
+                      ))}
+                    </FormControl>
+                  </InputGroup>
+                </Col>
+                <Col sm={3}>
+                  <InputGroup size="sm" className="mb-3">
+                    <InputGroup.Prepend>
                       <InputGroup.Text>国籍制限</InputGroup.Text>
                     </InputGroup.Prepend>
                     <FormControl
@@ -962,27 +1128,6 @@ class ProjectInfoSearch extends Component {
                       onChange={this.valueChange}
                     >
                       {nationalityDrop.map((date) => (
-                        <option key={date.code} value={date.code}>
-                          {date.name}
-                        </option>
-                      ))}
-                    </FormControl>
-                  </InputGroup>
-                </Col>
-              </Row>
-              <Row>
-                <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
-                    <InputGroup.Prepend>
-                      <InputGroup.Text>日本語</InputGroup.Text>
-                    </InputGroup.Prepend>
-                    <FormControl
-                      as="select"
-                      value={japaneaseConversationLevel}
-                      name="japaneaseConversationLevel"
-                      onChange={this.valueChange}
-                    >
-                      {japaneaseConversationLevelDrop.map((date) => (
                         <option key={date.code} value={date.code}>
                           {date.name}
                         </option>
@@ -1011,42 +1156,6 @@ class ProjectInfoSearch extends Component {
                     >
                       年以上
                     </font>
-                  </InputGroup>
-                </Col>
-                <Col sm={6}>
-                  <InputGroup size="sm" className="mb-3">
-                    <InputGroup.Prepend>
-                      <InputGroup.Text>作業工程</InputGroup.Text>
-                    </InputGroup.Prepend>
-                    <FormControl
-                      as="select"
-                      value={projectPhaseStart}
-                      name="projectPhaseStart"
-                      onChange={this.valueChange}
-                    >
-                      {projectPhaseDrop.map((date) => (
-                        <option key={date.code} value={date.code}>
-                          {date.name}
-                        </option>
-                      ))}
-                    </FormControl>
-                    <font style={{ marginTop: "5px" }}>から</font>
-
-                    <InputGroup.Prepend>
-                      <InputGroup.Text>面談回数</InputGroup.Text>
-                    </InputGroup.Prepend>
-                    <FormControl
-                      as="select"
-                      value={noOfInterviewCode}
-                      name="noOfInterviewCode"
-                      onChange={this.valueChange}
-                    >
-                      {noOfInterviewDrop.map((date) => (
-                        <option key={date.code} value={date.code}>
-                          {date.name}
-                        </option>
-                      ))}
-                    </FormControl>
                   </InputGroup>
                 </Col>
               </Row>
@@ -1089,6 +1198,14 @@ class ProjectInfoSearch extends Component {
                 >
                   <FontAwesomeIcon icon={faEnvelope} /> お客様選択
                 </Button>{" "}
+                <Button
+                  size="sm"
+                  variant="info"
+                  id="copyBtn"
+                  name="clickButton"
+                >
+                  <FontAwesomeIcon icon={faBook} /> コピー
+                </Button>
               </Col>
               <Col sm={5}>
                 <div style={{ float: "right" }}>
@@ -1162,7 +1279,7 @@ class ProjectInfoSearch extends Component {
                   <TableHeaderColumn
                     row="0"
                     rowSpan="2"
-                    width="70"
+                    width="60"
                     tdStyle={{ padding: ".45em" }}
                     dataFormat={this.grayRow}
                     dataField="rowNo"
@@ -1187,6 +1304,7 @@ class ProjectInfoSearch extends Component {
                     tdStyle={{ padding: ".45em" }}
                     dataFormat={this.successRateNameData.bind(this)}
                     dataField="successRateName"
+                    hidden
                   >
                     確率
                   </TableHeaderColumn>
@@ -1210,16 +1328,7 @@ class ProjectInfoSearch extends Component {
                   >
                     場所
                   </TableHeaderColumn>
-                  <TableHeaderColumn
-                    row="0"
-                    rowSpan="2"
-                    width="110"
-                    tdStyle={{ padding: ".45em" }}
-                    dataFormat={this.grayRow}
-                    dataField="japaneaseConversationName"
-                  >
-                    日本語
-                  </TableHeaderColumn>
+
                   <TableHeaderColumn
                     row="0"
                     rowSpan="2"
@@ -1227,6 +1336,7 @@ class ProjectInfoSearch extends Component {
                     tdStyle={{ padding: ".45em" }}
                     dataFormat={this.showExperienceYear}
                     dataField="experienceYear"
+                    hidden
                   >
                     経験年数
                   </TableHeaderColumn>
@@ -1252,20 +1362,11 @@ class ProjectInfoSearch extends Component {
                   </TableHeaderColumn>
                   <TableHeaderColumn
                     row="0"
-                    rowSpan="2"
-                    width="130"
-                    tdStyle={{ padding: ".45em" }}
-                    dataFormat={this.grayRow}
-                    dataField="customerName"
-                  >
-                    お客様
-                  </TableHeaderColumn>
-                  <TableHeaderColumn
-                    row="0"
                     colSpan="2"
                     rowSpan="1"
                     width="90"
                     tdStyle={{ padding: ".45em" }}
+                    headerAlign="center"
                   >
                     開発言語
                   </TableHeaderColumn>
@@ -1293,6 +1394,27 @@ class ProjectInfoSearch extends Component {
                     hidden
                     dataField="keyWordOfLanagurueName3"
                   ></TableHeaderColumn>
+                  <TableHeaderColumn
+                    row="0"
+                    rowSpan="2"
+                    width="110"
+                    tdStyle={{ padding: ".45em" }}
+                    dataFormat={this.grayRow}
+                    dataField="japaneaseConversationName"
+                  >
+                    日本語
+                  </TableHeaderColumn>
+                  <TableHeaderColumn
+                    row="0"
+                    rowSpan="2"
+                    width="130"
+                    tdStyle={{ padding: ".45em" }}
+                    dataFormat={this.grayRow}
+                    dataField="customerName"
+                  >
+                    お客様
+                  </TableHeaderColumn>
+
                   <TableHeaderColumn
                     row="0"
                     rowSpan="2"

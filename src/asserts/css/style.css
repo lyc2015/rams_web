@@ -2051,7 +2051,7 @@ body {
   }
 
   .Autocompletestyle-projectInfo-keyWordOfLanagurue {
-    width: 5.2rem;
+    /* width: 5.2rem; */
     height: 31px;
     border-color: "#ced4da";
     border-width: 1;

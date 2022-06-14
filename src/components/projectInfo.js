@@ -17,12 +17,15 @@ import {
   faSave,
   faUndo,
   faLevelUpAlt,
+  faBook,
 } from "@fortawesome/free-solid-svg-icons";
 import * as utils from "./utils/publicUtils.js";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import store from "./redux/store";
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker, { registerLocale } from "react-datepicker";
+import Clipboard from "clipboard";
+
 axios.defaults.withCredentials = true;
 
 class projectInfo extends Component {
@@ -31,6 +34,7 @@ class projectInfo extends Component {
     this.state = this.initialState; //初期化
   }
   initialState = {
+    detailEditFlag: true,
     //項目
     projectNo: "",
     projectName: "",
@@ -349,6 +353,7 @@ class projectInfo extends Component {
     }
   };
   componentDidMount() {
+    this.initCopy();
     for (let i = 0; i < 11; i++) {
       let experienceYearDrop = this.state.experienceYearDrop;
       experienceYearDrop.push({ code: String(i), name: String(i) });
@@ -429,11 +434,8 @@ class projectInfo extends Component {
         });
     });
   }
-  /**
-   * 登録ボタン
-   */
-  toroku = () => {
-    $("#toroku").attr("disabled", true);
+
+  getProjectInfoModel = () => {
     var projectInfoModel = {};
     var formArray = $("#projectInfoForm").serializeArray();
     $.each(formArray, function (i, item) {
@@ -459,6 +461,14 @@ class projectInfo extends Component {
     projectInfoModel["actionType"] = this.state.actionType;
     projectInfoModel["experienceYear"] = this.state.experienceYear;
     projectInfoModel["salesStaff"] = this.state.salesStaff;
+    return projectInfoModel;
+  };
+  /**
+   * 登録ボタン
+   */
+  toroku = () => {
+    $("#toroku").attr("disabled", true);
+    let projectInfoModel = this.getProjectInfoModel();
     axios
       .post(this.state.serverIP + "projectInfo/toroku", projectInfoModel)
       .then((result) => {
@@ -466,6 +476,7 @@ class projectInfo extends Component {
           result.data.errorsMessage === null ||
           result.data.errorsMessage === undefined
         ) {
+          store.dispatch({ type: "UPDATE_STATE", dropName: "getProjectNo" });
           this.setState({
             myToastShow: true,
             type: "success",
@@ -532,6 +543,131 @@ class projectInfo extends Component {
     };
     this.props.history.push(path);
   };
+
+  getCopyText = () => {
+    let {
+      projectName,
+      admissionPeriod,
+      admissionMonthCode,
+      siteLocation,
+      projectPhaseStart,
+      projectPhaseEnd,
+      keyWordOfLanagurue1,
+      keyWordOfLanagurue2,
+      japaneaseConversationLevel,
+      noOfInterviewCode,
+      remark,
+    } = this.getProjectInfoModel();
+    console.log(this.getProjectInfoModel(), "this.getProjectInfoModel()");
+
+    // format code to name from dropDown
+    let admissionMonthName = utils.findItemByKey(
+      this.state.admissionMonthDrop,
+      "code",
+      admissionMonthCode
+    )?.name;
+
+    let siteLocationName = utils.findItemByKey(
+      this.state.stationDrop,
+      "code",
+      siteLocation
+    )?.name;
+    let projectPhaseNameStart = utils.findItemByKey(
+      this.state.projectPhaseDrop,
+      "code",
+      projectPhaseStart
+    )?.name;
+    let projectPhaseNameEnd = utils.findItemByKey(
+      this.state.projectPhaseDrop,
+      "code",
+      projectPhaseEnd
+    )?.name;
+    let keyWordOfLanagurueName1 = utils.findItemByKey(
+      this.state.developLanguageDrop,
+      "code",
+      keyWordOfLanagurue1
+    )?.name;
+    let keyWordOfLanagurueName2 = utils.findItemByKey(
+      this.state.developLanguageDrop,
+      "code",
+      keyWordOfLanagurue2
+    )?.name;
+    let japaneaseConversationName = utils.findItemByKey(
+      this.state.japaneaseConversationLevelDrop,
+      "code",
+      japaneaseConversationLevel
+    )?.name;
+    let noOfInterviewName = utils.findItemByKey(
+      this.state.noOfInterviewDrop,
+      "code",
+      noOfInterviewCode
+    )?.name;
+
+    let textObjs = [
+      {
+        name: `【案件名】`,
+        joinWith: undefined,
+        values: [projectName],
+      },
+      {
+        name: `【期　間】`,
+        joinWith: undefined,
+        values: [
+          admissionPeriod +
+            (admissionMonthName ? `(${admissionMonthName})` : ""),
+        ],
+      },
+      {
+        name: `【場　所】`,
+        joinWith: undefined,
+        values: [siteLocationName],
+      },
+      {
+        name: `【工　程】`,
+        joinWith: `～`,
+        values: [projectPhaseNameStart, projectPhaseNameEnd],
+      },
+      {
+        name: `【言　語】`,
+        joinWith: `、`,
+        values: [keyWordOfLanagurueName1, keyWordOfLanagurueName2],
+      },
+      {
+        name: `【日本語】`,
+        joinWith: undefined,
+        values: [japaneaseConversationName],
+      },
+      {
+        name: `【面　談】`,
+        joinWith: undefined,
+        values: [noOfInterviewName],
+      },
+      {
+        name: `【備　考】`,
+        joinWith: undefined,
+        values: [remark],
+      },
+    ];
+    return utils.formatCopyByTextObjs(textObjs);
+  };
+
+  initCopy = () => {
+    let myThis = this;
+    var clipboard = new Clipboard("#copyBtn", {
+      text: function () {
+        return myThis.getCopyText();
+      },
+    });
+
+    clipboard.on("success", function (e) {
+      console.log(e);
+    });
+
+    clipboard.on("error", function (e) {
+      console.log(e);
+    });
+  };
+
   render() {
     const {
       projectNo,
@@ -590,7 +726,13 @@ class projectInfo extends Component {
       workStartPeriodDrop,
       admissionMonthDrop,
       experienceYearDrop,
+      detailEditFlag,
     } = this.state;
+
+    console.log(
+      { state: this.state, location: this.props.locations },
+      "render"
+    );
     return (
       <div>
         <div style={{ display: myToastShow ? "block" : "none" }}>
@@ -613,7 +755,7 @@ class projectInfo extends Component {
           <Form id="projectInfoForm">
             <Form.Group>
               <Row>
-                <Col sm={2}>
+                <Col sm={3}>
                   <InputGroup size="sm" className="mb-3">
                     <InputGroup.Prepend>
                       <InputGroup.Text>案件番号</InputGroup.Text>
@@ -650,35 +792,50 @@ class projectInfo extends Component {
                     </font>
                   </InputGroup>
                 </Col>
-              </Row>
-              <Row>
-                <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+                <Col sm={5}>
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
-                      <InputGroup.Text>案件種別</InputGroup.Text>
+                      <InputGroup.Text>お客様</InputGroup.Text>
                     </InputGroup.Prepend>
-                    <FormControl
-                      as="select"
-                      value={projectType}
-                      name="projectType"
-                      onChange={this.valueChange}
+                    <Autocomplete
+                      id="customerNo"
+                      name="customerNo"
+                      value={
+                        customerDrop.find((v) => v.code === customerNo) || {}
+                      }
+                      options={customerDrop}
+                      getOptionLabel={(option) => option.name || ""}
                       disabled={actionType === "detail" ? true : false}
+                      onChange={(event, values) =>
+                        this.getCustomer(event, values)
+                      }
+                      renderInput={(params) => (
+                        <div ref={params.InputProps.ref}>
+                          <input
+                            placeholder="例：ベース"
+                            type="text"
+                            {...params.inputProps}
+                            className="auto form-control Autocompletestyle-projectInfo-siteLocation"
+                          />
+                        </div>
+                      )}
+                    />
+                    <Button
+                      className="ml5"
+                      size="sm"
+                      variant="info"
+                      onClick={() => {
+                        this.setState((state) => ({
+                          detailEditFlag: !state.detailEditFlag,
+                        }));
+                      }}
                     >
-                      {projectTypeDrop.map((date) => (
-                        <option key={date.code} value={date.code}>
-                          {date.name}
-                        </option>
-                      ))}
-                    </FormControl>
-                    <font
-                      id="mark"
-                      color="red"
-                      style={{ marginLeft: "10px", marginRight: "10px" }}
-                    >
-                      ★
-                    </font>
+                      詳細入力
+                    </Button>
                   </InputGroup>
                 </Col>
+              </Row>
+              <Row>
                 <Col sm={3}>
                   <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
@@ -721,7 +878,7 @@ class projectInfo extends Component {
                       as="select"
                       value={admissionMonthCode}
                       name="admissionMonthCode"
-                      style={{ minWidth: "4rem" }}
+                      style={{ minWidth: "4.2rem" }}
                       onChange={this.valueChange}
                       disabled={actionType === "detail" ? true : false}
                     >
@@ -731,162 +888,42 @@ class projectInfo extends Component {
                         </option>
                       ))}
                     </FormControl>
-                    <font
-                      id="mark"
-                      color="red"
-                      style={{ marginLeft: "10px", marginRight: "10px" }}
-                    >
+                    <font id="mark" color="red" style={{ marginLeft: "5px" }}>
                       ★
                     </font>
                   </InputGroup>
                 </Col>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
-                      <InputGroup.Text>単価範囲</InputGroup.Text>
+                      <InputGroup.Text>現場場所</InputGroup.Text>
                     </InputGroup.Prepend>
-                    <FormControl
-                      maxLength="3"
-                      value={unitPriceRangeLowest}
-                      placeholder="例：123"
-                      name="unitPriceRangeLowest"
-                      onChange={(e) =>
-                        this.vNumberChange(e, "unitPriceRangeLowest")
+                    <Autocomplete
+                      id="siteLocation"
+                      name="siteLocation"
+                      value={
+                        stationDrop.find((v) => v.code === siteLocation) || {}
                       }
+                      options={stationDrop}
+                      getOptionLabel={(option) => option.name || ""}
                       disabled={actionType === "detail" ? true : false}
-                    ></FormControl>
-                    {"~"}
-                    <FormControl
-                      maxLength="3"
-                      value={unitPriceRangeHighest}
-                      placeholder="例：123"
-                      name="unitPriceRangeHighest"
-                      onChange={(e) =>
-                        this.vNumberChange(e, "unitPriceRangeHighest")
+                      onChange={(event, values) =>
+                        this.getStation(event, values)
                       }
-                      disabled={actionType === "detail" ? true : false}
-                    ></FormControl>
+                      renderInput={(params) => (
+                        <div ref={params.InputProps.ref}>
+                          <input
+                            placeholder="例：秋葉原"
+                            type="text"
+                            {...params.inputProps}
+                            className="auto form-control Autocompletestyle-projectInfo-siteLocation"
+                          />
+                        </div>
+                      )}
+                    />
                   </InputGroup>
                 </Col>
-                <Col sm={2}>
-                  <InputGroup size="sm" className="mb-3">
-                    <InputGroup.Prepend>
-                      <InputGroup.Text>募集人数</InputGroup.Text>
-                    </InputGroup.Prepend>
-                    <FormControl
-                      as="select"
-                      value={recruitmentNumbers}
-                      name="recruitmentNumbers"
-                      onChange={this.valueChange}
-                      disabled={actionType === "detail" ? true : false}
-                    >
-                      {recruitmentNumbersDrop.map((date) => (
-                        <option key={date.code} value={date.code}>
-                          {date.name}
-                        </option>
-                      ))}
-                    </FormControl>
-                  </InputGroup>
-                </Col>
-              </Row>
-              <Row>
-                <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
-                    <InputGroup.Prepend>
-                      <InputGroup.Text>国籍制限</InputGroup.Text>
-                    </InputGroup.Prepend>
-                    <FormControl
-                      as="select"
-                      value={nationalityCode}
-                      name="nationalityCode"
-                      onChange={this.valueChange}
-                      disabled={actionType === "detail" ? true : false}
-                    >
-                      {nationalityDrop.map((date) => (
-                        <option key={date.code} value={date.code}>
-                          {date.name}
-                        </option>
-                      ))}
-                    </FormControl>
-                  </InputGroup>
-                </Col>
-                <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
-                    <InputGroup.Prepend>
-                      <InputGroup.Text>日本語</InputGroup.Text>
-                    </InputGroup.Prepend>
-                    <FormControl
-                      as="select"
-                      value={japaneaseConversationLevel}
-                      name="japaneaseConversationLevel"
-                      onChange={this.valueChange}
-                      disabled={actionType === "detail" ? true : false}
-                    >
-                      {japaneaseConversationLevelDrop.map((date) => (
-                        <option key={date.code} value={date.code}>
-                          {date.name}
-                        </option>
-                      ))}
-                    </FormControl>
-                  </InputGroup>
-                </Col>
-                <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
-                    <InputGroup.Prepend>
-                      <InputGroup.Text>清算範囲</InputGroup.Text>
-                    </InputGroup.Prepend>
-                    <FormControl
-                      as="select"
-                      value={payOffRangeLowest}
-                      name="payOffRangeLowest"
-                      onChange={this.valueChange}
-                      disabled={actionType === "detail" ? true : false}
-                    >
-                      {payOffRangeDrop.map((date) => (
-                        <option key={date.code} value={date.code}>
-                          {date.name}
-                        </option>
-                      ))}
-                    </FormControl>
-                    {"~"}
-                    <FormControl
-                      as="select"
-                      value={payOffRangeHighest}
-                      name="payOffRangeHighest"
-                      onChange={this.valueChange}
-                      disabled={actionType === "detail" ? true : false}
-                    >
-                      {payOffRangeDrop.map((date) => (
-                        <option key={date.code} value={date.code}>
-                          {date.name}
-                        </option>
-                      ))}
-                    </FormControl>
-                  </InputGroup>
-                </Col>
-                <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
-                    <InputGroup.Prepend>
-                      <InputGroup.Text>年齢制限</InputGroup.Text>
-                    </InputGroup.Prepend>
-                    <FormControl
-                      as="select"
-                      value={ageClassificationCode}
-                      name="ageClassificationCode"
-                      onChange={this.valueChange}
-                      disabled={actionType === "detail" ? true : false}
-                    >
-                      {ageClassificationDrop.map((date) => (
-                        <option key={date.code} value={date.code}>
-                          {date.name}
-                        </option>
-                      ))}
-                    </FormControl>
-                  </InputGroup>
-                </Col>
-              </Row>
-              <Row>
-                <Col sm={3}>
+                <Col sm={4}>
                   <InputGroup size="sm" className="mb-3">
                     <InputGroup.Prepend>
                       <InputGroup.Text>作業工程</InputGroup.Text>
@@ -920,34 +957,211 @@ class projectInfo extends Component {
                     </FormControl>
                   </InputGroup>
                 </Col>
+              </Row>
+              <Row>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
+                  <InputGroup size="sm" className="mb-3">
                     <InputGroup.Prepend>
-                      <InputGroup.Text>現場場所</InputGroup.Text>
+                      <InputGroup.Text>日本語</InputGroup.Text>
                     </InputGroup.Prepend>
-                    <Autocomplete
-                      id="siteLocation"
-                      name="siteLocation"
-                      value={
-                        stationDrop.find((v) => v.code === siteLocation) || {}
-                      }
-                      options={stationDrop}
-                      getOptionLabel={(option) => option.name || ""}
+                    <FormControl
+                      as="select"
+                      value={japaneaseConversationLevel}
+                      name="japaneaseConversationLevel"
+                      onChange={this.valueChange}
                       disabled={actionType === "detail" ? true : false}
-                      onChange={(event, values) =>
-                        this.getStation(event, values)
+                    >
+                      {japaneaseConversationLevelDrop.map((date) => (
+                        <option key={date.code} value={date.code}>
+                          {date.name}
+                        </option>
+                      ))}
+                    </FormControl>
+                  </InputGroup>
+                </Col>
+                <Col sm={3}>
+                  <InputGroup size="sm" className="mb-3">
+                    <InputGroup.Prepend>
+                      <InputGroup.Text>面談回数</InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <FormControl
+                      as="select"
+                      value={noOfInterviewCode}
+                      name="noOfInterviewCode"
+                      onChange={this.valueChange}
+                      disabled={actionType === "detail" ? true : false}
+                    >
+                      {noOfInterviewDrop.map((date) => (
+                        <option key={date.code} value={date.code}>
+                          {date.name}
+                        </option>
+                      ))}
+                    </FormControl>
+                  </InputGroup>
+                </Col>
+                <Col sm={4}>
+                  <InputGroup size="sm" className="mb-3">
+                    <InputGroup.Prepend>
+                      <InputGroup.Text>備考</InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <FormControl
+                      value={remark}
+                      name="remark"
+                      placeholder="例：XXXXX"
+                      onChange={this.valueChange}
+                      disabled={actionType === "detail" ? true : false}
+                    ></FormControl>
+                  </InputGroup>
+                </Col>
+              </Row>
+              {/* 非活性化 */}
+              <Row>
+                <Col sm={3}>
+                  <InputGroup size="sm" className="mb-3">
+                    <InputGroup.Prepend>
+                      <InputGroup.Text>単価範囲</InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <FormControl
+                      maxLength="3"
+                      value={unitPriceRangeLowest}
+                      placeholder="例：123"
+                      name="unitPriceRangeLowest"
+                      onChange={(e) =>
+                        this.vNumberChange(e, "unitPriceRangeLowest")
                       }
-                      renderInput={(params) => (
-                        <div ref={params.InputProps.ref}>
-                          <input
-                            placeholder="例：秋葉原"
-                            type="text"
-                            {...params.inputProps}
-                            className="auto form-control Autocompletestyle-projectInfo-siteLocation"
-                          />
-                        </div>
-                      )}
-                    />
+                      disabled={
+                        (actionType === "detail" ? true : false) ||
+                        detailEditFlag
+                      }
+                    ></FormControl>
+                    {"~"}
+                    <FormControl
+                      maxLength="3"
+                      value={unitPriceRangeHighest}
+                      placeholder="例：123"
+                      name="unitPriceRangeHighest"
+                      onChange={(e) =>
+                        this.vNumberChange(e, "unitPriceRangeHighest")
+                      }
+                      disabled={
+                        (actionType === "detail" ? true : false) ||
+                        detailEditFlag
+                      }
+                    ></FormControl>
+                  </InputGroup>
+                </Col>
+                <Col sm={3}>
+                  <InputGroup size="sm" className="mb-3">
+                    <InputGroup.Prepend>
+                      <InputGroup.Text>清算範囲</InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <FormControl
+                      as="select"
+                      value={payOffRangeLowest}
+                      name="payOffRangeLowest"
+                      onChange={this.valueChange}
+                      disabled={
+                        (actionType === "detail" ? true : false) ||
+                        detailEditFlag
+                      }
+                    >
+                      {payOffRangeDrop.map((date) => (
+                        <option key={date.code} value={date.code}>
+                          {date.name}
+                        </option>
+                      ))}
+                    </FormControl>
+                    {"~"}
+                    <FormControl
+                      as="select"
+                      value={payOffRangeHighest}
+                      name="payOffRangeHighest"
+                      onChange={this.valueChange}
+                      disabled={
+                        (actionType === "detail" ? true : false) ||
+                        detailEditFlag
+                      }
+                    >
+                      {payOffRangeDrop.map((date) => (
+                        <option key={date.code} value={date.code}>
+                          {date.name}
+                        </option>
+                      ))}
+                    </FormControl>
+                  </InputGroup>
+                </Col>
+                <Col sm={3}>
+                  <InputGroup size="sm" className="mb-3">
+                    <InputGroup.Prepend>
+                      <InputGroup.Text>年齢制限</InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <FormControl
+                      as="select"
+                      value={ageClassificationCode}
+                      name="ageClassificationCode"
+                      onChange={this.valueChange}
+                      disabled={
+                        (actionType === "detail" ? true : false) ||
+                        detailEditFlag
+                      }
+                    >
+                      {ageClassificationDrop.map((date) => (
+                        <option key={date.code} value={date.code}>
+                          {date.name}
+                        </option>
+                      ))}
+                    </FormControl>
+                  </InputGroup>
+                </Col>
+              </Row>
+              <Row>
+                <Col sm={3}>
+                  <InputGroup size="sm" className="mb-3">
+                    <InputGroup.Prepend>
+                      <InputGroup.Text>案件種別</InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <FormControl
+                      as="select"
+                      value={projectType}
+                      name="projectType"
+                      onChange={this.valueChange}
+                      disabled={
+                        (actionType === "detail" ? true : false) ||
+                        detailEditFlag
+                      }
+                    >
+                      {projectTypeDrop.map((date) => (
+                        <option key={date.code} value={date.code}>
+                          {date.name}
+                        </option>
+                      ))}
+                    </FormControl>
+                    {/* <font id="mark" color="red" style={{ marginLeft: "5px" }}>
+                      ★
+                    </font> */}
+                  </InputGroup>
+                </Col>
+                <Col sm={3}>
+                  <InputGroup size="sm" className="mb-3">
+                    <InputGroup.Prepend>
+                      <InputGroup.Text>国籍制限</InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <FormControl
+                      as="select"
+                      value={nationalityCode}
+                      name="nationalityCode"
+                      onChange={this.valueChange}
+                      disabled={
+                        (actionType === "detail" ? true : false) ||
+                        detailEditFlag
+                      }
+                    >
+                      {nationalityDrop.map((date) => (
+                        <option key={date.code} value={date.code}>
+                          {date.name}
+                        </option>
+                      ))}
+                    </FormControl>
                   </InputGroup>
                 </Col>
                 <Col sm={3}>
@@ -966,7 +1180,10 @@ class projectInfo extends Component {
                       }
                       options={experienceYearDrop}
                       getOptionLabel={(option) => option.name || ""}
-                      disabled={actionType === "detail" ? true : false}
+                      disabled={
+                        (actionType === "detail" ? true : false) ||
+                        detailEditFlag
+                      }
                       onChange={(event, values) =>
                         this.getYearChange(event, values)
                       }
@@ -1000,19 +1217,22 @@ class projectInfo extends Component {
                     </font>
                   </InputGroup>
                 </Col>
-                <Col sm={3}>
+                <Col sm={2}>
                   <InputGroup size="sm" className="mb-3">
                     <InputGroup.Prepend>
-                      <InputGroup.Text>面談回数</InputGroup.Text>
+                      <InputGroup.Text>募集人数</InputGroup.Text>
                     </InputGroup.Prepend>
                     <FormControl
                       as="select"
-                      value={noOfInterviewCode}
-                      name="noOfInterviewCode"
+                      value={recruitmentNumbers}
+                      name="recruitmentNumbers"
                       onChange={this.valueChange}
-                      disabled={actionType === "detail" ? true : false}
+                      disabled={
+                        (actionType === "detail" ? true : false) ||
+                        detailEditFlag
+                      }
                     >
-                      {noOfInterviewDrop.map((date) => (
+                      {recruitmentNumbersDrop.map((date) => (
                         <option key={date.code} value={date.code}>
                           {date.name}
                         </option>
@@ -1034,13 +1254,13 @@ class projectInfo extends Component {
                       name="workStartPeriod"
                       onChange={this.valueChange}
                       disabled={
-                        actionType === "detail"
+                        (actionType === "detail"
                           ? true
                           : workStartPeriodForDate === ""
                           ? false
                           : workStartPeriodForDate === null
                           ? false
-                          : true
+                          : true) || detailEditFlag
                       }
                     >
                       {workStartPeriodDrop.map((date) => (
@@ -1067,11 +1287,14 @@ class projectInfo extends Component {
                       dateFormat={"yyyy/MM"}
                       name="workStartPeriodForDate"
                       locale="ja"
-                      disabled={actionType === "detail" ? true : false}
+                      disabled={
+                        (actionType === "detail" ? true : false) ||
+                        detailEditFlag
+                      }
                     />
                   </InputGroup>
                 </Col>
-                <Col sm={3}>
+                <Col sm={2}>
                   <InputGroup size="sm" className="mb-3">
                     <InputGroup.Prepend>
                       <InputGroup.Text>確率</InputGroup.Text>
@@ -1081,7 +1304,10 @@ class projectInfo extends Component {
                       value={successRate}
                       name="successRate"
                       onChange={this.valueChange}
-                      disabled={actionType === "detail" ? true : false}
+                      disabled={
+                        (actionType === "detail" ? true : false) ||
+                        detailEditFlag
+                      }
                     >
                       {successRateDrop.map((date) => (
                         <option key={date.code} value={date.code}>
@@ -1091,7 +1317,7 @@ class projectInfo extends Component {
                     </FormControl>
                   </InputGroup>
                 </Col>
-                <Col sm={3}>
+                <Col sm={4}>
                   <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text>開発言語</InputGroup.Text>
@@ -1106,7 +1332,10 @@ class projectInfo extends Component {
                       }
                       options={developLanguageDrop}
                       getOptionLabel={(option) => option.name || ""}
-                      disabled={actionType === "detail" ? true : false}
+                      disabled={
+                        (actionType === "detail" ? true : false) ||
+                        detailEditFlag
+                      }
                       onChange={(event, values) =>
                         this.getJapanese1(event, values)
                       }
@@ -1131,7 +1360,10 @@ class projectInfo extends Component {
                       }
                       options={developLanguageDrop}
                       getOptionLabel={(option) => option.name || ""}
-                      disabled={actionType === "detail" ? true : false}
+                      disabled={
+                        (actionType === "detail" ? true : false) ||
+                        detailEditFlag
+                      }
                       onChange={(event, values) =>
                         this.getJapanese2(event, values)
                       }
@@ -1157,7 +1389,10 @@ class projectInfo extends Component {
                       }
                       options={developLanguageDrop}
                       getOptionLabel={(option) => option.name || ""}
-                      disabled={actionType === "detail" ? true : false}
+                      disabled={
+                        (actionType === "detail" ? true : false) ||
+                        detailEditFlag
+                      }
                       onChange={(event, values) =>
                         this.getJapanese3(event, values)
                       }
@@ -1184,7 +1419,10 @@ class projectInfo extends Component {
                     <Autocomplete
                       id="salesStaff"
                       name="salesStaff"
-                      disabled={actionType === "detail" ? true : false}
+                      disabled={
+                        (actionType === "detail" ? true : false) ||
+                        detailEditFlag
+                      }
                       value={
                         this.state.salesStaffDrop.find(
                           (v) => v.code === this.state.salesStaff
@@ -1229,7 +1467,10 @@ class projectInfo extends Component {
                       name="requiredItem1"
                       placeholder="例：リーダー経験がある、springboot経験がある"
                       onChange={this.valueChange}
-                      disabled={actionType === "detail" ? true : false}
+                      disabled={
+                        (actionType === "detail" ? true : false) ||
+                        detailEditFlag
+                      }
                     ></FormControl>
                   </InputGroup>
                 </Col>
@@ -1246,42 +1487,15 @@ class projectInfo extends Component {
                       placeholder="例：リーダー経験がある、springboot経験がある"
                       name="requiredItem2"
                       onChange={this.valueChange}
-                      disabled={actionType === "detail" ? true : false}
+                      disabled={
+                        (actionType === "detail" ? true : false) ||
+                        detailEditFlag
+                      }
                     ></FormControl>
                   </InputGroup>
                 </Col>
               </Row>
               <Row>
-                <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
-                    <InputGroup.Prepend>
-                      <InputGroup.Text>お客様</InputGroup.Text>
-                    </InputGroup.Prepend>
-                    <Autocomplete
-                      id="customerNo"
-                      name="customerNo"
-                      value={
-                        customerDrop.find((v) => v.code === customerNo) || {}
-                      }
-                      options={customerDrop}
-                      getOptionLabel={(option) => option.name || ""}
-                      disabled={actionType === "detail" ? true : false}
-                      onChange={(event, values) =>
-                        this.getCustomer(event, values)
-                      }
-                      renderInput={(params) => (
-                        <div ref={params.InputProps.ref}>
-                          <input
-                            placeholder="例：ベース"
-                            type="text"
-                            {...params.inputProps}
-                            className="auto form-control Autocompletestyle-projectInfo-siteLocation"
-                          />
-                        </div>
-                      )}
-                    />
-                  </InputGroup>
-                </Col>
                 <Col sm={3}>
                   <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
@@ -1297,7 +1511,10 @@ class projectInfo extends Component {
                       }
                       options={personInChargeDrop}
                       getOptionLabel={(option) => option.name || ""}
-                      disabled={actionType === "detail" ? true : false}
+                      disabled={
+                        (actionType === "detail" ? true : false) ||
+                        detailEditFlag
+                      }
                       onChange={(event, values) =>
                         this.getPersonInChange(event, values)
                       }
@@ -1324,28 +1541,27 @@ class projectInfo extends Component {
                       name="mail"
                       placeholder="例：XXXXXXXXXXX@gmail.com"
                       onChange={this.valueChange}
-                      disabled={actionType === "detail" ? true : false}
-                    ></FormControl>
-                  </InputGroup>
-                </Col>
-                <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
-                    <InputGroup.Prepend>
-                      <InputGroup.Text>備考</InputGroup.Text>
-                    </InputGroup.Prepend>
-                    <FormControl
-                      value={remark}
-                      name="remark"
-                      placeholder="例：XXXXX"
-                      onChange={this.valueChange}
-                      disabled={actionType === "detail" ? true : false}
+                      disabled={
+                        (actionType === "detail" ? true : false) ||
+                        detailEditFlag
+                      }
                     ></FormControl>
                   </InputGroup>
                 </Col>
               </Row>
-              <Row>
-                <a className="projectInfoDetailTitle">案件詳細：</a>
-              </Row>
+              <div className="df justify-between align-center">
+                <div className="projectInfoDetailTitle">案件詳細：</div>
+                <div>
+                  <Button
+                    size="sm"
+                    variant="info"
+                    id="copyBtn"
+                    name="clickButton"
+                  >
+                    <FontAwesomeIcon icon={faBook} /> コピー
+                  </Button>
+                </div>
+              </div>
               <Row>
                 <FormControl
                   maxLength="500"

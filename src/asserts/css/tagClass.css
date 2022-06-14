@@ -62,6 +62,10 @@
   margin-right: 0px !important;
 }
 
+.ml5 {
+  margin-left: 5px !important;
+}
+
 .mr5 {
   margin-right: 5px !important;
 }
@@ -100,6 +104,10 @@
 
 .mainBodyMinWidth {
   min-width: 1550px;
+}
+
+.dib {
+  display: inline-block;
 }
 
 .dif {
