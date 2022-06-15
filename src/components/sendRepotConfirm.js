@@ -586,16 +586,23 @@ class sendRepotConfirm extends React.Component {
       });
       console.log(selectedMailCC);
       let mailFrom = this.state.loginUserInfo[0].companyMail;
+
+      const formData = new FormData();
+      let emailModel = {
+        resumeName,
+        mailTitle,
+        resumePath,
+        mailConfirmContont,
+        selectedmail,
+        selectedMailCC,
+        mailFrom,
+      };
+      formData.append(`emailModel`, JSON.stringify(emailModel));
       axios
-        .post(this.state.serverIP + "sendLettersConfirm/sendMailWithFile", {
-          resumeName,
-          mailTitle,
-          resumePath,
-          mailConfirmContont,
-          selectedmail,
-          selectedMailCC,
-          mailFrom,
-        })
+        .post(
+          this.state.serverIP + "sendLettersConfirm/sendMailWithFile",
+          formData
+        )
         .then((result) => {
           /*
            * this.setState({ mails: result.data, })

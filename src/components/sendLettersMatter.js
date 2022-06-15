@@ -582,17 +582,26 @@ Email：` +
       });
       console.log(selectedMailCC);
       let mailFrom = this.state.loginUserInfo[0].companyMail;
+
+      const formData = new FormData();
+
+      let emailModel = {
+        resumeName,
+        mailTitle,
+        resumePath,
+        mailConfirmContont,
+        selectedmail,
+        selectedMailCC,
+        mailFrom,
+        selectedCustomer,
+      };
+      formData.append(`emailModel`, JSON.stringify(emailModel));
+
       axios
-        .post(this.state.serverIP + "sendLettersConfirm/sendMailWithFile", {
-          resumeName,
-          mailTitle,
-          resumePath,
-          mailConfirmContont,
-          selectedmail,
-          selectedMailCC,
-          mailFrom,
-          selectedCustomer,
-        })
+        .post(
+          this.state.serverIP + "sendLettersConfirm/sendMailWithFile",
+          formData
+        )
         .then((result) => {
           if (result.data.errorsMessage != null) {
             this.setState({
