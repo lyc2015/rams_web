@@ -1,5 +1,13 @@
 .text-center {
-  text-align: center;
+  text-align: center !important;
+}
+
+.text-left {
+  text-align: left !important;
+}
+
+.text-right {
+  text-align: right !important;
 }
 
 .verticalAlignMiddle {
@@ -136,12 +144,20 @@
   flex-wrap: nowrap !important;
 }
 
+.fwn {
+  font-weight: normal !important;
+}
+
 .fwb {
-  font-weight: bold;
+  font-weight: bold !important;
 }
 
 .fz12 {
   font-size: 12px !important;
+}
+
+.fz14 {
+  font-size: 14px !important;
 }
 
 .fz18 {
