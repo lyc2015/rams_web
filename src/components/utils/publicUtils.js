@@ -1074,3 +1074,10 @@ export function findItemByKey(arr, keyName, key, needIndex = false) {
     return item;
   }
 }
+
+export function addLeftSlash(cell) {
+  let arr = cell.split("");
+  if (arr.length < 6) return cell;
+  arr.splice(4, 0, "/");
+  return arr.join("");
+}

@@ -1313,7 +1313,9 @@ class ProjectInfoSearch extends Component {
                     rowSpan="2"
                     width="150"
                     tdStyle={{ padding: ".45em" }}
-                    dataFormat={this.grayRow}
+                    dataFormat={(cell, row) =>
+                      this.grayRow(utils.addLeftSlash(cell), row)
+                    }
                     dataField="admissionPeriodReset"
                   >
                     入場時期
