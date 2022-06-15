@@ -795,12 +795,13 @@ class projectInfo extends Component {
                     </font>
                   </InputGroup>
                 </Col>
-                <Col sm={3}>
+                <Col sm={4}>
                   <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text>お客様</InputGroup.Text>
                     </InputGroup.Prepend>
                     <Autocomplete
+                      className="w100p"
                       id="customerNo"
                       name="customerNo"
                       value={
@@ -967,7 +968,6 @@ class projectInfo extends Component {
                     />
                   </InputGroup>
                 </Col>
-
                 <Col sm={4}>
                   <InputGroup size="sm" className="mb-3">
                     <InputGroup.Prepend>
@@ -1024,12 +1024,13 @@ class projectInfo extends Component {
                     </FormControl>
                   </InputGroup>
                 </Col>
-                <Col sm={3}>
+                <Col sm={2}>
                   <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text>現場場所</InputGroup.Text>
                     </InputGroup.Prepend>
                     <Autocomplete
+                      className="w100p"
                       id="siteLocation"
                       name="siteLocation"
                       value={
@@ -1098,7 +1099,7 @@ class projectInfo extends Component {
                 </Col>
               </Row> */}
 
-              <Collapse defaultActiveKey={["1"]} ghost>
+              <Collapse ghost>
                 <Panel header="詳細入力" key="1">
                   <div>
                     <Row>
@@ -1164,7 +1165,7 @@ class projectInfo extends Component {
                           </FormControl>
                         </InputGroup>
                       </Col>
-                      <Col sm={3}>
+                      <Col sm={2}>
                         <InputGroup size="sm" className="mb-3">
                           <InputGroup.Prepend>
                             <InputGroup.Text>年齢制限</InputGroup.Text>
@@ -1192,6 +1193,7 @@ class projectInfo extends Component {
                             </InputGroup.Text>
                           </InputGroup.Prepend>
                           <Autocomplete
+                            className="w100p"
                             id="salesStaff"
                             name="salesStaff"
                             disabled={actionType === "detail" ? true : false}
@@ -1271,6 +1273,26 @@ class projectInfo extends Component {
                           </FormControl>
                         </InputGroup>
                       </Col>
+                      <Col sm={2}>
+                        <InputGroup size="sm" className="mb-3">
+                          <InputGroup.Prepend>
+                            <InputGroup.Text>募集人数</InputGroup.Text>
+                          </InputGroup.Prepend>
+                          <FormControl
+                            as="select"
+                            value={recruitmentNumbers}
+                            name="recruitmentNumbers"
+                            onChange={this.valueChange}
+                            disabled={actionType === "detail" ? true : false}
+                          >
+                            {recruitmentNumbersDrop.map((date) => (
+                              <option key={date.code} value={date.code}>
+                                {date.name}
+                              </option>
+                            ))}
+                          </FormControl>
+                        </InputGroup>
+                      </Col>
                       <Col sm={3}>
                         <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                           <InputGroup.Prepend>
@@ -1319,26 +1341,6 @@ class projectInfo extends Component {
                           >
                             年以上
                           </font>
-                        </InputGroup>
-                      </Col>
-                      <Col sm={2}>
-                        <InputGroup size="sm" className="mb-3">
-                          <InputGroup.Prepend>
-                            <InputGroup.Text>募集人数</InputGroup.Text>
-                          </InputGroup.Prepend>
-                          <FormControl
-                            as="select"
-                            value={recruitmentNumbers}
-                            name="recruitmentNumbers"
-                            onChange={this.valueChange}
-                            disabled={actionType === "detail" ? true : false}
-                          >
-                            {recruitmentNumbersDrop.map((date) => (
-                              <option key={date.code} value={date.code}>
-                                {date.name}
-                              </option>
-                            ))}
-                          </FormControl>
                         </InputGroup>
                       </Col>
                     </Row>
@@ -1418,7 +1420,7 @@ class projectInfo extends Component {
                         </InputGroup>
                       </Col>
 
-                      <Col sm={6}>
+                      <Col sm={5}>
                         <InputGroup size="sm" className="mb-3">
                           <InputGroup.Prepend>
                             <InputGroup.Text id="fiveKanji">
@@ -1521,78 +1523,89 @@ class projectInfo extends Component {
                 詳細入力
               </Button> */}
               {/* 非活性化 */}
-
-              <div className="df justify-between align-center">
-                <div className="projectInfoDetailTitle">案件詳細：</div>
-                <div>
-                  <Button
-                    size="sm"
-                    variant="info"
-                    id="copyBtn"
-                    name="clickButton"
-                  >
-                    <FontAwesomeIcon icon={faBook} /> コピー
-                  </Button>{" "}
-                  <Button
-                    size="sm"
-                    variant="info"
-                    onClick={() => {
-                      this.props.history.push(
-                        "/subMenuManager/projectInfoSearch"
-                      );
-                    }}
-                  >
-                    案件一覧
-                  </Button>
-                </div>
-              </div>
               <Row>
-                <FormControl
-                  maxLength="500"
-                  cols="10"
-                  rows="8"
-                  value={projectInfoDetail}
-                  disabled={actionType === "detail" ? true : false}
-                  onChange={this.valueChange}
-                  name="projectInfoDetail"
-                  as="textarea"
-                ></FormControl>
-                <p className="textNum">
-                  入力した字数：{projectInfoDetail.length}/500
-                </p>
+                <Col sm={11}>
+                  <div className="df justify-between align-center">
+                    <div className="projectInfoDetailTitle">案件詳細：</div>
+                    <div>
+                      <Button
+                        size="sm"
+                        variant="info"
+                        id="copyBtn"
+                        name="clickButton"
+                      >
+                        <FontAwesomeIcon icon={faBook} /> コピー
+                      </Button>{" "}
+                      <Button
+                        size="sm"
+                        variant="info"
+                        onClick={() => {
+                          this.props.history.push(
+                            "/subMenuManager/projectInfoSearch"
+                          );
+                        }}
+                      >
+                        案件一覧
+                      </Button>
+                    </div>
+                  </div>
+                </Col>
+              </Row>
+
+              <Row>
+                <Col sm={11}>
+                  <FormControl
+                    maxLength="500"
+                    cols="10"
+                    rows="8"
+                    value={projectInfoDetail}
+                    disabled={actionType === "detail" ? true : false}
+                    onChange={this.valueChange}
+                    name="projectInfoDetail"
+                    as="textarea"
+                  ></FormControl>
+                  <p className="textNum">
+                    入力した字数：{projectInfoDetail.length}/500
+                  </p>
+                </Col>
               </Row>
               <br />
-              <div style={{ textAlign: "center" }}>
-                <Button
-                  size="sm"
-                  hidden={actionType === "detail" ? true : false}
-                  onClick={this.toroku}
-                  id="toroku"
-                  variant="info"
-                >
-                  <FontAwesomeIcon icon={faSave} />
-                  {torokuText}
-                </Button>{" "}
-                <Button
-                  size="sm"
-                  hidden={actionType === "detail" ? true : false}
-                  onClick={this.resetValue}
-                  variant="info"
-                  value="Reset"
-                >
-                  <FontAwesomeIcon icon={faUndo} />
-                  リセット
-                </Button>{" "}
-                <Button
-                  size="sm"
-                  hidden={backPage === "" ? true : false}
-                  variant="info"
-                  onClick={this.back}
-                >
-                  <FontAwesomeIcon icon={faLevelUpAlt} />
-                  戻る
-                </Button>
-              </div>
+              <Row>
+                <Col sm={11}>
+                  {" "}
+                  <div style={{ textAlign: "center" }}>
+                    <Button
+                      size="sm"
+                      hidden={actionType === "detail" ? true : false}
+                      onClick={this.toroku}
+                      id="toroku"
+                      variant="info"
+                    >
+                      <FontAwesomeIcon icon={faSave} />
+                      {torokuText}
+                    </Button>{" "}
+                    <Button
+                      size="sm"
+                      hidden={actionType === "detail" ? true : false}
+                      onClick={this.resetValue}
+                      variant="info"
+                      value="Reset"
+                    >
+                      <FontAwesomeIcon icon={faUndo} />
+                      リセット
+                    </Button>{" "}
+                    <Button
+                      size="sm"
+                      hidden={backPage === "" ? true : false}
+                      variant="info"
+                      onClick={this.back}
+                    >
+                      <FontAwesomeIcon icon={faLevelUpAlt} />
+                      戻る
+                    </Button>
+                  </div>
+                </Col>
+              </Row>
             </Form.Group>
           </Form>
         </div>
