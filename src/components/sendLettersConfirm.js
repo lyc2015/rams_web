@@ -1281,7 +1281,7 @@ Email：` +
   };
 
   setMailContent = (mailContent) => {
-    if (mailContent === undefined || mailContent === null) {
+    if (!mailContent) {
       mailContent =
         `【名　　前】：` +
         this.state.employeeName +
@@ -1451,6 +1451,7 @@ Email：` +
       this.setState({
         file,
         selectedColumnId: row.index,
+        employeeName: this.state.employeeInfo[row.index - 1].employeeName,
         employeeFlag: true,
         selectRowFlag: true,
         unitPriceShow: row.hopeHighestPrice,
@@ -1678,18 +1679,18 @@ Email：` +
     });
   };
 
-  employeeNameInputChange = (row, event) => {
-    let employeeInfo = this.state.employeeInfo;
-    employeeInfo[row.index - 1].employeeName = event.target.value;
-  };
-  employeeNameInputBlur = (row, event) => {
-    let employeeInfo = this.state.employeeInfo;
-    employeeInfo[row.index - 1].employeeName = event.target.value;
-    this.setState({
-      employeeInfo: employeeInfo,
-      employeeFlag: true,
-    });
-  };
+  // employeeNameInputChange = (row, event) => {
+  //   let employeeInfo = this.state.employeeInfo;
+  //   employeeInfo[row.index - 1].employeeName = event.target.value;
+  // };
+  // employeeNameInputBlur = (row, event) => {
+  //   let employeeInfo = this.state.employeeInfo;
+  //   employeeInfo[row.index - 1].employeeName = event.target.value;
+  //   this.setState({
+  //     employeeInfo: employeeInfo,
+  //     employeeFlag: true,
+  //   });
+  // };
 
   // 要員名前触発されるイベント
   myCodeEmployeeNameChange = (event, value, reason, details, row) => {
@@ -1790,6 +1791,7 @@ Email：` +
       employeeName: "",
       employeeStatus: "",
       hopeHighestPrice: "",
+      mailContent: "",
       resumeInfo1: "",
       resumeInfo1Name: "",
       resumeInfo2: "",
@@ -1969,6 +1971,9 @@ Email：` +
 
   mailContentChange = (event) => {
     let { employeeInfo } = this.state;
+    if (!employeeInfo[this.state.selectedColumnId - 1]) {
+      return;
+    }
     employeeInfo[this.state.selectedColumnId - 1].mailContent =
       event.target.value;
     this.setState({
@@ -2403,6 +2408,7 @@ Email：` +
           <Col sm={4}>
             <textarea
               ref={(textarea) => (this.textArea = textarea)}
+              disabled={this.state.selectedColumnId < 1}
               onChange={this.mailContentChange}
               name="mailContent"
               style={{
