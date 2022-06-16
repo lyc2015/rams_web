@@ -1022,13 +1022,13 @@ class costRegistration extends React.Component {
       <div className={isMobileDevice ? "clear-grid-padding" : ""}>
         {/*　 他の費用*/}
         <Modal
-          centered={!isMobileDevice}
           destroyOnClose
-          width={isMobileDevice ? "100%" : "50%"}
+          width={isMobileDevice ? "100%" : "40%"}
           visible={this.state.showOtherCostModal}
           footer={null}
           onCancel={this.handleHideModal.bind(this)}
-          style={isMobileDevice ? { top: "0" } : null}
+          centered
+          // style={isMobileDevice ? { top: "0" } : null}
           bodyStyle={isMobileDevice ? { padding: "12px 0px" } : null}
         >
           <OtherCostModel
