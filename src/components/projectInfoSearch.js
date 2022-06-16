@@ -681,22 +681,22 @@ class ProjectInfoSearch extends Component {
 
     let textObjs = [
       {
-        name: `【案件名】`,
+        name: `案件名`,
         joinWith: undefined,
         values: [selectedProjectInfo.projectName],
       },
       {
-        name: `【期　間】`,
+        name: `期　間`,
         joinWith: undefined,
         values: [selectedProjectInfo.admissionPeriodReset],
       },
       {
-        name: `【場　所】`,
+        name: `場　所`,
         joinWith: undefined,
         values: [selectedProjectInfo.siteLocationName],
       },
       {
-        name: `【工　程】`,
+        name: `工　程`,
         joinWith: `～`,
         values: [
           selectedProjectInfo.projectPhaseNameStart,
@@ -704,7 +704,7 @@ class ProjectInfoSearch extends Component {
         ],
       },
       {
-        name: `【言　語】`,
+        name: `言　語`,
         joinWith: `、`,
         values: [
           selectedProjectInfo.keyWordOfLanagurueName1,
@@ -712,14 +712,19 @@ class ProjectInfoSearch extends Component {
         ],
       },
       {
-        name: `【日本語】`,
+        name: `日本語`,
         joinWith: undefined,
         values: [selectedProjectInfo.japaneaseConversationName],
       },
       {
-        name: `【面　談】`,
+        name: `面　談`,
         joinWith: undefined,
         values: [selectedProjectInfo.noOfInterviewName],
+      },
+      {
+        name: `備　考`,
+        joinWith: undefined,
+        values: [selectedProjectInfo.remark],
       },
     ];
     return utils.formatCopyByTextObjs(textObjs);

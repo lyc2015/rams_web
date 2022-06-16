@@ -615,12 +615,12 @@ class projectInfo extends Component {
 
     let textObjs = [
       {
-        name: `【案件名】`,
+        name: `案件名`,
         joinWith: undefined,
         values: [projectName],
       },
       {
-        name: `【期　間】`,
+        name: `期　間`,
         joinWith: undefined,
         values: [
           admissionPeriod +
@@ -628,32 +628,32 @@ class projectInfo extends Component {
         ],
       },
       {
-        name: `【場　所】`,
+        name: `場　所`,
         joinWith: undefined,
         values: [siteLocationName],
       },
       {
-        name: `【工　程】`,
+        name: `工　程`,
         joinWith: `～`,
         values: [projectPhaseNameStart, projectPhaseNameEnd],
       },
       {
-        name: `【言　語】`,
+        name: `言　語`,
         joinWith: `、`,
         values: [keyWordOfLanagurueName1, keyWordOfLanagurueName2],
       },
       {
-        name: `【日本語】`,
+        name: `日本語`,
         joinWith: undefined,
         values: [japaneaseConversationName],
       },
       {
-        name: `【面　談】`,
+        name: `面　談`,
         joinWith: undefined,
         values: [noOfInterviewName],
       },
       {
-        name: `【備　考】`,
+        name: `備　考`,
         joinWith: undefined,
         values: [remark],
       },
@@ -994,7 +994,7 @@ class projectInfo extends Component {
                         </option>
                       ))}
                     </FormControl>
-                    {"~"}
+                    {" ～ "}
                     <FormControl
                       as="select"
                       value={projectPhaseEnd}
