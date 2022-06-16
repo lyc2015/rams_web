@@ -13,6 +13,7 @@ import TextField from "@material-ui/core/TextField";
 import MyToast from "./myToast";
 import store from "./redux/store";
 import ErrorsMessageToast from "./errorsMessageToast";
+import { message } from "antd";
 axios.defaults.withCredentials = true;
 
 /**
@@ -101,8 +102,13 @@ class salesContent extends React.Component {
     admissionEndDate: this.props.sendValue.admissionEndDate,
   };
 
+  componentWillUnmount() {
+    this.clipboard?.destroy && this.clipboard.destroy();
+  }
+
   componentDidMount() {
     this.setNewDevelopLanguagesShow();
+    this.copyToClipboard();
 
     if (this.state.interviewDate !== "") {
       var myDate = new Date();
@@ -320,20 +326,22 @@ class salesContent extends React.Component {
 
   // コピー
   copyToClipboard = async () => {
-    // let text = this.getText();
     let myThis = this;
-    let clipboard = new Clipboard("#copyUrl2", {
-      text: function () {
-        return myThis.getText();
-        // return text;
-      },
-    });
-    clipboard.on("success", function () {
-      console.log("已复制到剪贴板！");
-    });
-    clipboard.on("error", function () {
-      console.log("err！");
-    });
+    if (!this.clipboard) {
+      this.clipboard = new Clipboard("#copyUrl2", {
+        text: function () {
+          return myThis.getText();
+        },
+      });
+      this.clipboard.on("success", function () {
+        message.success("コピー成功しました");
+        console.log("已复制到剪贴板！");
+      });
+      this.clipboard.on("error", function () {
+        message.error("コピー失敗しました");
+        console.log("err！");
+      });
+    }
   };
 
   // 更新ボタン
@@ -575,7 +583,6 @@ class salesContent extends React.Component {
       },
       () => {
         if (callback instanceof Function) callback();
-        this.copyToClipboard();
       }
     );
   };

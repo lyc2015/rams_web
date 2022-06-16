@@ -30,7 +30,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import DatePicker, { registerLocale } from "react-datepicker";
 import store from "./redux/store";
 import ProjectContent from "./projectContent";
-import { notification } from "antd";
+import { notification, message } from "antd";
 import Clipboard from "clipboard";
 axios.defaults.withCredentials = true;
 
@@ -210,6 +210,11 @@ class ProjectInfoSearch extends Component {
       });
     }
   };
+
+  componentWillUnmount() {
+    this.clipboard?.destroy && this.clipboard.destroy();
+  }
+
   componentDidMount() {
     this.initCopy();
     let stationDrop = this.state.stationDrop;
@@ -722,17 +727,19 @@ class ProjectInfoSearch extends Component {
 
   initCopy = () => {
     let myThis = this;
-    var clipboard = new Clipboard("#copyBtn", {
+    this.clipboard = new Clipboard("#copyBtnProjectInfoSearch", {
       text: function () {
         return myThis.getCopyText();
       },
     });
 
-    clipboard.on("success", function (e) {
+    this.clipboard.on("success", function (e) {
+      message.success("コピー成功しました");
       console.log(e);
     });
 
-    clipboard.on("error", function (e) {
+    this.clipboard.on("error", function (e) {
+      message.error("コピー失敗しました");
       console.log(e);
     });
   };
@@ -1201,7 +1208,7 @@ class ProjectInfoSearch extends Component {
                 <Button
                   size="sm"
                   variant="info"
-                  id="copyBtn"
+                  id="copyBtnProjectInfoSearch"
                   name="clickButton"
                 >
                   <FontAwesomeIcon icon={faBook} /> コピー

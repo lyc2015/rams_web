@@ -24,7 +24,7 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import store from "./redux/store";
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker, { registerLocale } from "react-datepicker";
-import { Divider, Collapse } from "antd";
+import { Divider, Collapse, message } from "antd";
 import Clipboard from "clipboard";
 
 const { Panel } = Collapse;
@@ -36,7 +36,9 @@ class projectInfo extends Component {
     super(props);
     this.state = this.initialState; //初期化
   }
+
   initialState = {
+    clipboard: null,
     detailEditFlag: true,
     //項目
     projectNo: "",
@@ -355,6 +357,11 @@ class projectInfo extends Component {
       });
     }
   };
+
+  componentWillUnmount() {
+    this.clipboard?.destroy && this.clipboard.destroy();
+  }
+
   componentDidMount() {
     this.initCopy();
     for (let i = 0; i < 11; i++) {
@@ -656,17 +663,18 @@ class projectInfo extends Component {
 
   initCopy = () => {
     let myThis = this;
-    var clipboard = new Clipboard("#copyBtn", {
+    this.clipboard = new Clipboard("#copyBtnProjectInfo", {
       text: function () {
         return myThis.getCopyText();
       },
     });
-
-    clipboard.on("success", function (e) {
-      console.log(e);
+    this.clipboard.on("success", function (e) {
+      message.success("コピー成功しました");
+      // console.log(e);
     });
 
-    clipboard.on("error", function (e) {
+    this.clipboard.on("error", function (e) {
+      message.error("コピー失敗しました");
       console.log(e);
     });
   };
@@ -1531,7 +1539,7 @@ class projectInfo extends Component {
                       <Button
                         size="sm"
                         variant="info"
-                        id="copyBtn"
+                        id="copyBtnProjectInfo"
                         name="clickButton"
                       >
                         <FontAwesomeIcon icon={faBook} /> コピー

@@ -34,7 +34,7 @@ import ErrorsMessageToast from "./errorsMessageToast";
 import SalesContent from "./salesContent";
 import InterviewInformation from "./interviewInformation";
 import store from "./redux/store";
-import { notification } from "antd";
+import { notification, message } from "antd";
 axios.defaults.withCredentials = true;
 /**
  * 営業状況画面
@@ -134,6 +134,10 @@ class manageSituation extends React.Component {
     makeDirectoryFalg: true,
     loading: true,
   };
+
+  componentWillUnmount() {
+    this.clipboard?.destroy && this.clipboard.destroy();
+  }
 
   // 初期表示のレコードを取る
   componentDidMount() {
@@ -1724,17 +1728,20 @@ class manageSituation extends React.Component {
             ? ""
             : "【備　　考】：" + remark + "\n");
       });
-    var clipboard = new Clipboard("#copyUrl", {
-      text: function () {
-        return text;
-      },
-    });
-    clipboard.on("success", function () {
-      console.log("已复制到剪贴板！");
-    });
-    clipboard.on("error", function () {
-      console.log("err！");
-    });
+    if (!this.clipboard) {
+      this.clipboard = new Clipboard("#copyUrl", {
+        text: function () {
+          return text;
+        },
+      });
+      this.clipboard.on("success", function () {
+        message.success("コピー成功しました");
+      });
+      this.clipboard.on("error", function (e) {
+        message.error("コピー失敗しました");
+        console.log("err！", e);
+      });
+    }
   };
 
   downloadResume = (resumeInfo, no) => {
