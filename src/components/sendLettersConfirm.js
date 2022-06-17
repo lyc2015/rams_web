@@ -580,6 +580,10 @@ class sendLettersConfirm extends React.Component {
 
   // 获取确认邮件文本
   getMailConfirmContont = ({ selectedCusInfo, mailText }) => {
+    if (!selectedCusInfo) {
+      message.error("先ずはお客様を選択してください");
+      return;
+    }
     let { loginUserInfo, greetinTtext } = this.state;
     return (
       (selectedCusInfo.customerName.split("(")[0].search("株式会社") === -1
@@ -625,6 +629,10 @@ Email：` +
 
   // 送信処理请求数据整理 emailModel,resumeFileList
   getSendMailWithFileRequestParams = async (selectedCusInfo) => {
+    if (!selectedCusInfo) {
+      message.error("先ずはお客様を選択してください");
+      return;
+    }
     let {
       mailText,
       resumeNameList,
@@ -657,7 +665,7 @@ Email：` +
       selectedMailCC: selectedMailCCs,
       mailFrom: loginUserInfo[0].companyMail,
       mailConfirmContont: this.getMailConfirmContont({
-        selectedCusInfo: selectedCusInfo,
+        selectedCusInfo,
         mailText,
       }),
       selectedmail: selectedCusInfo.purchasingManagersMail,
@@ -1254,8 +1262,13 @@ Email：` +
   };
 
   handleCtmSelect = (row, isSelected, e) => {
+    let { selectedCusInfos } = this.state;
+
+    let index = selectedCusInfos.findIndex(
+      (item) => (item.customerNo = row.customerNo)
+    );
     this.setState({
-      selectedCusInfoIndex: row.rowId,
+      selectedCusInfoIndex: index,
       selectedCustomerName: isSelected ? row.customerName : "",
       selectedPurchasingManagers: isSelected ? row.purchasingManagers : "",
       // selectedSalesPerson: isSelected ? row.customerName : '',
@@ -1464,6 +1477,8 @@ Email：` +
       $("#deleteButton").attr("disabled", true);
       $("#bookButton").attr("disabled", true);
       this.setState({
+        selectedColumnId: "",
+        employeeName: "",
         selectRowFlag: false,
         mailContent: "",
       });
@@ -2419,12 +2434,9 @@ Email：` +
               }}
               // value={mailContent}
               value={
-                this.state.employeeName === "empty" ||
-                this.state.employeeName === ""
-                  ? "要員追加してください。"
-                  : this.state.employeeFlag
+                this.state.selectRowFlag
                   ? this.state.mailContent
-                  : "要員追加してください。"
+                  : "要員選択してください。"
               }
             />
           </Col>
