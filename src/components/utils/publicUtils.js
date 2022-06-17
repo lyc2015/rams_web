@@ -997,7 +997,7 @@ export function costValueChange(v) {
  * @param {} name eq:【言　語】, joinWith eq: `、`, values eq:['C#','VB.net']
  * @returns 【言　語】: C#、VB.net
  */
-function formatText({ name, joinWith, values }) {
+function formatText({ name, joinWith, values, keepLastJoinMark }) {
   let str = "";
   let nameIsIn = false;
   if (!(values instanceof Array)) {
@@ -1017,7 +1017,7 @@ function formatText({ name, joinWith, values }) {
     // 拼接内容
     str += `${value}${joinWith || ""}`;
   });
-  if (str.endsWith(joinWith)) {
+  if (!keepLastJoinMark && str.endsWith(joinWith)) {
     str = str.slice(0, str.length - joinWith.length);
   }
 

@@ -623,8 +623,8 @@ class projectInfo extends Component {
         name: `期　間`,
         joinWith: undefined,
         values: [
-          admissionPeriod +
-            (admissionMonthName ? `(${admissionMonthName})` : ""),
+          utils.addLeftSlash(admissionPeriod) +
+            (admissionMonthName ? `(${admissionMonthName})～` : "～"),
         ],
       },
       {
@@ -636,6 +636,7 @@ class projectInfo extends Component {
         name: `工　程`,
         joinWith: `～`,
         values: [projectPhaseNameStart, projectPhaseNameEnd],
+        keepLastJoinMark: true,
       },
       {
         name: `言　語`,
@@ -781,6 +782,8 @@ class projectInfo extends Component {
                     ></FormControl>
                   </InputGroup>
                 </Col>
+              </Row>
+              <Row>
                 <Col sm={4}>
                   <InputGroup size="sm" className="mb-3">
                     <InputGroup.Prepend>
@@ -794,16 +797,12 @@ class projectInfo extends Component {
                       disabled={actionType === "detail" ? true : false}
                       placeholder="例：123システム"
                     ></FormControl>
-                    <font
-                      id="mark"
-                      color="red"
-                      style={{ marginLeft: "10px", marginRight: "10px" }}
-                    >
+                    <font id="mark" color="red" style={{ marginLeft: "5px" }}>
                       ★
                     </font>
                   </InputGroup>
                 </Col>
-                <Col sm={4}>
+                <Col sm={3}>
                   <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text>お客様</InputGroup.Text>
@@ -832,6 +831,57 @@ class projectInfo extends Component {
                         </div>
                       )}
                     />
+                  </InputGroup>
+                </Col>
+                <Col sm={2}>
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
+                    <InputGroup.Prepend>
+                      <InputGroup.Text>現場場所</InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <Autocomplete
+                      className="w100p"
+                      id="siteLocation"
+                      name="siteLocation"
+                      value={
+                        stationDrop.find((v) => v.code === siteLocation) || {}
+                      }
+                      options={stationDrop}
+                      getOptionLabel={(option) => option.name || ""}
+                      disabled={actionType === "detail" ? true : false}
+                      onChange={(event, values) =>
+                        this.getStation(event, values)
+                      }
+                      renderInput={(params) => (
+                        <div ref={params.InputProps.ref}>
+                          <input
+                            placeholder="例：秋葉原"
+                            type="text"
+                            {...params.inputProps}
+                            className="auto form-control Autocompletestyle-projectInfo-siteLocation"
+                          />
+                        </div>
+                      )}
+                    />
+                  </InputGroup>
+                </Col>
+                <Col sm={2}>
+                  <InputGroup size="sm" className="mb-3">
+                    <InputGroup.Prepend>
+                      <InputGroup.Text>面談回数</InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <FormControl
+                      as="select"
+                      value={noOfInterviewCode}
+                      name="noOfInterviewCode"
+                      onChange={this.valueChange}
+                      disabled={actionType === "detail" ? true : false}
+                    >
+                      {noOfInterviewDrop.map((date) => (
+                        <option key={date.code} value={date.code}>
+                          {date.name}
+                        </option>
+                      ))}
+                    </FormControl>
                   </InputGroup>
                 </Col>
               </Row>
@@ -1032,58 +1082,8 @@ class projectInfo extends Component {
                     </FormControl>
                   </InputGroup>
                 </Col>
-                <Col sm={2}>
-                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
-                    <InputGroup.Prepend>
-                      <InputGroup.Text>現場場所</InputGroup.Text>
-                    </InputGroup.Prepend>
-                    <Autocomplete
-                      className="w100p"
-                      id="siteLocation"
-                      name="siteLocation"
-                      value={
-                        stationDrop.find((v) => v.code === siteLocation) || {}
-                      }
-                      options={stationDrop}
-                      getOptionLabel={(option) => option.name || ""}
-                      disabled={actionType === "detail" ? true : false}
-                      onChange={(event, values) =>
-                        this.getStation(event, values)
-                      }
-                      renderInput={(params) => (
-                        <div ref={params.InputProps.ref}>
-                          <input
-                            placeholder="例：秋葉原"
-                            type="text"
-                            {...params.inputProps}
-                            className="auto form-control Autocompletestyle-projectInfo-siteLocation"
-                          />
-                        </div>
-                      )}
-                    />
-                  </InputGroup>
-                </Col>
-                <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
-                    <InputGroup.Prepend>
-                      <InputGroup.Text>面談回数</InputGroup.Text>
-                    </InputGroup.Prepend>
-                    <FormControl
-                      as="select"
-                      value={noOfInterviewCode}
-                      name="noOfInterviewCode"
-                      onChange={this.valueChange}
-                      disabled={actionType === "detail" ? true : false}
-                    >
-                      {noOfInterviewDrop.map((date) => (
-                        <option key={date.code} value={date.code}>
-                          {date.name}
-                        </option>
-                      ))}
-                    </FormControl>
-                  </InputGroup>
-                </Col>
-                <Col sm={3}>
+
+                <Col sm={8}>
                   <InputGroup size="sm" className="mb-3">
                     <InputGroup.Prepend>
                       <InputGroup.Text>備考</InputGroup.Text>

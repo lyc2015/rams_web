@@ -688,7 +688,12 @@ class ProjectInfoSearch extends Component {
       {
         name: `期　間`,
         joinWith: undefined,
-        values: [selectedProjectInfo.admissionPeriodReset],
+        values: [
+          utils.addLeftSlash(selectedProjectInfo.admissionPeriod) +
+            (selectedProjectInfo.admissionMonthName
+              ? `(${selectedProjectInfo.admissionMonthName})～`
+              : "～"),
+        ],
       },
       {
         name: `場　所`,
@@ -702,6 +707,7 @@ class ProjectInfoSearch extends Component {
           selectedProjectInfo.projectPhaseNameStart,
           selectedProjectInfo.projectPhaseNameEnd,
         ],
+        keepLastJoinMark: true,
       },
       {
         name: `言　語`,
