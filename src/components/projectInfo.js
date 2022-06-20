@@ -636,7 +636,7 @@ class projectInfo extends Component {
         name: `工　程`,
         joinWith: `～`,
         values: [projectPhaseNameStart, projectPhaseNameEnd],
-        keepLastJoinMark: true,
+        keepLastJoinMarkWhenOne: true,
       },
       {
         name: `言　語`,

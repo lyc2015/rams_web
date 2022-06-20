@@ -707,7 +707,7 @@ class ProjectInfoSearch extends Component {
           selectedProjectInfo.projectPhaseNameStart,
           selectedProjectInfo.projectPhaseNameEnd,
         ],
-        keepLastJoinMark: true,
+        keepLastJoinMarkWhenOne: true,
       },
       {
         name: `言　語`,

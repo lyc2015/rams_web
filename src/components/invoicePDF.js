@@ -141,7 +141,10 @@ class invoicePDF extends React.Component {
   // 初期化データ
   initialState = {
     // yearAndMonth: this.props.location?.state.yearAndMonth,
-    invoiceDate: moment(new Date()).endOf("month").toDate(),
+    // invoiceDate: this.props.location?.state?.yearAndMonth
+    //   ? moment().endOf("month").toDate()
+    //   : "",
+
     // invoiceDate: new Date(),
     // yearAndMonthFormat:
     //   String(new Date().getFullYear()) +
@@ -185,12 +188,12 @@ class invoicePDF extends React.Component {
       this.state.yearAndMonth.getFullYear() +
       (Number(month) < 10 ? "0" + month : month);
     this.setState({
-      invoiceNo: invoiceNo,
+      invoiceNo,
     });
     const emp = {
       yearAndMonth: publicUtils.formateDate(this.state.yearAndMonth, false),
       customerNo: this.state.customerNo,
-      invoiceNo: invoiceNo,
+      invoiceNo,
       invoiceDate: moment(this.state.invoiceDate).format("YYYYMMDD"),
     };
     axios
@@ -277,9 +280,9 @@ class invoicePDF extends React.Component {
           workTimeFlag: result.data[0].workTimeFlag,
           employeeNameFlag: result.data[0].employeeNameFlag,
           originalFlag: {
-            systemNameFlag: result.data[0].systemNameFlag,
-            workTimeFlag: result.data[0].workTimeFlag,
-            employeeNameFlag: result.data[0].employeeNameFlag,
+            systemNameFlag: result.data[0].systemNameFlag + "",
+            workTimeFlag: result.data[0].workTimeFlag + "",
+            employeeNameFlag: result.data[0].employeeNameFlag + "",
           },
         });
         this.refs.table.setState({
@@ -1195,7 +1198,10 @@ class invoicePDF extends React.Component {
                           value={
                             this.state.invoiceDate
                               ? moment(this.state.invoiceDate)
-                              : ""
+                              : moment(
+                                  this.props.location?.state?.yearAndMonth ||
+                                    new Date()
+                                ).endOf("month")
                           }
                           onChange={this.inactiveYearAndMonth}
                           format="YYYY/MM/DD"

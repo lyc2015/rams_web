@@ -17,6 +17,7 @@ import DatePicker, { registerLocale } from "react-datepicker";
 import ja from "date-fns/locale/ja";
 import "react-datepicker/dist/react-datepicker.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
 import {
   faEdit,
   faUpload,
@@ -29,7 +30,7 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import store from "./redux/store";
 import SendInvoiceLetter from "./sendInvoiceLetter";
 import { faLevelUpAlt } from "@fortawesome/free-solid-svg-icons";
-import { Popover } from "antd";
+import { Popover, Modal as AntdModal, message } from "antd";
 registerLocale("ja", ja);
 axios.defaults.withCredentials = true;
 
@@ -115,6 +116,7 @@ class sendInvoice extends React.Component {
     const emp = {
       yearAndMonth: publicUtils.formateDate($("#datePicker").val(), false),
       customerNo: this.state.customerNo,
+      customerName: this.state.customerName,
     };
 
     if (this.state.dutyManagementSelectedEmployeeNo) {
@@ -178,15 +180,6 @@ class sendInvoice extends React.Component {
           rowPurchasingManagersMail: row.purchasingManagersMail,
           sendFlag: row.havePDF === "false",
           reportRowNo: row.rowNo,
-          mailTitle:
-            "請求書_" +
-            this.state.yearAndMonth.getFullYear() +
-            "年" +
-            (this.state.yearAndMonth.getMonth() + 1) +
-            "月分_" +
-            (row.customerName.search("会社") === -1
-              ? row.customerName + `株式会社`
-              : row.customerName),
         },
         async () => {
           let { mailCC, customerNo } = await this.getSalesPersonsCC();
@@ -214,7 +207,6 @@ class sendInvoice extends React.Component {
         rowEmployeeList: [],
         rowPurchasingManagersMail: "",
         sendFlag: true,
-        mailTitle: "",
       });
     }
   };
@@ -385,11 +377,37 @@ class sendInvoice extends React.Component {
     );
   };
 
-  checkMail = () => {
+  getNowDate = () => {
+    return (
+      String(new Date().getFullYear()) +
+      "/" +
+      (new Date().getMonth() + 1 < 10
+        ? "0" + String(new Date().getMonth() + 1)
+        : String(new Date().getMonth() + 1)) +
+      "/" +
+      (new Date().getDate() < 10
+        ? "0" + String(new Date().getDate())
+        : String(new Date().getDate())) +
+      " " +
+      new Date().getHours() +
+      ":" +
+      new Date().getMinutes()
+    );
+  };
+
+  getMailContent = () => {
     let flag = true;
-    let reportFlag = false;
-    let mailConfirmContont;
     let sendInvoiceList = this.state.sendInvoiceList;
+    let employeeList = this.state.rowEmployeeList;
+    let employee = "";
+    for (let i in employeeList) {
+      employee += employeeList[i].employeeName + "、";
+    }
+    if (employee.length > 0)
+      employee = employee.substring(0, employee.length - 1);
+    let mailConfirmContont;
+    let reportFlag = false;
+
     for (let i in sendInvoiceList) {
       if (sendInvoiceList[i].customerName === this.state.rowCustomerName) {
         if (
@@ -412,15 +430,7 @@ class sendInvoice extends React.Component {
         }
       }
     }
-
     if (flag) {
-      let employeeList = this.state.rowEmployeeList;
-      let employee = "";
-      for (let i in employeeList) {
-        employee += employeeList[i].employeeName + "、";
-      }
-      if (employee.length > 0)
-        employee = employee.substring(0, employee.length - 1);
       mailConfirmContont =
         (this.state.rowCustomerName.search("会社") === -1
           ? this.state.rowCustomerName + `株式会社`
@@ -456,14 +466,34 @@ LYC株式会社　
 事務担当　宋（ソウ）/莫（バク）
 〒101-0032　東京都千代田区岩本町3-3-3　サザンビル3階
 URL:http://www.lyc.co.jp/　TEL:03-6908-5796 
-E-mail: zoeywu@lyc.co.jp  事務共通:jimu@lyc.co.jp
+事務共通:jimu@lyc.co.jp
 P-mark:第21004525(02)号
 労働者派遣事業許可番号　派13-306371
 `;
     }
+    return mailConfirmContont;
+  };
+
+  getMailTitle = () => {
+    return (
+      "請求書_" +
+      this.state.yearAndMonth.getFullYear() +
+      "年" +
+      (this.state.yearAndMonth.getMonth() + 1) +
+      "月分_" +
+      "LYC 株式会社"
+
+      // (this.state.rowCustomerName.search("会社") === -1
+      //   ? this.state.rowCustomerName + `株式会社`
+      //   : this.state.rowCustomerName)
+    );
+  };
+
+  checkMail = () => {
+    let mailConfirmContont = this.getMailContent();
     this.setState(
       {
-        mailConfirmContont: mailConfirmContont,
+        mailConfirmContont,
       },
       () => {
         this.handleShowModal();
@@ -472,153 +502,61 @@ P-mark:第21004525(02)号
   };
 
   sendLetter = () => {
-    var a = window.confirm("送信してよろしいでしょうか？");
-
-    if (a) {
-      let model;
-      let sendInvoiceList = this.state.sendInvoiceList;
-      let employeeList = this.state.rowEmployeeList;
-      let employee = "";
-      for (let i in employeeList) {
-        employee += employeeList[i].employeeName + "、";
-      }
-      if (employee.length > 0)
-        employee = employee.substring(0, employee.length - 1);
-
-      let mailConfirmContont;
-      let reportFlag = false;
-      let flag = true;
-      for (let i in sendInvoiceList) {
-        if (sendInvoiceList[i].customerName === this.state.rowCustomerName) {
-          if (
-            !(
-              sendInvoiceList[i].mailConfirmContont === undefined ||
-              sendInvoiceList[i].mailConfirmContont === null ||
-              sendInvoiceList[i].mailConfirmContont === ""
-            )
-          ) {
-            flag = false;
-            mailConfirmContont = sendInvoiceList[i].mailConfirmContont;
-          }
-          for (let j in this.state.sendInvoiceList[i]
-            .sendInvoiceWorkTimeModel) {
-            if (
-              this.state.selectAllFlag ||
-              this.state.sendInvoiceList[i].sendInvoiceWorkTimeModel[j].report
-            ) {
-              reportFlag = true;
+    AntdModal.confirm({
+      title: "送信してよろしいでしょうか？",
+      icon: <ExclamationCircleOutlined />,
+      onOk: () => {
+        let model;
+        let sendInvoiceList = this.state.sendInvoiceList;
+        for (let i in sendInvoiceList) {
+          if (sendInvoiceList[i].customerNo === this.state.rowCustomerNo) {
+            let reportFile = "";
+            for (let j in this.state.sendInvoiceList[i]
+              .sendInvoiceWorkTimeModel) {
+              if (
+                this.state.selectAllFlag ||
+                this.state.sendInvoiceList[i].sendInvoiceWorkTimeModel[j].report
+              ) {
+                reportFile +=
+                  this.state.sendInvoiceList[i].sendInvoiceWorkTimeModel[j]
+                    .workingTimeReport + ";;";
+              }
             }
+
+            let selectedMailCC = sendInvoiceList[i]?.mailCC?.join(",");
+            if (selectedMailCC) {
+              model.selectedMailCC = selectedMailCC;
+            }
+
+            model = {
+              yearAndMonth: publicUtils.formateDate(
+                $("#datePicker").val(),
+                false
+              ),
+              // mailCC:this.state.mailCC
+              customerAbbreviation: sendInvoiceList[i].customerAbbreviation,
+              mail: sendInvoiceList[i].purchasingManagersMail,
+              purchasingManagers: sendInvoiceList[i].purchasingManagers,
+              customerNo: sendInvoiceList[i].customerNo,
+              customerName: sendInvoiceList[i].customerName,
+              mailFrom: this.state.loginUserInfo[0].companyMail,
+              reportFile: reportFile,
+              mailConfirmContont: this.getMailContent(),
+              mailTitle: this.getMailTitle(),
+              nowDate: this.getNowDate(),
+            };
           }
         }
-      }
-      if (flag) {
-        mailConfirmContont =
-          (this.state.rowCustomerName.search("会社") === -1
-            ? this.state.rowCustomerName + `株式会社`
-            : this.state.rowCustomerName) +
-          `
-` +
-          (this.state.rowPurchasingManagers === ""
-            ? ""
-            : (this.state.rowPurchasingManagers.search(" ") !== -1 ||
-              this.state.rowPurchasingManagers.search("　") !== -1
-                ? this.state.rowPurchasingManagers.search(" ") !== -1
-                  ? this.state.rowPurchasingManagers.split(" ")[0]
-                  : this.state.rowPurchasingManagers.split("　")[0]
-                : this.state.rowPurchasingManagers) + `様`) +
-          `
 
-いつもお世話になっております。ＬＹＣの` +
-          this.state.loginUserInfo[0].employeeFristName +
-          `でございます。
-
-弊社` +
-          employee +
-          (this.state.yearAndMonth.getMonth() + 1) +
-          `月分請求書類` +
-          (reportFlag ? `、作業報告書` : "") +
-          `を添付にてご送付致します。
-
-お手数ですが、ご確認お願い致します。
-
-引き続き何卒よろしくお願い申し上げます。
-----------------------------------------
-LYC株式会社　
-事務担当　宋（ソウ）/莫（バク）
-〒101-0032　東京都千代田区岩本町3-3-3　サザンビル3階
-URL:http://www.lyc.co.jp/　TEL:03-6908-5796 
-E-mail: zoeywu@lyc.co.jp  事務共通:jimu@lyc.co.jp
-P-mark:第21004525(02)号
-労働者派遣事業許可番号　派13-306371
-`;
-      }
-      for (let i in sendInvoiceList) {
-        if (sendInvoiceList[i].customerNo === this.state.rowCustomerNo) {
-          let reportFile = "";
-          for (let j in this.state.sendInvoiceList[i]
-            .sendInvoiceWorkTimeModel) {
-            if (
-              this.state.selectAllFlag ||
-              this.state.sendInvoiceList[i].sendInvoiceWorkTimeModel[j].report
-            ) {
-              reportFile +=
-                this.state.sendInvoiceList[i].sendInvoiceWorkTimeModel[j]
-                  .workingTimeReport + ";;";
-            }
-          }
-
-          let selectedMailCC = sendInvoiceList[i]?.mailCC?.join(",");
-          if (selectedMailCC) {
-            model.selectedMailCC = selectedMailCC;
-          }
-
-          model = {
-            yearAndMonth: publicUtils.formateDate(
-              $("#datePicker").val(),
-              false
-            ),
-            // mailCC:this.state.mailCC
-            customerAbbreviation: sendInvoiceList[i].customerAbbreviation,
-            mail: sendInvoiceList[i].purchasingManagersMail,
-            purchasingManagers: sendInvoiceList[i].purchasingManagers,
-            customerNo: sendInvoiceList[i].customerNo,
-            customerName: sendInvoiceList[i].customerName,
-            mailFrom: this.state.loginUserInfo[0].companyMail,
-            mailConfirmContont: mailConfirmContont,
-            mailTitle:
-              "請求書_" +
-              this.state.yearAndMonth.getFullYear() +
-              "年" +
-              (this.state.yearAndMonth.getMonth() + 1) +
-              "月分_" +
-              (this.state.rowCustomerName.search("会社") === -1
-                ? this.state.rowCustomerName + `株式会社`
-                : this.state.rowCustomerName),
-            nowDate:
-              String(new Date().getFullYear()) +
-              "/" +
-              (new Date().getMonth() + 1 < 10
-                ? "0" + String(new Date().getMonth() + 1)
-                : String(new Date().getMonth() + 1)) +
-              "/" +
-              (new Date().getDate() < 10
-                ? "0" + String(new Date().getDate())
-                : String(new Date().getDate())) +
-              " " +
-              new Date().getHours() +
-              ":" +
-              new Date().getMinutes(),
-            reportFile: reportFile,
-          };
-        }
-      }
-
-      axios
-        .post(this.state.serverIP + "sendInvoice/sendLetter", model)
-        .then((result) => {
-          this.searchSendInvoiceList();
-        });
-    }
+        axios
+          .post(this.state.serverIP + "sendInvoice/sendLetter", model)
+          .then((result) => {
+            this.searchSendInvoiceList();
+          });
+      },
+      centered: true,
+      className: this.state.isMobileDevice ? "confirmModalBtnCenterClass" : "",
+    });
   };
 
   reportDownload = (report, employeeName) => {
@@ -986,7 +924,7 @@ P-mark:第21004525(02)号
                   mailCC={this.state.sendInvoiceList[
                     this.state.reportRowNo - 1
                   ]?.mailCC?.join(",")}
-                  mailTitle={this.state.mailTitle}
+                  mailTitle={this.getMailTitle()}
                   customerNo={this.state.rowCustomerNo}
                 />
               </Modal.Body>
