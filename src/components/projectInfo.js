@@ -100,6 +100,7 @@ class projectInfo extends Component {
     stationDrop: store.getState().dropDown[14].slice(1),
     successRateDrop: store.getState().dropDown[48],
     developLanguageDrop: store.getState().dropDown[8].slice(1),
+    getFrameWorkDrop: store.getState().dropDown[71].slice(1),
     ageClassificationDrop: store.getState().dropDown[49],
     workStartPeriodDrop: store.getState().dropDown[59],
     admissionMonthDrop: store.getState().dropDown[62],
@@ -147,6 +148,8 @@ class projectInfo extends Component {
       keyWordOfLanagurue1: "",
       keyWordOfLanagurue2: "",
       keyWordOfLanagurue3: "",
+      keyWordOfFrameWork1: "",
+      keyWordOfFrameWork2: "",
       projectInfoDetail: "",
       japaneaseConversationLevel: "",
       unitPriceRangeLowest: "",
@@ -192,6 +195,8 @@ class projectInfo extends Component {
       keyWordOfLanagurue1: projectInfoMod.keyWordOfLanagurue1,
       keyWordOfLanagurue2: projectInfoMod.keyWordOfLanagurue2,
       keyWordOfLanagurue3: projectInfoMod.keyWordOfLanagurue3,
+      keyWordOfFrameWork1: projectInfoMod.keyWordOfFrameWork1,
+      keyWordOfFrameWork2: projectInfoMod.keyWordOfFrameWork2,
       projectInfoDetail: projectInfoMod.projectInfoDetail,
       japaneaseConversationLevel: projectInfoMod.japaneaseConversationLevel,
       unitPriceRangeLowest: projectInfoMod.unitPriceRangeLowest,
@@ -266,6 +271,23 @@ class projectInfo extends Component {
       });
     }
   };
+
+  /**
+   * frameWorkの自動提示
+   * @param {*} event
+   * @param {*} values
+   */
+  handleFrameWork1Change = (event, values) => {
+    this.setState({
+      keyWordOfFrameWork1: values?.code || "",
+    });
+  };
+  handleFrameWork2Change = (event, values) => {
+    this.setState({
+      keyWordOfFrameWork2: values?.code || "",
+    });
+  };
+
   /**
    * 開発言語の自動提示
    * @param {*} event
@@ -467,6 +489,8 @@ class projectInfo extends Component {
     projectInfoModel["keyWordOfLanagurue1"] = this.state.keyWordOfLanagurue1;
     projectInfoModel["keyWordOfLanagurue2"] = this.state.keyWordOfLanagurue2;
     projectInfoModel["keyWordOfLanagurue3"] = this.state.keyWordOfLanagurue3;
+    projectInfoModel["keyWordOfFrameWork1"] = this.state.keyWordOfFrameWork1;
+    projectInfoModel["keyWordOfFrameWork2"] = this.state.keyWordOfFrameWork2;
     projectInfoModel["customerNo"] = this.state.customerNo;
     projectInfoModel["actionType"] = this.state.actionType;
     projectInfoModel["experienceYear"] = this.state.experienceYear;
@@ -564,6 +588,8 @@ class projectInfo extends Component {
       projectPhaseEnd,
       keyWordOfLanagurue1,
       keyWordOfLanagurue2,
+      keyWordOfFrameWork1,
+      keyWordOfFrameWork2,
       japaneaseConversationLevel,
       noOfInterviewCode,
       remark,
@@ -739,6 +765,9 @@ class projectInfo extends Component {
       admissionMonthDrop,
       experienceYearDrop,
       detailEditFlag,
+      keyWordOfFrameWork1,
+      keyWordOfFrameWork2,
+      getFrameWorkDrop,
     } = this.state;
 
     console.log(
@@ -1082,8 +1111,67 @@ class projectInfo extends Component {
                     </FormControl>
                   </InputGroup>
                 </Col>
+                <Col sm={4}>
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
+                    <InputGroup.Prepend>
+                      <InputGroup.Text className="w100p">
+                        フレームワーク
+                      </InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <Autocomplete
+                      id="keyWordOfFrameWork1"
+                      name="keyWordOfFrameWork1"
+                      value={
+                        getFrameWorkDrop.find(
+                          (v) => v.code === keyWordOfFrameWork1
+                        ) || {}
+                      }
+                      options={getFrameWorkDrop}
+                      getOptionLabel={(option) => option.name || ""}
+                      disabled={actionType === "detail" ? true : false}
+                      onChange={(event, values) =>
+                        this.handleFrameWork1Change(event, values)
+                      }
+                      renderInput={(params) => (
+                        <div ref={params.InputProps.ref}>
+                          <input
+                            placeholder="例：FrameWork1"
+                            type="text"
+                            {...params.inputProps}
+                            className="auto form-control Autocompletestyle-projectInfo-keyWordOfLanagurue"
+                          />
+                        </div>
+                      )}
+                    />
+                    <Autocomplete
+                      id="keyWordOfFrameWork2"
+                      name="keyWordOfFrameWork2"
+                      value={
+                        getFrameWorkDrop.find(
+                          (v) => v.code === keyWordOfFrameWork2
+                        ) || {}
+                      }
+                      options={getFrameWorkDrop}
+                      getOptionLabel={(option) => option.name || ""}
+                      disabled={actionType === "detail" ? true : false}
+                      onChange={(event, values) =>
+                        this.handleFrameWork2Change(event, values)
+                      }
+                      renderInput={(params) => (
+                        <div ref={params.InputProps.ref}>
+                          <input
+                            placeholder="例：FrameWork2"
+                            type="text"
+                            {...params.inputProps}
+                            className="auto form-control Autocompletestyle-projectInfo-keyWordOfLanagurue"
+                          />
+                        </div>
+                      )}
+                    />
+                  </InputGroup>
+                </Col>
 
-                <Col sm={8}>
+                <Col sm={4}>
                   <InputGroup size="sm" className="mb-3">
                     <InputGroup.Prepend>
                       <InputGroup.Text>備考</InputGroup.Text>
