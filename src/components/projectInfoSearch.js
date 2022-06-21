@@ -858,11 +858,12 @@ class ProjectInfoSearch extends Component {
             <Form.Group>
               <Row>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text>選択期間</InputGroup.Text>
                     </InputGroup.Prepend>
                     <FormControl
+                      className="fx1"
                       as="select"
                       value={theSelectProjectperiodStatus}
                       name="theSelectProjectperiodStatus"
@@ -882,6 +883,7 @@ class ProjectInfoSearch extends Component {
                       <InputGroup.Text>案件番号</InputGroup.Text>
                     </InputGroup.Prepend>
                     <Autocomplete
+                      className="fx1"
                       id="projectNo"
                       name="projectNo"
                       value={
@@ -898,7 +900,7 @@ class ProjectInfoSearch extends Component {
                             placeholder="例：20200101"
                             type="text"
                             {...params.inputProps}
-                            className="auto form-control Autocompletestyle-projectInfo"
+                            className="auto form-control Autocompletestyle-projectInfo w100p"
                           />
                         </div>
                       )}
@@ -911,6 +913,7 @@ class ProjectInfoSearch extends Component {
                       <InputGroup.Text>開発言語</InputGroup.Text>
                     </InputGroup.Prepend>
                     <Autocomplete
+                      className="fx1"
                       id="keyWordOfLanagurue1"
                       name="keyWordOfLanagurue1"
                       value={
@@ -929,12 +932,13 @@ class ProjectInfoSearch extends Component {
                             placeholder="例：JAVA"
                             type="text"
                             {...params.inputProps}
-                            className="auto form-control Autocompletestyle-projectInfo-keyWordOfLanagurue"
+                            className="auto form-control Autocompletestyle-projectInfo-keyWordOfLanagurue w100p"
                           />
                         </div>
                       )}
                     />
                     <Autocomplete
+                      className="fx1"
                       id="keyWordOfLanagurue2"
                       name="keyWordOfLanagurue2"
                       value={
@@ -953,12 +957,13 @@ class ProjectInfoSearch extends Component {
                             placeholder="例：JAVA"
                             type="text"
                             {...params.inputProps}
-                            className="auto form-control Autocompletestyle-projectInfo-keyWordOfLanagurue"
+                            className="auto form-control Autocompletestyle-projectInfo-keyWordOfLanagurue w100p"
                           />
                         </div>
                       )}
                     />
                     <Autocomplete
+                      className="fx1"
                       hidden
                       id="keyWordOfLanagurue3"
                       name="keyWordOfLanagurue3"
@@ -978,7 +983,7 @@ class ProjectInfoSearch extends Component {
                             placeholder="例：JAVA"
                             type="text"
                             {...params.inputProps}
-                            className="auto form-control Autocompletestyle-projectInfo-keyWordOfLanagurue"
+                            className="auto form-control Autocompletestyle-projectInfo-keyWordOfLanagurue w100p"
                           />
                         </div>
                       )}
@@ -991,6 +996,7 @@ class ProjectInfoSearch extends Component {
                       <InputGroup.Text>面談回数</InputGroup.Text>
                     </InputGroup.Prepend>
                     <FormControl
+                      className="fx1"
                       as="select"
                       value={noOfInterviewCode}
                       name="noOfInterviewCode"
@@ -1007,11 +1013,12 @@ class ProjectInfoSearch extends Component {
               </Row>
               <Row>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text>日本語</InputGroup.Text>
                     </InputGroup.Prepend>
                     <FormControl
+                      className="fx1"
                       as="select"
                       value={japaneaseConversationLevel}
                       name="japaneaseConversationLevel"
@@ -1039,7 +1046,7 @@ class ProjectInfoSearch extends Component {
                       showFullMonthYearPicker
                       minDate={new Date()}
                       showDisabledMonthNavigation
-                      className="form-control form-control-sm"
+                      className="form-control form-control-sm w100p"
                       id="projectInfoSearchDatePicker"
                       dateFormat={"yyyy/MM"}
                       name="admissionPeriod"
@@ -1049,11 +1056,12 @@ class ProjectInfoSearch extends Component {
                   </InputGroup>
                 </Col>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text>単価範囲</InputGroup.Text>
                     </InputGroup.Prepend>
                     <FormControl
+                      className="fx1"
                       maxLength="3"
                       value={unitPriceRangeLowest}
                       placeholder="例：123"
@@ -1075,11 +1083,12 @@ class ProjectInfoSearch extends Component {
                   </InputGroup>
                 </Col>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text>作業工程</InputGroup.Text>
                     </InputGroup.Prepend>
                     <FormControl
+                      className="fx1"
                       as="select"
                       value={projectPhaseStart}
                       name="projectPhaseStart"
@@ -1097,11 +1106,12 @@ class ProjectInfoSearch extends Component {
               </Row>
               <Row hidden>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text>確率</InputGroup.Text>
                     </InputGroup.Prepend>
                     <FormControl
+                      className="fx1"
                       as="select"
                       value={successRate}
                       name="successRate"
@@ -1116,11 +1126,12 @@ class ProjectInfoSearch extends Component {
                   </InputGroup>
                 </Col>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text>案件種別</InputGroup.Text>
                     </InputGroup.Prepend>
                     <FormControl
+                      className="fx1"
                       as="select"
                       value={projectType}
                       name="projectType"
@@ -1135,11 +1146,12 @@ class ProjectInfoSearch extends Component {
                   </InputGroup>
                 </Col>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text>国籍制限</InputGroup.Text>
                     </InputGroup.Prepend>
                     <FormControl
+                      className="fx1"
                       as="select"
                       value={nationalityCode}
                       name="nationalityCode"
@@ -1154,11 +1166,12 @@ class ProjectInfoSearch extends Component {
                   </InputGroup>
                 </Col>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text>年数要求</InputGroup.Text>
                     </InputGroup.Prepend>
                     <FormControl
+                      className="fx1"
                       maxLength="2"
                       placeholder="例：10"
                       value={experienceYear}

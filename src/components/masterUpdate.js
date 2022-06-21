@@ -499,13 +499,14 @@ class masterUpdate extends Component {
         <Form id="masterUpdateForm">
           <Row>
             <Col>
-              <InputGroup size="sm" className="mb-3">
+              <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                 <InputGroup.Prepend>
                   <InputGroup.Text id="inputGroup-sizing-sm">
                     名　称
                   </InputGroup.Text>
                 </InputGroup.Prepend>
                 <Autocomplete
+                  className="fx1"
                   id="master"
                   name="master"
                   value={
@@ -521,7 +522,7 @@ class masterUpdate extends Component {
                         placeholder="  マスター名"
                         type="text"
                         {...params.inputProps}
-                        className="auto form-control Autocompletestyle-master"
+                        className="auto form-control Autocompletestyle-master w100p"
                       />
                     </div>
                   )}

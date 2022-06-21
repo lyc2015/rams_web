@@ -663,6 +663,7 @@ class CustomerInfoSearch extends Component {
                   <InputGroup.Text id="fiveKanji">お客様名</InputGroup.Text>
                 </InputGroup.Prepend>
                 <Autocomplete
+                  className="w100p"
                   id="customerNo"
                   name="customerNo"
                   value={
@@ -682,7 +683,7 @@ class CustomerInfoSearch extends Component {
                       <input
                         type="text"
                         {...params.inputProps}
-                        className="auto form-control Autocompletestyle-customerInfoSearch"
+                        className="auto form-control Autocompletestyle-customerInfoSearch w100p"
                       />
                     </div>
                   )}
@@ -695,6 +696,7 @@ class CustomerInfoSearch extends Component {
                   <InputGroup.Text id="fiveKanji">客様略称</InputGroup.Text>
                 </InputGroup.Prepend>
                 <Autocomplete
+                  className="w100p"
                   id="customerAbbreviation"
                   name="customerAbbreviation"
                   value={
@@ -716,7 +718,7 @@ class CustomerInfoSearch extends Component {
                       <input
                         type="text"
                         {...params.inputProps}
-                        className="auto form-control Autocompletestyle-customerInfoSearch"
+                        className="auto form-control Autocompletestyle-customerInfoSearch w100p"
                       />
                     </div>
                   )}
@@ -729,6 +731,7 @@ class CustomerInfoSearch extends Component {
                   <InputGroup.Text id="fiveKanji">LYC担当</InputGroup.Text>
                 </InputGroup.Prepend>
                 <Autocomplete
+                  className="w100p"
                   id="salesStaff"
                   name="salesStaff"
                   value={
@@ -749,7 +752,7 @@ class CustomerInfoSearch extends Component {
                       <input
                         type="text"
                         {...params.inputProps}
-                        className="auto form-control Autocompletestyle-customerInfoSearch"
+                        className="auto form-control Autocompletestyle-customerInfoSearch w100p"
                       />
                     </div>
                   )}
@@ -877,6 +880,7 @@ class CustomerInfoSearch extends Component {
                   <InputGroup.Text id="fiveKanji">本社場所</InputGroup.Text>
                 </InputGroup.Prepend>
                 <Autocomplete
+                  className="w100p"
                   disabled={this.state.actionType === "detail" ? true : false}
                   id="stationCode"
                   name="stationCode"
@@ -896,7 +900,7 @@ class CustomerInfoSearch extends Component {
                         placeholder=" 例：秋葉原駅"
                         type="text"
                         {...params.inputProps}
-                        className="auto form-control Autocompletestyle-customerInfoSearch"
+                        className="auto form-control Autocompletestyle-customerInfoSearch w100p"
                       />
                     </div>
                   )}
@@ -909,6 +913,7 @@ class CustomerInfoSearch extends Component {
                   <InputGroup.Text id="fiveKanji">上位お客様</InputGroup.Text>
                 </InputGroup.Prepend>
                 <Autocomplete
+                  className="w100p"
                   disabled={this.state.actionType === "detail" ? true : false}
                   id="topCustomer"
                   name="topCustomer"
@@ -928,7 +933,7 @@ class CustomerInfoSearch extends Component {
                         placeholder=" 例：富士通"
                         type="text"
                         {...params.inputProps}
-                        className="auto form-control Autocompletestyle-customerInfoSearch"
+                        className="auto form-control Autocompletestyle-customerInfoSearch w100p"
                       />
                     </div>
                   )}

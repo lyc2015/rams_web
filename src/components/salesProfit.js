@@ -488,13 +488,14 @@ class salesProfit extends React.Component {
             <Form.Group>
               <Row>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         営業担当
                       </InputGroup.Text>
                     </InputGroup.Prepend>
                     <Autocomplete
+                      className="fx1"
                       id="customerNo"
                       name="customerNo"
                       value={
@@ -517,7 +518,7 @@ class salesProfit extends React.Component {
                           <input
                             type="text"
                             {...params.inputProps}
-                            className="auto form-control Autocompletestyle-customerInfo"
+                            className="auto form-control Autocompletestyle-customerInfo w100p"
                           />
                         </div>
                       )}
@@ -547,53 +548,51 @@ class salesProfit extends React.Component {
                   </InputGroup>
                 </Col>
                 <Col sm={5}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         年月
                       </InputGroup.Text>
                     </InputGroup.Prepend>
-                    <InputGroup.Prepend>
-                      <DatePicker
-                        selected={this.state.admissionStartDate}
-                        onChange={this.admissionStartDate}
-                        dateFormat="yyyy/MM"
-                        showMonthYearPicker
-                        showFullMonthYearPicker
-                        maxDate={
-                          new Date(
-                            new Date().getFullYear(),
-                            parseInt(new Date().getMonth() + 1) + 1,
-                            0
-                          )
-                        }
-                        name="admissionStartDate"
-                        className="form-control form-control-sm"
-                        id="datePicker"
-                        locale="ja"
-                        autoComplete="off"
-                      />
-                      〜
-                      <DatePicker
-                        selected={this.state.admissionEndDate}
-                        onChange={this.admissionEndDate}
-                        dateFormat="yyyy/MM"
-                        showMonthYearPicker
-                        showFullMonthYearPicker
-                        maxDate={
-                          new Date(
-                            new Date().getFullYear(),
-                            parseInt(new Date().getMonth() + 1) + 1,
-                            0
-                          )
-                        }
-                        name="admissionEndDate"
-                        className="form-control form-control-sm"
-                        id="datePicker"
-                        locale="ja"
-                        autoComplete="off"
-                      />
-                    </InputGroup.Prepend>
+                    <DatePicker
+                      selected={this.state.admissionStartDate}
+                      onChange={this.admissionStartDate}
+                      dateFormat="yyyy/MM"
+                      showMonthYearPicker
+                      showFullMonthYearPicker
+                      maxDate={
+                        new Date(
+                          new Date().getFullYear(),
+                          parseInt(new Date().getMonth() + 1) + 1,
+                          0
+                        )
+                      }
+                      name="admissionStartDate"
+                      className="form-control form-control-sm"
+                      id="datePicker"
+                      locale="ja"
+                      autoComplete="off"
+                    />
+                    〜
+                    <DatePicker
+                      selected={this.state.admissionEndDate}
+                      onChange={this.admissionEndDate}
+                      dateFormat="yyyy/MM"
+                      showMonthYearPicker
+                      showFullMonthYearPicker
+                      maxDate={
+                        new Date(
+                          new Date().getFullYear(),
+                          parseInt(new Date().getMonth() + 1) + 1,
+                          0
+                        )
+                      }
+                      name="admissionEndDate"
+                      className="form-control form-control-sm"
+                      id="datePicker"
+                      locale="ja"
+                      autoComplete="off"
+                    />
                   </InputGroup>
                 </Col>
               </Row>

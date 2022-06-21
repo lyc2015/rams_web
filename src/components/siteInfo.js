@@ -1639,7 +1639,7 @@ class siteInfo extends Component {
                           <input
                             type="text"
                             {...params.inputProps}
-                            className="auto Autocompletestyle-siteInfo-employeeNo form-control"
+                            className="auto Autocompletestyle-siteInfo-employeeNo form-control w100p"
                           />
                         </div>
                       )}
@@ -1847,7 +1847,7 @@ class siteInfo extends Component {
                           <input
                             type="text"
                             {...params.inputProps}
-                            className="auto form-control Autocompletestyle-siteInfo"
+                            className="auto form-control Autocompletestyle-siteInfo w100p"
                           />
                         </div>
                       )}
@@ -1881,7 +1881,7 @@ class siteInfo extends Component {
                           <input
                             type="text"
                             {...params.inputProps}
-                            className="auto form-control Autocompletestyle-siteInfo"
+                            className="auto form-control Autocompletestyle-siteInfo w100p"
                           />
                         </div>
                       )}
@@ -1918,7 +1918,7 @@ class siteInfo extends Component {
                           <input
                             type="text"
                             {...params.inputProps}
-                            className="auto form-control Autocompletestyle-siteInfo"
+                            className="auto form-control Autocompletestyle-siteInfo w100p"
                           />
                         </div>
                       )}
@@ -1952,7 +1952,7 @@ class siteInfo extends Component {
                           <input
                             type="text"
                             {...params.inputProps}
-                            className="auto form-control Autocompletestyle-siteInfo-topCustomer"
+                            className="auto form-control Autocompletestyle-siteInfo-topCustomer w100p"
                           />
                         </div>
                       )}
@@ -2175,6 +2175,7 @@ class siteInfo extends Component {
                       </InputGroup.Text>
                     </InputGroup.Prepend>
                     <Autocomplete
+                      className="fx1"
                       id="employeeName"
                       name="employeeName"
                       value={
@@ -2212,6 +2213,7 @@ class siteInfo extends Component {
                       )}
                     />
                     <Autocomplete
+                      className="fx1"
                       id="employeeName"
                       name="employeeName"
                       value={
@@ -2249,6 +2251,7 @@ class siteInfo extends Component {
                       )}
                     />
                     <Autocomplete
+                      className="fx1"
                       id="employeeName"
                       name="employeeName"
                       value={
@@ -2286,6 +2289,7 @@ class siteInfo extends Component {
                       )}
                     />
                     <Autocomplete
+                      className="fx1"
                       id="employeeName"
                       name="employeeName"
                       value={

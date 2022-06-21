@@ -1404,13 +1404,14 @@ class WagesInfo extends Component {
             <Form.Group>
               <Row>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         社員区分
                       </InputGroup.Text>
                     </InputGroup.Prepend>
                     <Form.Control
+                      className="w100p"
                       as="select"
                       size="sm"
                       onChange={this.employeeStatusChange.bind(this)}
@@ -1427,11 +1428,15 @@ class WagesInfo extends Component {
                   </InputGroup>
                 </Col>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
+                  <InputGroup
+                    size="sm"
+                    className="mb-3 flexWrapNoWrap required-mark"
+                  >
                     <InputGroup.Prepend>
                       <InputGroup.Text>社員名</InputGroup.Text>
                     </InputGroup.Prepend>
                     <Autocomplete
+                      className="w100p"
                       id="employeeName"
                       name="employeeName"
                       value={
@@ -1456,14 +1461,11 @@ class WagesInfo extends Component {
                             placeholder="  例：佐藤真一"
                             type="text"
                             {...params.inputProps}
-                            className="auto form-control Autocompletestyle-wagesInfo-employeeName"
+                            className="auto form-control Autocompletestyle-wagesInfo-employeeName w100p"
                           />
                         </div>
                       )}
                     />
-                    <font id="mark" color="red" className="site-mark">
-                      ★
-                    </font>
                   </InputGroup>
                 </Col>
                 <Col sm={5}></Col>
@@ -1481,11 +1483,12 @@ class WagesInfo extends Component {
               </Row>
               <Row>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text>稼働区分</InputGroup.Text>
                     </InputGroup.Prepend>
                     <Form.Control
+                      className="w100p"
                       as="select"
                       size="sm"
                       onChange={this.valueChange}
@@ -1506,7 +1509,10 @@ class WagesInfo extends Component {
                   sm={3}
                   hidden={this.state.workingCondition === "0" ? false : true}
                 >
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup
+                    size="sm"
+                    className="mb-3 flexWrapNoWrap required-mark"
+                  >
                     <InputGroup.Prepend>
                       <InputGroup.Text>給料</InputGroup.Text>
                     </InputGroup.Prepend>
@@ -1524,21 +1530,16 @@ class WagesInfo extends Component {
                         円
                       </InputGroup.Text>
                     </InputGroup.Prepend>
-                    <font
-                      /*hidden={kadouCheck}*/
-                      id="mark"
-                      color="red"
-                      className="site-mark"
-                    >
-                      ★
-                    </font>{" "}
                   </InputGroup>
                 </Col>
                 <Col
                   sm={3}
                   hidden={this.state.workingCondition === "0" ? true : false}
                 >
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup
+                    size="sm"
+                    className="mb-3 flexWrapNoWrap required-mark"
+                  >
                     <InputGroup.Prepend>
                       <InputGroup.Text id="fiveKanji">
                         非稼動費用
@@ -1558,18 +1559,10 @@ class WagesInfo extends Component {
                         円
                       </InputGroup.Text>
                     </InputGroup.Prepend>
-                    <font
-                      /*hidden={!kadouCheck}*/
-                      id="mark"
-                      color="red"
-                      className="site-mark"
-                    >
-                      ★
-                    </font>
                   </InputGroup>
                 </Col>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text>社会保険</InputGroup.Text>
                     </InputGroup.Prepend>
@@ -1596,7 +1589,7 @@ class WagesInfo extends Component {
                   </InputGroup>
                 </Col>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="niKanji">厚生</InputGroup.Text>
                     </InputGroup.Prepend>
@@ -1651,38 +1644,36 @@ class WagesInfo extends Component {
                         次回昇給月
                       </InputGroup.Text>
                     </InputGroup.Prepend>
-                    <InputGroup.Append>
-                      <DatePicker
-                        selected={raiseStartDate}
-                        onChange={this.raiseChange}
-                        autoComplete="off"
-                        locale="pt-BR"
-                        showMonthYearPicker
-                        showFullMonthYearPicker
-                        minDate={
-                          new Date(
-                            new Date().getFullYear(),
-                            new Date().getMonth()
-                          )
-                        }
-                        showDisabledMonthNavigation
-                        className="form-control form-control-sm"
-                        id={
-                          actionType === "detail"
-                            ? "wagesInfoDatePicker-nextRaiseMonth-readOnly"
-                            : "wagesInfoDatePicker-nextRaiseMonth"
-                        }
-                        dateFormat={"yyyy/MM"}
-                        name="nextRaiseMonth"
-                        locale="ja"
-                        disabled={actionType === "detail" ? true : false}
-                      />
-                    </InputGroup.Append>
+                    <DatePicker
+                      selected={raiseStartDate}
+                      onChange={this.raiseChange}
+                      autoComplete="off"
+                      locale="pt-BR"
+                      showMonthYearPicker
+                      showFullMonthYearPicker
+                      minDate={
+                        new Date(
+                          new Date().getFullYear(),
+                          new Date().getMonth()
+                        )
+                      }
+                      showDisabledMonthNavigation
+                      className="form-control form-control-sm w100p"
+                      id={
+                        actionType === "detail"
+                          ? "wagesInfoDatePicker-nextRaiseMonth-readOnly"
+                          : "wagesInfoDatePicker-nextRaiseMonth"
+                      }
+                      dateFormat={"yyyy/MM"}
+                      name="nextRaiseMonth"
+                      locale="ja"
+                      disabled={actionType === "detail" ? true : false}
+                    />
                   </InputGroup>
                 </Col>
 
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="sixKanji">
                         ボーナス回数
@@ -1726,7 +1717,7 @@ class WagesInfo extends Component {
                           showFullMonthYearPicker
                           // minDate={new Date()}
                           showDisabledMonthNavigation
-                          className="form-control form-control-sm"
+                          className="form-control form-control-sm w100p"
                           id={
                             actionType === "detail"
                               ? "wagesInfoDatePickerReadOnly"
@@ -1751,7 +1742,7 @@ class WagesInfo extends Component {
                           showFullMonthYearPicker
                           // minDate={new Date()}
                           showDisabledMonthNavigation
-                          className="form-control form-control-sm"
+                          className="form-control form-control-sm w100p"
                           id={
                             actionType === "detail"
                               ? "wagesInfoDatePickerReadOnly"
@@ -1770,7 +1761,7 @@ class WagesInfo extends Component {
                   </InputGroup>
                 </Col>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     {/*<InputGroup.Prepend>
                                             <InputGroup.Text>前回額</InputGroup.Text>
                                         </InputGroup.Prepend>
@@ -1811,7 +1802,7 @@ class WagesInfo extends Component {
               </Row>
               <Row>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text>総額</InputGroup.Text>
                     </InputGroup.Prepend>
@@ -1831,40 +1822,38 @@ class WagesInfo extends Component {
                   </InputGroup>
                 </Col>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="flexWrapNoWrap">
+                  <InputGroup
+                    size="sm"
+                    className="flexWrapNoWrap required-mark"
+                  >
                     <InputGroup.Prepend>
                       <InputGroup.Text>開始年月</InputGroup.Text>
                     </InputGroup.Prepend>
-                    <InputGroup.Append>
-                      <DatePicker
-                        selected={this.state.reflectStartDate}
-                        onChange={this.reflectStartDateChange}
-                        dateFormat={"yyyy MM"}
-                        autoComplete="off"
-                        locale="pt-BR"
-                        showMonthYearPicker
-                        showFullMonthYearPicker
-                        // minDate={new Date()}
-                        showDisabledMonthNavigation
-                        className="form-control form-control-sm"
-                        id={
-                          actionType === "detail"
-                            ? "wagesInfoDatePicker-reflectYearAndMonth-readOnly"
-                            : "wagesInfoDatePicker-reflectYearAndMonth"
-                        }
-                        dateFormat={"yyyy/MM"}
-                        name="reflectYearAndMonth"
-                        locale="ja"
-                        disabled={actionType === "detail" ? true : false}
-                      />
-                      <font id="mark" color="red" className="site-mark">
-                        ★
-                      </font>
-                    </InputGroup.Append>
+                    <DatePicker
+                      selected={this.state.reflectStartDate}
+                      onChange={this.reflectStartDateChange}
+                      dateFormat={"yyyy MM"}
+                      autoComplete="off"
+                      locale="pt-BR"
+                      showMonthYearPicker
+                      showFullMonthYearPicker
+                      // minDate={new Date()}
+                      showDisabledMonthNavigation
+                      className="form-control form-control-sm w100p"
+                      id={
+                        actionType === "detail"
+                          ? "wagesInfoDatePicker-reflectYearAndMonth-readOnly"
+                          : "wagesInfoDatePicker-reflectYearAndMonth"
+                      }
+                      dateFormat={"yyyy/MM"}
+                      name="reflectYearAndMonth"
+                      locale="ja"
+                      disabled={actionType === "detail" ? true : false}
+                    />
                   </InputGroup>
                 </Col>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text>社員形式</InputGroup.Text>
                     </InputGroup.Prepend>
@@ -1888,7 +1877,7 @@ class WagesInfo extends Component {
                   </InputGroup>
                 </Col>
                 <Col hidden>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text>社員区分</InputGroup.Text>
                     </InputGroup.Prepend>
@@ -1908,7 +1897,7 @@ class WagesInfo extends Component {
                   </InputGroup>
                 </Col>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text>備考</InputGroup.Text>
                     </InputGroup.Prepend>

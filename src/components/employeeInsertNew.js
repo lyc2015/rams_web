@@ -1594,6 +1594,7 @@ class employeeInsertNew extends React.Component {
                       <InputGroup.Text id="sanKanji">紹介者</InputGroup.Text>
                     </InputGroup.Prepend>
                     <Autocomplete
+                      className="width-auto"
                       id="employeeName"
                       name="employeeName"
                       value={

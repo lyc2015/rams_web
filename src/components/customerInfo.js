@@ -1094,22 +1094,28 @@ class CustomerInfo extends Component {
           <Form id="customerForm">
             <Row>
               <Col sm={3}>
-                <InputGroup size="sm" className="mb-3">
+                <InputGroup
+                  size="sm"
+                  className="mb-3 flexWrapNoWrap required-mark"
+                >
                   <InputGroup.Prepend>
                     <InputGroup.Text>お客様名</InputGroup.Text>
                   </InputGroup.Prepend>
                   <Form.Control
+                    className="w100p"
                     placeholder="例：LYC株式会社"
                     maxLength="50"
                     id="customerName"
                     onChange={customerInfoJs.toDisabed}
                     name="customerName"
                   />
-                  <font color="red">★</font>
                 </InputGroup>
               </Col>
               <Col sm={3}>
-                <InputGroup size="sm" className="mb-3">
+                <InputGroup
+                  size="sm"
+                  className="mb-3 flexWrapNoWrap required-mark"
+                >
                   <InputGroup.Prepend>
                     <InputGroup.Text id="twoKanji">略称</InputGroup.Text>
                   </InputGroup.Prepend>
@@ -1129,17 +1135,17 @@ class CustomerInfo extends Component {
                     name="customerNo"
                     readOnly
                   />
-                  <font color="red">★</font>
                 </InputGroup>
               </Col>
             </Row>
             <Row>
               <Col sm={3}>
-                <InputGroup size="sm" className="mb-3">
+                <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                   <InputGroup.Prepend>
                     <InputGroup.Text>代表</InputGroup.Text>
                   </InputGroup.Prepend>
                   <Form.Control
+                    className="w100p"
                     placeholder="例：中山毛石"
                     maxLength="20"
                     id="representative"
@@ -1153,6 +1159,7 @@ class CustomerInfo extends Component {
                     <InputGroup.Text>本社場所</InputGroup.Text>
                   </InputGroup.Prepend>
                   <Autocomplete
+                    className="w100p"
                     disabled={this.state.actionType === "detail" ? true : false}
                     id="stationCode"
                     name="stationCode"
@@ -1172,7 +1179,7 @@ class CustomerInfo extends Component {
                           placeholder=" 例：秋葉原駅"
                           type="text"
                           {...params.inputProps}
-                          className="auto form-control Autocompletestyle-customerInfo"
+                          className="auto form-control Autocompletestyle-customerInfo w100p"
                         />
                       </div>
                     )}
@@ -1180,7 +1187,7 @@ class CustomerInfo extends Component {
                 </InputGroup>
               </Col>
               <Col sm={3}>
-                <InputGroup size="sm" className="mb-3">
+                <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                   <InputGroup.Prepend>
                     <InputGroup.Text>資本金</InputGroup.Text>
                   </InputGroup.Prepend>
@@ -1212,7 +1219,7 @@ class CustomerInfo extends Component {
                         ? "customerInfoDatePickerReadOnly-establishmentDate"
                         : "customerInfoDatePicker-establishmentDate"
                     }
-                    className="form-control form-control-sm"
+                    className="form-control form-control-sm w100p"
                     showMonthYearPicker
                     showFullMonthYearPicker
                     showDisabledMonthNavigation
@@ -1225,11 +1232,12 @@ class CustomerInfo extends Component {
             </Row>
             <Row>
               <Col sm={3}>
-                <InputGroup size="sm" className="mb-3">
+                <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                   <InputGroup.Prepend>
                     <InputGroup.Text>上場会社</InputGroup.Text>
                   </InputGroup.Prepend>
                   <Form.Control
+                    className="w100p"
                     as="select"
                     placeholder="上場会社"
                     id="listedCompanyFlag"
@@ -1244,11 +1252,12 @@ class CustomerInfo extends Component {
                 </InputGroup>
               </Col>
               <Col sm={3}>
-                <InputGroup size="sm" className="mb-3">
+                <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                   <InputGroup.Prepend>
                     <InputGroup.Text>会社性質</InputGroup.Text>
                   </InputGroup.Prepend>
                   <Form.Control
+                    className="w100p"
                     as="select"
                     placeholder="会社性質"
                     id="companyNatureCode"
@@ -1263,11 +1272,12 @@ class CustomerInfo extends Component {
                 </InputGroup>
               </Col>
               <Col sm={3}>
-                <InputGroup size="sm" className="mb-3">
+                <InputGroup size="sm" className="mb-3  flexWrapNoWrap">
                   <InputGroup.Prepend>
                     <InputGroup.Text id="fiveKanji">支払サイト</InputGroup.Text>
                   </InputGroup.Prepend>
                   <Form.Control
+                    className="w100p"
                     as="select"
                     placeholder="支払サイト"
                     id="paymentsiteCode"
@@ -1287,6 +1297,7 @@ class CustomerInfo extends Component {
                     <InputGroup.Text id="fiveKanji">上位お客様</InputGroup.Text>
                   </InputGroup.Prepend>
                   <Autocomplete
+                    className="w100p"
                     disabled={this.state.actionType === "detail" ? true : false}
                     id="topCustomer"
                     name="topCustomer"
@@ -1306,7 +1317,7 @@ class CustomerInfo extends Component {
                           placeholder=" 例：富士通"
                           type="text"
                           {...params.inputProps}
-                          className="auto form-control Autocompletestyle-customerInfo-topCustomer"
+                          className="auto form-control Autocompletestyle-customerInfo-topCustomer w100p"
                         />
                       </div>
                     )}
@@ -1435,6 +1446,7 @@ class CustomerInfo extends Component {
                     <InputGroup.Text>職位</InputGroup.Text>
                   </InputGroup.Prepend>
                   <Autocomplete
+                    className="w100p"
                     disabled={this.state.actionType === "detail" ? true : false}
                     id="positionCode"
                     name="positionCode"
@@ -1454,7 +1466,7 @@ class CustomerInfo extends Component {
                           placeholder=" 例：部長"
                           type="text"
                           {...params.inputProps}
-                          className="auto form-control Autocompletestyle-customerInfo"
+                          className="auto form-control Autocompletestyle-customerInfo w100p"
                         />
                       </div>
                     )}
@@ -1554,7 +1566,7 @@ class CustomerInfo extends Component {
                     showFullMonthYearPicker
                     showDisabledMonthNavigation
                     name="businessStartDate"
-                    className="form-control form-control-sm"
+                    className="form-control form-control-sm w100p"
                     locale="ja"
                     disabled={
                       actionType === "detail" || !this.state.responseFlag
@@ -1583,7 +1595,7 @@ class CustomerInfo extends Component {
                         : "customerInfoDatePicker"
                     }
                     name="contactDate"
-                    className="form-control form-control-sm"
+                    className="form-control form-control-sm w100p"
                     locale="ja"
                     disabled={
                       actionType === "detail" ||
@@ -1602,6 +1614,7 @@ class CustomerInfo extends Component {
                     <InputGroup.Text>LYC担当</InputGroup.Text>
                   </InputGroup.Prepend>
                   <Autocomplete
+                    className="w100p"
                     id="customerNo"
                     name="customerNo"
                     disabled={this.state.actionType === "detail" ? true : false}
@@ -1627,7 +1640,7 @@ class CustomerInfo extends Component {
                         <input
                           type="text"
                           {...params.inputProps}
-                          className="auto form-control Autocompletestyle-customerInfo"
+                          className="auto form-control Autocompletestyle-customerInfo w100p"
                         />
                       </div>
                     )}

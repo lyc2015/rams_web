@@ -308,7 +308,7 @@ class situationChange extends Component {
           <Col sm={6}>
             <InputGroup size="sm" className="mb-3">
               <InputGroup.Prepend>
-                <InputGroup.Text id="inputGroup-sizing-sm">
+                <InputGroup.Text id="inputGroup-sizing-sm flexWrapNoWrap">
                   年月
                 </InputGroup.Text>
                 <DatePicker
@@ -325,7 +325,7 @@ class situationChange extends Component {
                   name="individualSales_startYearAndMonth"
                   locale="ja"
                 ></DatePicker>
-                <font id="mark">～</font>
+                ～
                 <DatePicker
                   selected={this.state.endsituationChange}
                   onChange={this.endsituationChange}

@@ -797,11 +797,12 @@ class projectInfo extends Component {
             <Form.Group>
               <Row>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text>案件番号</InputGroup.Text>
                     </InputGroup.Prepend>
                     <FormControl
+                      className="w100p"
                       maxLength="8"
                       value={projectNo}
                       name="projectNo"
@@ -814,11 +815,15 @@ class projectInfo extends Component {
               </Row>
               <Row>
                 <Col sm={4}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup
+                    size="sm"
+                    className="mb-3 flexWrapNoWrap required-mark"
+                  >
                     <InputGroup.Prepend>
                       <InputGroup.Text>案件名</InputGroup.Text>
                     </InputGroup.Prepend>
                     <FormControl
+                      className="w100p"
                       maxLength="20"
                       value={projectName}
                       name="projectName"
@@ -826,9 +831,6 @@ class projectInfo extends Component {
                       disabled={actionType === "detail" ? true : false}
                       placeholder="例：123システム"
                     ></FormControl>
-                    <font id="mark" color="red" style={{ marginLeft: "5px" }}>
-                      ★
-                    </font>
                   </InputGroup>
                 </Col>
                 <Col sm={3}>
@@ -894,11 +896,12 @@ class projectInfo extends Component {
                   </InputGroup>
                 </Col>
                 <Col sm={2}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text>面談回数</InputGroup.Text>
                     </InputGroup.Prepend>
                     <FormControl
+                      className="w100p"
                       as="select"
                       value={noOfInterviewCode}
                       name="noOfInterviewCode"
@@ -916,7 +919,10 @@ class projectInfo extends Component {
               </Row>
               <Row>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
+                  <InputGroup
+                    size="sm"
+                    className="mb-3 flexWrapNoWrap  required-mark"
+                  >
                     <InputGroup.Prepend>
                       <InputGroup.Text>入場時期</InputGroup.Text>
                     </InputGroup.Prepend>
@@ -941,7 +947,7 @@ class projectInfo extends Component {
                         )
                       }
                       showDisabledMonthNavigation
-                      className="form-control form-control-sm"
+                      className="form-control form-control-sm w100p"
                       id={
                         actionType === "detail"
                           ? "workStartPeriodDatePickerReadOnly"
@@ -967,9 +973,6 @@ class projectInfo extends Component {
                         </option>
                       ))}
                     </FormControl>
-                    <font id="mark" color="red" style={{ marginLeft: "5px" }}>
-                      ★
-                    </font>
                   </InputGroup>
                 </Col>
                 <Col sm={4}>
@@ -978,6 +981,7 @@ class projectInfo extends Component {
                       <InputGroup.Text>開発言語</InputGroup.Text>
                     </InputGroup.Prepend>
                     <Autocomplete
+                      className="fx1"
                       id="keyWordOfLanagurue1"
                       name="keyWordOfLanagurue1"
                       value={
@@ -997,12 +1001,13 @@ class projectInfo extends Component {
                             placeholder="例：JAVA"
                             type="text"
                             {...params.inputProps}
-                            className="auto form-control Autocompletestyle-projectInfo-keyWordOfLanagurue"
+                            className="auto form-control Autocompletestyle-projectInfo-keyWordOfLanagurue w100p"
                           />
                         </div>
                       )}
                     />
                     <Autocomplete
+                      className="fx1"
                       id="keyWordOfLanagurue2"
                       name="keyWordOfLanagurue2"
                       value={
@@ -1028,6 +1033,7 @@ class projectInfo extends Component {
                       )}
                     />
                     <Autocomplete
+                      className="fx1"
                       hidden
                       id="keyWordOfLanagurue3"
                       name="keyWordOfLanagurue3"
@@ -1056,7 +1062,7 @@ class projectInfo extends Component {
                   </InputGroup>
                 </Col>
                 <Col sm={4}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text>作業工程</InputGroup.Text>
                     </InputGroup.Prepend>
@@ -1092,11 +1098,12 @@ class projectInfo extends Component {
               </Row>
               <Row>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text>日本語</InputGroup.Text>
                     </InputGroup.Prepend>
                     <FormControl
+                      className="w100p"
                       as="select"
                       value={japaneaseConversationLevel}
                       name="japaneaseConversationLevel"
@@ -1119,6 +1126,7 @@ class projectInfo extends Component {
                       </InputGroup.Text>
                     </InputGroup.Prepend>
                     <Autocomplete
+                      className="fx1"
                       id="keyWordOfFrameWork1"
                       name="keyWordOfFrameWork1"
                       value={
@@ -1144,6 +1152,7 @@ class projectInfo extends Component {
                       )}
                     />
                     <Autocomplete
+                      className="fx1"
                       id="keyWordOfFrameWork2"
                       name="keyWordOfFrameWork2"
                       value={
@@ -1172,11 +1181,12 @@ class projectInfo extends Component {
                 </Col>
 
                 <Col sm={4}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text>備考</InputGroup.Text>
                     </InputGroup.Prepend>
                     <FormControl
+                      className="w100p"
                       value={remark}
                       name="remark"
                       placeholder="例：XXXXX"
@@ -1200,7 +1210,7 @@ class projectInfo extends Component {
                   <div>
                     <Row>
                       <Col sm={3}>
-                        <InputGroup size="sm" className="mb-3">
+                        <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                           <InputGroup.Prepend>
                             <InputGroup.Text>単価範囲</InputGroup.Text>
                           </InputGroup.Prepend>
@@ -1228,7 +1238,7 @@ class projectInfo extends Component {
                         </InputGroup>
                       </Col>
                       <Col sm={3}>
-                        <InputGroup size="sm" className="mb-3">
+                        <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                           <InputGroup.Prepend>
                             <InputGroup.Text>清算範囲</InputGroup.Text>
                           </InputGroup.Prepend>
@@ -1262,11 +1272,12 @@ class projectInfo extends Component {
                         </InputGroup>
                       </Col>
                       <Col sm={2}>
-                        <InputGroup size="sm" className="mb-3">
+                        <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                           <InputGroup.Prepend>
                             <InputGroup.Text>年齢制限</InputGroup.Text>
                           </InputGroup.Prepend>
                           <FormControl
+                            className="w100p"
                             as="select"
                             value={ageClassificationCode}
                             name="ageClassificationCode"
@@ -1317,7 +1328,7 @@ class projectInfo extends Component {
                                 <input
                                   type="text"
                                   {...params.inputProps}
-                                  className="auto form-control Autocompletestyle-customerInfo"
+                                  className="auto form-control Autocompletestyle-customerInfo w100p"
                                 />
                               </div>
                             )}
@@ -1327,11 +1338,12 @@ class projectInfo extends Component {
                     </Row>
                     <Row>
                       <Col sm={3}>
-                        <InputGroup size="sm" className="mb-3">
+                        <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                           <InputGroup.Prepend>
                             <InputGroup.Text>案件種別</InputGroup.Text>
                           </InputGroup.Prepend>
                           <FormControl
+                            className="w100p"
                             as="select"
                             value={projectType}
                             name="projectType"
@@ -1344,17 +1356,15 @@ class projectInfo extends Component {
                               </option>
                             ))}
                           </FormControl>
-                          {/* <font id="mark" color="red" style={{ marginLeft: "5px" }}>
-                      ★
-                    </font> */}
                         </InputGroup>
                       </Col>
                       <Col sm={3}>
-                        <InputGroup size="sm" className="mb-3">
+                        <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                           <InputGroup.Prepend>
                             <InputGroup.Text>国籍制限</InputGroup.Text>
                           </InputGroup.Prepend>
                           <FormControl
+                            className="w100p"
                             as="select"
                             value={nationalityCode}
                             name="nationalityCode"
@@ -1370,11 +1380,12 @@ class projectInfo extends Component {
                         </InputGroup>
                       </Col>
                       <Col sm={2}>
-                        <InputGroup size="sm" className="mb-3">
+                        <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                           <InputGroup.Prepend>
                             <InputGroup.Text>募集人数</InputGroup.Text>
                           </InputGroup.Prepend>
                           <FormControl
+                            className="w100p"
                             as="select"
                             value={recruitmentNumbers}
                             name="recruitmentNumbers"
@@ -1496,7 +1507,7 @@ class projectInfo extends Component {
                         </InputGroup>
                       </Col>
                       <Col sm={3}>
-                        <InputGroup size="sm" className="mb-3">
+                        <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                           <InputGroup.Prepend>
                             <InputGroup.Text>確率</InputGroup.Text>
                           </InputGroup.Prepend>
@@ -1517,7 +1528,7 @@ class projectInfo extends Component {
                       </Col>
 
                       <Col sm={5}>
-                        <InputGroup size="sm" className="mb-3">
+                        <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                           <InputGroup.Prepend>
                             <InputGroup.Text id="fiveKanji">
                               必須事項
@@ -1568,7 +1579,7 @@ class projectInfo extends Component {
                         </InputGroup>
                       </Col>
                       <Col hidden={true} sm={6}>
-                        <InputGroup size="sm" className="mb-3">
+                        <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                           <InputGroup.Prepend>
                             <InputGroup.Text id="fiveKanji">
                               必須事項2
@@ -1587,7 +1598,7 @@ class projectInfo extends Component {
                     </Row>
                     <Row hidden={true}>
                       <Col sm={3}>
-                        <InputGroup size="sm" className="mb-3">
+                        <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                           <InputGroup.Prepend>
                             <InputGroup.Text id="fiveKanji">
                               メール
