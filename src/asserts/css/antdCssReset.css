@@ -26,7 +26,7 @@
 }
 
 .react-datepicker-wrapper {
-  /* width: 100%; */
+  width: 100%;
 }
 
 .react-bs-table-container {
@@ -123,4 +123,18 @@
   > .ant-collapse-content
   > .ant-collapse-content-box {
   padding: 0 !important;
+}
+
+.input-group .input-group-right-item {
+  flex: 1 !important;
+}
+
+.required-mark::after {
+  position: absolute;
+  width: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  color: red;
+  content: "★";
 }

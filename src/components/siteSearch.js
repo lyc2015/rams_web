@@ -582,13 +582,14 @@ class siteSearch extends Component {
             <Form.Group>
               <Row>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         社員区分
                       </InputGroup.Text>
                     </InputGroup.Prepend>
                     <Form.Control
+                      className="w100p"
                       as="select"
                       size="sm"
                       onChange={this.employeeStatusChange.bind(this)}
@@ -612,6 +613,7 @@ class siteSearch extends Component {
                       </InputGroup.Text>
                     </InputGroup.Prepend>
                     <Autocomplete
+                      className="w100p"
                       id="employeeName"
                       name="employeeName"
                       options={this.state.employeeInfo}
@@ -646,7 +648,7 @@ class siteSearch extends Component {
 
               <Row>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         社員形式
@@ -666,36 +668,13 @@ class siteSearch extends Component {
                   </InputGroup>
                 </Col>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         お客様
                       </InputGroup.Text>
-                      <Autocomplete
-                        id="customerNo"
-                        name="customerNo"
-                        options={this.state.customerMaster}
-                        getOptionLabel={(option) => option.name || ""}
-                        value={
-                          this.state.customerMaster.find(
-                            (v) => v.code === this.state.customerNo
-                          ) || {}
-                        }
-                        onChange={(event, values) =>
-                          this.getCustomer(event, values)
-                        }
-                        renderInput={(params) => (
-                          <div ref={params.InputProps.ref}>
-                            <input
-                              placeholder="  例：ベース"
-                              type="text"
-                              {...params.inputProps}
-                              className="auto form-control Autocompletestyle-siteInfoSearch-customerNo"
-                            />
-                          </div>
-                        )}
-                      />
-                      {/*<InputGroup.Text id="twoKanji">形態</InputGroup.Text>
+                    </InputGroup.Prepend>
+                    {/*<InputGroup.Text id="twoKanji">形態</InputGroup.Text>
 										<Autocomplete
 											id="typteOfContractStatus"
 											name="typteOfContractStatus"
@@ -710,7 +689,31 @@ class siteSearch extends Component {
 												</div>
 											)}
 										/>*/}
-                    </InputGroup.Prepend>
+                    <Autocomplete
+                      className="w100p"
+                      id="customerNo"
+                      name="customerNo"
+                      options={this.state.customerMaster}
+                      getOptionLabel={(option) => option.name || ""}
+                      value={
+                        this.state.customerMaster.find(
+                          (v) => v.code === this.state.customerNo
+                        ) || {}
+                      }
+                      onChange={(event, values) =>
+                        this.getCustomer(event, values)
+                      }
+                      renderInput={(params) => (
+                        <div ref={params.InputProps.ref}>
+                          <input
+                            placeholder="  例：ベース"
+                            type="text"
+                            {...params.inputProps}
+                            className="auto form-control Autocompletestyle-siteInfoSearch-customerNo w100p"
+                          />
+                        </div>
+                      )}
+                    />
                   </InputGroup>
                 </Col>
                 <Col sm={3}>
@@ -721,6 +724,7 @@ class siteSearch extends Component {
                       </InputGroup.Text>
                     </InputGroup.Prepend>
                     <Autocomplete
+                      className="w100p"
                       id="topCustomerNo"
                       name="topCustomerNo"
                       value={
@@ -754,6 +758,7 @@ class siteSearch extends Component {
                       </InputGroup.Text>
                     </InputGroup.Prepend>
                     <Autocomplete
+                      className="w100p"
                       id="bpCustomerNo"
                       name="bpCustomerNo"
                       value={
@@ -790,6 +795,7 @@ class siteSearch extends Component {
                       </InputGroup.Text>
                     </InputGroup.Prepend>
                     <Autocomplete
+                      className="w100p"
                       id="stationCode"
                       name="stationCode"
                       value={
@@ -927,21 +933,19 @@ class siteSearch extends Component {
                         退場・予定月
                       </InputGroup.Text>
                     </InputGroup.Prepend>
-                    <InputGroup.Prepend>
-                      <DatePicker
-                        selected={this.state.scheduledEndDate}
-                        onChange={this.scheduledEndDate}
-                        dateFormat="yyyy/MM"
-                        name="scheduledEndDate"
-                        showMonthYearPicker
-                        showFullMonthYearPicker
-                        showDisabledMonthNavigation
-                        className="form-control form-control-sm"
-                        id="scheduledEndDate"
-                        locale="ja"
-                        autoComplete="off"
-                      />
-                    </InputGroup.Prepend>
+                    <DatePicker
+                      selected={this.state.scheduledEndDate}
+                      onChange={this.scheduledEndDate}
+                      dateFormat="yyyy/MM"
+                      name="scheduledEndDate"
+                      showMonthYearPicker
+                      showFullMonthYearPicker
+                      showDisabledMonthNavigation
+                      className="form-control form-control-sm w100p"
+                      id="scheduledEndDate"
+                      locale="ja"
+                      autoComplete="off"
+                    />
                   </InputGroup>
                 </Col>
               </Row>

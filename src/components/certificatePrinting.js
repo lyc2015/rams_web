@@ -438,7 +438,7 @@ class certificatePrinting extends Component {
                   <InputGroup.Text id="fiveKanji">氏名</InputGroup.Text>
                 </InputGroup.Prepend>
                 <Autocomplete
-                  // className="w100p"
+                  className="w100p"
                   id="employeeName"
                   name="employeeName"
                   options={this.state.employeeInfo}
@@ -496,7 +496,7 @@ class certificatePrinting extends Component {
                   scrollableYearDropdown
                   maxDate={new Date()}
                   id="datePicker-certificatePrinting-birthday"
-                  className="form-control form-control-sm"
+                  className="form-control form-control-sm w100p"
                   showYearDropdown
                   dateFormat="yyyy/MM/dd"
                 />

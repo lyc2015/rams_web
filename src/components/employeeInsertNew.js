@@ -1288,8 +1288,7 @@ class employeeInsertNew extends React.Component {
                     </Form.Control>
                     <font className="site-mark"></font>
                   </InputGroup>
-
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="required-mark">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         社員名
@@ -1315,10 +1314,11 @@ class employeeInsertNew extends React.Component {
                       name="employeeLastName"
                       maxlength="8"
                     />
-                    <font color="red" className="site-mark">
+                    {/* <font color="red" className="site-mark">
                       ★
-                    </font>
-                    <Row></Row>
+                    </font> */}
+                  </InputGroup>
+                  <InputGroup size="sm" className="">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         カタカナ
@@ -1341,7 +1341,8 @@ class employeeInsertNew extends React.Component {
                       name="furigana2"
                     />
                     <font className="site-mark"></font>
-                    <Row></Row>
+                  </InputGroup>
+                  <InputGroup size="sm" className="required-mark">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         ローマ字
@@ -1374,10 +1375,8 @@ class employeeInsertNew extends React.Component {
                       size="sm"
                       name="alphabetName3"
                     />
-                    <font color="red" className="site-mark">
-                      ★
-                    </font>
-                    <Row></Row>
+                  </InputGroup>
+                  <InputGroup size="sm" className="required-mark">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         性別
@@ -1397,10 +1396,8 @@ class employeeInsertNew extends React.Component {
                         </option>
                       ))}
                     </Form.Control>
-                    <font color="red" className="site-mark">
-                      ★
-                    </font>
-                    <Row></Row>
+                  </InputGroup>
+                  <InputGroup size="sm" className="">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         年齢
@@ -1432,7 +1429,8 @@ class employeeInsertNew extends React.Component {
                     />
                     <FormControl value="歳" size="sm" disabled />
                     <font className="site-mark"></font>
-                    <Row></Row>
+                  </InputGroup>
+                  <InputGroup size="sm" className="required-mark">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         国籍
@@ -1452,12 +1450,6 @@ class employeeInsertNew extends React.Component {
                         </option>
                       ))}
                     </Form.Control>
-                    <font
-                      color="red"
-                      style={{ marginLeft: "0px", marginRight: "0px" }}
-                    >
-                      ★
-                    </font>
                     <FormControl
                       placeholder="県"
                       value={birthplace}
@@ -1494,8 +1486,7 @@ class employeeInsertNew extends React.Component {
                     />
                     <font className="site-mark"></font>
                   </InputGroup>
-
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="fiveKanji">社員形式</InputGroup.Text>
                     </InputGroup.Prepend>
@@ -1521,8 +1512,8 @@ class employeeInsertNew extends React.Component {
                         </option>
                       ))}
                     </Form.Control>
-                    <font className="site-mark"></font>
-                    <Row></Row>
+                  </InputGroup>
+                  <InputGroup size="sm" className="">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="fiveKanji">部署</InputGroup.Text>
                     </InputGroup.Prepend>
@@ -1545,8 +1536,8 @@ class employeeInsertNew extends React.Component {
                         </option>
                       ))}
                     </Form.Control>
-                    <font className="site-mark"></font>
-                    <Row></Row>
+                  </InputGroup>
+                  <InputGroup size="sm" className="">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="fiveKanji">職種</InputGroup.Text>
                     </InputGroup.Prepend>
@@ -1575,8 +1566,8 @@ class employeeInsertNew extends React.Component {
                         </option>
                       ))}
                     </Form.Control>
-                    <font className="site-mark"></font>
-                    <Row></Row>
+                  </InputGroup>
+                  <InputGroup size="sm" className="">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="fiveKanji">採用区分</InputGroup.Text>
                     </InputGroup.Prepend>
@@ -1634,8 +1625,8 @@ class employeeInsertNew extends React.Component {
                         </div>
                       )}
                     />
-                    <font className="site-mark"></font>
-                    <Row></Row>
+                  </InputGroup>
+                  <InputGroup size="sm" className="required-mark">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="fiveKanji">
                         社内メール
@@ -1658,10 +1649,8 @@ class employeeInsertNew extends React.Component {
                       name="companyMail"
                     />
                     <FormControl value="@lyc.co.jp" size="sm" disabled />
-                    <font color="red" className="site-mark">
-                      ★
-                    </font>
-                    <Row></Row>
+                  </InputGroup>
+                  <InputGroup size="sm" className="">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="fiveKanji">携帯電話</InputGroup.Text>
                     </InputGroup.Prepend>
@@ -1691,7 +1680,6 @@ class employeeInsertNew extends React.Component {
                       name="phoneNo3"
                       maxlength="4"
                     />
-                    <font className="site-mark"></font>
                   </InputGroup>
                 </Col>
               </Col>
@@ -1787,7 +1775,7 @@ class employeeInsertNew extends React.Component {
                   基本情報補足
                 </Form.Label>
                 <Col>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         権限
@@ -1813,10 +1801,8 @@ class employeeInsertNew extends React.Component {
                         </option>
                       ))}
                     </Form.Control>
-                    <font className="site-mark"></font>
-
-                    <Row></Row>
-
+                  </InputGroup>
+                  <InputGroup size="sm" className="">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         卒業学校
@@ -1838,10 +1824,8 @@ class employeeInsertNew extends React.Component {
                       size="sm"
                       name="major"
                     />
-                    <font className="site-mark"></font>
-
-                    <Row></Row>
-
+                  </InputGroup>
+                  <InputGroup size="sm" className="">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         卒業年月
@@ -1867,10 +1851,8 @@ class employeeInsertNew extends React.Component {
                       aria-describedby="inputGroup-sizing-sm"
                       disabled
                     />
-                    <font className="site-mark"></font>
-
-                    <Row></Row>
-
+                  </InputGroup>
+                  <InputGroup size="sm" className="">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         来日年月
@@ -1896,10 +1878,8 @@ class employeeInsertNew extends React.Component {
                       aria-describedby="inputGroup-sizing-sm"
                       disabled
                     />
-                    <font className="site-mark"></font>
-
-                    <Row></Row>
-
+                  </InputGroup>
+                  <InputGroup size="sm" className="required-mark">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         入社年月
@@ -1932,12 +1912,8 @@ class employeeInsertNew extends React.Component {
                       aria-describedby="inputGroup-sizing-sm"
                       disabled
                     />
-                    <font color="red" className="site-mark">
-                      ★
-                    </font>
-
-                    <Row></Row>
-
+                  </InputGroup>
+                  <InputGroup size="sm" className="">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         経験年数
@@ -1963,10 +1939,8 @@ class employeeInsertNew extends React.Component {
                       aria-describedby="inputGroup-sizing-sm"
                       disabled
                     />
-                    <font className="site-mark"></font>
-
-                    <Row></Row>
-
+                  </InputGroup>
+                  <InputGroup size="sm" className="">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         役割
@@ -2000,10 +1974,8 @@ class employeeInsertNew extends React.Component {
                         </option>
                       ))}
                     </Form.Control>
-                    <font className="site-mark"></font>
-
-                    <Row></Row>
-
+                  </InputGroup>
+                  <InputGroup size="sm" className="">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         契約期限
@@ -2040,10 +2012,8 @@ class employeeInsertNew extends React.Component {
                       aria-describedby="inputGroup-sizing-sm"
                       disabled
                     />
-                    <font className="site-mark"></font>
-
-                    <Row></Row>
-
+                  </InputGroup>
+                  <InputGroup size="sm" className="">
                     {/*
                      * <InputGroup.Prepend> <InputGroup.Text
                      * id="inputGroup-sizing-sm">結婚区分</InputGroup.Text>
@@ -2091,11 +2061,8 @@ class employeeInsertNew extends React.Component {
                       <FontAwesomeIcon icon={faFile} />{" "}
                       {this.state.resumeInfo1 !== undefined ? "済み" : "添付"}
                     </Button>
-
-                    <font className="site-mark"></font>
-
-                    <Row></Row>
-
+                  </InputGroup>
+                  <InputGroup size="sm" className="">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         履歴書2
@@ -2124,7 +2091,6 @@ class employeeInsertNew extends React.Component {
                       <FontAwesomeIcon icon={faFile} />{" "}
                       {this.state.resumeInfo2 !== undefined ? "済み" : "添付"}
                     </Button>
-                    <font className="site-mark"></font>
                   </InputGroup>
                 </Col>
               </Col>
@@ -2133,7 +2099,7 @@ class employeeInsertNew extends React.Component {
                   スキール情報
                 </Form.Label>
                 <Col>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         日本語
@@ -2174,10 +2140,8 @@ class employeeInsertNew extends React.Component {
                         </option>
                       ))}
                     </Form.Control>
-                    <font className="site-mark"></font>
-
-                    <Row></Row>
-
+                  </InputGroup>
+                  <InputGroup size="sm" className="">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         資格
@@ -2209,10 +2173,8 @@ class employeeInsertNew extends React.Component {
                         </option>
                       ))}
                     </Form.Control>
-                    <font className="site-mark"></font>
-
-                    <Row></Row>
-
+                  </InputGroup>
+                  <InputGroup size="sm" className="flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         開発言語
@@ -2223,7 +2185,7 @@ class employeeInsertNew extends React.Component {
                       name="developLanguage1"
                       value={developLanguage1Value}
                       options={this.state.developLanguageMaster}
-                      getOptionLabel={(option) => option.name||''}
+                      getOptionLabel={(option) => option.name || ""}
                       renderInput={(params) => (
                         <div ref={params.InputProps.ref}>
                           <input
@@ -2241,7 +2203,7 @@ class employeeInsertNew extends React.Component {
                       name="developLanguage2"
                       value={developLanguage2Value}
                       options={this.state.developLanguageMaster}
-                      getOptionLabel={(option) => option.name||''}
+                      getOptionLabel={(option) => option.name || ""}
                       renderInput={(params) => (
                         <div ref={params.InputProps.ref}>
                           <input
@@ -2254,9 +2216,8 @@ class employeeInsertNew extends React.Component {
                         </div>
                       )}
                     />
-
-                    <Row></Row>
-
+                  </InputGroup>
+                  <InputGroup size="sm" className="flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm"></InputGroup.Text>
                     </InputGroup.Prepend>
@@ -2265,7 +2226,7 @@ class employeeInsertNew extends React.Component {
                       name="developLanguage3"
                       value={developLanguage3Value}
                       options={this.state.developLanguageMaster}
-                      getOptionLabel={(option) => option.name||''}
+                      getOptionLabel={(option) => option.name || ""}
                       renderInput={(params) => (
                         <div ref={params.InputProps.ref}>
                           <input
@@ -2283,7 +2244,7 @@ class employeeInsertNew extends React.Component {
                       name="developLanguage4"
                       value={developLanguage4Value}
                       options={this.state.developLanguageMaster}
-                      getOptionLabel={(option) => option.name||''}
+                      getOptionLabel={(option) => option.name || ""}
                       renderInput={(params) => (
                         <div ref={params.InputProps.ref}>
                           <input
@@ -2296,9 +2257,8 @@ class employeeInsertNew extends React.Component {
                         </div>
                       )}
                     />
-
-                    <Row></Row>
-
+                  </InputGroup>
+                  <InputGroup size="sm" className="flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         フレーム
@@ -2309,7 +2269,7 @@ class employeeInsertNew extends React.Component {
                       name="frameWork1"
                       value={frameWork1Value}
                       options={this.state.frameWorkMaster}
-                      getOptionLabel={(option) => option.name||''}
+                      getOptionLabel={(option) => option.name || ""}
                       renderInput={(params) => (
                         <div ref={params.InputProps.ref}>
                           <input
@@ -2327,7 +2287,7 @@ class employeeInsertNew extends React.Component {
                       name="frameWork2"
                       value={frameWork2Value}
                       options={this.state.frameWorkMaster}
-                      getOptionLabel={(option) => option.name||''}
+                      getOptionLabel={(option) => option.name || ""}
                       renderInput={(params) => (
                         <div ref={params.InputProps.ref}>
                           <input
@@ -2344,7 +2304,7 @@ class employeeInsertNew extends React.Component {
                 </Col>
                 <font style={{ color: "#000000" }}>住所情報</font>
                 <Col>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         郵便番号
@@ -2360,10 +2320,8 @@ class employeeInsertNew extends React.Component {
                       id="postcode"
                       maxlength="7"
                     />
-                    <font className="site-mark"></font>
-
-                    <Row></Row>
-
+                  </InputGroup>
+                  <InputGroup size="sm" className="">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         都道府県
@@ -2379,10 +2337,8 @@ class employeeInsertNew extends React.Component {
                       ref="firstHalfAddress"
                       disabled
                     />
-                    <font className="site-mark"></font>
-
-                    <Row></Row>
-
+                  </InputGroup>
+                  <InputGroup size="sm" className="">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         以降住所
@@ -2397,22 +2353,20 @@ class employeeInsertNew extends React.Component {
                       name="lastHalfAddress"
                       maxlength="50"
                     />
-                    <font className="site-mark"></font>
-
-                    <Row></Row>
-
+                  </InputGroup>
+                  <InputGroup size="sm" className="">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         最寄駅
                       </InputGroup.Text>
                     </InputGroup.Prepend>
-
                     <Autocomplete
+                      className="input-group-right-item"
                       id="stationCode"
                       name="stationCode"
                       value={stationCodeValue}
                       options={this.state.station}
-                      getOptionLabel={(option) => option.name||''}
+                      getOptionLabel={(option) => option.name || ""}
                       onInput={this.getStation}
                       renderInput={(params) => (
                         <div ref={params.InputProps.ref}>
@@ -2427,13 +2381,13 @@ class employeeInsertNew extends React.Component {
                     />
                   </InputGroup>
                 </Col>
-                <Autocomplete
+                {/* <Autocomplete
                   id="developLanguage5"
                   name="developLanguage5"
                   value={developLanguage5Value}
                   hidden
                   options={this.state.developLanguageMaster}
-                  getOptionLabel={(option) => option.name||''}
+                  getOptionLabel={(option) => option.name || ""}
                   renderInput={(params) => (
                     <div ref={params.InputProps.ref}>
                       <input
@@ -2445,7 +2399,7 @@ class employeeInsertNew extends React.Component {
                       />
                     </div>
                   )}
-                />
+                /> */}
               </Col>
 
               <Col sm={4}>
@@ -2453,7 +2407,7 @@ class employeeInsertNew extends React.Component {
                   個人関連情報
                 </Form.Label>
                 <Col>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="sevenKanji">
                         在留資格{" "}
@@ -2480,12 +2434,8 @@ class employeeInsertNew extends React.Component {
                         </option>
                       ))}
                     </Form.Control>
-                    <font
-                      style={{ marginLeft: "5px", marginRight: "0px" }}
-                    ></font>
-
-                    <Row></Row>
-
+                  </InputGroup>
+                  <InputGroup size="sm" className="">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="sevenKanji">
                         在留カード番号
@@ -2508,19 +2458,14 @@ class employeeInsertNew extends React.Component {
                           : false
                       }
                     />
-
-                    <font
-                      style={{ marginLeft: "5px", marginRight: "0px" }}
-                    ></font>
-
-                    <Row></Row>
-
+                  </InputGroup>
+                  <InputGroup size="sm" className="flexWrapNoWrap">
                     <InputGroup.Prepend>
-                      <InputGroup.Text id="empinsert-right-kanji">
+                      <InputGroup.Text id="sevenKanji">
                         在留カード
                       </InputGroup.Text>
                     </InputGroup.Prepend>
-                    <InputGroup.Append>
+                    <>
                       <DatePicker
                         selected={this.state.stayPeriod}
                         onChange={this.inactiveStayPeriod}
@@ -2550,83 +2495,72 @@ class employeeInsertNew extends React.Component {
                             ? "datePickerReadonlyDefault-empInsert-right-stayPeriod"
                             : "datePicker-empInsert-right-stayPeriod"
                         }
+                      />{" "}
+                      <Button
+                        size="sm"
+                        style={
+                          this.state.residentCardInfo !== undefined
+                            ? {
+                                backgroundColor: "#53A100",
+                                border: "none",
+                                marginLeft: "3px",
+                              }
+                            : {
+                                backgroundColor: "",
+                                border: "none",
+                                marginLeft: "3px",
+                              }
+                        }
+                        disabled={
+                          employeeStatus === "1" || employeeStatus === "4"
+                            ? true
+                            : false
+                        }
+                        className="uploadButtom shrink-0"
+                        onClick={(event) =>
+                          this.addFile(event, "residentCardInfo")
+                        }
+                      >
+                        <FontAwesomeIcon icon={faFile} />{" "}
+                        {this.state.residentCardInfo !== undefined
+                          ? "済み"
+                          : "添付"}
+                      </Button>
+                      {/*<Button size="sm" style={{ marginLeft: "3px"}} disabled className="downloadButtom" onClick={publicUtils.handleDownload.bind(this, this.state.residentCardInfo, this.state.serverIP)} ><FontAwesomeIcon icon={faDownload} /> download</Button>*/}
+                      <Button
+                        size="sm"
+                        style={{ marginLeft: "3px", border: "none" }}
+                        disabled={
+                          this.state.residentCardInfo !== undefined
+                            ? false
+                            : true
+                        }
+                        className="uploadButtom shrink-0"
+                        onClick={this.deleteFile.bind(this, "residentCardInfo")}
+                      >
+                        <FontAwesomeIcon icon={faDownload} />
+                        削除
+                      </Button>
+                      <Form.File
+                        className="hidden-item "
+                        id="residentCardInfo"
+                        hidden
+                        data-browse="添付"
+                        value={this.state.residentCardInfo}
+                        custom
+                        onChange={(event) =>
+                          this.changeFile(event, "residentCardInfo")
+                        }
                       />
-                    </InputGroup.Append>
-                    <Autocomplete
-                      getOptionLabel={(option) => option.name||''}
-                      renderInput={(params) => (
-                        <div ref={params.InputProps.ref}>
-                          <Button
-                            size="sm"
-                            style={
-                              this.state.residentCardInfo !== undefined
-                                ? {
-                                    backgroundColor: "#53A100",
-                                    border: "none",
-                                    marginLeft: "3px",
-                                  }
-                                : {
-                                    backgroundColor: "",
-                                    border: "none",
-                                    marginLeft: "3px",
-                                  }
-                            }
-                            disabled={
-                              employeeStatus === "1" || employeeStatus === "4"
-                                ? true
-                                : false
-                            }
-                            className="uploadButtom"
-                            onClick={(event) =>
-                              this.addFile(event, "residentCardInfo")
-                            }
-                          >
-                            <FontAwesomeIcon icon={faFile} />{" "}
-                            {this.state.residentCardInfo !== undefined
-                              ? "済み"
-                              : "添付"}
-                          </Button>
-                          {/*<Button size="sm" style={{ marginLeft: "3px"}} disabled className="downloadButtom" onClick={publicUtils.handleDownload.bind(this, this.state.residentCardInfo, this.state.serverIP)} ><FontAwesomeIcon icon={faDownload} /> download</Button>*/}
-                          <Button
-                            size="sm"
-                            style={{ marginLeft: "3px", border: "none" }}
-                            disabled={
-                              this.state.residentCardInfo !== undefined
-                                ? false
-                                : true
-                            }
-                            className="uploadButtom"
-                            onClick={this.deleteFile.bind(
-                              this,
-                              "residentCardInfo"
-                            )}
-                          >
-                            <FontAwesomeIcon icon={faDownload} />
-                            削除
-                          </Button>
-                        </div>
-                      )}
-                    />
-
-                    <Form.File
-                      id="residentCardInfo"
-                      hidden
-                      data-browse="添付"
-                      value={this.state.residentCardInfo}
-                      custom
-                      onChange={(event) =>
-                        this.changeFile(event, "residentCardInfo")
-                      }
-                    />
-
-                    <Row></Row>
-
+                    </>
+                  </InputGroup>
+                  <InputGroup size="sm" className="flexWrapNoWrap">
                     <InputGroup.Prepend>
-                      <InputGroup.Text id="empinsert-right-kanji">
+                      <InputGroup.Text id="sevenKanji">
                         パスポート
                       </InputGroup.Text>
                     </InputGroup.Prepend>
-                    <InputGroup.Append>
+                    <>
                       <DatePicker
                         selected={this.state.passportStayPeriod}
                         onChange={this.passportStayPeriodChange}
@@ -2653,72 +2587,61 @@ class employeeInsertNew extends React.Component {
                             : "datePicker-empInsert-right-stayPeriod"
                         }
                       />
-                    </InputGroup.Append>
-                    <Autocomplete
-                      getOptionLabel={(option) => option.name||''}
-                      renderInput={(params) => (
-                        <div ref={params.InputProps.ref}>
-                          <Button
-                            size="sm"
-                            style={
-                              this.state.passportInfo !== undefined
-                                ? {
-                                    backgroundColor: "#53A100",
-                                    border: "none",
-                                    marginLeft: "3px",
-                                  }
-                                : {
-                                    backgroundColor: "",
-                                    border: "none",
-                                    marginLeft: "3px",
-                                  }
-                            }
-                            disabled={
-                              employeeStatus === "1" || employeeStatus === "4"
-                                ? true
-                                : false
-                            }
-                            className="uploadButtom"
-                            onClick={(event) =>
-                              this.addFile(event, "passportInfo")
-                            }
-                          >
-                            <FontAwesomeIcon icon={faFile} />{" "}
-                            {this.state.passportInfo !== undefined
-                              ? "済み"
-                              : "添付"}
-                          </Button>
-                          {/*<Button size="sm" style={{ marginLeft: "3px"}} disabled className="downloadButtom" onClick={publicUtils.handleDownload.bind(this, this.state.passportInfo, this.state.serverIP)} ><FontAwesomeIcon icon={faDownload} /> download</Button>*/}
-                          <Button
-                            size="sm"
-                            style={{ marginLeft: "3px", border: "none" }}
-                            disabled={
-                              this.state.passportInfo !== undefined
-                                ? false
-                                : true
-                            }
-                            className="uploadButtom"
-                            onClick={this.deleteFile.bind(this, "passportInfo")}
-                          >
-                            <FontAwesomeIcon icon={faDownload} />
-                            削除
-                          </Button>
-                        </div>
-                      )}
-                    />
-                    <Form.File
-                      id="passportInfo"
-                      hidden
-                      data-browse="添付"
-                      value={this.state.passportInfo}
-                      custom
-                      onChange={(event) =>
-                        this.changeFile(event, "passportInfo")
-                      }
-                    />
-
-                    <Row></Row>
-
+                      <Button
+                        size="sm"
+                        style={
+                          this.state.passportInfo !== undefined
+                            ? {
+                                backgroundColor: "#53A100",
+                                border: "none",
+                                marginLeft: "3px",
+                              }
+                            : {
+                                backgroundColor: "",
+                                border: "none",
+                                marginLeft: "3px",
+                              }
+                        }
+                        disabled={
+                          employeeStatus === "1" || employeeStatus === "4"
+                            ? true
+                            : false
+                        }
+                        className="uploadButtom  shrink-0"
+                        onClick={(event) => this.addFile(event, "passportInfo")}
+                      >
+                        <FontAwesomeIcon icon={faFile} />{" "}
+                        {this.state.passportInfo !== undefined
+                          ? "済み"
+                          : "添付"}
+                      </Button>
+                      {/*<Button size="sm" style={{ marginLeft: "3px"}} disabled className="downloadButtom" onClick={publicUtils.handleDownload.bind(this, this.state.passportInfo, this.state.serverIP)} ><FontAwesomeIcon icon={faDownload} /> download</Button>*/}
+                      <Button
+                        size="sm"
+                        style={{ marginLeft: "3px", border: "none" }}
+                        disabled={
+                          this.state.passportInfo !== undefined ? false : true
+                        }
+                        className="uploadButtom shrink-0"
+                        onClick={this.deleteFile.bind(this, "passportInfo")}
+                      >
+                        <FontAwesomeIcon icon={faDownload} />
+                        削除
+                      </Button>
+                      <Form.File
+                        className="hidden-item "
+                        id="passportInfo"
+                        hidden
+                        data-browse="添付"
+                        value={this.state.passportInfo}
+                        custom
+                        onChange={(event) =>
+                          this.changeFile(event, "passportInfo")
+                        }
+                      />
+                    </>
+                  </InputGroup>
+                  <InputGroup size="sm" className="">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="sevenKanji">
                         パスポート番号
@@ -2738,11 +2661,8 @@ class employeeInsertNew extends React.Component {
                       name="passportNo"
                       maxlength="9"
                     />
-                    <font
-                      style={{ marginLeft: "5px", marginRight: "0px" }}
-                    ></font>
-                    <Row></Row>
-
+                  </InputGroup>
+                  <InputGroup size="sm" className="">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="sevenKanji">
                         マイナンバー
@@ -2762,12 +2682,8 @@ class employeeInsertNew extends React.Component {
                       name="myNumber"
                       maxlength="12"
                     />
-                    <font
-                      style={{ marginLeft: "5px", marginRight: "0px" }}
-                    ></font>
-
-                    <Row></Row>
-
+                  </InputGroup>
+                  <InputGroup size="sm" className="flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="sevenKanji">
                         雇用保険加入
@@ -2807,12 +2723,8 @@ class employeeInsertNew extends React.Component {
                       maxlength="13"
                       disabled={employmentInsurance === "1" ? false : true}
                     />
-                    <font
-                      style={{ marginLeft: "5px", marginRight: "0px" }}
-                    ></font>
-
-                    <Row></Row>
-
+                  </InputGroup>
+                  <InputGroup size="sm" className="flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="sevenKanji">
                         社会保険加入
@@ -2873,12 +2785,8 @@ class employeeInsertNew extends React.Component {
                       maxlength="13"
                       disabled={socialInsurance === "1" ? false : true}
                     />
-                    <font
-                      style={{ marginLeft: "5px", marginRight: "0px" }}
-                    ></font>
-
-                    <Row></Row>
-
+                  </InputGroup>
+                  <InputGroup size="sm" className="flexWrapNoWrap">
                     {/*
                      * <InputGroup.Prepend> <InputGroup.Text
                      * id="empinsert-right-kanji">社会保険</InputGroup.Text>
@@ -2936,8 +2844,8 @@ class employeeInsertNew extends React.Component {
                         }
                         id={
                           employeeStatus === "1" || employeeStatus === "4"
-                            ? "datePickerReadonlyDefault-empInsert-right-immigrationTime"
-                            : "datePicker-empInsert-right-immigrationTime"
+                            ? "datePickerReadonlyDefault-empInsert-right-socialInsuranceDate"
+                            : "datePicker-empInsert-right-socialInsuranceDate"
                         }
                       />
                     </InputGroup.Append>
@@ -2966,9 +2874,8 @@ class employeeInsertNew extends React.Component {
                         }
                       />
                     </InputGroup.Append>
-
-                    <Row></Row>
-
+                  </InputGroup>
+                  <InputGroup size="sm" className="flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="sevenKanji">
                         退職年月日
@@ -3033,9 +2940,6 @@ class employeeInsertNew extends React.Component {
                         )
                       )}
                     </Form.Control>
-                    <font
-                      style={{ marginLeft: "5px", marginRight: "0px" }}
-                    ></font>
                   </InputGroup>
                 </Col>
               </Col>

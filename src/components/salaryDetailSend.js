@@ -830,34 +830,34 @@ P-mark：第21004525(02)号
             </InputGroup>
           </Col>
           <Col
-            sm={3}
+            sm={2}
             hidden={
               this.state.letterStatus === "1" || this.state.format === "1"
             }
           >
-            <InputGroup size="sm" className="mb-3">
+            <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
               <InputGroup.Prepend>
                 <InputGroup.Text id="inputGroup-sizing-sm">
                   年月
                 </InputGroup.Text>
-                <DatePicker
-                  selected={this.state.date}
-                  onChange={this.inactiveYearAndMonth}
-                  disabled={this.state.format === "1"}
-                  autoComplete="off"
-                  locale="ja"
-                  dateFormat="yyyy/MM"
-                  showMonthYearPicker
-                  showFullMonthYearPicker
-                  maxDate={new Date()}
-                  id={
-                    this.state.format === "1"
-                      ? "datePickerReadonlyDefault"
-                      : "datePicker"
-                  }
-                  className="form-control form-control-sm"
-                />
               </InputGroup.Prepend>
+              <DatePicker
+                selected={this.state.date}
+                onChange={this.inactiveYearAndMonth}
+                disabled={this.state.format === "1"}
+                autoComplete="off"
+                locale="ja"
+                dateFormat="yyyy/MM"
+                showMonthYearPicker
+                showFullMonthYearPicker
+                maxDate={new Date()}
+                id={
+                  this.state.format === "1"
+                    ? "datePickerReadonlyDefault"
+                    : "datePicker"
+                }
+                className="form-control form-control-sm"
+              />
             </InputGroup>
           </Col>
           <Col

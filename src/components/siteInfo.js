@@ -1616,6 +1616,7 @@ class siteInfo extends Component {
                       </InputGroup.Text>
                     </InputGroup.Prepend>
                     <Autocomplete
+                      className="w100p"
                       id="employeeName"
                       name="employeeName"
                       options={this.state.employeeInfo}
@@ -1672,7 +1673,7 @@ class siteInfo extends Component {
               </Row>
               <Row>
                 <Col sm={3}>
-                  <InputGroup size="sm">
+                  <InputGroup size="sm" className="required-mark">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="fiveKanji">
                         入場年月日
@@ -1706,17 +1707,18 @@ class siteInfo extends Component {
                       value={time}
                       disabled
                     />
-                    <font color="red" className="site-mark">
-                      ★
-                    </font>
                   </InputGroup>
                 </Col>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
+                  <InputGroup
+                    size="sm"
+                    className="mb-3 flexWrapNoWrap required-mark"
+                  >
                     <InputGroup.Prepend>
                       <InputGroup.Text id="cssNikanji">単価</InputGroup.Text>
                     </InputGroup.Prepend>
                     <InputNumber
+                      className="w100p"
                       ref="unitPrice"
                       min={0}
                       id="unitPrice"
@@ -1744,61 +1746,53 @@ class siteInfo extends Component {
                             : false
                         }
                       />
-                      <font className="site-mark" color="red">
-                        ★
-                      </font>
                     </InputGroup.Prepend>
                   </InputGroup>
                 </Col>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
+                  <InputGroup
+                    size="sm"
+                    className={
+                      "mb-3 flexWrapNoWrap" +
+                      (this.state.workState === "0" ||
+                      this.state.workState === "3"
+                        ? ""
+                        : "required-mark")
+                    }
+                  >
                     <InputGroup.Prepend>
                       <InputGroup.Text id="fiveKanji">
                         退場年月日
                       </InputGroup.Text>
                     </InputGroup.Prepend>
-                    <InputGroup.Prepend>
-                      <DatePicker
-                        filterDate={this.setGray}
-                        selected={this.state.admissionEndDate}
-                        onChange={this.admissionEndDate.bind(this)}
-                        dateFormat="yyyy/MM/dd"
-                        name="admissionEndDate"
-                        className="form-control form-control-sm"
-                        locale="ja"
-                        autoComplete="off"
-                        id={
-                          this.state.workState !== "0" &&
-                          this.state.workState !== "3"
-                            ? pageDisabledFlag
-                              ? "siteDatePickerReadonlyDefault"
-                              : "admissionEndDate"
-                            : "siteDatePickerReadonlyDefault"
-                        }
-                        disabled={
-                          this.state.employeeName === ""
-                            ? true
-                            : this.state.workState === "0" ||
-                              this.state.workState === "3"
-                            ? true
-                            : pageDisabledFlag
-                            ? true
-                            : false
-                        }
-                      />
-                      <font
-                        color="red"
-                        hidden={
-                          this.state.workState === "0" ||
-                          this.state.workState === "3"
-                            ? true
-                            : false
-                        }
-                        className="site-mark"
-                      >
-                        ★
-                      </font>
-                    </InputGroup.Prepend>
+                    <DatePicker
+                      filterDate={this.setGray}
+                      selected={this.state.admissionEndDate}
+                      onChange={this.admissionEndDate.bind(this)}
+                      dateFormat="yyyy/MM/dd"
+                      name="admissionEndDate"
+                      className="form-control form-control-sm w100p"
+                      locale="ja"
+                      autoComplete="off"
+                      id={
+                        this.state.workState !== "0" &&
+                        this.state.workState !== "3"
+                          ? pageDisabledFlag
+                            ? "siteDatePickerReadonlyDefault"
+                            : "admissionEndDate"
+                          : "siteDatePickerReadonlyDefault"
+                      }
+                      disabled={
+                        this.state.employeeName === ""
+                          ? true
+                          : this.state.workState === "0" ||
+                            this.state.workState === "3"
+                          ? true
+                          : pageDisabledFlag
+                          ? true
+                          : false
+                      }
+                    />
                   </InputGroup>
                 </Col>
                 <Col sm={3}>
@@ -1835,6 +1829,7 @@ class siteInfo extends Component {
                       </InputGroup.Text>
                     </InputGroup.Prepend>
                     <Autocomplete
+                      className="w100p"
                       id="location"
                       name="location"
                       value={
@@ -1861,107 +1856,110 @@ class siteInfo extends Component {
                   </InputGroup>
                 </Col>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         形態
                       </InputGroup.Text>
-                      <Autocomplete
-                        id="typteOfContractStatus"
-                        name="typteOfContractStatus"
-                        options={this.state.typteOfContractStatus}
-                        getOptionLabel={(option) => option.name || ""}
-                        value={
-                          this.state.typteOfContractStatus.find(
-                            (v) => v.code === this.state.typteOfContract
-                          ) || {}
-                        }
-                        onChange={(event, values) =>
-                          this.getTypteOfContract(event, values)
-                        }
-                        renderInput={(params) => (
-                          <div ref={params.InputProps.ref}>
-                            <input
-                              type="text"
-                              {...params.inputProps}
-                              className="auto form-control Autocompletestyle-siteInfo"
-                            />
-                          </div>
-                        )}
-                        disabled={pageDisabledFlag}
-                      />
                     </InputGroup.Prepend>
+                    <Autocomplete
+                      className="w100p"
+                      id="typteOfContractStatus"
+                      name="typteOfContractStatus"
+                      options={this.state.typteOfContractStatus}
+                      getOptionLabel={(option) => option.name || ""}
+                      value={
+                        this.state.typteOfContractStatus.find(
+                          (v) => v.code === this.state.typteOfContract
+                        ) || {}
+                      }
+                      onChange={(event, values) =>
+                        this.getTypteOfContract(event, values)
+                      }
+                      renderInput={(params) => (
+                        <div ref={params.InputProps.ref}>
+                          <input
+                            type="text"
+                            {...params.inputProps}
+                            className="auto form-control Autocompletestyle-siteInfo"
+                          />
+                        </div>
+                      )}
+                      disabled={pageDisabledFlag}
+                    />
                   </InputGroup>
                 </Col>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup
+                    size="sm"
+                    className="mb-3 flexWrapNoWrap required-mark"
+                  >
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         お客様
                       </InputGroup.Text>
-                      <Autocomplete
-                        id="customerNo"
-                        name="customerNo"
-                        options={this.state.customerMaster}
-                        getOptionLabel={(option) => option.name || ""}
-                        value={
-                          this.state.customerMaster.find(
-                            (v) => v.code === this.state.customerNo
-                          ) || {}
-                        }
-                        onChange={(event, values) =>
-                          this.getCustomer(event, values)
-                        }
-                        renderInput={(params) => (
-                          <div ref={params.InputProps.ref}>
-                            <input
-                              type="text"
-                              {...params.inputProps}
-                              className="auto form-control Autocompletestyle-siteInfo"
-                            />
-                          </div>
-                        )}
-                        disabled={pageDisabledFlag}
-                      />
-                      <font color="red" className="site-mark">
-                        ★
-                      </font>
                     </InputGroup.Prepend>
+                    <Autocomplete
+                      className="w100p"
+                      id="customerNo"
+                      name="customerNo"
+                      options={this.state.customerMaster}
+                      getOptionLabel={(option) => option.name || ""}
+                      value={
+                        this.state.customerMaster.find(
+                          (v) => v.code === this.state.customerNo
+                        ) || {}
+                      }
+                      onChange={(event, values) =>
+                        this.getCustomer(event, values)
+                      }
+                      renderInput={(params) => (
+                        <div ref={params.InputProps.ref}>
+                          <input
+                            type="text"
+                            {...params.inputProps}
+                            className="auto form-control Autocompletestyle-siteInfo"
+                          />
+                        </div>
+                      )}
+                      disabled={pageDisabledFlag}
+                    />
                   </InputGroup>
                 </Col>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="sixKanji">
                         トップお客様
                       </InputGroup.Text>
-                      <Autocomplete
-                        id="topCustomerNo"
-                        name="topCustomerNo"
-                        value={
-                          this.state.topCustomerMaster.find(
-                            (v) => v.code === this.state.topCustomerNo
-                          ) || {}
-                        }
-                        onChange={(event, values) =>
-                          this.getTopCustomer(event, values)
-                        }
-                        options={this.state.topCustomerMaster}
-                        getOptionLabel={(option) => option.name || ""}
-                        renderInput={(params) => (
-                          <div ref={params.InputProps.ref}>
-                            <input
-                              type="text"
-                              {...params.inputProps}
-                              className="auto form-control Autocompletestyle-siteInfo-topCustomer"
-                            />
-                          </div>
-                        )}
-                        disabled={
-                          pageDisabledFlag || this.state.typteOfContract === "4"
-                        }
-                      />
                     </InputGroup.Prepend>
+                    <Autocomplete
+                      className="w100p"
+                      id="topCustomerNo"
+                      name="topCustomerNo"
+                      value={
+                        this.state.topCustomerMaster.find(
+                          (v) => v.code === this.state.topCustomerNo
+                        ) || {}
+                      }
+                      onChange={(event, values) =>
+                        this.getTopCustomer(event, values)
+                      }
+                      options={this.state.topCustomerMaster}
+                      getOptionLabel={(option) => option.name || ""}
+                      renderInput={(params) => (
+                        <div ref={params.InputProps.ref}>
+                          <input
+                            type="text"
+                            {...params.inputProps}
+                            className="auto form-control Autocompletestyle-siteInfo-topCustomer"
+                          />
+                        </div>
+                      )}
+                      disabled={
+                        pageDisabledFlag || this.state.typteOfContract === "4"
+                      }
+                    />
                   </InputGroup>
                 </Col>
               </Row>
@@ -1994,6 +1992,7 @@ class siteInfo extends Component {
                       </InputGroup.Text>
                     </InputGroup.Prepend>
                     <Autocomplete
+                      className="w50p"
                       id="developLanguageCode"
                       name="developLanguageCode"
                       value={
@@ -2011,7 +2010,7 @@ class siteInfo extends Component {
                           <input
                             type="text"
                             {...params.inputProps}
-                            className="auto form-control Autocompletestyle-siteInfo-developLanguageCode"
+                            className="auto form-control Autocompletestyle-siteInfo-developLanguageCode w100p"
                             style={{
                               backgroundColor:
                                 this.state.employeeName === "" ? "#e9ecef" : "",
@@ -2022,6 +2021,7 @@ class siteInfo extends Component {
                       disabled={pageDisabledFlag}
                     />
                     <Autocomplete
+                      className="w50p"
                       id="developLanguageCode2"
                       name="developLanguageCode2"
                       value={
@@ -2039,7 +2039,7 @@ class siteInfo extends Component {
                           <input
                             type="text"
                             {...params.inputProps}
-                            className="auto form-control Autocompletestyle-siteInfo-developLanguageCode"
+                            className="auto form-control Autocompletestyle-siteInfo-developLanguageCode w100p"
                             style={{
                               backgroundColor:
                                 this.state.employeeName === "" ? "#e9ecef" : "",
@@ -2331,36 +2331,34 @@ class siteInfo extends Component {
                         予定終了月
                       </InputGroup.Text>
                     </InputGroup.Prepend>
-                    <InputGroup.Prepend>
-                      <DatePicker
-                        selected={this.state.scheduledEndDate}
-                        onChange={this.scheduledEndDate}
-                        dateFormat="yyyy/MM"
-                        name="scheduledEndDate"
-                        showMonthYearPicker
-                        showFullMonthYearPicker
-                        showDisabledMonthNavigation
-                        className="form-control form-control-sm"
-                        id="scheduledEndDate-siteInfo"
-                        locale="ja"
-                        autoComplete="off"
-                        disabled={pageDisabledFlag}
-                        id={
-                          pageDisabledFlag
-                            ? "scheduledEndDate-siteInfoReadOnly"
-                            : this.state.workState === "1"
-                            ? "scheduledEndDate-siteInfoReadOnly"
-                            : "scheduledEndDate-siteInfo"
-                        }
-                        disabled={
-                          pageDisabledFlag
-                            ? true
-                            : this.state.workState === "1"
-                            ? true
-                            : false
-                        }
-                      />
-                    </InputGroup.Prepend>
+                    <DatePicker
+                      selected={this.state.scheduledEndDate}
+                      onChange={this.scheduledEndDate}
+                      dateFormat="yyyy/MM"
+                      name="scheduledEndDate"
+                      showMonthYearPicker
+                      showFullMonthYearPicker
+                      showDisabledMonthNavigation
+                      className="form-control form-control-sm w100p"
+                      id="scheduledEndDate-siteInfo"
+                      locale="ja"
+                      autoComplete="off"
+                      disabled={pageDisabledFlag}
+                      id={
+                        pageDisabledFlag
+                          ? "scheduledEndDate-siteInfoReadOnly"
+                          : this.state.workState === "1"
+                          ? "scheduledEndDate-siteInfoReadOnly"
+                          : "scheduledEndDate-siteInfo"
+                      }
+                      disabled={
+                        pageDisabledFlag
+                          ? true
+                          : this.state.workState === "1"
+                          ? true
+                          : false
+                      }
+                    />
                   </InputGroup>
                 </Col>
                 <Col sm={3}>

@@ -938,7 +938,7 @@ P-mark:第21004525(02)号
             </Form.Group>
             <Form.Group>
               <Row>
-                <Col sm={3}>
+                <Col sm={2}>
                   <InputGroup size="sm" className="mb-2">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
@@ -954,7 +954,7 @@ P-mark:第21004525(02)号
                         showFullMonthYearPicker
                         maxDate={new Date()}
                         id="datePicker"
-                        className="form-control form-control-sm"
+                        className="form-control form-control-sm w100p"
                       />
                     </InputGroup.Prepend>
                   </InputGroup>

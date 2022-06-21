@@ -289,6 +289,7 @@ class envelopePrinting extends Component {
                   <InputGroup.Text id="fiveKanji">氏名</InputGroup.Text>
                 </InputGroup.Prepend>
                 <Autocomplete
+                  className="w100p"
                   id="employeeName"
                   name="employeeName"
                   options={this.state.employeeInfo}
