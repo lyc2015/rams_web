@@ -214,7 +214,7 @@ class sendLettersConfirm extends React.Component {
     $("#deleteButton").attr("disabled", true);
     $("#bookButton").attr("disabled", true);
 
-    if (this.state.employeeInfo.length === 0) {
+    if (this.state.employeeInfo?.length === 0) {
       this.setState({
         employeeFlag: false,
       });
@@ -235,11 +235,11 @@ class sendLettersConfirm extends React.Component {
 
   setNewDevelopLanguagesShow = () => {
     let developLanguagesTemp = [];
-    for (let i = 0; i < this.state.developLanguagesShow.length; i++) {
+    for (let i = 0; i < this.state.developLanguagesShow?.length; i++) {
       developLanguagesTemp.push(this.state.developLanguagesShow[i]);
     }
     let frameWorkTemp = [];
-    for (let i = 0; i < this.state.frameWorks.length; i++) {
+    for (let i = 0; i < this.state.frameWorks?.length; i++) {
       developLanguagesTemp.push({
         code: String((Number(this.state.frameWorks[i].code) + 1) * -1),
         name: this.state.frameWorks[i].name,
@@ -267,6 +267,9 @@ class sendLettersConfirm extends React.Component {
     axios
       .post(this.state.serverIP + "sendLettersConfirm/getAllEmployInfoName")
       .then((result) => {
+        if (result?.data?.length < 1) {
+          return;
+        }
         // 全部要員名前集合
         let arr = [];
         if (result.data.length !== 0) {
@@ -283,14 +286,14 @@ class sendLettersConfirm extends React.Component {
         });
       })
       .catch(function (error) {
-        alert(error);
+        console.error(error);
       });
   };
   /* 要員追加機能の新規 20201216 張棟 END */
 
   // 共用CCメールを操作
   onTagsChange = (event, values, fieldName) => {
-    if (values.length === 2) {
+    if (values?.length === 2) {
       this.setState({
         disbleState: true,
       });
@@ -301,8 +304,8 @@ class sendLettersConfirm extends React.Component {
     }
     this.setState({
       selectedMailCC: [
-        this.fromMailToEmp(values.length >= 1 ? values[0].companyMail : ""),
-        this.fromMailToEmp(values.length >= 2 ? values[1].companyMail : ""),
+        this.fromMailToEmp(values?.length >= 1 ? values[0].companyMail : ""),
+        this.fromMailToEmp(values?.length >= 2 ? values[1].companyMail : ""),
       ].filter(function (s) {
         return s;
       }),
@@ -326,7 +329,7 @@ class sendLettersConfirm extends React.Component {
         });
       })
       .catch(function (error) {
-        //alert(error);
+        console.error(error);
       });
   };
 
@@ -380,7 +383,7 @@ class sendLettersConfirm extends React.Component {
     let resumePathList = []; // 简历路径列表
     let resumeFileList = []; // 新上传的简历file列表
     let resumeResults = [];
-    for (let i = 0; i < employeeInfo.length; i++) {
+    for (let i = 0; i < employeeInfo?.length; i++) {
       const item = employeeInfo[i];
       let resumeResult = this.getFinalResume(item);
       resumeResults.push(resumeResult);
@@ -684,7 +687,7 @@ Email：` +
 
   checkCanSendEmail = () => {
     const { employeeInfo } = this.state;
-    for (let index = 0; index < employeeInfo.length; index++) {
+    for (let index = 0; index < employeeInfo?.length; index++) {
       const item = employeeInfo[index];
       if (!item.employeeName) {
         return {
@@ -722,7 +725,7 @@ Email：` +
       this.setSelectedCusInfos("○");
 
       // 遍历selectedCusInfos，发送邮件
-      for (let i = 0; i < selectedCusInfos.length; i++) {
+      for (let i = 0; i < selectedCusInfos?.length; i++) {
         let { emailModel, resumeFileList } =
           await this.getSendMailWithFileRequestParams(selectedCusInfos[i]);
         const formData = new FormData();
@@ -753,7 +756,7 @@ Email：` +
         }
       }
     } catch (error) {
-      alert(error);
+      console.error(error);
     }
   };
 
@@ -837,7 +840,7 @@ Email：` +
   };
 
   beforeSaveCell = (row, cellName, cellValue) => {
-    if (cellValue.length > 7 || Number.isNaN(cellValue)) {
+    if (cellValue?.length > 7 || Number.isNaN(cellValue)) {
       message.error("入力された単価は合理的ではありません！");
       return false;
     }
@@ -858,13 +861,13 @@ Email：` +
         });
       })
       .catch(function (error) {
-        alert(error);
+        console.error(error);
       });
   };
 
   getHopeHighestPrice = (result) => {
     let { employeeInfo } = this.state;
-    for (let i = 0; i < employeeInfo.length; i++) {
+    for (let i = 0; i < employeeInfo?.length; i++) {
       employeeInfo[i].hopeHighestPrice = result.data[i].unitPrice;
     }
 
@@ -918,20 +921,22 @@ Email：` +
       .then((result) => {
         if (index != undefined) {
           employeeInfo[index - 1].resumeInfo1 = result.data[0].resumeInfo1;
+          employeeInfo[index - 1].employeeStatus =
+            result.data[0].employeeStatus;
           employeeInfo[index - 1].resumeName1 = result.data[0].resumeName1;
           employeeInfo[index - 1].resumeInfo2 = result.data[0].resumeInfo2;
           employeeInfo[index - 1].resumeName2 = result.data[0].resumeName2;
           employeeInfo[index - 1].hopeHighestPrice = result.data[0].unitPrice;
           employeeInfo[index - 1].resumeInfoList =
             result.data[0].resumeInfoList;
-          if (result.data[0].resumeInfoList.length > 0) {
+          if (result.data[0].resumeInfoList?.length > 0) {
             employeeInfo[index - 1].resumeInfoName =
               result.data[0].resumeInfoList[0];
           } else {
             employeeInfo[index - 1].resumeInfoName = "";
           }
         }
-        if (result.data.length === 0 || result.data[0].age === "") {
+        if (result.data?.length === 0 || result.data[0].age === "") {
           this.setState(
             {
               employeeName: result.data[0].employeeFullName,
@@ -1182,7 +1187,7 @@ Email：` +
         }
       })
       .catch(function (error) {
-        alert(error);
+        console.error(error);
       });
   };
 
@@ -1229,13 +1234,13 @@ Email：` +
           employeeInfo: result.data,
           /* 要員追加機能の新規 20201216 張棟 START */
           // 営業状況確認一覧画面から遷移した後で、要員画面初期化して要員一覧のindex初期化
-          EmployeeNameIndex: result.data.length,
+          EmployeeNameIndex: result.data?.length,
           /* 要員追加機能の新規 20201216 張棟 END */
         });
         this.getHopeHighestPrice(result);
       })
       .catch(function (error) {
-        alert(error);
+        console.error(error);
       });
     this.searchPersonnalDetail(this.state.selectedEmpNos[0]);
   };
@@ -1503,12 +1508,12 @@ Email：` +
   formatEmpStatus = (cell, row, enumObject, index) => {
     let { employeeStatusS } = this.state;
     if (row.employeeNo) {
-      let name = this.state.employees.find((v) => v.code === cell).name;
+      let name = this.state.employees.find((v) => v.code === cell)?.name;
       return name === "1社先の社員" ? "協力" : name;
     }
     let newEmployeeCanSelectCode = ["0", "1", "2"],
       newEmployeeStatus = [];
-    if (employeeStatusS.length > 1) {
+    if (employeeStatusS?.length > 1) {
       newEmployeeStatus = employeeStatusS.filter((item, index) => {
         return newEmployeeCanSelectCode.includes(item.code);
       });
@@ -1567,25 +1572,27 @@ Email：` +
     if (newResumeName) {
       allResumeList = allResumeList.concat([newResumeName]);
     }
-    return (
-      <Form.Control
-        as="select"
-        size="sm"
-        onChange={this.resumeInfoListChange.bind(this, row)}
-        name="resumeInfoList"
-        autoComplete="off"
-        value={this.state.employeeInfo[row.index - 1].resumeInfoName}
-      >
-        {allResumeList.length > 0 &&
-          allResumeList.map((data) => (
+    if (allResumeList.length > 0) {
+      return (
+        <Form.Control
+          as="select"
+          size="sm"
+          onChange={this.resumeInfoListChange.bind(this, row)}
+          name="resumeInfoList"
+          autoComplete="off"
+          value={this.state.employeeInfo[row.index - 1].resumeInfoName}
+        >
+          {allResumeList.map((data) => (
             <option key={data} value={data}>
               {data.split("_").length > 1
                 ? data.split("_")[data.split("_").length - 1]
                 : data}
             </option>
           ))}
-      </Form.Control>
-    );
+        </Form.Control>
+      );
+    }
+    return "";
   }
 
   //onChange
