@@ -30,7 +30,7 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import store from "./redux/store";
 import SendInvoiceLetter from "./sendInvoiceLetter";
 import { faLevelUpAlt } from "@fortawesome/free-solid-svg-icons";
-import { Popover, Modal as AntdModal, message } from "antd";
+import { Popover, Modal as AntdModal, message, Tag } from "antd";
 registerLocale("ja", ja);
 axios.defaults.withCredentials = true;
 
@@ -610,11 +610,15 @@ P-mark:第21004525(02)号
     else return "";
   };
 
-  sendLetterStatusFormat = (cell) => {
+  sendLetterStatusFormat = (cell, row) => {
     if (cell === "1") {
       return "送信済み";
     } else {
-      return "未送信";
+      if (row.havePDF === "true") {
+        return "未送信";
+      } else {
+        return "送信不可";
+      }
     }
   };
 
@@ -1144,6 +1148,8 @@ P-mark:第21004525(02)号
               </TableHeaderColumn>
               <TableHeaderColumn
                 // width="12%"
+                width="140"
+                dataAlign="center"
                 tdStyle={{ padding: ".45em" }}
                 dataField="sendLetterStatus"
                 dataFormat={this.sendLetterStatusFormat.bind(this)}
