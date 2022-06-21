@@ -704,7 +704,7 @@ class salesContent extends React.Component {
                 【所　　属】：
                 <Form.Control
                   as="select"
-                  style={{ display: "inherit", width: "150px", height: "30px" }}
+                  style={{ display: "inherit", width: "150px" }}
                   onChange={this.valueChange}
                   name="employeeStatus"
                   value={this.state.employeeStatus}
@@ -761,7 +761,7 @@ class salesContent extends React.Component {
                 【日本　語】：
                 <Form.Control
                   as="select"
-                  style={{ display: "inherit", width: "150px", height: "30px" }}
+                  style={{ display: "inherit", width: "150px" }}
                   onChange={this.valueChange}
                   name="japaneaseConversationLevel"
                   value={this.state.japaneaseConversationLevel || ""}
@@ -780,7 +780,7 @@ class salesContent extends React.Component {
                 【英　　語】：
                 <Form.Control
                   as="select"
-                  style={{ display: "inherit", width: "150px", height: "30px" }}
+                  style={{ display: "inherit", width: "150px" }}
                   onChange={this.valueChange}
                   name="englishConversationLevel"
                   value={this.state.englishConversationLevel || ""}
@@ -817,7 +817,7 @@ class salesContent extends React.Component {
                 【対応工程】：
                 <Form.Control
                   as="select"
-                  style={{ display: "inherit", width: "150px", height: "30px" }}
+                  style={{ display: "inherit", width: "150px" }}
                   onChange={this.valueChange}
                   name="projectPhase"
                   value={this.state.projectPhase}
@@ -908,7 +908,7 @@ class salesContent extends React.Component {
                 <Form.Control
                   as="select"
                   disabled
-                  style={{ display: "inherit", width: "145px", height: "30px" }}
+                  style={{ display: "inherit", width: "145px" }}
                   onChange={this.valueChange}
                   name="salesProgressCode"
                   value={this.state.salesProgressCode + "" || "5"}
