@@ -60,6 +60,7 @@ import sendRepotConfirm from "./sendRepotConfirm";
 import customerSalesList from "./customerSalesList";
 import ReactTooltip from "react-tooltip";
 import { connect } from "react-redux";
+import EventEmitter from "./utils/EventEmitter";
 
 import {
   faAddressBook,
@@ -144,6 +145,9 @@ class SubMenu extends Component {
    * 画面の初期化
    */
   componentDidMount() {
+    EventEmitter.on("updateWorkRepot", () => {
+      this.getDutyRegistrationFlag();
+    });
     var dateNow = new Date();
     let month = dateNow.getMonth() + 1;
     let day = dateNow.getDate();
@@ -170,6 +174,10 @@ class SubMenu extends Component {
         "日",
       click: "",
     });
+  }
+
+  componentWillUnmount() {
+    EventEmitter.remove("updateWorkRepot");
   }
 
   logout = () => {
