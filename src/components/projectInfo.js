@@ -628,6 +628,11 @@ class projectInfo extends Component {
       "code",
       keyWordOfLanagurue2
     )?.name;
+    let keyWordOfFrameWorkName1 = utils.findItemByKey(
+      this.state.getFrameWorkDrop,
+      "code",
+      keyWordOfFrameWork1
+    )?.name;
     let japaneaseConversationName = utils.findItemByKey(
       this.state.japaneaseConversationLevelDrop,
       "code",
@@ -650,7 +655,7 @@ class projectInfo extends Component {
         joinWith: undefined,
         values: [
           utils.addLeftSlash(admissionPeriod) +
-            (admissionMonthName ? `(${admissionMonthName})～` : "～"),
+            (admissionMonthName ? `(${admissionMonthName})～` : ""),
         ],
       },
       {
@@ -667,7 +672,11 @@ class projectInfo extends Component {
       {
         name: `言　語`,
         joinWith: `、`,
-        values: [keyWordOfLanagurueName1, keyWordOfLanagurueName2],
+        values: [
+          keyWordOfLanagurueName1,
+          keyWordOfLanagurueName2,
+          keyWordOfFrameWorkName1,
+        ],
       },
       {
         name: `日本語`,
@@ -1034,6 +1043,32 @@ class projectInfo extends Component {
                     />
                     <Autocomplete
                       className="fx1"
+                      id="keyWordOfFrameWork1"
+                      name="keyWordOfFrameWork1"
+                      value={
+                        getFrameWorkDrop.find(
+                          (v) => v.code === keyWordOfFrameWork1
+                        ) || {}
+                      }
+                      options={getFrameWorkDrop}
+                      getOptionLabel={(option) => option.name || ""}
+                      disabled={actionType === "detail" ? true : false}
+                      onChange={(event, values) =>
+                        this.handleFrameWork1Change(event, values)
+                      }
+                      renderInput={(params) => (
+                        <div ref={params.InputProps.ref}>
+                          <input
+                            placeholder="例：FrameWork1"
+                            type="text"
+                            {...params.inputProps}
+                            className="auto form-control Autocompletestyle-projectInfo-keyWordOfLanagurue"
+                          />
+                        </div>
+                      )}
+                    />
+                    {/* <Autocomplete
+                      className="fx1"
                       hidden
                       id="keyWordOfLanagurue3"
                       name="keyWordOfLanagurue3"
@@ -1058,7 +1093,7 @@ class projectInfo extends Component {
                           />
                         </div>
                       )}
-                    />
+                    /> */}
                   </InputGroup>
                 </Col>
                 <Col sm={4}>
@@ -1118,7 +1153,7 @@ class projectInfo extends Component {
                     </FormControl>
                   </InputGroup>
                 </Col>
-                <Col sm={4}>
+                {/* <Col hidden sm={4}>
                   <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text className="w100p">
@@ -1178,9 +1213,9 @@ class projectInfo extends Component {
                       )}
                     />
                   </InputGroup>
-                </Col>
+                </Col> */}
 
-                <Col sm={4}>
+                <Col sm={8}>
                   <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text>備考</InputGroup.Text>

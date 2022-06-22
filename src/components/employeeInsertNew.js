@@ -2182,6 +2182,7 @@ class employeeInsertNew extends React.Component {
                       </InputGroup.Text>
                     </InputGroup.Prepend>
                     <Autocomplete
+                      className="fx1"
                       id="developLanguage1"
                       name="developLanguage1"
                       value={developLanguage1Value}
@@ -2200,6 +2201,7 @@ class employeeInsertNew extends React.Component {
                       )}
                     />
                     <Autocomplete
+                      className="fx1"
                       id="developLanguage2"
                       name="developLanguage2"
                       value={developLanguage2Value}
@@ -2223,6 +2225,7 @@ class employeeInsertNew extends React.Component {
                       <InputGroup.Text id="inputGroup-sizing-sm"></InputGroup.Text>
                     </InputGroup.Prepend>
                     <Autocomplete
+                      className="fx1"
                       id="developLanguage3"
                       name="developLanguage3"
                       value={developLanguage3Value}
@@ -2241,6 +2244,7 @@ class employeeInsertNew extends React.Component {
                       )}
                     />
                     <Autocomplete
+                      className="fx1"
                       id="developLanguage4"
                       name="developLanguage4"
                       value={developLanguage4Value}
@@ -2268,6 +2272,7 @@ class employeeInsertNew extends React.Component {
                     <Autocomplete
                       id="frameWork1"
                       name="frameWork1"
+                      className="fx1"
                       value={frameWork1Value}
                       options={this.state.frameWorkMaster}
                       getOptionLabel={(option) => option.name || ""}
@@ -2286,6 +2291,7 @@ class employeeInsertNew extends React.Component {
                     <Autocomplete
                       id="frameWork2"
                       name="frameWork2"
+                      className="fx1"
                       value={frameWork2Value}
                       options={this.state.frameWorkMaster}
                       getOptionLabel={(option) => option.name || ""}
@@ -2466,94 +2472,90 @@ class employeeInsertNew extends React.Component {
                         在留カード
                       </InputGroup.Text>
                     </InputGroup.Prepend>
-                    <>
-                      <DatePicker
-                        selected={this.state.stayPeriod}
-                        onChange={this.inactiveStayPeriod}
-                        locale="ja"
-                        dateFormat="yyyy/MM/dd"
-                        className="form-control form-control-sm"
-                        yearDropdownItemNumber={10}
-                        scrollableYearDropdown
-                        showYearDropdown
-                        autoComplete="off"
-                        minDate={new Date()}
-                        disabled={
-                          residenceTimeDisabled ||
-                          this.state.residenceCode === "3" ||
-                          this.state.residenceCode === "6" ||
-                          employeeStatus === "1" ||
-                          employeeStatus === "4"
-                            ? true
-                            : false
-                        }
-                        id={
-                          residenceTimeDisabled ||
-                          this.state.residenceCode === "3" ||
-                          this.state.residenceCode === "6" ||
-                          employeeStatus === "1" ||
-                          employeeStatus === "4"
-                            ? "datePickerReadonlyDefault-empInsert-right-stayPeriod"
-                            : "datePicker-empInsert-right-stayPeriod"
-                        }
-                      />{" "}
-                      <Button
-                        size="sm"
-                        style={
-                          this.state.residentCardInfo !== undefined
-                            ? {
-                                backgroundColor: "#53A100",
-                                border: "none",
-                                marginLeft: "3px",
-                              }
-                            : {
-                                backgroundColor: "",
-                                border: "none",
-                                marginLeft: "3px",
-                              }
-                        }
-                        disabled={
-                          employeeStatus === "1" || employeeStatus === "4"
-                            ? true
-                            : false
-                        }
-                        className="uploadButtom shrink-0"
-                        onClick={(event) =>
-                          this.addFile(event, "residentCardInfo")
-                        }
-                      >
-                        <FontAwesomeIcon icon={faFile} />{" "}
-                        {this.state.residentCardInfo !== undefined
-                          ? "済み"
-                          : "添付"}
-                      </Button>
-                      {/*<Button size="sm" style={{ marginLeft: "3px"}} disabled className="downloadButtom" onClick={publicUtils.handleDownload.bind(this, this.state.residentCardInfo, this.state.serverIP)} ><FontAwesomeIcon icon={faDownload} /> download</Button>*/}
-                      <Button
-                        size="sm"
-                        style={{ marginLeft: "3px", border: "none" }}
-                        disabled={
-                          this.state.residentCardInfo !== undefined
-                            ? false
-                            : true
-                        }
-                        className="uploadButtom shrink-0"
-                        onClick={this.deleteFile.bind(this, "residentCardInfo")}
-                      >
-                        <FontAwesomeIcon icon={faDownload} />
-                        削除
-                      </Button>
-                      <Form.File
-                        className="hidden-item "
-                        id="residentCardInfo"
-                        hidden
-                        data-browse="添付"
-                        value={this.state.residentCardInfo}
-                        custom
-                        onChange={(event) =>
-                          this.changeFile(event, "residentCardInfo")
-                        }
-                      />
-                    </>
+                    <DatePicker
+                      selected={this.state.stayPeriod}
+                      onChange={this.inactiveStayPeriod}
+                      locale="ja"
+                      dateFormat="yyyy/MM/dd"
+                      className="form-control form-control-sm "
+                      yearDropdownItemNumber={10}
+                      scrollableYearDropdown
+                      showYearDropdown
+                      autoComplete="off"
+                      minDate={new Date()}
+                      disabled={
+                        residenceTimeDisabled ||
+                        this.state.residenceCode === "3" ||
+                        this.state.residenceCode === "6" ||
+                        employeeStatus === "1" ||
+                        employeeStatus === "4"
+                          ? true
+                          : false
+                      }
+                      id={
+                        residenceTimeDisabled ||
+                        this.state.residenceCode === "3" ||
+                        this.state.residenceCode === "6" ||
+                        employeeStatus === "1" ||
+                        employeeStatus === "4"
+                          ? "datePickerReadonlyDefault-empInsert-right-stayPeriod"
+                          : "datePicker-empInsert-right-stayPeriod"
+                      }
+                    />{" "}
+                    <Button
+                      size="sm"
+                      style={
+                        this.state.residentCardInfo !== undefined
+                          ? {
+                              backgroundColor: "#53A100",
+                              border: "none",
+                              marginLeft: "3px",
+                            }
+                          : {
+                              backgroundColor: "",
+                              border: "none",
+                              marginLeft: "3px",
+                            }
+                      }
+                      disabled={
+                        employeeStatus === "1" || employeeStatus === "4"
+                          ? true
+                          : false
+                      }
+                      className="uploadButtom shrink-0"
+                      onClick={(event) =>
+                        this.addFile(event, "residentCardInfo")
+                      }
+                    >
+                      <FontAwesomeIcon icon={faFile} />{" "}
+                      {this.state.residentCardInfo !== undefined
+                        ? "済み"
+                        : "添付"}
+                    </Button>
+                    {/*<Button size="sm" style={{ marginLeft: "3px"}} disabled className="downloadButtom" onClick={publicUtils.handleDownload.bind(this, this.state.residentCardInfo, this.state.serverIP)} ><FontAwesomeIcon icon={faDownload} /> download</Button>*/}
+                    <Button
+                      size="sm"
+                      style={{ marginLeft: "3px", border: "none" }}
+                      disabled={
+                        this.state.residentCardInfo !== undefined ? false : true
+                      }
+                      className="uploadButtom shrink-0"
+                      onClick={this.deleteFile.bind(this, "residentCardInfo")}
+                    >
+                      <FontAwesomeIcon icon={faDownload} />
+                      削除
+                    </Button>
+                    <Form.File
+                      className="hidden-item "
+                      id="residentCardInfo"
+                      hidden
+                      data-browse="添付"
+                      value={this.state.residentCardInfo}
+                      custom
+                      onChange={(event) =>
+                        this.changeFile(event, "residentCardInfo")
+                      }
+                    />
                   </InputGroup>
                   <InputGroup size="sm" className="flexWrapNoWrap">
                     <InputGroup.Prepend>
@@ -2853,7 +2855,7 @@ class employeeInsertNew extends React.Component {
                     <InputGroup.Prepend>
                       <InputGroup.Text id="twoKanji">終了</InputGroup.Text>
                     </InputGroup.Prepend>
-                    <InputGroup.Append>
+                    <InputGroup.Append className="w100p">
                       <DatePicker
                         selected={this.state.immigrationEndTime}
                         onChange={this.immigrationEndTimeChange}
@@ -2861,7 +2863,7 @@ class employeeInsertNew extends React.Component {
                         dateFormat="yyyy/MM"
                         showMonthYearPicker
                         showFullMonthYearPicker
-                        className="form-control form-control-sm"
+                        className="form-control form-control-sm w100p"
                         autoComplete="off"
                         disabled={
                           employeeStatus === "1" || employeeStatus === "4"
@@ -2919,6 +2921,7 @@ class employeeInsertNew extends React.Component {
                       <InputGroup.Text id="twoKanji">区分</InputGroup.Text>
                     </InputGroup.Prepend>
                     <Form.Control
+                      className="w100p"
                       as="select"
                       size="sm"
                       onChange={this.valueChange}

@@ -90,6 +90,7 @@ class ProjectInfoSearch extends Component {
     admissionPeriodDrop: store.getState().dropDown[51],
     typeOfIndustryDrop: store.getState().dropDown[36],
     salesStaffDrop: store.getState().dropDown[9].slice(1),
+    getFrameWorkDrop: store.getState().dropDown[71].slice(1),
   };
   //onchange
   valueChange = (event) => {
@@ -715,6 +716,7 @@ class ProjectInfoSearch extends Component {
         values: [
           selectedProjectInfo.keyWordOfLanagurueName1,
           selectedProjectInfo.keyWordOfLanagurueName2,
+          selectedProjectInfo.keyWordOfFrameWorkName1,
         ],
       },
       {
@@ -769,6 +771,7 @@ class ProjectInfoSearch extends Component {
       keyWordOfLanagurue1,
       keyWordOfLanagurue2,
       keyWordOfLanagurue3,
+      keyWordOfFrameWork1,
       successRate,
       projectType,
       admissionPeriod,
@@ -791,6 +794,7 @@ class ProjectInfoSearch extends Component {
       successRateDrop,
       developLanguageDrop,
       theSelectProjectperiodStatusDrop,
+      getFrameWorkDrop,
     } = this.state;
     console.log({ state: this.state }, "render");
 
@@ -962,7 +966,33 @@ class ProjectInfoSearch extends Component {
                         </div>
                       )}
                     />
-                    <Autocomplete
+                    {/* <Autocomplete
+                      className="fx1"
+                      id="keyWordOfFrameWork1"
+                      name="keyWordOfFrameWork1"
+                      value={
+                        getFrameWorkDrop.find(
+                          (v) => v.code === keyWordOfFrameWork1
+                        ) || {}
+                      }
+                      options={getFrameWorkDrop}
+                      getOptionLabel={(option) => option.name || ""}
+                      disabled={actionType === "detail" ? true : false}
+                      onChange={(event, values) =>
+                        this.handleFrameWork1Change(event, values)
+                      }
+                      renderInput={(params) => (
+                        <div ref={params.InputProps.ref}>
+                          <input
+                            placeholder="例：FrameWork1"
+                            type="text"
+                            {...params.inputProps}
+                            className="auto form-control Autocompletestyle-projectInfo-keyWordOfLanagurue"
+                          />
+                        </div>
+                      )}
+                    /> */}
+                    {/* <Autocomplete
                       className="fx1"
                       hidden
                       id="keyWordOfLanagurue3"
@@ -987,7 +1017,7 @@ class ProjectInfoSearch extends Component {
                           />
                         </div>
                       )}
-                    />
+                    /> */}
                   </InputGroup>
                 </Col>
                 <Col sm={3}>

@@ -141,9 +141,9 @@ class invoicePDF extends React.Component {
   // 初期化データ
   initialState = {
     // yearAndMonth: this.props.location?.state.yearAndMonth,
-    // invoiceDate: this.props.location?.state?.yearAndMonth
-    //   ? moment().endOf("month").toDate()
-    //   : "",
+    invoiceDate: moment(this.props.location?.state?.yearAndMonth || new Date())
+      .endOf("month")
+      .toDate(),
 
     // invoiceDate: new Date(),
     // yearAndMonthFormat:
@@ -954,6 +954,7 @@ class invoicePDF extends React.Component {
     }
 
     if (list.length > 0) {
+      // TODO: 需要改成调用一个更新接口保存所有数据
       for (let index = 0; index < list.length; index++) {
         const model = list[index];
         let result = await axios.post(
@@ -1198,10 +1199,7 @@ class invoicePDF extends React.Component {
                           value={
                             this.state.invoiceDate
                               ? moment(this.state.invoiceDate)
-                              : moment(
-                                  this.props.location?.state?.yearAndMonth ||
-                                    new Date()
-                                ).endOf("month")
+                              : ""
                           }
                           onChange={this.inactiveYearAndMonth}
                           format="YYYY/MM/DD"
