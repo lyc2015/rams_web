@@ -550,7 +550,12 @@ P-mark:第21004525(02)号
 
         axios
           .post(this.state.serverIP + "sendInvoice/sendLetter", model)
-          .then((result) => {
+          .then((res) => {
+            if (res.result) {
+              message.success("送信成功しました");
+            } else {
+              message.error("送信失敗しました");
+            }
             this.searchSendInvoiceList();
           });
       },

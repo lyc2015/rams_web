@@ -43,6 +43,7 @@ class manageSituation extends React.Component {
   constructor(props) {
     super(props);
     this.state = this.initialState; // 初期化
+    this.myRef = React.createRef();
   }
 
   // 初期化
@@ -141,6 +142,7 @@ class manageSituation extends React.Component {
 
   // 初期表示のレコードを取る
   componentDidMount() {
+    this.initCopy();
     this.getLoginUserInfo();
     this.setNewDevelopLanguagesShow();
     // let sysYearMonth = new Date();
@@ -1223,7 +1225,6 @@ class manageSituation extends React.Component {
         },
         () => {
           if (isSelected) {
-            this.setCopy(row);
             this.setState({
               selectRow: row,
               selectetRowIds:
@@ -1524,7 +1525,6 @@ class manageSituation extends React.Component {
     this.setState({
       daiologShowFlag: false,
     });
-    this.setCopy(this.state.selectRow);
   };
 
   // // サブ画面表示
@@ -1550,198 +1550,205 @@ class manageSituation extends React.Component {
     });
   };
 
-  setCopy = (row) => {
+  initCopy = () => {
+    this.clipboard = new Clipboard("#copyId");
+    this.clipboard.on("success", function (e) {
+      message.success("コピー成功しました");
+      // console.log(e);
+    });
+    this.clipboard.on("error", function (e) {
+      message.error("コピー失敗しました");
+      console.log(e);
+    });
+  };
+
+  getCopyText = async () => {
     let text = "";
-    axios
-      .post(this.state.serverIP + "salesSituation/getPersonalSalesInfo", {
+    const { selectRow: row } = this.state;
+    let result = await axios.post(
+      this.state.serverIP + "salesSituation/getPersonalSalesInfo",
+      {
         employeeNo: row.employeeNo,
-      })
-      .then((result) => {
-        if (result.data.length < 0) {
-          notification.error({
-            message: "エラー",
-            description: "データ存在していません",
-            placement: "topLeft",
-          });
-          return;
-        }
-        let employeeStatus =
-          this.state.employees.find(
-            (v) => v.code === result.data[0]?.employeeStatus
-          )?.name || "";
-        let developLanguage = [
-          this.fromCodeToNameLanguage(result.data[0].developLanguage1),
-          this.fromCodeToNameLanguage(result.data[0].developLanguage2),
-          this.fromCodeToNameLanguage(result.data[0].developLanguage3),
-          this.fromCodeToNameLanguage(result.data[0].developLanguage4),
-          this.fromCodeToNameLanguage(result.data[0].developLanguage5),
-          this.fromCodeToNameLanguage(result.data[0].developLanguage6),
-        ]
-          .filter(function (s) {
-            return s && s.trim();
-          })
-          .join("、");
-        let admissionEndDate =
-          row.admissionEndDate === null || row.admissionEndDate === ""
-            ? row.scheduledEndDate
-            : row.admissionEndDate.substring(0, 6);
-        let beginMonth =
-          result.data[0].theMonthOfStartWork === null ||
-          result.data[0].theMonthOfStartWork === ""
-            ? new Date(
-                this.getNextMonthTemp(
-                  admissionEndDate === null || admissionEndDate === ""
-                    ? new Date()
-                    : publicUtils.converToLocalTime(admissionEndDate, false),
-                  1
-                )
-              ).getTime()
-            : new Date(result.data[0].theMonthOfStartWork).getTime();
-        let salesProgressCode = row.salesProgressCode;
-        let interviewDate =
-          row.interviewDate1 !== "" &&
-          row.interviewDate1 !== null &&
-          row.interviewDate2 !== "" &&
-          row.interviewDate2 !== null
-            ? row.interviewDate1 < row.interviewDate2
-              ? row.interviewDate1
-              : row.interviewDate2
-            : row.interviewDate1 !== "" && row.interviewDate1 !== null
-            ? row.interviewDate1
-            : row.interviewDate2 !== "" && row.interviewDate2 !== null
-            ? row.interviewDate2
-            : "";
-        let remark =
-          result.data[0].remark === null ||
-          result.data[0].remark === "" ||
-          result.data[0].remark === undefined
-            ? (row.remark1 === null ? "" : row.remark1 + " ") +
-              (row.remark2 === null ? "" : row.remark2)
-            : result.data[0].remark;
-        if (interviewDate !== "") {
-          var myDate = new Date();
-          myDate =
-            myDate.getFullYear() +
-            this.padding1(myDate.getMonth() + 1, 2) +
-            this.padding1(myDate.getDate(), 2);
-          if (interviewDate.substring(0, 8) >= myDate) {
-            interviewDate =
-              " " +
-              interviewDate.substring(4, 6) +
-              "/" +
-              interviewDate.substring(6, 8) +
-              " " +
-              interviewDate.substring(8, 10) +
-              ":" +
-              interviewDate.substring(10, 12);
-          } else {
-            interviewDate = "";
-          }
-        }
-        text =
-          "【名　　前】：" +
-          result.data[0].employeeFullName +
-          "　" +
-          result.data[0].nationalityName +
-          "　" +
-          this.state.genders.find((v) => v.code === result.data[0].genderStatus)
-            .name +
-          "\n" +
-          "【所　　属】：" +
-          (employeeStatus === "子会社社員" ? "社員" : employeeStatus) +
-          "\n" +
-          (result.data[0].age === null ||
-          result.data[0].age === undefined ||
-          result.data[0].age === ""
-            ? ""
-            : "【年　　齢】：" + result.data[0].age + "歳\n") +
-          (result.data[0].nearestStation === "" ||
-          result.data[0].nearestStation === null ||
-          result.data[0].nearestStation === undefined
-            ? ""
-            : "【最寄り駅】：" +
-              this.state.getstations.find(
-                (v) => v.code === result.data[0].nearestStation
-              ).name +
-              "\n") +
-          (result.data[0].japaneaseConversationLevel === "" ||
-          result.data[0].japaneaseConversationLevel === null ||
-          result.data[0].japaneaseConversationLevel === undefined
-            ? ""
-            : "【日本　語】：" +
-              this.state.japaneaseConversationLevels.find(
-                (v) => v.code === result.data[0].japaneaseConversationLevel
-              ).name +
-              "\n") +
-          (result.data[0].englishConversationLevel === "" ||
-          result.data[0].englishConversationLevel === null ||
-          result.data[0].englishConversationLevel === undefined
-            ? ""
-            : "【英　　語】：" +
-              this.state.englishConversationLevels.find(
-                (v) => v.code === result.data[0].englishConversationLevel
-              ).name +
-              "\n") +
-          (result.data[0].yearsOfExperience === null ||
-          result.data[0].yearsOfExperience === undefined ||
-          result.data[0].yearsOfExperience === ""
-            ? ""
-            : "【業務年数】：" + result.data[0].yearsOfExperience + "年\n") +
-          (result.data[0].projectPhase === "" ||
-          result.data[0].projectPhase === null ||
-          result.data[0].projectPhase === undefined
-            ? ""
-            : "【対応工程】：" +
-              this.state.projectPhases.find(
-                (v) => v.code === result.data[0].projectPhase
-              ).name +
-              "から\n") +
-          (developLanguage === null ||
-          developLanguage === undefined ||
-          developLanguage === ""
-            ? ""
-            : "【得意言語】：" + developLanguage + "\n") +
-          (result.data[0].unitPrice === null ||
-          result.data[0].unitPrice === undefined ||
-          result.data[0].unitPrice === ""
-            ? ""
-            : "【単　　価】：" + result.data[0].unitPrice / 10000 + "万円\n") +
-          "【稼働開始】：" +
-          (Number(admissionEndDate) + 1 <
-          this.getNextMonth(new Date(), 1).replace("/", "")
-            ? "即日\n"
-            : publicUtils
-                .formateDate(beginMonth, false)
-                .substring(4, 6)
-                .replace(/\b(0+)/gi, "") + "月\n") +
-          (salesProgressCode === "" ||
-          salesProgressCode === null ||
-          salesProgressCode === undefined
-            ? ""
-            : "【営業状況】：" +
-              this.state.salesProgressCodes.find(
-                (v) => v.code === salesProgressCode
-              ).name +
-              (salesProgressCode === "6" ? interviewDate : "") +
-              "\n") +
-          (remark === "" || remark === " "
-            ? ""
-            : "【備　　考】：" + remark + "\n");
+      }
+    );
+    if (result.data.length < 0) {
+      notification.error({
+        message: "エラー",
+        description: "データ存在していません",
+        placement: "topLeft",
       });
-    if (!this.clipboard) {
-      this.clipboard = new Clipboard("#copyUrl", {
-        text: function () {
-          return text;
-        },
-      });
-      this.clipboard.on("success", function () {
-        message.success("コピー成功しました");
-      });
-      this.clipboard.on("error", function (e) {
-        message.error("コピー失敗しました");
-        console.log("err！", e);
-      });
+      return;
     }
+    let employeeStatus =
+      this.state.employees.find(
+        (v) => v.code === result.data[0]?.employeeStatus
+      )?.name || "";
+    let developLanguage = [
+      this.fromCodeToNameLanguage(result.data[0].developLanguage1),
+      this.fromCodeToNameLanguage(result.data[0].developLanguage2),
+      this.fromCodeToNameLanguage(result.data[0].developLanguage3),
+      this.fromCodeToNameLanguage(result.data[0].developLanguage4),
+      this.fromCodeToNameLanguage(result.data[0].developLanguage5),
+      this.fromCodeToNameLanguage(result.data[0].developLanguage6),
+    ]
+      .filter(function (s) {
+        return s && s.trim();
+      })
+      .join("、");
+    let admissionEndDate =
+      row.admissionEndDate === null || row.admissionEndDate === ""
+        ? row.scheduledEndDate
+        : row.admissionEndDate.substring(0, 6);
+    let beginMonth =
+      result.data[0].theMonthOfStartWork === null ||
+      result.data[0].theMonthOfStartWork === ""
+        ? new Date(
+            this.getNextMonthTemp(
+              admissionEndDate === null || admissionEndDate === ""
+                ? new Date()
+                : publicUtils.converToLocalTime(admissionEndDate, false),
+              1
+            )
+          ).getTime()
+        : new Date(result.data[0].theMonthOfStartWork).getTime();
+    let salesProgressCode = row.salesProgressCode;
+    let interviewDate =
+      row.interviewDate1 !== "" &&
+      row.interviewDate1 !== null &&
+      row.interviewDate2 !== "" &&
+      row.interviewDate2 !== null
+        ? row.interviewDate1 < row.interviewDate2
+          ? row.interviewDate1
+          : row.interviewDate2
+        : row.interviewDate1 !== "" && row.interviewDate1 !== null
+        ? row.interviewDate1
+        : row.interviewDate2 !== "" && row.interviewDate2 !== null
+        ? row.interviewDate2
+        : "";
+    let remark =
+      result.data[0].remark === null ||
+      result.data[0].remark === "" ||
+      result.data[0].remark === undefined
+        ? (row.remark1 === null ? "" : row.remark1 + " ") +
+          (row.remark2 === null ? "" : row.remark2)
+        : result.data[0].remark;
+    if (interviewDate !== "") {
+      var myDate = new Date();
+      myDate =
+        myDate.getFullYear() +
+        this.padding1(myDate.getMonth() + 1, 2) +
+        this.padding1(myDate.getDate(), 2);
+      if (interviewDate.substring(0, 8) >= myDate) {
+        interviewDate =
+          " " +
+          interviewDate.substring(4, 6) +
+          "/" +
+          interviewDate.substring(6, 8) +
+          " " +
+          interviewDate.substring(8, 10) +
+          ":" +
+          interviewDate.substring(10, 12);
+      } else {
+        interviewDate = "";
+      }
+    }
+    text =
+      "【名　　前】：" +
+      result.data[0].employeeFullName +
+      "　" +
+      result.data[0].nationalityName +
+      "　" +
+      this.state.genders.find((v) => v.code === result.data[0].genderStatus)
+        .name +
+      "\n" +
+      "【所　　属】：" +
+      (employeeStatus === "子会社社員" ? "社員" : employeeStatus) +
+      "\n" +
+      (result.data[0].age === null ||
+      result.data[0].age === undefined ||
+      result.data[0].age === ""
+        ? ""
+        : "【年　　齢】：" + result.data[0].age + "歳\n") +
+      (result.data[0].nearestStation === "" ||
+      result.data[0].nearestStation === null ||
+      result.data[0].nearestStation === undefined
+        ? ""
+        : "【最寄り駅】：" +
+          this.state.getstations.find(
+            (v) => v.code === result.data[0].nearestStation
+          ).name +
+          "\n") +
+      (result.data[0].japaneaseConversationLevel === "" ||
+      result.data[0].japaneaseConversationLevel === null ||
+      result.data[0].japaneaseConversationLevel === undefined
+        ? ""
+        : "【日本　語】：" +
+          this.state.japaneaseConversationLevels.find(
+            (v) => v.code === result.data[0].japaneaseConversationLevel
+          ).name +
+          "\n") +
+      (result.data[0].englishConversationLevel === "" ||
+      result.data[0].englishConversationLevel === null ||
+      result.data[0].englishConversationLevel === undefined
+        ? ""
+        : "【英　　語】：" +
+          this.state.englishConversationLevels.find(
+            (v) => v.code === result.data[0].englishConversationLevel
+          ).name +
+          "\n") +
+      (result.data[0].yearsOfExperience === null ||
+      result.data[0].yearsOfExperience === undefined ||
+      result.data[0].yearsOfExperience === ""
+        ? ""
+        : "【業務年数】：" + result.data[0].yearsOfExperience + "年\n") +
+      (result.data[0].projectPhase === "" ||
+      result.data[0].projectPhase === null ||
+      result.data[0].projectPhase === undefined
+        ? ""
+        : "【対応工程】：" +
+          this.state.projectPhases.find(
+            (v) => v.code === result.data[0].projectPhase
+          ).name +
+          "から\n") +
+      (developLanguage === null ||
+      developLanguage === undefined ||
+      developLanguage === ""
+        ? ""
+        : "【得意言語】：" + developLanguage + "\n") +
+      (result.data[0].unitPrice === null ||
+      result.data[0].unitPrice === undefined ||
+      result.data[0].unitPrice === ""
+        ? ""
+        : "【単　　価】：" + result.data[0].unitPrice / 10000 + "万円\n") +
+      "【稼働開始】：" +
+      (Number(admissionEndDate) + 1 <
+      this.getNextMonth(new Date(), 1).replace("/", "")
+        ? "即日\n"
+        : publicUtils
+            .formateDate(beginMonth, false)
+            .substring(4, 6)
+            .replace(/\b(0+)/gi, "") + "月\n") +
+      (salesProgressCode === "" ||
+      salesProgressCode === null ||
+      salesProgressCode === undefined
+        ? ""
+        : "【営業状況】：" +
+          this.state.salesProgressCodes.find(
+            (v) => v.code === salesProgressCode
+          ).name +
+          (salesProgressCode === "6" ? interviewDate : "") +
+          "\n") +
+      (remark === "" || remark === " " ? "" : "【備　　考】：" + remark + "\n");
+    this.setState(
+      {
+        copyText: text,
+      },
+      () => {
+        setTimeout(() => {
+          this.myRef.current.click(); // 模拟点击事件，实现复制
+        }, 100);
+      }
+    );
   };
 
   downloadResume = (resumeInfo, no) => {
@@ -2104,7 +2111,6 @@ class manageSituation extends React.Component {
       salesSituationLists: salesSituationLists,
       unitPrice: unitPrice,
     });
-    this.setCopy(this.state.selectRow);
   };
 
   download = (filename, text) => {
@@ -2796,6 +2802,9 @@ class manageSituation extends React.Component {
                   variant="info"
                   name="clickButton"
                   disabled={this.state.linkDisableFlag}
+                  onClick={() => {
+                    this.getCopyText();
+                  }}
                 >
                   <FontAwesomeIcon icon={faCopy} /> コピー
                 </Button>{" "}
@@ -3092,6 +3101,12 @@ class manageSituation extends React.Component {
             marginTop: "-150px",
           }}
         ></div>
+        <span
+          style={{ opacity: 0 }}
+          id="copyId"
+          ref={this.myRef}
+          data-clipboard-text={this.state.copyText}
+        ></span>
       </div>
     );
   }
