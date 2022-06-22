@@ -2388,7 +2388,7 @@ class employeeInsertNew extends React.Component {
                     />
                   </InputGroup>
                 </Col>
-                {/* <Autocomplete
+                <Autocomplete
                   id="developLanguage5"
                   name="developLanguage5"
                   value={developLanguage5Value}
@@ -2406,7 +2406,7 @@ class employeeInsertNew extends React.Component {
                       />
                     </div>
                   )}
-                /> */}
+                />
               </Col>
 
               <Col sm={4}>

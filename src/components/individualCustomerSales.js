@@ -509,6 +509,7 @@ class IndividualCustomerSales extends React.Component {
                 </InputGroup.Text>
               </InputGroup.Prepend>
               <Autocomplete
+                className="fx1"
                 id="customerName"
                 name="customerName"
                 options={customerInfo}
@@ -525,7 +526,7 @@ class IndividualCustomerSales extends React.Component {
                       placeholder="  お客様名"
                       type="text"
                       {...params.inputProps}
-                      className="auto form-control Autocompletestyle-siteInfoSearch-customerNo"
+                      className="auto form-control Autocompletestyle-siteInfoSearch-customerNo w100p"
                     />
                   </div>
                 )}

@@ -313,20 +313,21 @@ class bpInfo extends React.Component {
             </div>
             <Row>
               <Col sm={6}>
-                <InputGroup size="sm" className="mb-3">
+                <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                   BP名：{pbInfoEmployeeName}
                 </InputGroup>
               </Col>
             </Row>
             <Row>
               <Col sm={6}>
-                <InputGroup size="sm" className="mb-3">
+                <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                   <InputGroup.Prepend>
                     <InputGroup.Text id="inputGroup-sizing-sm">
                       BP所属
                     </InputGroup.Text>
                   </InputGroup.Prepend>
                   <Autocomplete
+                    className="fx1"
                     id="bpBelongCustomerCode"
                     name="bpBelongCustomerCode"
                     value={
@@ -346,7 +347,7 @@ class bpInfo extends React.Component {
                           placeholder="  BP所属"
                           type="text"
                           {...params.inputProps}
-                          className="auto form-control Autocompletestyle-bpInfo-bpBelongCustomerCode"
+                          className="auto form-control Autocompletestyle-bpInfo-bpBelongCustomerCode w100p"
                           id="bpBelongCustomerCode"
                           style={{
                             backgroundColor:
@@ -361,13 +362,14 @@ class bpInfo extends React.Component {
                 </InputGroup>
               </Col>
               <Col sm={6}>
-                <InputGroup size="sm" className="mb-3">
+                <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                   <InputGroup.Prepend>
                     <InputGroup.Text id="inputGroup-sizing-sm">
                       営業状況
                     </InputGroup.Text>
                   </InputGroup.Prepend>
                   <Form.Control
+                    className="w100p"
                     as="select"
                     size="sm"
                     onChange={this.bpSalesProgressCodeChange}
@@ -387,7 +389,7 @@ class bpInfo extends React.Component {
             </Row>
             <Row>
               <Col sm={6}>
-                <InputGroup size="sm" className="mb-3">
+                <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                   <InputGroup.Prepend>
                     <InputGroup.Text id="sixKanji">
                       単価開始年月
@@ -419,13 +421,14 @@ class bpInfo extends React.Component {
                 </InputGroup>
               </Col>
               <Col sm={6}>
-                <InputGroup size="sm" className="mb-3">
+                <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                   <InputGroup.Prepend>
                     <InputGroup.Text id="inputGroup-sizing-sm">
                       BP単価
                     </InputGroup.Text>
                   </InputGroup.Prepend>
                   <InputNumber
+                    className="w100p"
                     placeholder="BP単価"
                     value={bpUnitPrice}
                     autoComplete="off"
@@ -446,7 +449,7 @@ class bpInfo extends React.Component {
             </Row>
             <Row>
               <Col sm={6}>
-                <InputGroup size="sm" className="mb-3">
+                <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                   <InputGroup.Prepend>
                     <InputGroup.Text id="sixKanji">
                       所属終了年月
@@ -478,11 +481,12 @@ class bpInfo extends React.Component {
                 </InputGroup>
               </Col>
               <Col sm={6}>
-                <InputGroup size="sm" className="mb-3">
+                <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                   <InputGroup.Prepend>
                     <InputGroup.Text id="twoKanji">備考</InputGroup.Text>
                   </InputGroup.Prepend>
                   <FormControl
+                    className="w100p"
                     placeholder="例：XXXXX"
                     name="bpRemark"
                     value={bpRemark}

@@ -1421,62 +1421,61 @@ Email：` +
                   </Form.Control>
                 </InputGroup>
               </Col>
-              <Col sm={10}>
-                <InputGroup size="sm" className="mb-3">
+              <Col sm={3}>
+                <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                   <InputGroup.Prepend>
-                    <InputGroup.Text
-                      id="inputGroup-sizing-sm"
-                      style={{ width: "7rem" }}
-                    >
+                    <InputGroup.Text className="width-auto">
                       送信日付設定
                     </InputGroup.Text>
                   </InputGroup.Prepend>
-                  <InputGroup.Prepend>
-                    <Form.Control
-                      id="sendDay"
-                      as="select"
-                      size="sm"
-                      onChange={this.valueChange}
-                      name="sendDay"
-                      value={this.state.sendDay}
-                      disabled={
-                        this.state.workReportStatusCode === "1" ? false : true
-                      }
-                      autoComplete="off"
-                    >
-                      {this.state.sendReportOfDateSeting.map((data) => (
-                        <option key={data.code} value={data.code}>
-                          {data.name}
-                        </option>
-                      ))}
-                    </Form.Control>
-                  </InputGroup.Prepend>
-                  <InputGroup.Prepend>
-                    <DatePicker
-                      disabled={
-                        this.state.workReportStatusCode === "1" ? false : true
-                      }
-                      selected={this.state.sendTime}
-                      value={this.state.sendTime}
-                      onChange={this.inactiveSendTime}
-                      autoComplete="off"
-                      locale="ja"
-                      dateFormat="HH:mm"
-                      showTimeSelect
-                      showTimeSelectOnly
-                      id={
-                        this.state.workReportStatusCode === "1"
-                          ? "datePicker"
-                          : "datePickerReadonlyDefault"
-                      }
-                      className="form-control form-control-sm"
-                    />
-                  </InputGroup.Prepend>
+                  <Form.Control
+                    className="w100p"
+                    id="sendDay"
+                    as="select"
+                    size="sm"
+                    onChange={this.valueChange}
+                    name="sendDay"
+                    value={this.state.sendDay}
+                    disabled={
+                      this.state.workReportStatusCode === "1" ? false : true
+                    }
+                    autoComplete="off"
+                  >
+                    {this.state.sendReportOfDateSeting.map((data) => (
+                      <option key={data.code} value={data.code}>
+                        {data.name}
+                      </option>
+                    ))}
+                  </Form.Control>
+                  <DatePicker
+                    disabled={
+                      this.state.workReportStatusCode === "1" ? false : true
+                    }
+                    selected={this.state.sendTime}
+                    value={this.state.sendTime}
+                    onChange={this.inactiveSendTime}
+                    autoComplete="off"
+                    locale="ja"
+                    dateFormat="HH:mm"
+                    showTimeSelect
+                    showTimeSelectOnly
+                    className={
+                      "form-control form-control-sm w100p bg-datePicker " +
+                      (this.state.workReportStatusCode === "1"
+                        ? "bg-white"
+                        : "bg-disabled")
+                    }
+                    // id={
+                    //   this.state.workReportStatusCode === "1"
+                    //     ? "datePicker"
+                    //     : "datePickerReadonlyDefault"
+                    // }
+                  />
                 </InputGroup>
               </Col>
             </Row>
             <Row>
-              <Col sm={3}>
+              <Col sm={2}>
                 <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                   <InputGroup.Prepend>
                     <InputGroup.Text id="inputGroup-sizing-sm">
@@ -1484,6 +1483,7 @@ Email：` +
                     </InputGroup.Text>
                   </InputGroup.Prepend>
                   <Autocomplete
+                    className="fx1"
                     disabled={
                       this.state.allCustomer.length ===
                       this.state.allCustomerNum
@@ -1508,19 +1508,20 @@ Email：` +
                           type="text"
                           {...params.inputProps}
                           id="customerCode"
-                          className="auto form-control Autocompletestyle-sendRepot"
+                          className="auto form-control Autocompletestyle-sendRepot w100p"
                         />
                       </div>
                     )}
                   />
                 </InputGroup>
               </Col>
-              <Col sm={3}>
+              <Col sm={2}>
                 <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                   <InputGroup.Prepend>
                     <InputGroup.Text id="sanKanji">担当者</InputGroup.Text>
                   </InputGroup.Prepend>
                   <Autocomplete
+                    className="fx1"
                     disabled={
                       this.state.allCustomer.length ===
                       this.state.allCustomerNum
@@ -1545,7 +1546,7 @@ Email：` +
                           type="text"
                           {...params.inputProps}
                           id="personInCharge"
-                          className="auto form-control Autocompletestyle-sendRepot"
+                          className="auto form-control Autocompletestyle-sendRepot w100p"
                         />
                       </div>
                     )}
@@ -1568,6 +1569,7 @@ Email：` +
                   追加
                 </Button>
               </Col>
+              <Col sm={2}></Col>
               <Col sm={2}>
                 <div style={{ position: "absolute", right: "0px" }}>
                   <InputGroup size="sm" className="mb-3 flexWrapNoWrap">

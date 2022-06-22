@@ -513,27 +513,25 @@ class certificatePrinting extends Component {
                         就職年月日
                       </InputGroup.Text>
                     </InputGroup.Prepend>
-                    <InputGroup.Append>
-                      <DatePicker
-                        selected={this.state.intoCompanyYearAndMonth}
-                        onChange={this.inactiveintoCompanyYearAndMonth}
-                        locale="ja"
-                        dateFormat="yyyy/MM/dd"
-                        className="form-control form-control-sm"
-                        autoComplete="off"
-                        id="datePicker-certificatePrinting-intoCompanyYearAndMonth"
-                      />
-                      <font>～</font>
-                      <DatePicker
-                        selected={this.state.nowYearAndMonth}
-                        onChange={this.inactiveintoNowYearAndMonth}
-                        locale="ja"
-                        dateFormat="yyyy/MM/dd"
-                        className="form-control form-control-sm"
-                        autoComplete="off"
-                        id="datePicker-certificatePrinting-intoCompanyYearAndMonth"
-                      />
-                    </InputGroup.Append>
+                    <DatePicker
+                      selected={this.state.intoCompanyYearAndMonth}
+                      onChange={this.inactiveintoCompanyYearAndMonth}
+                      locale="ja"
+                      dateFormat="yyyy/MM/dd"
+                      className="form-control form-control-sm"
+                      autoComplete="off"
+                      id="datePicker-certificatePrinting-intoCompanyYearAndMonth"
+                    />
+                    <font>～</font>
+                    <DatePicker
+                      selected={this.state.nowYearAndMonth}
+                      onChange={this.inactiveintoNowYearAndMonth}
+                      locale="ja"
+                      dateFormat="yyyy/MM/dd"
+                      className="form-control form-control-sm"
+                      autoComplete="off"
+                      id="datePicker-certificatePrinting-intoCompanyYearAndMonth"
+                    />
                   </InputGroup>
                 </Col>
               </Row>

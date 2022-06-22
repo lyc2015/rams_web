@@ -1753,7 +1753,7 @@ class siteInfo extends Component {
                   <InputGroup
                     size="sm"
                     className={
-                      "mb-3 flexWrapNoWrap" +
+                      "mb-3 flexWrapNoWrap " +
                       (this.state.workState === "0" ||
                       this.state.workState === "3"
                         ? ""

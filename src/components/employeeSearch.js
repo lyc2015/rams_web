@@ -1160,7 +1160,7 @@ class employeeSearch extends React.Component {
                     </Form.Control>
                   </InputGroup>
                 </Col>
-                <Col sm={4}>
+                <Col sm={3}>
                   <InputGroup size="sm" className="mb-3">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="fiveKanji">
@@ -1168,6 +1168,7 @@ class employeeSearch extends React.Component {
                       </InputGroup.Text>
                     </InputGroup.Prepend>
                     <Autocomplete
+                      className="fx1"
                       id="employeeName"
                       name="employeeName"
                       value={
@@ -1195,8 +1196,7 @@ class employeeSearch extends React.Component {
                           <input
                             type="text"
                             {...params.inputProps}
-                            className="auto"
-                            className="auto form-control Autocompletestyle-siteInfoSearch-employeeNo"
+                            className="auto form-control Autocompletestyle-siteInfoSearch-employeeNo w100p"
                           />
                         </div>
                       )}
@@ -1465,6 +1465,7 @@ class employeeSearch extends React.Component {
                       </InputGroup.Text>
                     </InputGroup.Prepend>
                     <Autocomplete
+                      className="fx1"
                       id="developLanguage1"
                       name="developLanguage1"
                       value={
@@ -1482,7 +1483,7 @@ class employeeSearch extends React.Component {
                           <input
                             type="text"
                             {...params.inputProps}
-                            className="auto form-control Autocompletestyle-developLanguage"
+                            className="auto form-control Autocompletestyle-developLanguage w100p"
                             id="developLanguage1"
                           />
                         </div>
@@ -1490,6 +1491,7 @@ class employeeSearch extends React.Component {
                     />
 
                     <Autocomplete
+                      className="fx1"
                       id="developLanguage2"
                       name="developLanguage2"
                       value={
@@ -1507,7 +1509,7 @@ class employeeSearch extends React.Component {
                           <input
                             type="text"
                             {...params.inputProps}
-                            className="auto form-control Autocompletestyle-developLanguage"
+                            className="auto form-control Autocompletestyle-developLanguage w100p"
                             id="developLanguage2"
                           />
                         </div>
@@ -1517,45 +1519,45 @@ class employeeSearch extends React.Component {
                 </Col>
 
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         入社年月
                       </InputGroup.Text>
-                      <DatePicker
-                        disabled={employeeStatus === "1" ? true : false}
-                        id={
-                          employeeStatus === "1"
-                            ? "datePickerReadonlyDefault"
-                            : "datePicker"
-                        }
-                        selected={this.state.intoCompanyYearAndMonthFrom}
-                        onChange={this.inactiveintoCompanyYearAndMonthFrom}
-                        locale="ja"
-                        dateFormat="yyyy/MM"
-                        showMonthYearPicker
-                        showFullMonthYearPicker
-                        className="form-control form-control-sm"
-                        autoComplete="off"
-                      />
-                      ～
-                      <DatePicker
-                        selected={this.state.intoCompanyYearAndMonthTo}
-                        onChange={this.inactiveintoCompanyYearAndMonthTo}
-                        locale="ja"
-                        dateFormat="yyyy/MM"
-                        showMonthYearPicker
-                        showFullMonthYearPicker
-                        disabled={employeeStatus === "1" ? true : false}
-                        id={
-                          employeeStatus === "1"
-                            ? "datePickerReadonlyDefault"
-                            : "datePicker"
-                        }
-                        className="form-control form-control-sm"
-                        autoComplete="off"
-                      />
                     </InputGroup.Prepend>
+                    <DatePicker
+                      disabled={employeeStatus === "1" ? true : false}
+                      id={
+                        employeeStatus === "1"
+                          ? "datePickerReadonlyDefault"
+                          : "datePicker"
+                      }
+                      selected={this.state.intoCompanyYearAndMonthFrom}
+                      onChange={this.inactiveintoCompanyYearAndMonthFrom}
+                      locale="ja"
+                      dateFormat="yyyy/MM"
+                      showMonthYearPicker
+                      showFullMonthYearPicker
+                      className="form-control form-control-sm "
+                      autoComplete="off"
+                    />
+                    ～
+                    <DatePicker
+                      selected={this.state.intoCompanyYearAndMonthTo}
+                      onChange={this.inactiveintoCompanyYearAndMonthTo}
+                      locale="ja"
+                      dateFormat="yyyy/MM"
+                      showMonthYearPicker
+                      showFullMonthYearPicker
+                      disabled={employeeStatus === "1" ? true : false}
+                      id={
+                        employeeStatus === "1"
+                          ? "datePickerReadonlyDefault"
+                          : "datePicker"
+                      }
+                      className="form-control form-control-sm "
+                      autoComplete="off"
+                    />
                   </InputGroup>
                 </Col>
                 <Col sm={3}>

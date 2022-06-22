@@ -1605,7 +1605,7 @@ class employeeUpdateNew extends React.Component {
                     <font className="site-mark"></font>
                   </InputGroup>
 
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         社員名
@@ -1634,7 +1634,9 @@ class employeeUpdateNew extends React.Component {
                     <font color="red" className="site-mark">
                       ★
                     </font>
-                    <Row></Row>
+                  </InputGroup>
+
+                  <InputGroup size="sm" className="flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         カタカナ
@@ -1657,7 +1659,8 @@ class employeeUpdateNew extends React.Component {
                       name="furigana2"
                     />
                     <font className="site-mark"></font>
-                    <Row></Row>
+                  </InputGroup>
+                  <InputGroup size="sm" className="flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         ローマ字
@@ -1693,7 +1696,8 @@ class employeeUpdateNew extends React.Component {
                     <font color="red" className="site-mark">
                       ★
                     </font>
-                    <Row></Row>
+                  </InputGroup>
+                  <InputGroup size="sm" className="flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         性別
@@ -1716,7 +1720,8 @@ class employeeUpdateNew extends React.Component {
                     <font color="red" className="site-mark">
                       ★
                     </font>
-                    <Row></Row>
+                  </InputGroup>
+                  <InputGroup size="sm" className="flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         年齢
@@ -1748,7 +1753,8 @@ class employeeUpdateNew extends React.Component {
                     />
                     <FormControl value="歳" size="sm" disabled />
                     <font className="site-mark"></font>
-                    <Row></Row>
+                  </InputGroup>
+                  <InputGroup size="sm" className="flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         国籍
@@ -1812,7 +1818,7 @@ class employeeUpdateNew extends React.Component {
                     <font className="site-mark"></font>
                   </InputGroup>
 
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="fiveKanji">社員形式</InputGroup.Text>
                     </InputGroup.Prepend>
@@ -1839,7 +1845,8 @@ class employeeUpdateNew extends React.Component {
                       ))}
                     </Form.Control>
                     <font className="site-mark"></font>
-                    <Row></Row>
+                  </InputGroup>
+                  <InputGroup size="sm" className="flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="fiveKanji">部署</InputGroup.Text>
                     </InputGroup.Prepend>
@@ -1863,7 +1870,8 @@ class employeeUpdateNew extends React.Component {
                       ))}
                     </Form.Control>
                     <font className="site-mark"></font>
-                    <Row></Row>
+                  </InputGroup>
+                  <InputGroup size="sm" className="flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="fiveKanji">職種</InputGroup.Text>
                     </InputGroup.Prepend>
@@ -1889,7 +1897,8 @@ class employeeUpdateNew extends React.Component {
                       ))}
                     </Form.Control>
                     <font className="site-mark"></font>
-                    <Row></Row>
+                  </InputGroup>
+                  <InputGroup size="sm" className="flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="fiveKanji">採用区分</InputGroup.Text>
                     </InputGroup.Prepend>
@@ -1952,7 +1961,8 @@ class employeeUpdateNew extends React.Component {
                       )}
                     />
                     <font className="site-mark"></font>
-                    <Row></Row>
+                  </InputGroup>
+                  <InputGroup size="sm" className="flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="fiveKanji">
                         社内メール
@@ -1978,7 +1988,8 @@ class employeeUpdateNew extends React.Component {
                     <font color="red" className="site-mark">
                       ★
                     </font>
-                    <Row></Row>
+                  </InputGroup>
+                  <InputGroup size="sm" className="flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="fiveKanji">携帯電話</InputGroup.Text>
                     </InputGroup.Prepend>
@@ -2080,7 +2091,7 @@ class employeeUpdateNew extends React.Component {
                   基本情報補足
                 </Form.Label>
                 <Col>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         権限
@@ -2107,9 +2118,8 @@ class employeeUpdateNew extends React.Component {
                       ))}
                     </Form.Control>
                     <font className="site-mark"></font>
-
-                    <Row></Row>
-
+                  </InputGroup>
+                  <InputGroup size="sm" className="flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         卒業学校
@@ -2132,9 +2142,8 @@ class employeeUpdateNew extends React.Component {
                       name="major"
                     />
                     <font className="site-mark"></font>
-
-                    <Row></Row>
-
+                  </InputGroup>
+                  <InputGroup size="sm" className="flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         卒業年月
@@ -2161,9 +2170,8 @@ class employeeUpdateNew extends React.Component {
                       disabled
                     />
                     <font className="site-mark"></font>
-
-                    <Row></Row>
-
+                  </InputGroup>
+                  <InputGroup size="sm" className="flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         来日年月
@@ -2190,9 +2198,8 @@ class employeeUpdateNew extends React.Component {
                       disabled
                     />
                     <font className="site-mark"></font>
-
-                    <Row></Row>
-
+                  </InputGroup>
+                  <InputGroup size="sm" className="flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         入社年月
@@ -2228,9 +2235,8 @@ class employeeUpdateNew extends React.Component {
                     <font color="red" className="site-mark">
                       ★
                     </font>
-
-                    <Row></Row>
-
+                  </InputGroup>
+                  <InputGroup size="sm" className="flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         経験年数
@@ -2257,9 +2263,8 @@ class employeeUpdateNew extends React.Component {
                       disabled
                     />
                     <font className="site-mark"></font>
-
-                    <Row></Row>
-
+                  </InputGroup>
+                  <InputGroup size="sm" className="flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         役割
@@ -2294,9 +2299,8 @@ class employeeUpdateNew extends React.Component {
                       ))}
                     </Form.Control>
                     <font className="site-mark"></font>
-
-                    <Row></Row>
-
+                  </InputGroup>
+                  <InputGroup size="sm" className="flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         契約期限
@@ -2334,9 +2338,8 @@ class employeeUpdateNew extends React.Component {
                       disabled
                     />
                     <font className="site-mark"></font>
-
-                    <Row></Row>
-
+                  </InputGroup>
+                  <InputGroup size="sm" className="flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         履歴書1
@@ -2370,9 +2373,8 @@ class employeeUpdateNew extends React.Component {
                         : "添付"}
                     </Button>
                     <font className="site-mark"></font>
-
-                    <Row></Row>
-
+                  </InputGroup>
+                  <InputGroup size="sm" className="flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         履歴書2
@@ -2425,7 +2427,7 @@ class employeeUpdateNew extends React.Component {
                   スキール情報
                 </Form.Label>
                 <Col>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         日本語
@@ -2446,7 +2448,6 @@ class employeeUpdateNew extends React.Component {
                         </option>
                       ))}
                     </Form.Control>
-
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         英語
@@ -2467,10 +2468,8 @@ class employeeUpdateNew extends React.Component {
                         </option>
                       ))}
                     </Form.Control>
-                    <font className="site-mark"></font>
-
-                    <Row></Row>
-
+                  </InputGroup>
+                  <InputGroup size="sm" className="flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         資格
@@ -2502,10 +2501,8 @@ class employeeUpdateNew extends React.Component {
                         </option>
                       ))}
                     </Form.Control>
-                    <font className="site-mark"></font>
-
-                    <Row></Row>
-
+                  </InputGroup>
+                  <InputGroup size="sm" className="flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         開発言語
@@ -2513,6 +2510,7 @@ class employeeUpdateNew extends React.Component {
                     </InputGroup.Prepend>
 
                     <Autocomplete
+                      className="fx1"
                       id="developLanguage1"
                       name="developLanguage1"
                       value={
@@ -2531,7 +2529,7 @@ class employeeUpdateNew extends React.Component {
                             placeholder="  開発言語1"
                             type="text"
                             {...params.inputProps}
-                            className="auto form-control Autocompletestyle-employeeInsert-developLanguage"
+                            className="auto form-control Autocompletestyle-employeeInsert-developLanguage w100p"
                             id="developLanguage1"
                           />
                         </div>
@@ -2539,6 +2537,7 @@ class employeeUpdateNew extends React.Component {
                     />
 
                     <Autocomplete
+                      className="fx1"
                       id="developLanguage2"
                       name="developLanguage2"
                       value={
@@ -2557,19 +2556,19 @@ class employeeUpdateNew extends React.Component {
                             placeholder="  開発言語2"
                             type="text"
                             {...params.inputProps}
-                            className="auto form-control Autocompletestyle-employeeInsert-developLanguage"
+                            className="auto form-control Autocompletestyle-employeeInsert-developLanguage w100p"
                             id="developLanguage2"
                           />
                         </div>
                       )}
                     />
-
-                    <Row></Row>
-
+                  </InputGroup>
+                  <InputGroup size="sm" className="flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm"></InputGroup.Text>
                     </InputGroup.Prepend>
                     <Autocomplete
+                      className="fx1"
                       id="developLanguage3"
                       name="developLanguage3"
                       value={
@@ -2588,13 +2587,14 @@ class employeeUpdateNew extends React.Component {
                             placeholder="  開発言語3"
                             type="text"
                             {...params.inputProps}
-                            className="auto form-control Autocompletestyle-employeeInsert-developLanguage"
+                            className="auto form-control Autocompletestyle-employeeInsert-developLanguage w100p"
                             id="developLanguage3"
                           />
                         </div>
                       )}
                     />
                     <Autocomplete
+                      className="fx1"
                       id="developLanguage4"
                       name="developLanguage4"
                       value={
@@ -2613,21 +2613,21 @@ class employeeUpdateNew extends React.Component {
                             placeholder="  開発言語4"
                             type="text"
                             {...params.inputProps}
-                            className="auto form-control Autocompletestyle-employeeInsert-developLanguage"
+                            className="auto form-control Autocompletestyle-employeeInsert-developLanguage w100p"
                             id="developLanguage4"
                           />
                         </div>
                       )}
                     />
-
-                    <Row></Row>
-
+                  </InputGroup>
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         フレーム
                       </InputGroup.Text>
                     </InputGroup.Prepend>
                     <Autocomplete
+                      className="fx1"
                       id="frameWork1"
                       name="frameWork1"
                       value={
@@ -2646,13 +2646,14 @@ class employeeUpdateNew extends React.Component {
                             placeholder="  フレームワーク1"
                             type="text"
                             {...params.inputProps}
-                            className="auto form-control Autocompletestyle-employeeInsert-developLanguage"
+                            className="auto form-control Autocompletestyle-employeeInsert-developLanguage w100p"
                             id="frameWork1"
                           />
                         </div>
                       )}
                     />
                     <Autocomplete
+                      className="fx1"
                       id="frameWork2"
                       name="frameWork2"
                       value={
@@ -2671,7 +2672,7 @@ class employeeUpdateNew extends React.Component {
                             placeholder="  フレームワーク2"
                             type="text"
                             {...params.inputProps}
-                            className="auto form-control Autocompletestyle-employeeInsert-developLanguage"
+                            className="auto form-control Autocompletestyle-employeeInsert-developLanguage w100p"
                             id="frameWork2"
                           />
                         </div>
@@ -2681,7 +2682,7 @@ class employeeUpdateNew extends React.Component {
                 </Col>
                 <font style={{ color: "#000000" }}>住所情報</font>
                 <Col>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         郵便番号
@@ -2697,10 +2698,8 @@ class employeeUpdateNew extends React.Component {
                       id="postcode"
                       maxlength="7"
                     />
-                    <font className="site-mark"></font>
-
-                    <Row></Row>
-
+                  </InputGroup>
+                  <InputGroup size="sm" className="flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         都道府県
@@ -2714,10 +2713,8 @@ class employeeUpdateNew extends React.Component {
                       ref="firstHalfAddress"
                       disabled
                     />
-                    <font className="site-mark"></font>
-
-                    <Row></Row>
-
+                  </InputGroup>
+                  <InputGroup size="sm" className="flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         以降住所
@@ -2732,16 +2729,15 @@ class employeeUpdateNew extends React.Component {
                       name="lastHalfAddress"
                       maxlength="50"
                     />
-                    <font className="site-mark"></font>
-
-                    <Row></Row>
-
+                  </InputGroup>
+                  <InputGroup size="sm" className="flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         最寄駅
                       </InputGroup.Text>
                     </InputGroup.Prepend>
                     <Autocomplete
+                      className="fx1"
                       id="stationCode"
                       name="stationCode"
                       value={
@@ -2760,7 +2756,7 @@ class employeeUpdateNew extends React.Component {
                             placeholder=" 例：秋葉原駅"
                             type="text"
                             {...params.inputProps}
-                            className="auto form-control Autocompletestyle-emp-station"
+                            className="auto form-control Autocompletestyle-emp-station w100p"
                           />
                         </div>
                       )}
@@ -2799,7 +2795,7 @@ class employeeUpdateNew extends React.Component {
                   個人関連情報
                 </Form.Label>
                 <Col>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="sevenKanji">
                         在留資格{" "}
@@ -2826,12 +2822,8 @@ class employeeUpdateNew extends React.Component {
                         </option>
                       ))}
                     </Form.Control>
-                    <font
-                      style={{ marginLeft: "5px", marginRight: "0px" }}
-                    ></font>
-
-                    <Row></Row>
-
+                  </InputGroup>
+                  <InputGroup size="sm" className="flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="sevenKanji">
                         在留カード番号
@@ -2854,112 +2846,94 @@ class employeeUpdateNew extends React.Component {
                           : false
                       }
                     />
-
-                    <font
-                      style={{ marginLeft: "5px", marginRight: "0px" }}
-                    ></font>
-
-                    <Row></Row>
-
+                  </InputGroup>
+                  <InputGroup size="sm" className="flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="empinsert-right-kanji">
                         在留カード
                       </InputGroup.Text>
                     </InputGroup.Prepend>
-                    <InputGroup.Append>
-                      <DatePicker
-                        selected={this.state.stayPeriod}
-                        onChange={this.inactiveStayPeriod}
-                        locale="ja"
-                        dateFormat="yyyy/MM/dd"
-                        className="form-control form-control-sm"
-                        yearDropdownItemNumber={10}
-                        scrollableYearDropdown
-                        showYearDropdown
-                        autoComplete="off"
-                        minDate={new Date()}
-                        disabled={
-                          residenceTimeDisabled ||
-                          this.state.residenceCode === "3" ||
-                          this.state.residenceCode === "6" ||
-                          employeeStatus === "1" ||
-                          employeeStatus === "4"
-                            ? true
-                            : false
-                        }
-                        id={
-                          residenceTimeDisabled ||
-                          this.state.residenceCode === "3" ||
-                          this.state.residenceCode === "6" ||
-                          employeeStatus === "1" ||
-                          employeeStatus === "4"
-                            ? "datePickerReadonlyDefault-empInsert-right-stayPeriod"
-                            : "datePicker-empInsert-right-stayPeriod"
-                        }
-                      />
-                    </InputGroup.Append>
-                    <Autocomplete
-                      getOptionLabel={(option) => option.name || ""}
-                      renderInput={(params) => (
-                        <div ref={params.InputProps.ref}>
-                          <Button
-                            size="sm"
-                            style={
-                              this.state.residentCardInfoURL !== "" ||
-                              this.state.residentCardInfo !== undefined
-                                ? {
-                                    backgroundColor: "#53A100",
-                                    border: "none",
-                                    marginLeft: "3px",
-                                  }
-                                : {
-                                    backgroundColor: "",
-                                    border: "none",
-                                    marginLeft: "3px",
-                                  }
-                            }
-                            onClick={(event) =>
-                              this.addFile(event, "resumeInfo2")
-                            }
-                            className="uploadButtom"
-                            onClick={(event) =>
-                              this.addFile(event, "residentCardInfo")
-                            }
-                            disabled={
-                              employeeStatus === "1" || employeeStatus === "4"
-                                ? true
-                                : false
-                            }
-                          >
-                            <FontAwesomeIcon icon={faFile} />{" "}
-                            {this.state.residentCardInfoURL !== "" ||
-                            this.state.residentCardInfo !== undefined
-                              ? "済み"
-                              : "添付"}
-                          </Button>
-                          {/*<Button size="sm" style={{ marginLeft: "3px"}} disabled={this.state.residentCardInfoURL === "" ? true:false} className="downloadButtom" onClick={publicUtils.handleDownload.bind(this, this.state.residentCardInfoURL, this.state.serverIP)} ><FontAwesomeIcon icon={faDownload} /> download</Button>*/}
-                          <Button
-                            size="sm"
-                            style={{ marginLeft: "3px", border: "none" }}
-                            disabled={
-                              this.state.residentCardInfoURL !== "" ||
-                              this.state.residentCardInfo !== undefined
-                                ? false
-                                : true
-                            }
-                            className="uploadButtom"
-                            onClick={this.deleteFile.bind(
-                              this,
-                              "residentCardInfo"
-                            )}
-                          >
-                            <FontAwesomeIcon icon={faDownload} />
-                            削除
-                          </Button>
-                        </div>
-                      )}
+                    <DatePicker
+                      selected={this.state.stayPeriod}
+                      onChange={this.inactiveStayPeriod}
+                      locale="ja"
+                      dateFormat="yyyy/MM/dd"
+                      className="form-control form-control-sm"
+                      yearDropdownItemNumber={10}
+                      scrollableYearDropdown
+                      showYearDropdown
+                      autoComplete="off"
+                      minDate={new Date()}
+                      disabled={
+                        residenceTimeDisabled ||
+                        this.state.residenceCode === "3" ||
+                        this.state.residenceCode === "6" ||
+                        employeeStatus === "1" ||
+                        employeeStatus === "4"
+                          ? true
+                          : false
+                      }
+                      id={
+                        residenceTimeDisabled ||
+                        this.state.residenceCode === "3" ||
+                        this.state.residenceCode === "6" ||
+                        employeeStatus === "1" ||
+                        employeeStatus === "4"
+                          ? "datePickerReadonlyDefault-empInsert-right-stayPeriod"
+                          : "datePicker-empInsert-right-stayPeriod"
+                      }
                     />
+                    <Button
+                      size="sm"
+                      style={
+                        this.state.residentCardInfoURL !== "" ||
+                        this.state.residentCardInfo !== undefined
+                          ? {
+                              backgroundColor: "#53A100",
+                              border: "none",
+                              marginLeft: "3px",
+                            }
+                          : {
+                              backgroundColor: "",
+                              border: "none",
+                              marginLeft: "3px",
+                            }
+                      }
+                      onClick={(event) => this.addFile(event, "resumeInfo2")}
+                      className="uploadButtom"
+                      onClick={(event) =>
+                        this.addFile(event, "residentCardInfo")
+                      }
+                      disabled={
+                        employeeStatus === "1" || employeeStatus === "4"
+                          ? true
+                          : false
+                      }
+                    >
+                      <FontAwesomeIcon icon={faFile} />{" "}
+                      {this.state.residentCardInfoURL !== "" ||
+                      this.state.residentCardInfo !== undefined
+                        ? "済み"
+                        : "添付"}
+                    </Button>
+                    {/*<Button size="sm" style={{ marginLeft: "3px"}} disabled={this.state.residentCardInfoURL === "" ? true:false} className="downloadButtom" onClick={publicUtils.handleDownload.bind(this, this.state.residentCardInfoURL, this.state.serverIP)} ><FontAwesomeIcon icon={faDownload} /> download</Button>*/}
+                    <Button
+                      size="sm"
+                      style={{ marginLeft: "3px", border: "none" }}
+                      disabled={
+                        this.state.residentCardInfoURL !== "" ||
+                        this.state.residentCardInfo !== undefined
+                          ? false
+                          : true
+                      }
+                      className="uploadButtom"
+                      onClick={this.deleteFile.bind(this, "residentCardInfo")}
+                    >
+                      <FontAwesomeIcon icon={faDownload} />
+                      削除
+                    </Button>
                     <Form.File
+                      className="hidden-item "
                       id="residentCardInfo"
                       hidden
                       data-browse="添付"
@@ -2969,98 +2943,87 @@ class employeeUpdateNew extends React.Component {
                         this.changeFile(event, "residentCardInfo")
                       }
                     />
-
-                    <Row></Row>
-
+                  </InputGroup>
+                  <InputGroup size="sm" className="flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="empinsert-right-kanji">
                         パスポート
                       </InputGroup.Text>
                     </InputGroup.Prepend>
-                    <InputGroup.Append>
-                      <DatePicker
-                        selected={this.state.passportStayPeriod}
-                        onChange={this.passportStayPeriodChange}
-                        locale="ja"
-                        dateFormat="yyyy/MM/dd"
-                        className="form-control form-control-sm"
-                        yearDropdownItemNumber={10}
-                        scrollableYearDropdown
-                        showYearDropdown
-                        autoComplete="off"
-                        minDate={new Date()}
-                        disabled={
-                          residenceTimeDisabled ||
-                          employeeStatus === "1" ||
-                          employeeStatus === "4"
-                            ? true
-                            : false
-                        }
-                        id={
-                          residenceTimeDisabled ||
-                          employeeStatus === "1" ||
-                          employeeStatus === "4"
-                            ? "datePickerReadonlyDefault-empInsert-right-stayPeriod"
-                            : "datePicker-empInsert-right-stayPeriod"
-                        }
-                      />
-                    </InputGroup.Append>
-                    <Autocomplete
-                      getOptionLabel={(option) => option.name || ""}
-                      renderInput={(params) => (
-                        <div ref={params.InputProps.ref}>
-                          <Button
-                            size="sm"
-                            style={
-                              this.state.passportInfoURL !== "" ||
-                              this.state.passportInfo !== undefined
-                                ? {
-                                    backgroundColor: "#53A100",
-                                    border: "none",
-                                    marginLeft: "3px",
-                                  }
-                                : {
-                                    backgroundColor: "",
-                                    border: "none",
-                                    marginLeft: "3px",
-                                  }
-                            }
-                            className="uploadButtom"
-                            onClick={(event) =>
-                              this.addFile(event, "passportInfo")
-                            }
-                            disabled={
-                              employeeStatus === "1" || employeeStatus === "4"
-                                ? true
-                                : false
-                            }
-                          >
-                            <FontAwesomeIcon icon={faFile} />{" "}
-                            {this.state.passportInfoURL !== "" ||
-                            this.state.passportInfo !== undefined
-                              ? "済み"
-                              : "添付"}
-                          </Button>
-                          {/*<Button size="sm" style={{ marginLeft: "3px"}} disabled={this.state.passportInfoURL === "" ? true:false} className="downloadButtom" onClick={publicUtils.handleDownload.bind(this, this.state.passportInfoURL, this.state.serverIP)} ><FontAwesomeIcon icon={faDownload} /> download</Button>*/}
-                          <Button
-                            size="sm"
-                            style={{ marginLeft: "3px", border: "none" }}
-                            disabled={
-                              this.state.passportInfoURL !== "" ||
-                              this.state.passportInfo !== undefined
-                                ? false
-                                : true
-                            }
-                            className="uploadButtom"
-                            onClick={this.deleteFile.bind(this, "passportInfo")}
-                          >
-                            <FontAwesomeIcon icon={faDownload} />
-                            削除
-                          </Button>
-                        </div>
-                      )}
+                    <DatePicker
+                      selected={this.state.passportStayPeriod}
+                      onChange={this.passportStayPeriodChange}
+                      locale="ja"
+                      dateFormat="yyyy/MM/dd"
+                      className="form-control form-control-sm"
+                      yearDropdownItemNumber={10}
+                      scrollableYearDropdown
+                      showYearDropdown
+                      autoComplete="off"
+                      minDate={new Date()}
+                      disabled={
+                        residenceTimeDisabled ||
+                        employeeStatus === "1" ||
+                        employeeStatus === "4"
+                          ? true
+                          : false
+                      }
+                      id={
+                        residenceTimeDisabled ||
+                        employeeStatus === "1" ||
+                        employeeStatus === "4"
+                          ? "datePickerReadonlyDefault-empInsert-right-stayPeriod"
+                          : "datePicker-empInsert-right-stayPeriod"
+                      }
                     />
+                    <Button
+                      size="sm"
+                      style={
+                        this.state.passportInfoURL !== "" ||
+                        this.state.passportInfo !== undefined
+                          ? {
+                              backgroundColor: "#53A100",
+                              border: "none",
+                              marginLeft: "3px",
+                            }
+                          : {
+                              backgroundColor: "",
+                              border: "none",
+                              marginLeft: "3px",
+                            }
+                      }
+                      className="uploadButtom"
+                      onClick={(event) => this.addFile(event, "passportInfo")}
+                      disabled={
+                        employeeStatus === "1" || employeeStatus === "4"
+                          ? true
+                          : false
+                      }
+                    >
+                      <FontAwesomeIcon icon={faFile} />{" "}
+                      {this.state.passportInfoURL !== "" ||
+                      this.state.passportInfo !== undefined
+                        ? "済み"
+                        : "添付"}
+                    </Button>
+                    {/*<Button size="sm" style={{ marginLeft: "3px"}} disabled={this.state.passportInfoURL === "" ? true:false} className="downloadButtom" onClick={publicUtils.handleDownload.bind(this, this.state.passportInfoURL, this.state.serverIP)} ><FontAwesomeIcon icon={faDownload} /> download</Button>*/}
+                    <Button
+                      size="sm"
+                      style={{ marginLeft: "3px", border: "none" }}
+                      disabled={
+                        this.state.passportInfoURL !== "" ||
+                        this.state.passportInfo !== undefined
+                          ? false
+                          : true
+                      }
+                      className="uploadButtom"
+                      onClick={this.deleteFile.bind(this, "passportInfo")}
+                    >
+                      <FontAwesomeIcon icon={faDownload} />
+                      削除
+                    </Button>
                     <Form.File
+                      className="hidden-item "
                       id="passportInfo"
                       hidden
                       data-browse="添付"
@@ -3070,9 +3033,8 @@ class employeeUpdateNew extends React.Component {
                         this.changeFile(event, "passportInfo")
                       }
                     />
-
-                    <Row></Row>
-
+                  </InputGroup>
+                  <InputGroup size="sm" className="flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="sevenKanji">
                         パスポート番号
@@ -3092,12 +3054,8 @@ class employeeUpdateNew extends React.Component {
                       name="passportNo"
                       maxlength="9"
                     />
-                    <font
-                      style={{ marginLeft: "5px", marginRight: "0px" }}
-                    ></font>
-
-                    <Row></Row>
-
+                  </InputGroup>
+                  <InputGroup size="sm" className="flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="sevenKanji">
                         マイナンバー
@@ -3117,12 +3075,8 @@ class employeeUpdateNew extends React.Component {
                       name="myNumber"
                       maxlength="12"
                     />
-                    <font
-                      style={{ marginLeft: "5px", marginRight: "0px" }}
-                    ></font>
-
-                    <Row></Row>
-
+                  </InputGroup>
+                  <InputGroup size="sm" className="flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="sevenKanji">
                         雇用保険加入
@@ -3162,12 +3116,8 @@ class employeeUpdateNew extends React.Component {
                       name="employmentInsuranceNo"
                       maxlength="13"
                     />
-                    <font
-                      style={{ marginLeft: "5px", marginRight: "0px" }}
-                    ></font>
-
-                    <Row></Row>
-
+                  </InputGroup>
+                  <InputGroup size="sm" className="flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="sevenKanji">
                         社会保険加入
@@ -3227,12 +3177,8 @@ class employeeUpdateNew extends React.Component {
                       maxlength="13"
                       disabled={socialInsurance === "1" ? false : true}
                     />
-                    <font
-                      style={{ marginLeft: "5px", marginRight: "0px" }}
-                    ></font>
-
-                    <Row></Row>
-
+                  </InputGroup>
+                  <InputGroup size="sm" className="flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         出入国届
@@ -3258,39 +3204,36 @@ class employeeUpdateNew extends React.Component {
                         }
                         id={
                           employeeStatus === "1" || employeeStatus === "4"
-                            ? "datePickerReadonlyDefault-empInsert-right-immigrationTime"
-                            : "datePicker-empInsert-right-immigrationTime"
+                            ? "datePickerReadonlyDefault-empInsert-right-socialInsuranceDate"
+                            : "datePicker-empInsert-right-socialInsuranceDate"
                         }
                       />
                     </InputGroup.Append>
                     <InputGroup.Prepend>
                       <InputGroup.Text id="twoKanji">終了</InputGroup.Text>
                     </InputGroup.Prepend>
-                    <InputGroup.Append>
-                      <DatePicker
-                        selected={this.state.immigrationEndTime}
-                        onChange={this.immigrationEndTimeChange}
-                        locale="ja"
-                        dateFormat="yyyy/MM"
-                        showMonthYearPicker
-                        showFullMonthYearPicker
-                        className="form-control form-control-sm"
-                        autoComplete="off"
-                        disabled={
-                          employeeStatus === "1" || employeeStatus === "4"
-                            ? true
-                            : false
-                        }
-                        id={
-                          employeeStatus === "1" || employeeStatus === "4"
-                            ? "datePickerReadonlyDefault-empInsert-right-immigrationTime"
-                            : "datePicker-empInsert-right-immigrationTime"
-                        }
-                      />
-                    </InputGroup.Append>
-
-                    <Row></Row>
-
+                    <DatePicker
+                      selected={this.state.immigrationEndTime}
+                      onChange={this.immigrationEndTimeChange}
+                      locale="ja"
+                      dateFormat="yyyy/MM"
+                      showMonthYearPicker
+                      showFullMonthYearPicker
+                      className="form-control form-control-sm w100p"
+                      autoComplete="off"
+                      disabled={
+                        employeeStatus === "1" || employeeStatus === "4"
+                          ? true
+                          : false
+                      }
+                      id={
+                        employeeStatus === "1" || employeeStatus === "4"
+                          ? "datePickerReadonlyDefault-empInsert-right-immigrationTime"
+                          : "datePicker-empInsert-right-immigrationTime"
+                      }
+                    />
+                  </InputGroup>
+                  <InputGroup size="sm" className="flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="sevenKanji">
                         退職年月日
@@ -3355,9 +3298,6 @@ class employeeUpdateNew extends React.Component {
                         )
                       )}
                     </Form.Control>
-                    <font
-                      style={{ marginLeft: "5px", marginRight: "0px" }}
-                    ></font>
                   </InputGroup>
                 </Col>
               </Col>
