@@ -1258,7 +1258,7 @@ class employeeInsertNew extends React.Component {
         </div>
         <Form onReset={this.resetBook} enctype="multipart/form-data">
           <Form.Group>
-            <Row>
+            <Row className="mb-3">
               <Col sm={12}>
                 <Form.Label style={{ color: "#000000" }}>基本情報</Form.Label>
               </Col>
@@ -1770,7 +1770,7 @@ class employeeInsertNew extends React.Component {
               </Col>
             </Row>
 
-            <Row>
+            <Row className="mb-3">
               <Col sm={4}>
                 <Form.Label style={{ color: "#000000" }}>
                   基本情報補足
@@ -2309,7 +2309,7 @@ class employeeInsertNew extends React.Component {
                     />
                   </InputGroup>
                 </Col>
-                <font style={{ color: "#000000" }}>住所情報</font>
+                <Form.Label style={{ color: "#000000" }}>住所情報</Form.Label>
                 <Col>
                   <InputGroup size="sm" className="">
                     <InputGroup.Prepend>

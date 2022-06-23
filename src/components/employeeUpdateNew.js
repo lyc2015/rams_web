@@ -2085,7 +2085,7 @@ class employeeUpdateNew extends React.Component {
 								
 							</Col>*/}
             </Row>
-            <Row>
+            <Row className="mb-3">
               <Col sm={4}>
                 <Form.Label style={{ color: "#000000" }}>
                   基本情報補足
@@ -2620,7 +2620,7 @@ class employeeUpdateNew extends React.Component {
                       )}
                     />
                   </InputGroup>
-                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
+                  <InputGroup size="sm" className="flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         フレーム
@@ -2680,7 +2680,7 @@ class employeeUpdateNew extends React.Component {
                     />
                   </InputGroup>
                 </Col>
-                <font style={{ color: "#000000" }}>住所情報</font>
+                <Form.Label style={{ color: "#000000" }}>住所情報</Form.Label>
                 <Col>
                   <InputGroup size="sm" className="flexWrapNoWrap">
                     <InputGroup.Prepend>
