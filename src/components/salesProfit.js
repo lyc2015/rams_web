@@ -18,6 +18,7 @@ import * as utils from "./utils/publicUtils.js";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import * as publicUtils from "./utils/publicUtils.js";
 import moment from "moment";
+import { message } from "antd";
 axios.defaults.withCredentials = true;
 
 registerLocale("ja", ja);
@@ -38,6 +39,8 @@ class salesProfit extends React.Component {
   }
 
   initialState = {
+    admissionStartDate: defaultData.startDate,
+    admissionEndDate: defaultData.endDate,
     no: "",
     employee: "",
     employeeNo: "",
@@ -175,7 +178,8 @@ class salesProfit extends React.Component {
         admissionStartDate: date,
       },
       () => {
-        this.getAdmissionDate("start", date);
+        // this.getAdmissionDate("start", date);
+        this.getSalesInfo();
       }
     );
   };
@@ -186,7 +190,8 @@ class salesProfit extends React.Component {
         admissionEndDate: date,
       },
       () => {
-        this.getAdmissionDate("end", date);
+        // this.getAdmissionDate("end", date);
+        this.getSalesInfo();
       }
     );
   };
@@ -210,14 +215,20 @@ class salesProfit extends React.Component {
   };
 
   // 現場情報を取得する
-  getSalesInfo = (start, end) => {
-    var salesPointSetModel = {};
-    salesPointSetModel["employeeName"] = this.state.customerNo;
-    salesPointSetModel["employeeStatus"] = this.state.employeeSearch;
-    salesPointSetModel["startDate"] = start;
-    salesPointSetModel["endDate"] = end;
-    salesPointSetModel["startTime"] = publicUtils.formateDate(start, false);
-    salesPointSetModel["endTime"] = publicUtils.formateDate(end, false);
+  getSalesInfo = () => {
+    if (this.state.admissionEndDate < this.state.admissionStartDate) {
+      message.error("開始年月は終了年月より小さい!");
+      return;
+    }
+    var salesPointSetModel = {
+      employeeName: this.state.customerNo,
+      employeeStatus: this.state.employeeSearch,
+      startDate: this.state.admissionStartDate,
+      endDate: this.state.admissionEndDate,
+      startTime: publicUtils.formateDate(this.state.admissionStartDate, false),
+      endTime: publicUtils.formateDate(this.state.admissionEndDate, false),
+    };
+
     axios
       .post(this.state.serverIP + "getSalesInfo", salesPointSetModel)
       .then((response) => {
@@ -582,9 +593,7 @@ class salesProfit extends React.Component {
                       </InputGroup.Text>
                     </InputGroup.Prepend>
                     <DatePicker
-                      selected={
-                        this.state.admissionStartDate || defaultData.startDate
-                      }
+                      selected={this.state.admissionStartDate}
                       onChange={this.admissionStartDate}
                       dateFormat="yyyy/MM"
                       showMonthYearPicker
@@ -604,9 +613,7 @@ class salesProfit extends React.Component {
                     />
                     〜
                     <DatePicker
-                      selected={
-                        this.state.admissionEndDate || defaultData.endDate
-                      }
+                      selected={this.state.admissionEndDate}
                       onChange={this.admissionEndDate}
                       dateFormat="yyyy/MM"
                       showMonthYearPicker

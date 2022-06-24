@@ -325,7 +325,11 @@ class situationChange extends Component {
                   name="individualSales_startYearAndMonth"
                   locale="ja"
                 ></DatePicker>
-                ～
+                <InputGroup.Prepend>
+                  <InputGroup.Text className="width-auto bdr0">
+                    ～
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
                 <DatePicker
                   selected={this.state.endsituationChange}
                   onChange={this.endsituationChange}

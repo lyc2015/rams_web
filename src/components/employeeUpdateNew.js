@@ -2001,7 +2001,11 @@ class employeeUpdateNew extends React.Component {
                       name="phoneNo1"
                       maxlength="3"
                     />
-                    —
+                    <InputGroup.Prepend>
+                      <InputGroup.Text className="width-auto bdr0">
+                        —
+                      </InputGroup.Text>
+                    </InputGroup.Prepend>
                     <FormControl
                       value={phoneNo2}
                       autoComplete="off"
@@ -2010,7 +2014,11 @@ class employeeUpdateNew extends React.Component {
                       name="phoneNo2"
                       maxlength="4"
                     />
-                    —
+                    <InputGroup.Prepend>
+                      <InputGroup.Text className="width-auto bdr0">
+                        —
+                      </InputGroup.Text>
+                    </InputGroup.Prepend>
                     <FormControl
                       value={phoneNo3}
                       autoComplete="off"

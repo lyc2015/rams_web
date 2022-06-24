@@ -730,7 +730,11 @@ class monthlySalesSearch extends Component {
                   aria-describedby="inputGroup-sizing-sm"
                   placeholder=" 万円"
                 />
-                <font id="mark">～</font>
+                <InputGroup.Prepend>
+                  <InputGroup.Text className="width-auto bdr0">
+                    ～
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
                 <FormControl
                   name="utilPriceback"
                   id="utilPriceback"
@@ -758,7 +762,11 @@ class monthlySalesSearch extends Component {
                   aria-describedby="inputGroup-sizing-sm"
                   placeholder=" 万円"
                 />
-                <font id="mark">～</font>
+                <InputGroup.Prepend>
+                  <InputGroup.Text className="width-auto bdr0">
+                    ～
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
                 <FormControl
                   name="salaryback"
                   id="salaryback"
@@ -786,7 +794,11 @@ class monthlySalesSearch extends Component {
                   aria-describedby="inputGroup-sizing-sm"
                   placeholder=" 万円"
                 />
-                <font id="mark">～</font>
+                <InputGroup.Prepend>
+                  <InputGroup.Text className="width-auto bdr0">
+                    ～
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
                 <FormControl
                   name="grossProfitBack"
                   id="grossProfitBack"
@@ -819,7 +831,11 @@ class monthlySalesSearch extends Component {
                     name="individualSales_startYearAndMonth"
                     locale="ja"
                   ></DatePicker>
-                  <font id="mark">～</font>
+                  <InputGroup.Prepend>
+                    <InputGroup.Text className="width-auto bdr0">
+                      ～
+                    </InputGroup.Text>
+                  </InputGroup.Prepend>
                   <DatePicker
                     selected={this.state.monthlySales_endYearAndMonth}
                     onChange={this.monthlySalesEndYearAndMonthChange}

@@ -1424,7 +1424,7 @@ Email：` +
               <Col sm={3}>
                 <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                   <InputGroup.Prepend>
-                    <InputGroup.Text className="width-auto">
+                    <InputGroup.Text className="width-auto bdr0">
                       送信日付設定
                     </InputGroup.Text>
                   </InputGroup.Prepend>

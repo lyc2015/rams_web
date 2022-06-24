@@ -284,3 +284,7 @@
 .color-red {
   color: red;
 }
+
+.bdr0 {
+  border-radius: 0;
+}

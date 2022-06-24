@@ -360,7 +360,7 @@ class salesPoint extends React.Component {
                   </InputGroup>
                 </Col>
                 <Col sm={5}>
-                  <InputGroup size="sm" className="mb-3">
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         年月
@@ -381,12 +381,16 @@ class salesPoint extends React.Component {
                           )
                         }
                         name="admissionStartDate"
-                        className="form-control form-control-sm"
+                        className="form-control form-control-sm "
                         id="datePicker"
                         locale="ja"
                         autoComplete="off"
                       />
-                      〜
+                      <InputGroup.Prepend>
+                        <InputGroup.Text className="width-auto bdr0">
+                          ～
+                        </InputGroup.Text>
+                      </InputGroup.Prepend>
                       <DatePicker
                         selected={this.state.admissionEndDate}
                         onChange={this.admissionEndDate}

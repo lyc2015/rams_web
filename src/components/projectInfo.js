@@ -1114,7 +1114,11 @@ class projectInfo extends Component {
                         </option>
                       ))}
                     </FormControl>
-                    {" ～ "}
+                    <InputGroup.Prepend>
+                      <InputGroup.Text className="width-auto bdr0">
+                        ～
+                      </InputGroup.Text>
+                    </InputGroup.Prepend>
                     <FormControl
                       as="select"
                       value={projectPhaseEnd}

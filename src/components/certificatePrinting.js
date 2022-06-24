@@ -522,7 +522,11 @@ class certificatePrinting extends Component {
                       autoComplete="off"
                       id="datePicker-certificatePrinting-intoCompanyYearAndMonth"
                     />
-                    <font>～</font>
+                    <InputGroup.Prepend>
+                      <InputGroup.Text className="width-auto bdr0">
+                        ～
+                      </InputGroup.Text>
+                    </InputGroup.Prepend>
                     <DatePicker
                       selected={this.state.nowYearAndMonth}
                       onChange={this.inactiveintoNowYearAndMonth}

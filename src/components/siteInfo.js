@@ -2073,7 +2073,11 @@ class siteInfo extends Component {
                         </option>
                       ))}
                     </Form.Control>
-                    〜
+                    <InputGroup.Prepend>
+                      <InputGroup.Text className="width-auto bdr0">
+                        ～
+                      </InputGroup.Text>
+                    </InputGroup.Prepend>
                     <Form.Control
                       as="select"
                       onChange={this.onchange}

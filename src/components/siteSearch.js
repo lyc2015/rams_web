@@ -1021,7 +1021,11 @@ class siteSearch extends Component {
                         </option>
                       ))}
                     </Form.Control>
-                    〜
+                    <InputGroup.Prepend>
+                      <InputGroup.Text className="width-auto bdr0">
+                        ～
+                      </InputGroup.Text>
+                    </InputGroup.Prepend>
                     <Form.Control
                       as="select"
                       onChange={this.onchange}
@@ -1056,7 +1060,11 @@ class siteSearch extends Component {
                       aria-label="Small"
                       aria-describedby="inputGroup-sizing-sm"
                     />
-                    〜
+                    <InputGroup.Prepend>
+                      <InputGroup.Text className="width-auto bdr0">
+                        ～
+                      </InputGroup.Text>
+                    </InputGroup.Prepend>
                     <FormControl
                       maxLength="3"
                       id="unitPrice2"

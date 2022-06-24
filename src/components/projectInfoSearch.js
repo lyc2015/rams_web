@@ -161,6 +161,7 @@ class ProjectInfoSearch extends Component {
       });
     }
   };
+
   getJapanese2 = (event, values) => {
     if (values != null) {
       this.setState({
@@ -463,6 +464,7 @@ class ProjectInfoSearch extends Component {
       keyWordOfLanagurue1: this.state.keyWordOfLanagurue1,
       keyWordOfLanagurue2: this.state.keyWordOfLanagurue2,
       keyWordOfLanagurue3: this.state.keyWordOfLanagurue3,
+      keyWordOfFrameWork1: this.state.keyWordOfFrameWork1,
       japaneaseConversationLevel: this.state.japaneaseConversationLevel,
       unitPriceRangeLowest: this.state.unitPriceRangeLowest,
       unitPriceRangeHighest: this.state.unitPriceRangeHighest,
@@ -579,18 +581,17 @@ class ProjectInfoSearch extends Component {
 
   showSiteLocation = (cell, row) => {
     if (row.siteLocation !== null && row.siteLocation !== "") {
+      let name = this.state.stationDrop.find(
+        (v) => v.code === row.siteLocation
+      ).name;
       if (row.endFlag === "0") {
         return (
-          <div style={{ color: "gray" }}>
-            {this.state.stationDrop.find((v) => v.code === row.siteLocation)
-              .name || {}}
+          <div title={name} style={{ color: "gray" }}>
+            {name}
           </div>
         );
       } else {
-        return (
-          this.state.stationDrop.find((v) => v.code === row.siteLocation)
-            .name || {}
-        );
+        return <div title={name}>{name}</div>;
       }
     }
   };
@@ -864,21 +865,24 @@ class ProjectInfoSearch extends Component {
                 <Col sm={3}>
                   <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
-                      <InputGroup.Text>選択期間</InputGroup.Text>
+                      <InputGroup.Text>入場時期</InputGroup.Text>
                     </InputGroup.Prepend>
-                    <FormControl
-                      className="fx1"
-                      as="select"
-                      value={theSelectProjectperiodStatus}
-                      name="theSelectProjectperiodStatus"
-                      onChange={this.valueChange}
-                    >
-                      {theSelectProjectperiodStatusDrop.map((date) => (
-                        <option key={date.code} value={date.code}>
-                          {date.name}
-                        </option>
-                      ))}
-                    </FormControl>
+                    <DatePicker
+                      selected={admissionPeriod}
+                      onChange={this.admissionPeriodChange}
+                      autoComplete="off"
+                      locale="pt-BR"
+                      showMonthYearPicker
+                      showFullMonthYearPicker
+                      minDate={new Date()}
+                      showDisabledMonthNavigation
+                      className="form-control form-control-sm w100p"
+                      id="projectInfoSearchDatePicker"
+                      dateFormat={"yyyy/MM"}
+                      name="admissionPeriod"
+                      locale="ja"
+                      disabled={actionType === "detail" ? true : false}
+                    />
                   </InputGroup>
                 </Col>
                 <Col sm={3}>
@@ -911,7 +915,7 @@ class ProjectInfoSearch extends Component {
                     />
                   </InputGroup>
                 </Col>
-                <Col sm={3}>
+                <Col sm={4}>
                   <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text>開発言語</InputGroup.Text>
@@ -966,7 +970,7 @@ class ProjectInfoSearch extends Component {
                         </div>
                       )}
                     />
-                    {/* <Autocomplete
+                    <Autocomplete
                       className="fx1"
                       id="keyWordOfFrameWork1"
                       name="keyWordOfFrameWork1"
@@ -978,9 +982,12 @@ class ProjectInfoSearch extends Component {
                       options={getFrameWorkDrop}
                       getOptionLabel={(option) => option.name || ""}
                       disabled={actionType === "detail" ? true : false}
-                      onChange={(event, values) =>
-                        this.handleFrameWork1Change(event, values)
-                      }
+                      onChange={(event, values) => {
+                        this.setState({
+                          keyWordOfFrameWork1:
+                            values != null ? values.code : "",
+                        });
+                      }}
                       renderInput={(params) => (
                         <div ref={params.InputProps.ref}>
                           <input
@@ -991,7 +998,7 @@ class ProjectInfoSearch extends Component {
                           />
                         </div>
                       )}
-                    /> */}
+                    />
                     {/* <Autocomplete
                       className="fx1"
                       hidden
@@ -1020,19 +1027,19 @@ class ProjectInfoSearch extends Component {
                     /> */}
                   </InputGroup>
                 </Col>
-                <Col sm={3}>
+                <Col sm={2}>
                   <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
-                      <InputGroup.Text>面談回数</InputGroup.Text>
+                      <InputGroup.Text>選択期間</InputGroup.Text>
                     </InputGroup.Prepend>
                     <FormControl
                       className="fx1"
                       as="select"
-                      value={noOfInterviewCode}
-                      name="noOfInterviewCode"
+                      value={theSelectProjectperiodStatus}
+                      name="theSelectProjectperiodStatus"
                       onChange={this.valueChange}
                     >
-                      {noOfInterviewDrop.map((date) => (
+                      {theSelectProjectperiodStatusDrop.map((date) => (
                         <option key={date.code} value={date.code}>
                           {date.name}
                         </option>
@@ -1065,24 +1072,21 @@ class ProjectInfoSearch extends Component {
                 <Col sm={3}>
                   <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
-                      <InputGroup.Text>入場時期</InputGroup.Text>
+                      <InputGroup.Text>面談回数</InputGroup.Text>
                     </InputGroup.Prepend>
-                    <DatePicker
-                      selected={admissionPeriod}
-                      onChange={this.admissionPeriodChange}
-                      autoComplete="off"
-                      locale="pt-BR"
-                      showMonthYearPicker
-                      showFullMonthYearPicker
-                      minDate={new Date()}
-                      showDisabledMonthNavigation
-                      className="form-control form-control-sm w100p"
-                      id="projectInfoSearchDatePicker"
-                      dateFormat={"yyyy/MM"}
-                      name="admissionPeriod"
-                      locale="ja"
-                      disabled={actionType === "detail" ? true : false}
-                    />
+                    <FormControl
+                      className="fx1"
+                      as="select"
+                      value={noOfInterviewCode}
+                      name="noOfInterviewCode"
+                      onChange={this.valueChange}
+                    >
+                      {noOfInterviewDrop.map((date) => (
+                        <option key={date.code} value={date.code}>
+                          {date.name}
+                        </option>
+                      ))}
+                    </FormControl>
                   </InputGroup>
                 </Col>
                 <Col sm={3}>
@@ -1130,7 +1134,11 @@ class ProjectInfoSearch extends Component {
                         </option>
                       ))}
                     </FormControl>
-                    <font style={{ marginTop: "5px" }}>から</font>
+                    <InputGroup.Prepend>
+                      <InputGroup.Text className="width-auto bdr0">
+                        から
+                      </InputGroup.Text>
+                    </InputGroup.Prepend>
                   </InputGroup>
                 </Col>
               </Row>
@@ -1372,7 +1380,7 @@ class ProjectInfoSearch extends Component {
                   <TableHeaderColumn
                     row="0"
                     rowSpan="2"
-                    width="150"
+                    width="125"
                     tdStyle={{ padding: ".45em" }}
                     dataFormat={(cell, row) =>
                       this.grayRow(utils.addLeftSlash(cell), row)
@@ -1425,7 +1433,7 @@ class ProjectInfoSearch extends Component {
                   </TableHeaderColumn>
                   <TableHeaderColumn
                     row="0"
-                    colSpan="2"
+                    colSpan="3"
                     rowSpan="1"
                     width="90"
                     tdStyle={{ padding: ".45em" }}
@@ -1436,7 +1444,7 @@ class ProjectInfoSearch extends Component {
                   <TableHeaderColumn
                     row="1"
                     rowSpan="1"
-                    width="90"
+                    width="100"
                     tdStyle={{ padding: ".45em" }}
                     dataFormat={this.grayRow}
                     dataField="keyWordOfLanagurueName1"
@@ -1444,7 +1452,7 @@ class ProjectInfoSearch extends Component {
                   <TableHeaderColumn
                     row="1"
                     rowSpan="1"
-                    width="90"
+                    width="100"
                     tdStyle={{ padding: ".45em" }}
                     dataFormat={this.grayRow}
                     dataField="keyWordOfLanagurueName2"
@@ -1452,7 +1460,15 @@ class ProjectInfoSearch extends Component {
                   <TableHeaderColumn
                     row="1"
                     rowSpan="1"
-                    width="90"
+                    width="100"
+                    tdStyle={{ padding: ".45em" }}
+                    dataFormat={this.grayRow}
+                    dataField="keyWordOfFrameWorkName1"
+                  ></TableHeaderColumn>
+                  <TableHeaderColumn
+                    row="1"
+                    rowSpan="1"
+                    width="100"
                     tdStyle={{ padding: ".45em" }}
                     hidden
                     dataField="keyWordOfLanagurueName3"
@@ -1460,7 +1476,7 @@ class ProjectInfoSearch extends Component {
                   <TableHeaderColumn
                     row="0"
                     rowSpan="2"
-                    width="110"
+                    width="100"
                     tdStyle={{ padding: ".45em" }}
                     dataFormat={this.grayRow}
                     dataField="japaneaseConversationName"
@@ -1470,7 +1486,7 @@ class ProjectInfoSearch extends Component {
                   <TableHeaderColumn
                     row="0"
                     rowSpan="2"
-                    width="130"
+                    width="120"
                     tdStyle={{ padding: ".45em" }}
                     dataFormat={this.grayRow}
                     dataField="customerName"

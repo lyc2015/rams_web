@@ -1040,7 +1040,11 @@ class CustomerInfoSearch extends Component {
                   id="traderPersonFront"
                   name="traderPersonFront"
                 />
-                {"~"}
+                <InputGroup.Prepend>
+                  <InputGroup.Text className="width-auto bdr0">
+                    ～
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
                 <Form.Control
                   placeholder="例：12"
                   value={traderPersonBack}

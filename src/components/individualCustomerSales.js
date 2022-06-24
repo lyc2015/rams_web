@@ -562,7 +562,11 @@ class IndividualCustomerSales extends React.Component {
                   name="individualCustomerSales_startYearAndMonth"
                   locale="ja"
                 />
-                <font id="mark">～</font>
+                <InputGroup.Prepend>
+                  <InputGroup.Text className="width-auto bdr0">
+                    ～
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
                 <DatePicker
                   selected={this.state.individualCustomerSales_endYearAndMonth}
                   onChange={this.individualCustomerSalesEndYearAndMonthChange}
