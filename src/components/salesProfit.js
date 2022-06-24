@@ -17,9 +17,15 @@ import store from "./redux/store";
 import * as utils from "./utils/publicUtils.js";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import * as publicUtils from "./utils/publicUtils.js";
+import moment from "moment";
 axios.defaults.withCredentials = true;
 
 registerLocale("ja", ja);
+
+const defaultData = {
+  startDate: moment().date(1).toDate(),
+  endDate: moment().add(1, "month").date(1).toDate(),
+};
 
 // 営業個別売上
 class salesProfit extends React.Component {
@@ -49,6 +55,7 @@ class salesProfit extends React.Component {
     authorityCode: "",
     occupationCode: "",
     employeeStatus: store.getState().dropDown[4].slice(1),
+    employeeStatusS: store.getState().dropDown[4].slice(1),
     newMemberStatus: store.getState().dropDown[23].slice(1),
     customerContractStatus: store.getState().dropDown[24].slice(1),
     levelStatus: store.getState().dropDown[18].slice(1),
@@ -104,8 +111,9 @@ class salesProfit extends React.Component {
           this.select();
         }
       );
+      return;
     }
-    // this.select();
+    this.select();
   }
 
   /**
@@ -334,20 +342,17 @@ class salesProfit extends React.Component {
     var salesPointSetModel = {};
     salesPointSetModel["employeeName"] = this.state.customerNo;
     salesPointSetModel["employeeStatus"] = this.state.employeeSearch;
-    if (
-      typeof this.state.admissionStartDate == "undefined" ||
-      typeof this.state.admissionEndDate == "undefined"
-    ) {
-      return;
-    }
-    salesPointSetModel["startDate"] = this.state.admissionStartDate;
-    salesPointSetModel["endDate"] = this.state.admissionEndDate;
+
+    salesPointSetModel["startDate"] =
+      this.state.admissionStartDate || defaultData.startDate;
+    salesPointSetModel["endDate"] =
+      this.state.admissionEndDate || defaultData.endDate;
     salesPointSetModel["startTime"] = publicUtils.formateDate(
-      this.state.admissionStartDate,
+      this.state.admissionStartDate || defaultData.startDate,
       false
     );
     salesPointSetModel["endTime"] = publicUtils.formateDate(
-      this.state.admissionEndDate,
+      this.state.admissionEndDate || defaultData.endDate,
       false
     );
     axios
@@ -406,19 +411,38 @@ class salesProfit extends React.Component {
     );
   };
 
+  eiGyoFormat = (cell, row, enumObject, index) => {
+    return (
+      (row.salesEmployeeName || "") +
+      (row.salesOccupationCode === "5" ? "(BP営業)" : "")
+    );
+  };
+
   employeeNameFormat = (cell, row, enumObject, index) => {
     let employeeName = row.employeeName;
     if (row.employeeNo.search("BP") !== -1) {
       employeeName += "(" + row.employeeFrom + ")";
     }
-    return employeeName;
+    // let employeeStatusName = utils.findItemByKey(
+    //   this.state.employeeStatusS,
+    //   "code",
+    //   row.employeeStatus
+    // )?.name;
+    return <div title={employeeName}>{employeeName}</div>;
   };
 
   siteRoleNameFormat = (cell, row, enumObject, index) => {
+    let renderMark = row.bpSiteRoleName > 0 ? "(+)" : "";
+
     if (Number(utils.deleteComma(row.siteRoleName)) < 0) {
-      return <font color="red">{row.siteRoleName}</font>;
+      return <font color="red">{row.siteRoleName + "  " + renderMark}</font>;
     }
-    return row.siteRoleName;
+    return (
+      <>
+        {row.siteRoleName + "  "}
+        <font color="red">{renderMark}</font>
+      </>
+    );
   };
 
   profitFormat = (cell, row, enumObject, index) => {
@@ -465,6 +489,9 @@ class salesProfit extends React.Component {
       mode: "click",
       blurToSave: true,
     };
+
+    console.log({ state: this.state }, "render");
+
     return (
       <div>
         <div
@@ -555,7 +582,9 @@ class salesProfit extends React.Component {
                       </InputGroup.Text>
                     </InputGroup.Prepend>
                     <DatePicker
-                      selected={this.state.admissionStartDate}
+                      selected={
+                        this.state.admissionStartDate || defaultData.startDate
+                      }
                       onChange={this.admissionStartDate}
                       dateFormat="yyyy/MM"
                       showMonthYearPicker
@@ -575,7 +604,9 @@ class salesProfit extends React.Component {
                     />
                     〜
                     <DatePicker
-                      selected={this.state.admissionEndDate}
+                      selected={
+                        this.state.admissionEndDate || defaultData.endDate
+                      }
                       onChange={this.admissionEndDate}
                       dateFormat="yyyy/MM"
                       showMonthYearPicker
@@ -668,11 +699,8 @@ class salesProfit extends React.Component {
                       }
                     >
                       <InputGroup.Prepend>
-                        <InputGroup.Text
-                          id="fiveKanji"
-                          className="input-group-indiv"
-                        >
-                          担当者粗利
+                        <InputGroup.Text className="input-group-indiv width-auto">
+                          担当者粗利合計
                         </InputGroup.Text>
                       </InputGroup.Prepend>
                       <FormControl
@@ -721,7 +749,7 @@ class salesProfit extends React.Component {
                       </TableHeaderColumn>
                       <TableHeaderColumn
                         dataField="yearAndMonth"
-                        width="100"
+                        width="90"
                         tdStyle={{ padding: ".45em" }}
                       >
                         年月
@@ -737,7 +765,7 @@ class salesProfit extends React.Component {
                       <TableHeaderColumn
                         dataField="employeeName"
                         tdStyle={{ padding: ".45em" }}
-                        width="260"
+                        width="180"
                         dataFormat={this.employeeNameFormat}
                       >
                         氏名
@@ -750,12 +778,14 @@ class salesProfit extends React.Component {
                         所属
                       </TableHeaderColumn>
                       <TableHeaderColumn
+                        width="120"
                         dataField="customerName"
                         tdStyle={{ padding: ".45em" }}
                       >
                         お客様
                       </TableHeaderColumn>
                       <TableHeaderColumn
+                        width="200"
                         dataField="workDate"
                         tdStyle={{ padding: ".45em" }}
                       >
@@ -769,6 +799,25 @@ class salesProfit extends React.Component {
                       >
                         単価
                       </TableHeaderColumn>
+                      <TableHeaderColumn
+                        dataField="salesStaff"
+                        width="150"
+                        tdStyle={{ padding: ".45em" }}
+                        dataFormat={this.eiGyoFormat}
+                        hidden
+                      >
+                        営業担当
+                      </TableHeaderColumn>
+
+                      <TableHeaderColumn
+                        dataField="introducerEmployeeName"
+                        width="120"
+                        tdStyle={{ padding: ".45em" }}
+                        hidden
+                      >
+                        紹介者
+                      </TableHeaderColumn>
+
                       <TableHeaderColumn
                         dataField="profit"
                         tdStyle={{ padding: ".45em" }}
@@ -791,6 +840,14 @@ class salesProfit extends React.Component {
                         dataFormat={this.siteRoleNameFormat}
                       >
                         粗利
+                      </TableHeaderColumn>
+                      <TableHeaderColumn
+                        dataField="bpSiteRoleName"
+                        width="150"
+                        tdStyle={{ padding: ".45em" }}
+                        dataFormat={(cell) => parseFloat(cell)}
+                      >
+                        担当者粗利
                       </TableHeaderColumn>
                     </BootstrapTable>
                   </Col>

@@ -279,3 +279,8 @@
 .dn {
   display: none;
 }
+
+/* color */
+.color-red {
+  color: red;
+}
