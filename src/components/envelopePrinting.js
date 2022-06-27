@@ -370,17 +370,9 @@ class envelopePrinting extends Component {
               <FontAwesomeIcon icon={faDownload} /> 印刷
             </Button>
           </div>
-          <div
-            className="loadingImage"
-            hidden={this.state.loading}
-            style={{
-              position: "absolute",
-              top: "60%",
-              left: "60%",
-              marginLeft: "-150px",
-              marginTop: "0px",
-            }}
-          ></div>
+          <div className="loadingImageContainer">
+            <div className="loadingImage" hidden={this.state.loading}></div>
+          </div>
         </div>
       </div>
     );

@@ -1099,17 +1099,9 @@ P-mark：第21004525(02)号
             </BootstrapTable>
           </div>
         </Col>
-        <div
-          className="loadingImage"
-          hidden={this.state.loading}
-          style={{
-            position: "absolute",
-            top: "60%",
-            left: "60%",
-            marginLeft: "-200px",
-            marginTop: "-150px",
-          }}
-        ></div>
+        <div className="loadingImageContainer">
+          <div className="loadingImage" hidden={this.state.loading}></div>
+        </div>
       </div>
     );
   }

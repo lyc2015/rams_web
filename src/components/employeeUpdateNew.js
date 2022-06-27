@@ -3359,17 +3359,9 @@ class employeeUpdateNew extends React.Component {
                 <FontAwesomeIcon icon={faLevelUpAlt} /> 戻る
               </Button>
             </div>
-            <div
-              className="loadingImage"
-              hidden={this.state.loading}
-              style={{
-                position: "absolute",
-                top: "60%",
-                left: "60%",
-                marginLeft: "-300px",
-                marginTop: "-150px",
-              }}
-            ></div>
+            <div className="loadingImageContainer">
+              <div className="loadingImage" hidden={this.state.loading}></div>
+            </div>
           </Form.Group>
         </Form>
       </div>

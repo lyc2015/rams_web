@@ -2999,17 +2999,9 @@ class employeeInsertNew extends React.Component {
               </Button>
             </div>
             {/*<div className='loading' hidden={this.state.loading} style = {{"position": "absolute","top":"50%","left":"50%","margin-left":"-300px", "margin-top":"-150px",}}></div>*/}
-            <div
-              className="loadingImage"
-              hidden={this.state.loading}
-              style={{
-                position: "absolute",
-                top: "60%",
-                left: "60%",
-                "margin-left": "-300px",
-                "margin-top": "-150px",
-              }}
-            ></div>
+            <div className="loadingImageContainer">
+              <div className="loadingImage" hidden={this.state.loading}></div>
+            </div>
           </Form.Group>
         </Form>
       </div>

@@ -1548,17 +1548,9 @@ class invoicePDF extends React.Component {
             登録
           </AntdButton>
         </div>
-        <div
-          className="loadingImage"
-          hidden={this.state.loading}
-          style={{
-            position: "absolute",
-            top: "60%",
-            left: "60%",
-            marginLeft: "-200px",
-            marginTop: "-150px",
-          }}
-        ></div>
+        <div className="loadingImageContainer">
+          <div className="loadingImage" hidden={this.state.loading}></div>
+        </div>
         <br />
       </div>
     );

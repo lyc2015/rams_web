@@ -3090,17 +3090,9 @@ class manageSituation extends React.Component {
           </Row>
         </Form>
         <input type="text" id="snippet" defaultValue="" hidden></input>
-        <div
-          className="loadingImage"
-          hidden={this.state.loading}
-          style={{
-            position: "absolute",
-            top: "60%",
-            left: "60%",
-            marginLeft: "-300px",
-            marginTop: "-150px",
-          }}
-        ></div>
+        <div className="loadingImageContainer">
+          <div className="loadingImage" hidden={this.state.loading}></div>
+        </div>
         <span
           style={{ opacity: 0 }}
           id="copyId"

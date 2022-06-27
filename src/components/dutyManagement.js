@@ -1475,23 +1475,15 @@ class dutyManagement extends React.Component {
             </BootstrapTable>
           </Col>
         </div>
-        <div
-          className="loadingImage"
-          hidden={this.state.loading}
-          style={{
-            position: "absolute",
-            top: "60%",
-            left: "60%",
-            marginLeft: "-200px",
-            marginTop: "-150px",
-          }}
-        >
-          <Form.File
-            id="getFile"
-            custom
-            hidden="hidden"
-            onChange={this.workRepotUpload}
-          />
+        <div className="loadingImageContainer">
+          <div className="loadingImage" hidden={this.state.loading}>
+            <Form.File
+              id="getFile"
+              custom
+              hidden="hidden"
+              onChange={this.workRepotUpload}
+            />
+          </div>
         </div>
       </div>
     );
