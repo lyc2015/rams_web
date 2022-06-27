@@ -506,7 +506,7 @@ P-mark:第21004525(02)号
       title: "送信してよろしいでしょうか？",
       icon: <ExclamationCircleOutlined />,
       onOk: () => {
-        let model;
+        let model = {};
         let sendInvoiceList = this.state.sendInvoiceList;
         for (let i in sendInvoiceList) {
           if (sendInvoiceList[i].customerNo === this.state.rowCustomerNo) {
@@ -525,7 +525,7 @@ P-mark:第21004525(02)号
 
             let selectedMailCC = sendInvoiceList[i]?.mailCC?.join(",");
             if (selectedMailCC) {
-              model.selectedMailCC = selectedMailCC;
+              model = { ...model, selectedMailCC };
             }
 
             model = {
@@ -550,11 +550,11 @@ P-mark:第21004525(02)号
 
         axios
           .post(this.state.serverIP + "sendInvoice/sendLetter", model)
-          .then((res) => {
-            if (res.result) {
+          .then(({ data }) => {
+            if (data.result) {
               message.success("送信成功しました");
             } else {
-              message.error("送信失敗しました");
+              message.error(data.errMsg);
             }
             this.searchSendInvoiceList();
           });
