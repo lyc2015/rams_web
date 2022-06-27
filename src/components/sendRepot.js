@@ -1223,7 +1223,13 @@ Email：` +
       .post(this.state.serverIP + "sendRepot/sendLetter", emailModel)
       .then((result) => {
         let allCustomer = this.state.allCustomer;
-        if (result.data.errorsMessage != null) {
+        if (result.data.result) {
+          for (let i in allCustomer) {
+            if (allCustomer[i].sendRepotsAppend !== "")
+              allCustomer[i].sentReportStatus = "1";
+          }
+          this.setState({ sendOver: true, allCustomer: allCustomer });
+        } else {
           for (let i in allCustomer) {
             if (allCustomer[i].sendRepotsAppend !== "")
               allCustomer[i].sentReportStatus = "0";
@@ -1231,15 +1237,9 @@ Email：` +
           this.setState({ sendOver: false, allCustomer: allCustomer });
           this.setState({
             errorsMessageShow: true,
-            errorsMessageValue: result.data.errorsMessage,
+            errorsMessageValue: result.data.errMsg,
           });
           setTimeout(() => this.setState({ errorsMessageShow: false }), 3000);
-        } else {
-          for (let i in allCustomer) {
-            if (allCustomer[i].sendRepotsAppend !== "")
-              allCustomer[i].sentReportStatus = "1";
-          }
-          this.setState({ sendOver: true, allCustomer: allCustomer });
         }
         this.setState({ loading: true });
       })

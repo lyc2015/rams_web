@@ -146,8 +146,8 @@
   padding: 0 11px !important;
 }
 
-@media screen and (max-width: 1440px) {
-  .ant-message-error {
-    font-size: 14px;
+@media screen and (max-width: 1200px) {
+  .ant-message {
+    font-size: 14px !important;
   }
 }

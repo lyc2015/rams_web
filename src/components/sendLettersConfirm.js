@@ -741,18 +741,18 @@ Email：` +
           formData
         );
 
-        if (result.data.errorsMessage != null) {
-          this.setState({
-            errorsMessageShow: true,
-            errorsMessageValue: result.data.errorsMessage,
-          });
-          setTimeout(() => this.setState({ errorsMessageShow: false }), 3000);
-          this.setSelectedCusInfos("X");
-        } else {
+        if (result.data.result) {
           this.setSelectedCusInfos("済み");
           this.setState({
             sendLetterOverFlag: true,
           });
+        } else {
+          this.setState({
+            errorsMessageShow: true,
+            errorsMessageValue: result.data.errMsg,
+          });
+          setTimeout(() => this.setState({ errorsMessageShow: false }), 3000);
+          this.setSelectedCusInfos("X");
         }
       }
     } catch (error) {

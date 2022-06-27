@@ -609,21 +609,21 @@ P-mark：第21004525(02)号
         emailModel
       )
       .then((result) => {
-        if (result.data.errorsMessage != null) {
+        if (result.data.result) {
+          for (let i in employeeList) {
+            employeeList[i].sendState = "1";
+          }
+          this.setState({ employeeList: employeeList });
+        } else {
           for (let i in employeeList) {
             employeeList[i].sendState = "×";
           }
           this.setState({ sendOver: false, employeeList: employeeList });
           this.setState({
             errorsMessageShow: true,
-            errorsMessageValue: result.data.errorsMessage,
+            errorsMessageValue: result.data.errMsg,
           });
           setTimeout(() => this.setState({ errorsMessageShow: false }), 3000);
-        } else {
-          for (let i in employeeList) {
-            employeeList[i].sendState = "1";
-          }
-          this.setState({ employeeList: employeeList });
         }
       })
       .catch(function (error) {

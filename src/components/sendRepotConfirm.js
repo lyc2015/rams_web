@@ -607,10 +607,19 @@ class sendRepotConfirm extends React.Component {
           /*
            * this.setState({ mails: result.data, })
            */
-          this.setSelectedCusInfos("済み");
-          this.setState({
-            sendLetterOverFlag: true,
-          });
+          if (result.data.result) {
+            this.setSelectedCusInfos("済み");
+            this.setState({
+              sendLetterOverFlag: true,
+            });
+          } else {
+            this.setState({
+              errorsMessageShow: true,
+              errorsMessageValue: result.data.errMsg,
+            });
+            setTimeout(() => this.setState({ errorsMessageShow: false }), 3000);
+            this.setSelectedCusInfos("X");
+          }
         })
         .catch(function (error) {
           alert(error);
