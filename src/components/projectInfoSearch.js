@@ -268,6 +268,7 @@ class ProjectInfoSearch extends Component {
             message: result.data.message,
           });
           setTimeout(() => this.setState({ myToastShow: false }), 3000);
+          this.search();
         } else {
           this.setState({
             myToastShow: false,
@@ -568,7 +569,7 @@ class ProjectInfoSearch extends Component {
   };
   successRateNameData = (cell, row) => {
     if (row.endFlag === "0") {
-      return <div style={{ color: "gray" }}>{row.successRateName}</div>;
+      return <div>{row.successRateName}</div>;
     } else {
       var successRate = row.successRate;
       if (successRate === "0" || successRate === "1") {
@@ -585,11 +586,7 @@ class ProjectInfoSearch extends Component {
         (v) => v.code === row.siteLocation
       ).name;
       if (row.endFlag === "0") {
-        return (
-          <div title={name} style={{ color: "gray" }}>
-            {name}
-          </div>
-        );
+        return <div title={name}>{name}</div>;
       } else {
         return <div title={name}>{name}</div>;
       }
@@ -599,9 +596,7 @@ class ProjectInfoSearch extends Component {
   showExperienceYear = (cell, row) => {
     if (row.experienceYear !== null && row.experienceYear !== "") {
       if (row.endFlag === "0") {
-        return (
-          <div style={{ color: "gray" }}>{row.experienceYear + "年～"}</div>
-        );
+        return <div>{row.experienceYear + "年～"}</div>;
       } else {
         return row.experienceYear + "年～";
       }
@@ -614,11 +609,7 @@ class ProjectInfoSearch extends Component {
       row.projectPhaseNameStart !== ""
     ) {
       if (row.endFlag === "0") {
-        return (
-          <div style={{ color: "gray" }}>
-            {row.projectPhaseNameStart + "～"}
-          </div>
-        );
+        return <div>{row.projectPhaseNameStart + "～"}</div>;
       } else {
         return row.projectPhaseNameStart + "～";
       }
@@ -634,12 +625,16 @@ class ProjectInfoSearch extends Component {
     }
   };
 
-  grayRow = (cell, row) => {
-    if (row.endFlag === "0") {
-      return <div style={{ color: "gray" }}>{cell}</div>;
-    } else {
-      return cell;
-    }
+  grayRow = (cell, row, cb) => {
+    return (
+      <div
+        style={
+          row.endFlag === "0" ? { color: "#9495aa" } : { color: "#212a4c" }
+        }
+      >
+        {typeof cb === "function" ? cb(cell, row) : cell}
+      </div>
+    );
   };
 
   /**
@@ -1371,7 +1366,9 @@ class ProjectInfoSearch extends Component {
                     rowSpan="2"
                     width="120"
                     tdStyle={{ padding: ".45em" }}
-                    dataFormat={this.successRateNameData.bind(this)}
+                    dataFormat={(cell, row) =>
+                      this.grayRow(cell, row, this.successRateNameData)
+                    }
                     dataField="successRateName"
                     hidden
                   >
@@ -1394,7 +1391,9 @@ class ProjectInfoSearch extends Component {
                     rowSpan="2"
                     width="90"
                     tdStyle={{ padding: ".45em" }}
-                    dataFormat={this.showSiteLocation}
+                    dataFormat={(cell, row) =>
+                      this.grayRow(cell, row, this.showSiteLocation)
+                    }
                     dataField="siteLocation"
                   >
                     場所
@@ -1405,7 +1404,9 @@ class ProjectInfoSearch extends Component {
                     rowSpan="2"
                     width="95"
                     tdStyle={{ padding: ".45em" }}
-                    dataFormat={this.showExperienceYear}
+                    dataFormat={(cell, row) =>
+                      this.grayRow(cell, row, this.showExperienceYear)
+                    }
                     dataField="experienceYear"
                     hidden
                   >
@@ -1426,7 +1427,9 @@ class ProjectInfoSearch extends Component {
                     rowSpan="2"
                     width="125"
                     tdStyle={{ padding: ".45em" }}
-                    dataFormat={this.showProjectPhaseNameStart}
+                    dataFormat={(cell, row) =>
+                      this.grayRow(cell, row, this.showProjectPhaseNameStart)
+                    }
                     dataField="projectPhaseNameStart"
                   >
                     作業工程
@@ -1499,8 +1502,9 @@ class ProjectInfoSearch extends Component {
                     rowSpan="2"
                     width="90"
                     tdStyle={{ padding: ".45em" }}
-                    dataFormat={this.grayRow}
-                    dataFormat={this.showSalesStaff}
+                    dataFormat={(cell, row) =>
+                      this.grayRow(cell, row, this.showSalesStaff)
+                    }
                     dataField="salesStaff"
                   >
                     営業担当

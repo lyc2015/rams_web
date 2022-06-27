@@ -18,7 +18,7 @@ import "../asserts/css/style.css";
 import axios from "axios";
 import * as publicUtils from "./utils/publicUtils.js";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import ErrorsMessageToast from "./errorsMessageToast";
+import { message } from "antd";
 import store from "./redux/store";
 axios.defaults.withCredentials = true;
 
@@ -271,14 +271,9 @@ class siteSearch extends Component {
     axios
       .post(this.state.serverIP + "getSiteSearchInfo", SiteSearchModel)
       .then((response) => {
-        if (
-          response.data.errorsMessage != null ||
-          response.data.errorsMessage != undefined
-        ) {
-          this.setState({
-            errorsMessageShow: true,
-            errorsMessageValue: response.data.errorsMessage,
-          });
+        if (response.data.errorsMessage) {
+          message.error(response.data.errorsMessage);
+
           this.setState({
             siteData: [],
           });
@@ -287,7 +282,6 @@ class siteSearch extends Component {
             this.setState(
               {
                 siteData: response.data.data,
-                errorsMessageShow: false,
               },
               () => {
                 this.refs.siteSearchTable.setState({
@@ -561,15 +555,6 @@ class siteSearch extends Component {
     };
     return (
       <div>
-        <div
-          style={{ display: this.state.errorsMessageShow ? "block" : "none" }}
-        >
-          <ErrorsMessageToast
-            errorsMessageShow={this.state.errorsMessageShow}
-            message={errorsMessageValue}
-            type={"danger"}
-          />
-        </div>
         <div>
           <Form id="siteForm">
             <Form.Group>

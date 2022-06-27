@@ -2243,7 +2243,7 @@ class manageSituation extends React.Component {
         </i>
       ),
       defaultSortOrder: "dsc",
-      sizePerPage: 12,
+      sizePerPage: 10,
       pageStartIndex: 1,
       paginationSize: 3,
       prePage: "<", // Previous page button text

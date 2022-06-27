@@ -27,11 +27,16 @@ import * as publicUtils from "./utils/publicUtils.js";
 import * as utils from "./utils/publicUtils.js";
 import BpInfoModel from "./bpInfo";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import MyToast from "./myToast";
-import ErrorsMessageToast from "./errorsMessageToast";
 import store from "./redux/store";
 import moment from "moment";
-import { DatePicker as AntdDatePicker, InputNumber } from "antd";
+import {
+  DatePicker as AntdDatePicker,
+  InputNumber,
+  message,
+  Modal as AntdModal,
+  notification,
+} from "antd";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
 axios.defaults.withCredentials = true;
 registerLocale("ja", ja);
 moment.locale("ja");
@@ -51,8 +56,6 @@ class siteInfo extends Component {
     payOffRange2: "0",
     workState: "0",
     employeeName: "",
-    myToastShow: false,
-    message: "",
     workDate: "",
     employeeNo: "",
     currPage: "",
@@ -451,16 +454,12 @@ class siteInfo extends Component {
               response.data.siteList[response.data.siteList.length - 1]
             );
           } else {
-            this.setState({
-              errorsMessageShow: true,
-              errorsMessageValue: response.data.errorsMessage,
-            });
+            message.error(response.data.errorsMessage);
             this.setState({
               employeeName: employeeNo,
               siteData: [],
               disabledFlag: false,
             });
-            setTimeout(() => this.setState({ errorsMessageShow: false }), 3000);
           }
         })
         .catch((error) => {
@@ -533,16 +532,13 @@ class siteInfo extends Component {
             employeeName: employeeName,
             employeeAllName: employeeAllName,
           },
-          () => {
+          async () => {
             axios
               .post(this.state.serverIP + "getSiteInfo", {
                 employeeName: this.state.employeeName,
               })
               .then((response) => {
-                if (
-                  response.data.errorsMessage === null ||
-                  response.data.errorsMessage === undefined
-                ) {
+                if (!response.data.errorsMessage) {
                   this.setState({
                     siteData: response.data.siteList,
                     disabledFlag: false,
@@ -561,10 +557,13 @@ class siteInfo extends Component {
                     response.data.siteList[response.data.siteList.length - 1]
                   );
                 } else {
-                  this.setState({
-                    errorsMessageShow: true,
-                    errorsMessageValue: response.data.errorsMessage,
-                  });
+                  if (response.data.errorsMessage === "該当データなし") {
+                    notification.warning({
+                      message: `該当BP情報なし`,
+                      description: "まずBP情報を入力してください。",
+                      placement: "topLeft",
+                    });
+                  } else message.error(response.data.errorsMessage);
                   this.setState({
                     siteData: [],
                     disabledFlag: false,
@@ -572,10 +571,6 @@ class siteInfo extends Component {
                     workStateFlag: true,
                     updateFlag: true,
                   });
-                  setTimeout(
-                    () => this.setState({ errorsMessageShow: false }),
-                    3000
-                  );
                 }
               })
               .catch((error) => {
@@ -1078,18 +1073,9 @@ class siteInfo extends Component {
       .post(this.state.serverIP + "insertSiteInfo", siteModel)
       .then((result) => {
         if (result.data.errorsMessage != null) {
-          this.setState({
-            errorsMessageShow: true,
-            errorsMessageValue: result.data.errorsMessage,
-          });
+          message.error(result.data.errorsMessage);
         } else {
-          this.setState({
-            myToastShow: true,
-            method: "post",
-            message: "登録成功",
-            errorsMessageShow: false,
-          });
-          setTimeout(() => this.setState({ myToastShow: false }), 3000);
+          message.success("登録成功");
           this.refs.table.setState({
             selectedRowKeys: [],
           });
@@ -1108,14 +1094,7 @@ class siteInfo extends Component {
                 });
                 this.reset();
               } else {
-                this.setState({
-                  errorsMessageShow: true,
-                  errorsMessageValue: response.data.errorsMessage,
-                });
-                setTimeout(
-                  () => this.setState({ errorsMessageShow: false }),
-                  3000
-                );
+                message.error(response.data.errorsMessage);
               }
             })
             .catch((error) => {
@@ -1177,18 +1156,10 @@ class siteInfo extends Component {
       .post(this.state.serverIP + "updateSiteInfo", siteModel)
       .then((result) => {
         if (result.data.errorsMessage != null) {
-          this.setState({
-            errorsMessageShow: true,
-            errorsMessageValue: result.data.errorsMessage,
-          });
+          message.error(result.data.errorsMessage);
         } else {
-          this.setState({
-            myToastShow: true,
-            method: "put",
-            message: "修正成功",
-            errorsMessageShow: false,
-          });
-          setTimeout(() => this.setState({ myToastShow: false }), 3000);
+          message.success("修正成功");
+
           this.refs.table.setState({
             selectedRowKeys: [],
           });
@@ -1212,14 +1183,7 @@ class siteInfo extends Component {
                 });
                 this.setState(() => this.resetStates);
               } else {
-                this.setState({
-                  errorsMessageShow: true,
-                  errorsMessageValue: response.data.errorsMessage,
-                });
-                setTimeout(
-                  () => this.setState({ errorsMessageShow: false }),
-                  3000
-                );
+                message.error(response.data.errorsMessage);
               }
             })
             .catch((error) => {
@@ -1261,58 +1225,47 @@ class siteInfo extends Component {
   // }
   // 隠した削除ボタンの実装
   onDeleteRow = (rows) => {
-    var a = window.confirm("削除していただきますか？");
-    if (a) {
-      axios
-        .post(this.state.serverIP + "deleteSiteInfo", {
-          employeeNo: this.state.employeeName,
-          admissionStartDate: publicUtils.formateDate(
-            this.state.admissionStartDate,
-            true
-          ),
-        })
-        .then((result) => {
-          if (result.data) {
-            var workDate = this.state.workDate;
-            var siteData = this.state.siteData;
-            for (let i = siteData.length - 1; i >= 0; i--) {
-              if (siteData[i].workDate === workDate) {
-                siteData.splice(i, 1);
+    AntdModal.confirm({
+      title: "削除していただきますか？",
+      icon: <ExclamationCircleOutlined />,
+      onOk: () => {
+        axios
+          .post(this.state.serverIP + "deleteSiteInfo", {
+            employeeNo: this.state.employeeName,
+            admissionStartDate: publicUtils.formateDate(
+              this.state.admissionStartDate,
+              true
+            ),
+          })
+          .then((result) => {
+            if (result.data) {
+              var workDate = this.state.workDate;
+              var siteData = this.state.siteData;
+              for (let i = siteData.length - 1; i >= 0; i--) {
+                if (siteData[i].workDate === workDate) {
+                  siteData.splice(i, 1);
+                }
               }
+              message.success("削除成功");
+              this.setState({
+                siteData: siteData,
+                rowNo: "",
+                updateFlag: true,
+              });
+              this.refs.table.setState({
+                selectedRowKeys: [],
+              });
+              this.reset();
+            } else if (!result.data) {
+              message.error("現場は終了のため、削除できない");
             }
-            this.setState({
-              siteData: siteData,
-              rowNo: "",
-              updateFlag: true,
-              myToastShow: true,
-              message: "削除成功",
-              errorsMessageShow: false,
-            });
-            setTimeout(() => this.setState({ myToastShow: false }), 3000);
-            this.refs.table.setState({
-              selectedRowKeys: [],
-            });
-            this.reset();
-          } else if (!result.data) {
-            this.setState({
-              errorsMessageValue: "現場は終了のため、削除できない",
-              errorsMessageShow: true,
-            });
-            setTimeout(() => this.setState({ errorsMessageShow: false }), 3000);
-          } else {
-            this.setState({
-              myToastShow: true,
-              method: "success",
-              message: "削除失敗",
-              errorsMessageShow: false,
-            });
-            setTimeout(() => this.setState({ myToastShow: false }), 3000);
-          }
-        })
-        .catch(function (error) {
-          alert("删除错误，请检查程序");
-        });
-    }
+          })
+          .catch(function (error) {
+            alert("删除错误，请检查程序");
+          });
+      },
+      centered: true,
+    });
   };
   // // 削除前のデフォルトお知らせの削除
   // customConfirm(next, dropRowKeys) {
@@ -1528,22 +1481,6 @@ class siteInfo extends Component {
     };
     return (
       <div>
-        <div style={{ display: this.state.myToastShow ? "block" : "none" }}>
-          <MyToast
-            myToastShow={this.state.myToastShow}
-            message={this.state.message}
-            type={"success"}
-          />
-        </div>
-        <div
-          style={{ display: this.state.errorsMessageShow ? "block" : "none" }}
-        >
-          <ErrorsMessageToast
-            errorsMessageShow={this.state.errorsMessageShow}
-            message={errorsMessageValue}
-            type={"danger"}
-          />
-        </div>
         {/* bp情報 */}
         <Modal
           aria-labelledby="contained-modal-title-vcenter"

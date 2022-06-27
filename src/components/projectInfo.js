@@ -74,11 +74,6 @@ class projectInfo extends Component {
     //パラメータ
     actionType: this.props.location.state.actionType,
     backPage: "", //遷移元
-    message: "", //toastのメッセージ
-    type: "", //成功や失敗
-    myToastShow: false, //toastのフラグ
-    errorsMessageShow: false, ///エラーのメッセージのフラグ
-    errorsMessageValue: "", //エラーのメッセージ
     torokuText: "登録", //登録ボタンの文字
     serverIP: store.getState().dropDown[store.getState().dropDown.length - 1], //バックエンドのリンク
     //Drop
@@ -254,11 +249,9 @@ class projectInfo extends Component {
               });
             })
             .catch((error) => {
-              this.setState({
-                errorsMessageShow: true,
-                errorsMessageValue:
-                  "エラーが発生してしまいました、画面をリフレッシュしてください",
-              });
+              message.error(
+                "エラーが発生してしまいました、画面をリフレッシュしてください"
+              );
             });
         }
       );
@@ -444,11 +437,9 @@ class projectInfo extends Component {
                 );
               })
               .catch((error) => {
-                this.setState({
-                  errorsMessageShow: true,
-                  errorsMessageValue:
-                    "エラーが発生してしまいました、画面をリフレッシュしてください",
-                });
+                message.error(
+                  "エラーが発生してしまいました、画面をリフレッシュしてください"
+                );
               });
             if (this.state.actionType === "update") {
               this.setState({
@@ -458,11 +449,9 @@ class projectInfo extends Component {
           }
         })
         .catch((error) => {
-          this.setState({
-            errorsMessageShow: true,
-            errorsMessageValue:
-              "エラーが発生してしまいました、画面をリフレッシュしてください",
-          });
+          message.error(
+            "エラーが発生してしまいました、画面をリフレッシュしてください"
+          );
         });
     });
   }
@@ -506,36 +495,24 @@ class projectInfo extends Component {
     axios
       .post(this.state.serverIP + "projectInfo/toroku", projectInfoModel)
       .then((result) => {
-        if (
-          result.data.errorsMessage === null ||
-          result.data.errorsMessage === undefined
-        ) {
+        if (!result.data.errorsMessage) {
           store.dispatch({ type: "UPDATE_STATE", dropName: "getProjectNo" });
-          this.setState({
-            myToastShow: true,
-            type: "success",
-            errorsMessageShow: false,
-            message: result.data.message,
-          });
-          setTimeout(() => this.setState({ myToastShow: false }), 3000);
+          message.success(result.data.message);
           if (this.state.actionType === "insert") {
           } else {
             $("#toroku").attr("disabled", false);
           }
         } else {
-          this.setState({
-            errorsMessageShow: true,
-            errorsMessageValue: result.data.errorsMessage,
-          });
+          message.error(result.data.errorsMessage);
+
           $("#toroku").attr("disabled", false);
         }
       })
       .catch((error) => {
-        this.setState({
-          errorsMessageShow: true,
-          errorsMessageValue:
-            "エラーが発生してしまいました、画面をリフレッシュしてください",
-        });
+        message.error(
+          "エラーが発生してしまいました、画面をリフレッシュしてください"
+        );
+
         $("#toroku").attr("disabled", false);
       });
   };
@@ -750,11 +727,6 @@ class projectInfo extends Component {
       remark,
       actionType,
       backPage,
-      message, //toastのメッセージ
-      type, //成功や失敗
-      myToastShow, //toastのフラグ
-      errorsMessageShow, ///エラーのメッセージのフラグ
-      errorsMessageValue, //エラーのメッセージ
       torokuText, //登録ボタンの文字
       //Drop
       recruitmentNumbersDrop,
@@ -785,16 +757,6 @@ class projectInfo extends Component {
     );
     return (
       <div>
-        <div style={{ display: myToastShow ? "block" : "none" }}>
-          <MyToast myToastShow={myToastShow} message={message} type={type} />
-        </div>
-        <div style={{ display: errorsMessageShow ? "block" : "none" }}>
-          <ErrorsMessageToast
-            errorsMessageShow={errorsMessageShow}
-            message={errorsMessageValue}
-            type={"danger"}
-          />
-        </div>
         <div id="Home">
           <Row inline="true">
             <Col className="text-center">
