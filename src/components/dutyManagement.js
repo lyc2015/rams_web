@@ -31,7 +31,7 @@ import { message, Tooltip, Popover, notification } from "antd";
 registerLocale("ja", ja);
 axios.defaults.withCredentials = true;
 
-const SIZE_PRE_PAGE = 12;
+const SIZE_PRE_PAGE = 10;
 const MIN_WIDTH = 1650;
 
 /**

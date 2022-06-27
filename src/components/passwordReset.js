@@ -38,11 +38,7 @@ class passwordReset extends Component {
         .post(this.state.serverIP + "passwordReset/passwordReset", pswMod)
         .then((resultMap) => {
           if (resultMap.data === 0) {
-            notification.success({
-              message: "エラー",
-              description: "パスワードリセット成功しました",
-              placement: "topLeft",
-            });
+            message.success("パスワードリセット成功しました");
             this.props.history.push("/");
           } else if (resultMap.data === 1) {
             notification.error({
@@ -71,7 +67,8 @@ class passwordReset extends Component {
   };
   render() {
     return (
-      <div className="mainBody">
+      <div>
+        <div className="mainBody"></div>
         <br />
         <Row inline="true">
           <Col className="text-center">

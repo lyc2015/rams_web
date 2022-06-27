@@ -204,24 +204,6 @@ class SubMenu extends Component {
       });
   };
 
-  handleMouseOver = () => {
-    var popudiv = $("#popu_div");
-    var test = "test";
-    popudiv.html(test); //设置内容
-    popudiv.css("position", "absolute"); //设置position
-    var pos = {
-      //定位popudiv，这里以在td右边显示为例子，左边跟上边的时候还要计算popudiv的尺寸
-      top: 0,
-      left: 0,
-    };
-    popudiv.css(pos).show(); //设置left，top，并显示出来
-  };
-
-  handleMouseOut = () => {
-    var popudiv = $("#popu_div");
-    popudiv.hide();
-  };
-
   shuseiTo = (path) => {
     this.props.history.push(path);
   };
@@ -366,15 +348,12 @@ class SubMenu extends Component {
     const { isMobileDevice } = this.state;
 
     return (
-      <div
-        className={"mainBody " + (isMobileDevice ? "" : " mainBodyMinWidth")}
-      >
-        <div id="popu_div"></div>
-        <Row className="myCss" style={{ backgroundColor: "#FFFAF0" }}>
+      <div className={isMobileDevice ? "" : " mainBodyMinWidth"}>
+        <div className="mainBody"></div>
+        <Row className="myCss employeeNavBar">
           <Col sm={11}>{this.renderTop()}</Col>
           <Col sm={1}></Col>
         </Row>
-
         <Row onClick={() => this.checkSession()}>
           <Col sm={2}>
             <br />
