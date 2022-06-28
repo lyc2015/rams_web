@@ -629,7 +629,7 @@ class ProjectInfoSearch extends Component {
     return (
       <div
         style={
-          row.endFlag === "0" ? { color: "#9495aa" } : { color: "#212a4c" }
+          row.endFlag === "0" ? { color: "#9495aa" } : { color: "#082567" }
         }
       >
         {typeof cb === "function" ? cb(cell, row) : cell}
