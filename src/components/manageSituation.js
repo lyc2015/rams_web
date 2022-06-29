@@ -36,6 +36,9 @@ import InterviewInformation from "./interviewInformation";
 import store from "./redux/store";
 import { notification, message } from "antd";
 axios.defaults.withCredentials = true;
+
+const SIZE_PER_SIZE = 12;
+
 /**
  * 営業状況画面
  */
@@ -2243,7 +2246,7 @@ class manageSituation extends React.Component {
         </i>
       ),
       defaultSortOrder: "dsc",
-      sizePerPage: 10,
+      sizePerPage: SIZE_PER_SIZE,
       pageStartIndex: 1,
       paginationSize: 3,
       prePage: "<", // Previous page button text

@@ -145,9 +145,6 @@ class SubMenu extends Component {
    * 画面の初期化
    */
   componentDidMount() {
-    EventEmitter.on("updateWorkRepot", () => {
-      this.getDutyRegistrationFlag();
-    });
     var dateNow = new Date();
     let month = dateNow.getMonth() + 1;
     let day = dateNow.getDate();

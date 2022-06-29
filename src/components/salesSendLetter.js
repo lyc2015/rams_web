@@ -23,6 +23,8 @@ import {
 import { array } from "prop-types";
 axios.defaults.withCredentials = true;
 
+const SIZE_PER_SIZE = 12;
+
 class salesSendLetter extends React.Component {
   constructor(props) {
     super(props);
@@ -1250,7 +1252,7 @@ class salesSendLetter extends React.Component {
   renderGetSalesPersons(cell, row) {
     return (
       <Button
-        style={{ padding: 0 }}
+        className="reset-link-btn"
         onClick={this.handleGetSalesPersons.bind(this, row)}
         variant="link"
       >
@@ -1369,7 +1371,7 @@ class salesSendLetter extends React.Component {
       },
       page: this.state.currentPage,
       defaultSortOrder: "dsc",
-      sizePerPage: 10,
+      sizePerPage: SIZE_PER_SIZE,
       pageStartIndex: 1,
       paginationSize: 3,
       prePage: "<", // Previous page button text
