@@ -1553,6 +1553,7 @@ Email：` +
         type="file"
         id={`newResume${row.index - 1}`}
         data-browse="添付"
+        onClick={(e) => e.stopPropagation()}
         onChange={(event) =>
           this.changeFile(event, `newResume${row.index - 1}`)
         }
@@ -1968,6 +1969,7 @@ Email：` +
    *            name
    */
   addFile = (event) => {
+    event.stopPropagation();
     $(`#newResume${this.state.selectedColumnId - 1}`).click();
   };
 
@@ -1977,9 +1979,19 @@ Email：` +
     let fileName = arr[arr.length - 1];
     let { employeeInfo, selectedColumnId } = this.state;
     // 除了两个本来就有的简历外，本地新增的简历只能新增一个。
+    console.log(
+      employeeInfo[selectedColumnId - 1],
+      employeeInfo,
+      selectedColumnId,
+      "employeeInfo[selectedColumnId - 1]"
+    );
 
-    employeeInfo[selectedColumnId - 1].newResumeName = fileName;
-    employeeInfo[selectedColumnId - 1].resumeInfoName = fileName;
+    employeeInfo[selectedColumnId - 1] = {
+      ...employeeInfo[selectedColumnId - 1],
+      newResumeName: fileName,
+      resumeInfoName: fileName,
+    };
+
     this.setState({
       employeeInfo,
     });
