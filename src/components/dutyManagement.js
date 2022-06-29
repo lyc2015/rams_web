@@ -1327,6 +1327,7 @@ class dutyManagement extends React.Component {
                         ? this.listApproval.bind(this, 1)
                         : this.listApproval.bind(this, 0)
                     }
+                    disable={!this.state.rowWorkTime}
                   >
                     <FontAwesomeIcon icon={faEdit} />
                     {this.state.rowApprovalStatus !== "1" ? "承認" : "取消"}
