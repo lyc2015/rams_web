@@ -452,6 +452,7 @@ class dutyManagement extends React.Component {
   handleRowSelect = (row, isSelected, e) => {
     if (isSelected) {
       this.setState({
+        rowSelected: row,
         rowNo: row.rowNo,
         rowSelectEmployeeNo: row.employeeNo,
         rowSelectEmployeeName: row.employeeName,
@@ -483,6 +484,7 @@ class dutyManagement extends React.Component {
       }
     } else {
       this.setState({
+        rowSelected: {},
         rowNo: "",
         rowSelectEmployeeNo: "",
         rowSelectEmployeeName: "",
@@ -669,17 +671,22 @@ class dutyManagement extends React.Component {
       axios
         .post(this.state.serverIP + "dutyRegistration/downloadPDF", dataInfo)
         .then((resultMap) => {
+          let extraData = {
+            employeeNo: this.state.rowSelected.employeeNo,
+            employeeName: this.state.rowSelected.employeeName,
+            type: "作業報告書",
+          };
+          if (this.state.rowSelected.workTime !== null) {
+            extraData.workTime = this.state.rowSelected.workTime + "H";
+          }
+          if (this.state.rowSelected.cost > 0) {
+            extraData.cost =
+              publicUtils.addComma(this.state.rowSelected.cost) + "円";
+          }
           if (resultMap.data) {
             publicUtils.handleDownload(resultMap.data, this.state.serverIP, {
               clearName: true,
-              extraDate: {
-                employeeNo: this.state.rowSelectEmployeeNo,
-                employeeName: this.state.rowSelectEmployeeName,
-                type: "作業報告書",
-                workTime: this.state.rowWorkTime
-                  ? this.state.rowWorkTime + "H"
-                  : "",
-              },
+              extraData,
             });
           } else {
             notification.error({
@@ -708,6 +715,14 @@ class dutyManagement extends React.Component {
           downLoadPath = path.replaceAll("/", "//");
         }
       }
+      let extraData = {};
+      if (this.state.rowSelected.workTime !== null) {
+        extraData.workTime = this.state.rowSelected.workTime + "H";
+      }
+      if (this.state.rowSelected.cost > 0) {
+        extraData.cost =
+          publicUtils.addComma(this.state.rowSelected.cost) + "円";
+      }
       axios
         .post(this.state.serverIP + "s3Controller/downloadFile", {
           fileKey: fileKey,
@@ -716,11 +731,7 @@ class dutyManagement extends React.Component {
         .then((result) => {
           let path = downLoadPath.replaceAll("//", "/");
           publicUtils.handleDownload(path, this.state.serverIP, {
-            extraDate: {
-              workTime: this.state.rowWorkTime
-                ? this.state.rowWorkTime + "H"
-                : "",
-            },
+            extraData,
           });
         })
         .catch(function (error) {
