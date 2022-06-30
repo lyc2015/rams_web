@@ -428,7 +428,7 @@ class bpInfo extends React.Component {
                     </InputGroup.Text>
                   </InputGroup.Prepend>
                   <InputNumber
-                    className="w100p"
+                    className="w100p form-control"
                     placeholder="BP単価"
                     value={bpUnitPrice}
                     autoComplete="off"

@@ -510,8 +510,8 @@ class siteInfo extends Component {
         [event.target.name]: event.target.value,
       },
       () => {
-        let employeeName = null;
-        let employeeAllName = null;
+        let employeeName;
+        let employeeAllName;
         if (values !== null) {
           employeeName = values.code;
           employeeAllName = values.text;
@@ -557,7 +557,10 @@ class siteInfo extends Component {
                     response.data.siteList[response.data.siteList.length - 1]
                   );
                 } else {
-                  if (response.data.errorsMessage === "該当データなし") {
+                  if (
+                    this.state.employeeName &&
+                    response.data.errorsMessage === "該当データなし"
+                  ) {
                     notification.warning({
                       message: `該当BP情報なし`,
                       description: "まずBP情報を入力してください。",
@@ -1557,12 +1560,17 @@ class siteInfo extends Component {
                       id="employeeName"
                       name="employeeName"
                       options={this.state.employeeInfo}
-                      getOptionLabel={(option) => option.text || ""}
+                      getOptionLabel={(option) => option.name || ""}
                       value={
                         this.state.employeeInfo.find(
                           (v) => v.code === this.state.employeeName
                         ) || {}
                       }
+                      // inputValue={
+                      //   this.state.employeeInfo.find(
+                      //     (v) => v.code === this.state.employeeName
+                      //   )?.text || ""
+                      // }
                       onChange={(event, values) =>
                         this.getEmployeeNo(event, values)
                       }
@@ -1655,7 +1663,7 @@ class siteInfo extends Component {
                       <InputGroup.Text id="cssNikanji">単価</InputGroup.Text>
                     </InputGroup.Prepend>
                     <InputNumber
-                      className="w100p"
+                      className="w100p  form-control"
                       ref="unitPrice"
                       min={0}
                       id="unitPrice"
@@ -2379,12 +2387,7 @@ class siteInfo extends Component {
                 variant="info"
                 name="clickButton"
                 onClick={this.handleShowModal.bind(this, "bpInfoModel")}
-                disabled={
-                  this.state.employeeName === null ||
-                  this.state.employeeName.search("BP") === -1
-                    ? true
-                    : false
-                }
+                disabled={!this.state.employeeName?.includes("BP")}
               >
                 BP情報
               </Button>

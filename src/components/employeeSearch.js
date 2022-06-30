@@ -611,25 +611,25 @@ class employeeSearch extends React.Component {
     return value;
   }
 
-  // AUTOSELECT select事件
-  handleTag = ({ target }, fieldName) => {
-    const { value, id } = target;
-    if (value === "") {
-      this.setState({
-        [id]: "",
-      });
-    } else {
-      if (this.state.employeeInfo.find((v) => v.name === value) !== undefined) {
-        switch (fieldName) {
-          case "employeeName":
-            this.setState({
-              employeeName: value,
-            });
-            break;
-        }
-      }
-    }
-  };
+  // // AUTOSELECT select事件
+  // handleTag = ({ target }, fieldName) => {
+  //   const { value, id } = target;
+  //   if (value === "") {
+  //     this.setState({
+  //       [id]: "",
+  //     });
+  //   } else {
+  //     if (this.state.employeeInfo.find((v) => v.name === value) !== undefined) {
+  //       switch (fieldName) {
+  //         case "employeeName":
+  //           this.setState({
+  //             employeeName: value,
+  //           });
+  //           break;
+  //       }
+  //     }
+  //   }
+  // };
 
   /**
    * 社員名連想
@@ -1104,6 +1104,8 @@ class employeeSearch extends React.Component {
       sortIndicator: false, // 隐藏初始排序箭头
     };
 
+    console.log({ state: this.state }, "render");
+
     return (
       <div>
         <FormControl
@@ -1177,12 +1179,10 @@ class employeeSearch extends React.Component {
                         ) || {}
                       }
                       options={this.state.employeeInfo}
-                      getOptionLabel={(option) =>
-                        option.text ? option.text : ""
-                      }
-                      onSelect={(event) =>
-                        this.handleTag(event, "employeeName")
-                      }
+                      getOptionLabel={(option) => option.name || ""}
+                      // onSelect={(event) =>
+                      //   this.handleTag(event, "employeeName")
+                      // }
                       onChange={(event, values) =>
                         this.getEmployeeName(event, values)
                       }

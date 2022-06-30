@@ -1464,7 +1464,7 @@ class individualSales extends React.Component {
           </Col>
         </Row>
         <Row>
-          <Col>
+          <Col sm={2}>
             <InputGroup size="sm" className="mb-3">
               <InputGroup.Prepend>
                 <InputGroup.Text id="inputGroup-sizing-sm">
@@ -1494,7 +1494,7 @@ class individualSales extends React.Component {
           </Col>
         </Row>
         <Row>
-          <Col>
+          <Col sm={2}>
             <InputGroup size="sm" className="mb-3">
               <InputGroup.Prepend>
                 <InputGroup.Text id="inputGroup-sizing-sm">
@@ -1515,10 +1515,10 @@ class individualSales extends React.Component {
               </Form.Control>
             </InputGroup>
           </Col>
-          <Col>
+          <Col sm={2}>
             <InputGroup size="sm" className="mb-3">
               <InputGroup.Prepend>
-                <InputGroup.Text id="inputGroup-sizing-sm">
+                <InputGroup.Text id="inputGroup-sizing-sm width-auto">
                   社員区分
                 </InputGroup.Text>
               </InputGroup.Prepend>
@@ -1538,12 +1538,13 @@ class individualSales extends React.Component {
               </Form.Control>
             </InputGroup>
           </Col>
-          <Col>
+          <Col sm={3}>
             <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
               <InputGroup.Prepend>
-                <InputGroup.Text id="threeKanji">社員名</InputGroup.Text>
+                <InputGroup.Text className="width-auto">社員名</InputGroup.Text>
               </InputGroup.Prepend>
               <Autocomplete
+                className="fx1"
                 id="employeeName"
                 name="employeeName"
                 options={employeeInfo}
@@ -1560,68 +1561,64 @@ class individualSales extends React.Component {
                       placeholder=" 社員名"
                       type="text"
                       {...params.inputProps}
-                      className="auto form-control Autocompletestyle-individualSales"
+                      className="auto form-control Autocompletestyle-individualSales w100p"
                     />
                   </div>
                 )}
               />
             </InputGroup>
           </Col>
-          <Col>
-            <InputGroup size="sm" className="mb-3">
+          <Col sm={3}>
+            <InputGroup size="sm" className="mb-3 required-mark flexWrapNoWrap">
               <InputGroup.Prepend>
-                <font
+                {/* <font
                   color="red"
                   style={{ marginLeft: "-30px", marginRight: "15px" }}
                 >
                   ★
-                </font>
-                <InputGroup.Text id="inputGroup-sizing-sm">
-                  年月
-                </InputGroup.Text>
-                <DatePicker
-                  selected={this.state.individualSales_startYearAndMonth}
-                  onChange={this.individualSalesStartYearAndMonthChange.bind(
-                    this
-                  )}
-                  dateFormat={"yyyy MM"}
-                  autoComplete="off"
-                  locale="pt-BR"
-                  showMonthYearPicker
-                  showFullMonthYearPicker
-                  showDisabledMonthNavigation
-                  className="form-control form-control-sm"
-                  id="personalsalesSearchDatePicker"
-                  dateFormat={"yyyy/MM"}
-                  name="individualSales_startYearAndMonth"
-                  locale="ja"
-                />
-                <InputGroup.Prepend>
-                  <InputGroup.Text className="width-auto bdr0">
-                    ～
-                  </InputGroup.Text>
-                </InputGroup.Prepend>
-                <DatePicker
-                  selected={this.state.individualSales_endYearAndMonth}
-                  onChange={this.individualSalesEndYearAndMonthChange.bind(
-                    this
-                  )}
-                  dateFormat={"yyyy MM"}
-                  autoComplete="off"
-                  locale="pt-BR"
-                  showMonthYearPicker
-                  showFullMonthYearPicker
-                  showDisabledMonthNavigation
-                  className="form-control form-control-sm"
-                  id="personalsalesSearchBackDatePicker"
-                  dateFormat={"yyyy/MM"}
-                  name="individualSales_endYearAndMonth"
-                  locale="ja"
-                />
+                </font> */}
+                <InputGroup.Text className="width-auto">年月</InputGroup.Text>
               </InputGroup.Prepend>
+              <DatePicker
+                selected={this.state.individualSales_startYearAndMonth}
+                onChange={this.individualSalesStartYearAndMonthChange.bind(
+                  this
+                )}
+                dateFormat={"yyyy MM"}
+                autoComplete="off"
+                locale="pt-BR"
+                showMonthYearPicker
+                showFullMonthYearPicker
+                showDisabledMonthNavigation
+                className="form-control form-control-sm"
+                id="personalsalesSearchDatePicker"
+                dateFormat={"yyyy/MM"}
+                name="individualSales_startYearAndMonth"
+                locale="ja"
+              />
+              <InputGroup.Prepend>
+                <InputGroup.Text className="width-auto bdr0">
+                  ～
+                </InputGroup.Text>
+              </InputGroup.Prepend>
+              <DatePicker
+                selected={this.state.individualSales_endYearAndMonth}
+                onChange={this.individualSalesEndYearAndMonthChange.bind(this)}
+                dateFormat={"yyyy MM"}
+                autoComplete="off"
+                locale="pt-BR"
+                showMonthYearPicker
+                showFullMonthYearPicker
+                showDisabledMonthNavigation
+                className="form-control form-control-sm"
+                id="personalsalesSearchBackDatePicker"
+                dateFormat={"yyyy/MM"}
+                name="individualSales_endYearAndMonth"
+                locale="ja"
+              />
             </InputGroup>
           </Col>
-          <Col style={{ pointerEvents: "none" }}></Col>
+          {/* <Col sm={1} style={{ pointerEvents: "none" }}></Col> */}
         </Row>
         <Row>
           <Col>

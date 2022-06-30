@@ -670,7 +670,17 @@ class dutyManagement extends React.Component {
         .post(this.state.serverIP + "dutyRegistration/downloadPDF", dataInfo)
         .then((resultMap) => {
           if (resultMap.data) {
-            publicUtils.handleDownload(resultMap.data, this.state.serverIP);
+            publicUtils.handleDownload(resultMap.data, this.state.serverIP, {
+              clearName: true,
+              extraDate: {
+                employeeNo: this.state.rowSelectEmployeeNo,
+                employeeName: this.state.rowSelectEmployeeName,
+                type: "作業報告書",
+                workTime: this.state.rowWorkTime
+                  ? this.state.rowWorkTime + "H"
+                  : "",
+              },
+            });
           } else {
             notification.error({
               message: "エラー",
@@ -705,7 +715,13 @@ class dutyManagement extends React.Component {
         })
         .then((result) => {
           let path = downLoadPath.replaceAll("//", "/");
-          publicUtils.handleDownload(path, this.state.serverIP);
+          publicUtils.handleDownload(path, this.state.serverIP, {
+            extraDate: {
+              workTime: this.state.rowWorkTime
+                ? this.state.rowWorkTime + "H"
+                : "",
+            },
+          });
         })
         .catch(function (error) {
           notification.error({
@@ -741,7 +757,7 @@ class dutyManagement extends React.Component {
       })
       .then((result) => {
         let path = downLoadPath.replaceAll("//", "/");
-        publicUtils.handleDownload(path, this.state.serverIP, fileKey);
+        publicUtils.handleDownload(path, this.state.serverIP, { fileKey });
       })
       .catch(function (error) {
         notification.error({
@@ -1175,7 +1191,9 @@ class dutyManagement extends React.Component {
                 <Col sm={3}>
                   <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
-                      <InputGroup.Text id="sanKanji">お客様</InputGroup.Text>
+                      <InputGroup.Text className="width-auto" id="sanKanji">
+                        お客様
+                      </InputGroup.Text>
                     </InputGroup.Prepend>
                     <Autocomplete
                       id="customerAbbreviation"
@@ -1296,6 +1314,11 @@ class dutyManagement extends React.Component {
                     size="sm"
                     onClick={this.downloadTest}
                     id="workRepot"
+                    disabled={
+                      this.state.rowWorkTime === null ||
+                      (this.state.rowSelectEmployeeNo.includes("BP") &&
+                        this.state.rowSelectWorkingTimeReport === null)
+                    }
                   >
                     <FontAwesomeIcon icon={faDownload} />
                     報告書
@@ -1327,7 +1350,7 @@ class dutyManagement extends React.Component {
                         ? this.listApproval.bind(this, 1)
                         : this.listApproval.bind(this, 0)
                     }
-                    disable={!this.state.rowWorkTime}
+                    // disable={!this.state.rowWorkTime}
                   >
                     <FontAwesomeIcon icon={faEdit} />
                     {this.state.rowApprovalStatus !== "1" ? "承認" : "取消"}

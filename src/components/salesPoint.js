@@ -359,58 +359,56 @@ class salesPoint extends React.Component {
                     />
                   </InputGroup>
                 </Col>
-                <Col sm={5}>
+                <Col sm={3}>
                   <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
-                      <InputGroup.Text id="inputGroup-sizing-sm">
+                      <InputGroup.Text className="width-auto">
                         年月
                       </InputGroup.Text>
                     </InputGroup.Prepend>
+                    <DatePicker
+                      selected={this.state.admissionStartDate}
+                      onChange={this.admissionStartDate}
+                      dateFormat="yyyy/MM"
+                      showMonthYearPicker
+                      showFullMonthYearPicker
+                      maxDate={
+                        new Date(
+                          new Date().getFullYear(),
+                          parseInt(new Date().getMonth() + 1) + 1,
+                          0
+                        )
+                      }
+                      name="admissionStartDate"
+                      className="form-control form-control-sm "
+                      id="datePicker"
+                      locale="ja"
+                      autoComplete="off"
+                    />
                     <InputGroup.Prepend>
-                      <DatePicker
-                        selected={this.state.admissionStartDate}
-                        onChange={this.admissionStartDate}
-                        dateFormat="yyyy/MM"
-                        showMonthYearPicker
-                        showFullMonthYearPicker
-                        maxDate={
-                          new Date(
-                            new Date().getFullYear(),
-                            parseInt(new Date().getMonth() + 1) + 1,
-                            0
-                          )
-                        }
-                        name="admissionStartDate"
-                        className="form-control form-control-sm "
-                        id="datePicker"
-                        locale="ja"
-                        autoComplete="off"
-                      />
-                      <InputGroup.Prepend>
-                        <InputGroup.Text className="width-auto bdr0">
-                          ～
-                        </InputGroup.Text>
-                      </InputGroup.Prepend>
-                      <DatePicker
-                        selected={this.state.admissionEndDate}
-                        onChange={this.admissionEndDate}
-                        dateFormat="yyyy/MM"
-                        showMonthYearPicker
-                        showFullMonthYearPicker
-                        maxDate={
-                          new Date(
-                            new Date().getFullYear(),
-                            parseInt(new Date().getMonth() + 1) + 1,
-                            0
-                          )
-                        }
-                        name="admissionEndDate"
-                        className="form-control form-control-sm"
-                        id="datePicker"
-                        locale="ja"
-                        autoComplete="off"
-                      />
+                      <InputGroup.Text className="width-auto bdr0">
+                        ～
+                      </InputGroup.Text>
                     </InputGroup.Prepend>
+                    <DatePicker
+                      selected={this.state.admissionEndDate}
+                      onChange={this.admissionEndDate}
+                      dateFormat="yyyy/MM"
+                      showMonthYearPicker
+                      showFullMonthYearPicker
+                      maxDate={
+                        new Date(
+                          new Date().getFullYear(),
+                          parseInt(new Date().getMonth() + 1) + 1,
+                          0
+                        )
+                      }
+                      name="admissionEndDate"
+                      className="form-control form-control-sm"
+                      id="datePicker"
+                      locale="ja"
+                      autoComplete="off"
+                    />
                   </InputGroup>
                 </Col>
               </Row>
