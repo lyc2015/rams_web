@@ -442,9 +442,9 @@ class dutyManagement extends React.Component {
 
   handleRowClick = (row, isSelected, e) => {
     if (isSelected) {
-      this.setState({ rowDownload: row.costFile });
+      this.setState({ rowDownload: row.costFile, rowCost: row.cost });
     } else {
-      this.setState({ rowDownload: "" });
+      this.setState({ rowDownload: "", rowCost: "" });
     }
   };
 
@@ -679,10 +679,11 @@ class dutyManagement extends React.Component {
           if (this.state.rowSelected.workTime !== null) {
             extraData.workTime = this.state.rowSelected.workTime + "H";
           }
-          if (this.state.rowSelected.cost > 0) {
-            extraData.cost =
-              publicUtils.addComma(this.state.rowSelected.cost) + "円";
-          }
+          // 報告書なら要らない
+          // if (this.state.rowSelected.cost > 0) {
+          //   extraData.cost =
+          //     publicUtils.addComma(this.state.rowSelected.cost) + "円";
+          // }
           if (resultMap.data) {
             publicUtils.handleDownload(resultMap.data, this.state.serverIP, {
               clearName: true,
@@ -719,10 +720,11 @@ class dutyManagement extends React.Component {
       if (this.state.rowSelected.workTime !== null) {
         extraData.workTime = this.state.rowSelected.workTime + "H";
       }
-      if (this.state.rowSelected.cost > 0) {
-        extraData.cost =
-          publicUtils.addComma(this.state.rowSelected.cost) + "円";
-      }
+      // 報告書なら要らない
+      // if (this.state.rowSelected.cost > 0) {
+      //   extraData.cost =
+      //     publicUtils.addComma(this.state.rowSelected.cost) + "円";
+      // }
       axios
         .post(this.state.serverIP + "s3Controller/downloadFile", {
           fileKey: fileKey,
@@ -768,7 +770,15 @@ class dutyManagement extends React.Component {
       })
       .then((result) => {
         let path = downLoadPath.replaceAll("//", "/");
-        publicUtils.handleDownload(path, this.state.serverIP, { fileKey });
+        let extraData = {};
+        // show cost when download
+        if (this.state.rowCost !== "") {
+          extraData.cost = publicUtils.addComma(this.state.rowCost) + "円";
+        }
+        publicUtils.handleDownload(path, this.state.serverIP, {
+          fileKey,
+          extraData,
+        });
       })
       .catch(function (error) {
         notification.error({
