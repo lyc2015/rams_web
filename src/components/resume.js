@@ -168,23 +168,14 @@ class resume extends React.Component {
       .post(this.state.serverIP + "resume/insertResume", formData)
       .then((response) => {
         if (response.data) {
-          this.setState({
-            myToastShow: true,
-            method: "put",
-            message: "登録完了",
-          });
-          setTimeout(() => this.setState({ myToastShow: false }), 3000);
+          message.success("登録完了");
           this.searchResume();
           var file = document.getElementById("UpButtonForm1");
           file.reset();
           var file = document.getElementById("UpButtonForm2");
           file.reset();
         } else {
-          this.setState({
-            errorsMessageShow: true,
-            method: "put",
-            message: "登録失敗",
-          });
+          message.error("登録失敗");
         }
       });
   };
