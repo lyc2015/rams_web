@@ -561,9 +561,18 @@ class siteInfo extends Component {
                     this.state.employeeName &&
                     response.data.errorsMessage === "該当データなし"
                   ) {
+                    let employeeStatus = "";
+                    employeeStatus = publicUtils.getEmployeeStatusByEmployeeNo(
+                      this.state.employeeName
+                    );
+                    let str = publicUtils.findItemByKey(
+                      this.state.employeeStatuss,
+                      "code",
+                      employeeStatus
+                    ).name;
                     notification.warning({
-                      message: `該当BP情報なし`,
-                      description: "まずBP情報を入力してください。",
+                      message: `該当${str}情報なし`,
+                      description: `まず${str}情報を入力してください。`,
                       placement: "topLeft",
                     });
                   } else message.error(response.data.errorsMessage);
