@@ -58,12 +58,12 @@ class resume extends React.Component {
       .then((response) => response.data)
       .then((data) => {
         //data.push({ "rowNo": 2, "resumeInfo1": data[0].resumeInfo2, "resumeName1": data[0].resumeName2, "updateTime": data[0].updateTime, "updateUser": data[0].updateUser });
-        if (data[0].resumeInfo1 == null || data[0].resumeInfo1 == "") {
+        if (data[0]?.resumeInfo1 == null || data[0]?.resumeInfo1 == "") {
           data[0]["fileSts"] = false;
         } else {
           data[0]["fileSts"] = true;
         }
-        if (data[0].resumeInfo2 == null || data[0].resumeInfo2 == "") {
+        if (data[0]?.resumeInfo2 == null || data[0]?.resumeInfo2 == "") {
           data[1]["fileSts"] = false;
         } else {
           data[1]["fileSts"] = true;
