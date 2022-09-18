@@ -646,7 +646,7 @@ class ProjectInfoSearch extends Component {
     if (row.endFlag === "0") style.color = "#9495aa";
     if (row.successRate === "0" || row.successRate === "1") style.color = "red";
     return (
-      <LightTooltip title={cell}>
+      <LightTooltip>
         <div title={cell} id="projectInfoSearchCol" style={style}>
           {typeof cb === "function" ? cb(cell, row) : cell}
         </div>
