@@ -1,5 +1,6 @@
 import { message } from "antd";
 import JapaneseHolidays from "japanese-holidays";
+import store from "../redux/store";
 import axios from "axios";
 axios.defaults.withCredentials = true;
 const $ = require("jquery");
@@ -1120,4 +1121,35 @@ export function addLeftSlash(cell) {
   if (arr.length < 6) return cell;
   arr.splice(4, 0, "/");
   return arr.join("");
+}
+
+//  LYC041 =>  0
+//  BP041 =>  1
+export function getEmployeeStatusByEmployeeNo(employeeNo) {
+  let status = "";
+  let employeeNoArr = employeeNo.split("");
+  employeeNoArr.splice(-3, 3);
+  let key = employeeNoArr.join("");
+  switch (key) {
+    case "LYC":
+      status = "0";
+      break;
+    case "BP":
+      status = "1";
+      break;
+    case "BPR":
+      status = "4";
+      break;
+    case "個人事業主":
+      status = "2";
+      break;
+    case "SC":
+      status = "3";
+      break;
+
+    default:
+      break;
+  }
+
+  return status;
 }
