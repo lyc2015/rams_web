@@ -32,7 +32,19 @@ import store from "./redux/store";
 import ProjectContent from "./projectContent";
 import { notification, message } from "antd";
 import Clipboard from "clipboard";
+import { withStyles, makeStyles } from "@material-ui/core/styles";
+import Tooltip from "@material-ui/core/Tooltip";
+
 axios.defaults.withCredentials = true;
+
+const LightTooltip = withStyles((theme) => ({
+  tooltip: {
+    backgroundColor: theme.palette.common.white,
+    color: "rgba(0, 0, 0, 0.87)",
+    boxShadow: theme.shadows[1],
+    fontSize: 11,
+  },
+}))(Tooltip);
 
 class ProjectInfoSearch extends Component {
   constructor(props) {
@@ -626,14 +638,19 @@ class ProjectInfoSearch extends Component {
   };
 
   grayRow = (cell, row, cb) => {
+    const style = {
+      fontSize: "15px",
+      textOverflow: "ellipsis",
+      overflow: "hidden",
+    };
+    if (row.endFlag === "0") style.color = "#9495aa";
+    if (row.successRate === "0" || row.successRate === "1") style.color = "red";
     return (
-      <div
-        style={
-          row.endFlag === "0" ? { color: "#9495aa" } : { color: "#082567" }
-        }
-      >
-        {typeof cb === "function" ? cb(cell, row) : cell}
-      </div>
+      <LightTooltip title={cell}>
+        <div title={cell} id="projectInfoSearchCol" style={style}>
+          {typeof cb === "function" ? cb(cell, row) : cell}
+        </div>
+      </LightTooltip>
     );
   };
 
@@ -965,7 +982,7 @@ class ProjectInfoSearch extends Component {
                         </div>
                       )}
                     />
-                    <Autocomplete
+                    {/* <Autocomplete
                       className="fx1"
                       id="keyWordOfFrameWork1"
                       name="keyWordOfFrameWork1"
@@ -993,7 +1010,7 @@ class ProjectInfoSearch extends Component {
                           />
                         </div>
                       )}
-                    />
+                    /> */}
                     {/* <Autocomplete
                       className="fx1"
                       hidden
@@ -1343,7 +1360,7 @@ class ProjectInfoSearch extends Component {
                   <TableHeaderColumn
                     row="0"
                     rowSpan="2"
-                    width="60"
+                    width="65"
                     tdStyle={{ padding: ".45em" }}
                     dataFormat={this.grayRow}
                     dataField="rowNo"
@@ -1377,7 +1394,7 @@ class ProjectInfoSearch extends Component {
                   <TableHeaderColumn
                     row="0"
                     rowSpan="2"
-                    width="125"
+                    width="120"
                     tdStyle={{ padding: ".45em" }}
                     dataFormat={(cell, row) =>
                       this.grayRow(utils.addLeftSlash(cell), row)
@@ -1438,7 +1455,7 @@ class ProjectInfoSearch extends Component {
                     row="0"
                     colSpan="3"
                     rowSpan="1"
-                    width="90"
+                    // width="90"
                     tdStyle={{ padding: ".45em" }}
                     headerAlign="center"
                   >
@@ -1447,7 +1464,7 @@ class ProjectInfoSearch extends Component {
                   <TableHeaderColumn
                     row="1"
                     rowSpan="1"
-                    width="100"
+                    width="90"
                     tdStyle={{ padding: ".45em" }}
                     dataFormat={this.grayRow}
                     dataField="keyWordOfLanagurueName1"
@@ -1455,7 +1472,7 @@ class ProjectInfoSearch extends Component {
                   <TableHeaderColumn
                     row="1"
                     rowSpan="1"
-                    width="100"
+                    width="90"
                     tdStyle={{ padding: ".45em" }}
                     dataFormat={this.grayRow}
                     dataField="keyWordOfLanagurueName2"
@@ -1463,7 +1480,7 @@ class ProjectInfoSearch extends Component {
                   <TableHeaderColumn
                     row="1"
                     rowSpan="1"
-                    width="100"
+                    width="90"
                     tdStyle={{ padding: ".45em" }}
                     dataFormat={this.grayRow}
                     dataField="keyWordOfFrameWorkName1"
@@ -1471,7 +1488,7 @@ class ProjectInfoSearch extends Component {
                   <TableHeaderColumn
                     row="1"
                     rowSpan="1"
-                    width="100"
+                    width="90"
                     tdStyle={{ padding: ".45em" }}
                     hidden
                     dataField="keyWordOfLanagurueName3"
@@ -1479,7 +1496,7 @@ class ProjectInfoSearch extends Component {
                   <TableHeaderColumn
                     row="0"
                     rowSpan="2"
-                    width="100"
+                    width="90"
                     tdStyle={{ padding: ".45em" }}
                     dataFormat={this.grayRow}
                     dataField="japaneaseConversationName"
@@ -1489,18 +1506,27 @@ class ProjectInfoSearch extends Component {
                   <TableHeaderColumn
                     row="0"
                     rowSpan="2"
-                    width="120"
+                    width="90"
                     tdStyle={{ padding: ".45em" }}
                     dataFormat={this.grayRow}
                     dataField="customerName"
                   >
                     お客様
                   </TableHeaderColumn>
-
                   <TableHeaderColumn
                     row="0"
                     rowSpan="2"
                     width="90"
+                    tdStyle={{ padding: ".45em" }}
+                    dataFormat={this.grayRow}
+                    dataField="remark"
+                  >
+                    備考
+                  </TableHeaderColumn>
+                  <TableHeaderColumn
+                    row="0"
+                    rowSpan="2"
+                    width="100"
                     tdStyle={{ padding: ".45em" }}
                     dataFormat={(cell, row) =>
                       this.grayRow(cell, row, this.showSalesStaff)

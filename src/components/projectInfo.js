@@ -764,7 +764,7 @@ class projectInfo extends Component {
             </Col>
           </Row>
           <br />
-          <Form id="projectInfoForm">
+          <Form id="projectInfoForm" style={{ paddingBottom: 5 }}>
             <Form.Group>
               <Row>
                 <Col sm={3}>
@@ -781,6 +781,26 @@ class projectInfo extends Component {
                       readOnly
                       disabled={actionType === "detail" ? true : false}
                     ></FormControl>
+                  </InputGroup>
+                </Col>
+                <Col sm={3}>
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
+                    <InputGroup.Prepend>
+                      <InputGroup.Text>確率/優先</InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <FormControl
+                      as="select"
+                      value={successRate}
+                      name="successRate"
+                      onChange={this.valueChange}
+                      disabled={actionType === "detail" ? true : false}
+                    >
+                      {successRateDrop.map((date) => (
+                        <option key={date.code} value={date.code}>
+                          {date.name}
+                        </option>
+                      ))}
+                    </FormControl>
                   </InputGroup>
                 </Col>
               </Row>
@@ -1507,38 +1527,35 @@ class projectInfo extends Component {
                           />
                         </InputGroup>
                       </Col>
-                      <Col sm={3}>
-                        <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
-                          <InputGroup.Prepend>
-                            <InputGroup.Text>確率</InputGroup.Text>
-                          </InputGroup.Prepend>
-                          <FormControl
-                            as="select"
-                            value={successRate}
-                            name="successRate"
-                            onChange={this.valueChange}
-                            disabled={actionType === "detail" ? true : false}
-                          >
-                            {successRateDrop.map((date) => (
-                              <option key={date.code} value={date.code}>
-                                {date.name}
-                              </option>
-                            ))}
-                          </FormControl>
-                        </InputGroup>
-                      </Col>
 
-                      <Col sm={5}>
+                      <Col sm={4}>
                         <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                           <InputGroup.Prepend>
                             <InputGroup.Text id="fiveKanji">
-                              必須事項
+                              必須事項1
                             </InputGroup.Text>
                           </InputGroup.Prepend>
                           <FormControl
                             maxLength="50"
                             value={requiredItem1}
                             name="requiredItem1"
+                            placeholder="例：リーダー経験がある、springboot経験がある"
+                            onChange={this.valueChange}
+                            disabled={actionType === "detail" ? true : false}
+                          ></FormControl>
+                        </InputGroup>
+                      </Col>
+                      <Col sm={4}>
+                        <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
+                          <InputGroup.Prepend>
+                            <InputGroup.Text id="fiveKanji">
+                              必須事項2
+                            </InputGroup.Text>
+                          </InputGroup.Prepend>
+                          <FormControl
+                            maxLength="50"
+                            value={requiredItem2}
+                            name="requiredItem2"
                             placeholder="例：リーダー経験がある、springboot経験がある"
                             onChange={this.valueChange}
                             disabled={actionType === "detail" ? true : false}

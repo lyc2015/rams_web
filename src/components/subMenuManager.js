@@ -2237,12 +2237,15 @@ class SubMenu extends Component {
               </Col>
             </Row>
           </Col>
-          <Col
-            sm={9}
-            id="page"
-            style={{ backgroundColor: this.state.backgroundColor }}
-          >
-            <div key={this.props.location.key}>
+          <Col sm={10}>
+            <div
+              id="page"
+              style={{
+                backgroundColor: this.state.backgroundColor,
+                marginRight: 15,
+              }}
+              key={this.props.location.key}
+            >
               <br />
               <Router>
                 <Route
