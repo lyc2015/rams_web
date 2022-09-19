@@ -820,7 +820,9 @@ P-mark:第21004525(02)号
         }
       );
       if (res.data.length > 0) {
-        let mailCC = res.data;
+        let mailCC = res.data.filter(
+          (item) => item.customerDepartmentCode === "7"
+        );
         mailCC = mailCC
           ?.map((item) => item.customerDepartmentMail)
           .filter((value) => value !== rowPurchasingManagersMail);

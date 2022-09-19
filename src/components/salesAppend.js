@@ -85,12 +85,13 @@ class salesAppend extends Component {
       .then((result) => {
         let salesPersonsNameArray = new Array();
         let salesRowIdArray = new Array();
-        for (let i in result.data) {
-          salesPersonsNameArray.push(result.data[i].responsiblePerson);
-          salesRowIdArray.push(result.data[i].rowId);
+        let arr = result.data;
+        for (let i in arr) {
+          salesPersonsNameArray.push(arr[i].responsiblePerson);
+          salesRowIdArray.push(arr[i].rowId);
         }
         this.setState({
-          allSalesPersons: result.data,
+          allSalesPersons: arr,
           allSalesPersonsName: salesPersonsNameArray,
           allRowId: salesRowIdArray,
         });
