@@ -615,17 +615,28 @@ class ProjectInfoSearch extends Component {
     }
   };
 
+  showKeyWordOfLanagurue = (cell, row) => {
+    let arr = [];
+    row.keyWordOfLanagurue1 && arr.push(row.keyWordOfLanagurueName1);
+    row.keyWordOfLanagurue2 && arr.push(row.keyWordOfLanagurueName2);
+    return arr.join(",");
+  };
+
   showProjectPhaseNameStart = (cell, row) => {
-    if (
-      row.projectPhaseNameStart !== null &&
-      row.projectPhaseNameStart !== ""
-    ) {
-      if (row.endFlag === "0") {
-        return <div>{row.projectPhaseNameStart + "～"}</div>;
-      } else {
-        return row.projectPhaseNameStart + "～";
-      }
-    }
+    const arr = [row.projectPhaseNameStart, row.projectPhaseNameEnd];
+    if (arr[0] && arr[1]) {
+      return arr.join("～");
+    } else if (arr[0]) return arr[0] + "～";
+    // if (
+    //   row.projectPhaseNameStart !== null &&
+    //   row.projectPhaseNameStart !== ""
+    // ) {
+    //   if (row.endFlag === "0") {
+    //     return <div>{row.projectPhaseNameStart + "～"}</div>;
+    //   } else {
+    //     return row.projectPhaseNameStart + "～";
+    //   }
+    // }
   };
 
   showSalesStaff = (cell, row) => {
@@ -644,10 +655,12 @@ class ProjectInfoSearch extends Component {
       overflow: "hidden",
     };
     if (row.endFlag === "0") style.color = "#9495aa";
-    if (row.successRate === "0" || row.successRate === "1") style.color = "red";
+    else if (row.successRate === "0" || row.successRate === "1")
+      style.color = "red";
+
     return (
-      <LightTooltip>
-        <div title={cell} id="projectInfoSearchCol" style={style}>
+      <LightTooltip title={typeof cb === "function" ? cb(cell, row) : cell}>
+        <div id="projectInfoSearchCol" style={style}>
           {typeof cb === "function" ? cb(cell, row) : cell}
         </div>
       </LightTooltip>
@@ -1356,11 +1369,12 @@ class ProjectInfoSearch extends Component {
                   striped
                   hover
                   condensed
+                  tableStyle={{ tableLayout: "fixed", wordBreak: "break-all" }}
                 >
                   <TableHeaderColumn
                     row="0"
                     rowSpan="2"
-                    width="65"
+                    width="50"
                     tdStyle={{ padding: ".45em" }}
                     dataFormat={this.grayRow}
                     dataField="rowNo"
@@ -1370,7 +1384,7 @@ class ProjectInfoSearch extends Component {
                   <TableHeaderColumn
                     row="0"
                     rowSpan="2"
-                    width="90"
+                    width="70"
                     tdStyle={{ padding: ".45em" }}
                     dataFormat={this.grayRow}
                     dataField="projectNo"
@@ -1381,20 +1395,7 @@ class ProjectInfoSearch extends Component {
                   <TableHeaderColumn
                     row="0"
                     rowSpan="2"
-                    width="120"
-                    tdStyle={{ padding: ".45em" }}
-                    dataFormat={(cell, row) =>
-                      this.grayRow(cell, row, this.successRateNameData)
-                    }
-                    dataField="successRateName"
-                    hidden
-                  >
-                    確率
-                  </TableHeaderColumn>
-                  <TableHeaderColumn
-                    row="0"
-                    rowSpan="2"
-                    width="120"
+                    width="85"
                     tdStyle={{ padding: ".45em" }}
                     dataFormat={(cell, row) =>
                       this.grayRow(utils.addLeftSlash(cell), row)
@@ -1406,7 +1407,31 @@ class ProjectInfoSearch extends Component {
                   <TableHeaderColumn
                     row="0"
                     rowSpan="2"
-                    width="90"
+                    width="85"
+                    tdStyle={{ padding: ".45em" }}
+                    dataFormat={this.grayRow}
+                    dataField="customerName"
+                  >
+                    お客様
+                  </TableHeaderColumn>
+                  <TableHeaderColumn
+                    row="0"
+                    rowSpan="2"
+                    width="100"
+                    tdStyle={{ padding: ".45em" }}
+                    dataFormat={(cell, row) =>
+                      this.grayRow(cell, row, this.successRateNameData)
+                    }
+                    dataField="successRateName"
+                    hidden
+                  >
+                    確率
+                  </TableHeaderColumn>
+
+                  <TableHeaderColumn
+                    row="0"
+                    rowSpan="2"
+                    width="75"
                     tdStyle={{ padding: ".45em" }}
                     dataFormat={(cell, row) =>
                       this.grayRow(cell, row, this.showSiteLocation)
@@ -1442,7 +1467,7 @@ class ProjectInfoSearch extends Component {
                   <TableHeaderColumn
                     row="0"
                     rowSpan="2"
-                    width="125"
+                    width="80"
                     tdStyle={{ padding: ".45em" }}
                     dataFormat={(cell, row) =>
                       this.grayRow(cell, row, this.showProjectPhaseNameStart)
@@ -1453,11 +1478,24 @@ class ProjectInfoSearch extends Component {
                   </TableHeaderColumn>
                   <TableHeaderColumn
                     row="0"
+                    rowSpan="2"
+                    width="100"
+                    tdStyle={{ padding: ".45em" }}
+                    dataFormat={(cell, row) =>
+                      this.grayRow(cell, row, this.showKeyWordOfLanagurue)
+                    }
+                    dataField="keyWordOfLanagurueName1"
+                  >
+                    開発言語
+                  </TableHeaderColumn>
+                  <TableHeaderColumn
+                    row="0"
                     colSpan="3"
                     rowSpan="1"
-                    // width="90"
+                    width="90"
                     tdStyle={{ padding: ".45em" }}
                     headerAlign="center"
+                    hidden
                   >
                     開発言語
                   </TableHeaderColumn>
@@ -1468,6 +1506,7 @@ class ProjectInfoSearch extends Component {
                     tdStyle={{ padding: ".45em" }}
                     dataFormat={this.grayRow}
                     dataField="keyWordOfLanagurueName1"
+                    hidden
                   ></TableHeaderColumn>
                   <TableHeaderColumn
                     row="1"
@@ -1476,6 +1515,7 @@ class ProjectInfoSearch extends Component {
                     tdStyle={{ padding: ".45em" }}
                     dataFormat={this.grayRow}
                     dataField="keyWordOfLanagurueName2"
+                    hidden
                   ></TableHeaderColumn>
                   <TableHeaderColumn
                     row="1"
@@ -1484,6 +1524,7 @@ class ProjectInfoSearch extends Component {
                     tdStyle={{ padding: ".45em" }}
                     dataFormat={this.grayRow}
                     dataField="keyWordOfFrameWorkName1"
+                    hidden
                   ></TableHeaderColumn>
                   <TableHeaderColumn
                     row="1"
@@ -1496,27 +1537,18 @@ class ProjectInfoSearch extends Component {
                   <TableHeaderColumn
                     row="0"
                     rowSpan="2"
-                    width="90"
+                    width="75"
                     tdStyle={{ padding: ".45em" }}
                     dataFormat={this.grayRow}
                     dataField="japaneaseConversationName"
                   >
                     日本語
                   </TableHeaderColumn>
+
                   <TableHeaderColumn
                     row="0"
                     rowSpan="2"
-                    width="90"
-                    tdStyle={{ padding: ".45em" }}
-                    dataFormat={this.grayRow}
-                    dataField="customerName"
-                  >
-                    お客様
-                  </TableHeaderColumn>
-                  <TableHeaderColumn
-                    row="0"
-                    rowSpan="2"
-                    width="90"
+                    width="120"
                     tdStyle={{ padding: ".45em" }}
                     dataFormat={this.grayRow}
                     dataField="remark"
@@ -1526,7 +1558,7 @@ class ProjectInfoSearch extends Component {
                   <TableHeaderColumn
                     row="0"
                     rowSpan="2"
-                    width="100"
+                    width="90"
                     tdStyle={{ padding: ".45em" }}
                     dataFormat={(cell, row) =>
                       this.grayRow(cell, row, this.showSalesStaff)
