@@ -579,6 +579,20 @@ class ProjectInfoSearch extends Component {
   handleShowModal = (Kbn) => {
     this.setState({ showProjectContentModal: true });
   };
+  formatCustomerName = (cell, row) => {
+    let str = "";
+    let noOfInterviewName = "";
+    if (row.noOfInterviewCode === "0" || row.noOfInterviewCode === "1") {
+      noOfInterviewName = "一回";
+    } else if (row.noOfInterviewCode === "2" || row.noOfInterviewCode === "3") {
+      noOfInterviewName = "二回";
+    }
+    if (row.customerName) {
+      if (noOfInterviewName) str = `${row.customerName}(${noOfInterviewName})`;
+      else str = `${row.customerName}`;
+    }
+    return str;
+  };
   successRateNameData = (cell, row) => {
     if (row.endFlag === "0") {
       return <div>{row.successRateName}</div>;
@@ -639,12 +653,14 @@ class ProjectInfoSearch extends Component {
     // }
   };
 
-  showSalesStaff = (cell, row) => {
+  showSalesStaff = (cell, row, showLastName) => {
     if (row.salesStaff !== null && row.salesStaff !== "") {
-      return (
-        this.state.salesStaffDrop.find((v) => v.code === row.salesStaff).text ||
-        {}
-      );
+      // console.log(this.state.salesStaffDrop, "this.state.salesStaffDrop");
+      let item =
+        this.state.salesStaffDrop.find((v) => v.code === row.salesStaff) || {};
+      return showLastName
+        ? item.employeeFristName + item.employeeLastName
+        : item.employeeFristName;
     }
   };
 
@@ -659,7 +675,9 @@ class ProjectInfoSearch extends Component {
       style.color = "red";
 
     return (
-      <LightTooltip title={typeof cb === "function" ? cb(cell, row) : cell}>
+      <LightTooltip
+        title={typeof cb === "function" ? cb(cell, row, true) : cell}
+      >
         <div id="projectInfoSearchCol" style={style}>
           {typeof cb === "function" ? cb(cell, row) : cell}
         </div>
@@ -1389,13 +1407,14 @@ class ProjectInfoSearch extends Component {
                     dataFormat={this.grayRow}
                     dataField="projectNo"
                     isKey
+                    hidden
                   >
                     案件番号
                   </TableHeaderColumn>
                   <TableHeaderColumn
                     row="0"
                     rowSpan="2"
-                    width="85"
+                    width="80"
                     tdStyle={{ padding: ".45em" }}
                     dataFormat={(cell, row) =>
                       this.grayRow(utils.addLeftSlash(cell), row)
@@ -1407,9 +1426,11 @@ class ProjectInfoSearch extends Component {
                   <TableHeaderColumn
                     row="0"
                     rowSpan="2"
-                    width="85"
+                    width="90"
                     tdStyle={{ padding: ".45em" }}
-                    dataFormat={this.grayRow}
+                    dataFormat={(cell, row) =>
+                      this.grayRow(cell, row, this.formatCustomerName)
+                    }
                     dataField="customerName"
                   >
                     お客様
@@ -1431,7 +1452,7 @@ class ProjectInfoSearch extends Component {
                   <TableHeaderColumn
                     row="0"
                     rowSpan="2"
-                    width="75"
+                    width="70"
                     tdStyle={{ padding: ".45em" }}
                     dataFormat={(cell, row) =>
                       this.grayRow(cell, row, this.showSiteLocation)
@@ -1467,7 +1488,7 @@ class ProjectInfoSearch extends Component {
                   <TableHeaderColumn
                     row="0"
                     rowSpan="2"
-                    width="80"
+                    width="130"
                     tdStyle={{ padding: ".45em" }}
                     dataFormat={(cell, row) =>
                       this.grayRow(cell, row, this.showProjectPhaseNameStart)
@@ -1548,7 +1569,7 @@ class ProjectInfoSearch extends Component {
                   <TableHeaderColumn
                     row="0"
                     rowSpan="2"
-                    width="120"
+                    width="150"
                     tdStyle={{ padding: ".45em" }}
                     dataFormat={this.grayRow}
                     dataField="remark"
@@ -1558,14 +1579,14 @@ class ProjectInfoSearch extends Component {
                   <TableHeaderColumn
                     row="0"
                     rowSpan="2"
-                    width="90"
+                    width="55"
                     tdStyle={{ padding: ".45em" }}
                     dataFormat={(cell, row) =>
                       this.grayRow(cell, row, this.showSalesStaff)
                     }
                     dataField="salesStaff"
                   >
-                    営業担当
+                    営業
                   </TableHeaderColumn>
                 </BootstrapTable>
               </Col>
