@@ -1223,7 +1223,7 @@ class siteInfo extends Component {
 
   // siteInfoeDelete = () => {
   // //将id进行数据类型转换，强制转换为数字类型，方便下面进行判断。
-  // var a = window.confirm("削除していただきますか？");
+  // var a = window.confirm("削除してもよろしいでしょうか？");
   // if (a) {
   // $("#deleteBtn").click();
   // }
@@ -1238,7 +1238,7 @@ class siteInfo extends Component {
   // 隠した削除ボタンの実装
   onDeleteRow = (rows) => {
     AntdModal.confirm({
-      title: "削除していただきますか？",
+      title: "削除してもよろしいでしょうか？",
       icon: <ExclamationCircleOutlined />,
       onOk: () => {
         axios

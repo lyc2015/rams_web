@@ -457,7 +457,7 @@ class employeeSearch extends React.Component {
 
   employeeDelete = () => {
     // 将id进行数据类型转换，强制转换为数字类型，方便下面进行判断。
-    var a = window.confirm("削除していただきますか？");
+    var a = window.confirm("削除してもよろしいでしょうか？");
     if (a) {
       $("#deleteBtn").click();
     }

@@ -422,7 +422,7 @@ class salesPointSet extends React.Component {
    * 削除ボタン
    */
   delete = () => {
-    var a = window.confirm("削除していただきますか？");
+    var a = window.confirm("削除してもよろしいでしょうか？");
     if (a) {
       var salesPointSetModel = {};
       salesPointSetModel["no"] = this.state.no;

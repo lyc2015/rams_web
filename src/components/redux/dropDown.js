@@ -88,7 +88,7 @@ var methodNameList = [
   "getServerIP", // 最後
 ];
 
-const serverIP = "http://192.168.2.13:8080/";
+const serverIP = "http://127.0.0.1:8080/";
 
 export function fetchDropDown(state = defaultState) {
   var outArray = [];

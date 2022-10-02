@@ -471,7 +471,7 @@ class CustomerInfo extends Component {
   //隠した削除ボタンの実装
   onDeleteRow = (rows) => {
     // ...
-    var a = window.confirm("削除していただきますか？");
+    var a = window.confirm("削除してもよろしいでしょうか？");
     if (a) {
       var id = this.state.rowNo;
       var departmentList = this.state.customerDepartmentList;

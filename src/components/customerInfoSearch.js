@@ -264,7 +264,7 @@ class CustomerInfoSearch extends Component {
   };
   //隠した削除ボタンの実装
   onDeleteRow = () => {
-    var a = window.confirm("削除していただきますか？");
+    var a = window.confirm("削除してもよろしいでしょうか？");
     if (a) {
       var customerInfoMod = {};
       customerInfoMod["customerNo"] = this.state.customerNoForPageChange;

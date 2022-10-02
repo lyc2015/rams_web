@@ -294,7 +294,7 @@ class dataShareEmployee extends React.Component {
 
   dataDelete = () => {
     Modal.confirm({
-      title: "削除していただきますか？",
+      title: "削除してもよろしいでしょうか？",
       icon: <ExclamationCircleOutlined />,
       onOk: () => {
         var model = {};

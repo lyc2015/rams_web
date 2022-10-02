@@ -1206,7 +1206,7 @@ class WagesInfo extends Component {
     );
   };
   delete = () => {
-    var a = window.confirm("削除していただきますか？");
+    var a = window.confirm("削除してもよろしいでしょうか？");
     if (a) {
       var deleteMod = {};
       deleteMod["employeeNo"] = this.state.employeeName;

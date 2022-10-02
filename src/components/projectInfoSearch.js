@@ -562,7 +562,7 @@ class ProjectInfoSearch extends Component {
    * 削除ボタン
    */
   delete = () => {
-    var a = window.confirm("削除していただきますか？");
+    var a = window.confirm("削除してもよろしいでしょうか？");
     if (a) {
       $("#deleteBtn").click();
     }
@@ -1392,7 +1392,7 @@ class ProjectInfoSearch extends Component {
                   <TableHeaderColumn
                     row="0"
                     rowSpan="2"
-                    width="50"
+                    width="40"
                     tdStyle={{ padding: ".45em" }}
                     dataFormat={this.grayRow}
                     dataField="rowNo"
@@ -1414,7 +1414,7 @@ class ProjectInfoSearch extends Component {
                   <TableHeaderColumn
                     row="0"
                     rowSpan="2"
-                    width="80"
+                    width="70"
                     tdStyle={{ padding: ".45em" }}
                     dataFormat={(cell, row) =>
                       this.grayRow(utils.addLeftSlash(cell), row)
@@ -1488,7 +1488,7 @@ class ProjectInfoSearch extends Component {
                   <TableHeaderColumn
                     row="0"
                     rowSpan="2"
-                    width="130"
+                    width="120"
                     tdStyle={{ padding: ".45em" }}
                     dataFormat={(cell, row) =>
                       this.grayRow(cell, row, this.showProjectPhaseNameStart)
@@ -1558,7 +1558,7 @@ class ProjectInfoSearch extends Component {
                   <TableHeaderColumn
                     row="0"
                     rowSpan="2"
-                    width="75"
+                    width="60"
                     tdStyle={{ padding: ".45em" }}
                     dataFormat={this.grayRow}
                     dataField="japaneaseConversationName"
@@ -1569,7 +1569,7 @@ class ProjectInfoSearch extends Component {
                   <TableHeaderColumn
                     row="0"
                     rowSpan="2"
-                    width="150"
+                    width="180"
                     tdStyle={{ padding: ".45em" }}
                     dataFormat={this.grayRow}
                     dataField="remark"
@@ -1579,7 +1579,7 @@ class ProjectInfoSearch extends Component {
                   <TableHeaderColumn
                     row="0"
                     rowSpan="2"
-                    width="55"
+                    width="40"
                     tdStyle={{ padding: ".45em" }}
                     dataFormat={(cell, row) =>
                       this.grayRow(cell, row, this.showSalesStaff)

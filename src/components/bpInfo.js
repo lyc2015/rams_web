@@ -79,7 +79,7 @@ class bpInfo extends React.Component {
   };
 
   deleteRow = () => {
-    var a = window.confirm("削除していただきますか？");
+    var a = window.confirm("削除してもよろしいでしょうか？");
     if (a) {
       const bpInfoModel = {
         bpEmployeeNo: this.props.employeeNo,

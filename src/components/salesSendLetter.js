@@ -663,7 +663,7 @@ class salesSendLetter extends React.Component {
   // deleteボタン事件
   handleDeleteLists = () => {
     let a = window.confirm(
-      `${this.state.storageListName}から選んだお客様を削除していただきますか？`
+      `${this.state.storageListName}から選んだお客様を削除してもよろしいでしょうか？`
     );
     if (a) {
       // TODO: 删除操作后调整表格数据。这段代码位置为何放在删除接口调用前？
@@ -1042,7 +1042,7 @@ class salesSendLetter extends React.Component {
   // 选中list后，删除当前选中的list
   handleDeleteList = () => {
     let a = window.confirm(
-      `${this.state.storageListName}を削除していただきますか？`
+      `${this.state.storageListName}を削除してもよろしいでしょうか？`
     );
     if (a) {
       axios

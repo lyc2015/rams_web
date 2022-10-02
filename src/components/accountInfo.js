@@ -384,7 +384,7 @@ class BankInfo extends Component {
   };
 
   deleteAccount = () => {
-    var a = window.confirm("削除していただきますか？");
+    var a = window.confirm("削除してもよろしいでしょうか？");
     if (a) {
       var accountInfo = {};
       accountInfo["employeeOrCustomerNo"] = this.state.employeeOrCustomerNo;

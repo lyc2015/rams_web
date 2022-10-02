@@ -408,7 +408,7 @@ class sendRepot extends React.Component {
   };
   // clearボタン事件
   clearLists = () => {
-    var a = window.confirm("削除していただきますか？");
+    var a = window.confirm("削除してもよろしいでしょうか？");
     if (a) {
       if (this.state.storageListName !== "") {
         axios
@@ -574,7 +574,7 @@ class sendRepot extends React.Component {
 
   // deleteボタン事件
   deleteLists = () => {
-    var a = window.confirm("削除していただきますか？");
+    var a = window.confirm("削除してもよろしいでしょうか？");
     if (a) {
       let selectedIndex = this.state.selectetRowIds;
       let newCustomer = this.state.allCustomer;
@@ -1013,7 +1013,7 @@ class sendRepot extends React.Component {
   };
 
   deleteList = () => {
-    var a = window.confirm("削除していただきますか？");
+    var a = window.confirm("削除してもよろしいでしょうか？");
     if (a) {
       var salesSendLettersListNames = {
         storageListName: this.state.storageListNameChange,

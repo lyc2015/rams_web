@@ -237,7 +237,7 @@ class masterUpdate extends Component {
    * 削除ボタン
    */
   delete = () => {
-    var a = window.confirm("削除していただきますか？");
+    var a = window.confirm("削除してもよろしいでしょうか？");
     if (a) {
       var masterModel = {};
       masterModel["master"] = publicUtils.labelGetValue(

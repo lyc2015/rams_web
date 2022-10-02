@@ -1406,7 +1406,7 @@ class sendRepotConfirm extends React.Component {
     next();
   }
   deleteRow = () => {
-    var deleteFlg = window.confirm("削除していただきますか？");
+    var deleteFlg = window.confirm("削除してもよろしいでしょうか？");
     if (deleteFlg) {
       $("#delectBtn").click();
     }
