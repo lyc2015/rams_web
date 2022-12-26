@@ -274,13 +274,12 @@ class ProjectContent extends Component {
               `
 ■案件名：` +
               projectName +
-              `
+              (projectInfoDetail === null || projectInfoDetail === "" ? `` :`
 ■業務内容：` +
               `
 　` +
-              projectInfoDetail.replace(/\n/g, "\n　") +
+              projectInfoDetail.replace(/\n/g, "\n　")) +
               `
-
 ■スキル要件：` +
               ((
                 (keyWordOfLanagurueName1 === null
@@ -341,8 +340,6 @@ class ProjectContent extends Component {
                 ? ``
                 : `
 　·` + requiredItem2) +
-              `
-` +
               (unitPriceRange === null || unitPriceRange === ""
                 ? ``
                 : `

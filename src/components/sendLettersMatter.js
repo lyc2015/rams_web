@@ -304,13 +304,14 @@ class sendLettersMatter extends React.Component {
                   "■業務名：" +
                   result.data.projectInfoList[0].projectName +
                   "\n" +
-                  "■業務内容：\n　" +
+                  (result.data.projectInfoList[0].projectInfoDetail === null ||
+                  result.data.projectInfoList[0].projectInfoDetail === ""
+                    ? ""
+                    : "■業務内容：\n　" +
                   result.data.projectInfoList[0].projectInfoDetail.replace(
                     /\n/g,
                     "\n　"
-                  ) +
-                  "\n" +
-                  "\n" +
+                  )) +
                   "■スキル要件：" +
                   (keyWordOfLanagurueName === ""
                     ? ""
@@ -321,7 +322,6 @@ class sendLettersMatter extends React.Component {
                   (result.data.projectInfoList[0].requiredItem2 === ""
                     ? ""
                     : "\n　· " + result.data.projectInfoList[0].requiredItem2) +
-                  "\n" +
                   (unitPriceRange === ""
                     ? ""
                     : "\n■月額単金：" + unitPriceRange) +

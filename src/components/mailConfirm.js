@@ -31,10 +31,41 @@ class mailConfirm extends React.Component {
     let { serverIP } = this.state;
     switch (type) {
       case "file":
-        this.showDownloadResume({
+        /*this.showDownloadResume({
           fileBlobUrl: value,
           resumeInfoName: name,
-        });
+        });*/
+        fileKey = "履歴書/Tmp_File/" + name;
+        downLoadPath = "c://file//履歴書//Tmp_File//" + name;
+        try {
+          await axios.post(serverIP + "s3Controller/downloadFile", {
+            fileKey,
+            downLoadPath,
+          });
+
+          let path = downLoadPath.replaceAll("//", "/");
+          let res = await axios.post(
+            serverIP + "download",
+            {
+              name: path,
+            },
+            {
+              responseType: "blob",
+            }
+          );
+          let fileBlobUrl = window.URL.createObjectURL(res.data);
+          this.showDownloadResume({
+            fileBlobUrl,
+            resumeInfoName: name,
+            fileKey,
+          });
+        } catch (error) {
+          notification.error({
+            message: "エラー",
+            description: "ファイルが存在しません。",
+            placement: "topLeft",
+          });
+        }
         break;
       case "url":
         let fileKey = "",
@@ -49,7 +80,6 @@ class mailConfirm extends React.Component {
             value.split(".")[value.split(".").length - 1]
           ).replaceAll("/", "//");
         }
-
         try {
           await axios.post(serverIP + "s3Controller/downloadFile", {
             fileKey,

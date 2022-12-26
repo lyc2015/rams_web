@@ -64,7 +64,7 @@ class sendLettersConfirm extends React.Component {
     hopeHighestPrice: "",
     nationalityName: "",
     greetinTtext:
-      "弊社営業中要員をご提案致します。見合う案件が御座いましたら、ご連絡頂けますと幸いです。",
+      "弊社営業中要員を提案致します。見合う案件がございましたら、ご連絡頂けますと幸いです。",
     birthday: "",
     stationName: "",
     developLanguage: "",
@@ -1974,6 +1974,7 @@ Email：` +
   };
 
   changeFile = (event, name) => {
+	this.uploadFile(event);
     let filePath = event.target.value;
     let arr = filePath.split("\\");
     let fileName = arr[arr.length - 1];
@@ -1996,6 +1997,15 @@ Email：` +
       employeeInfo,
     });
   };
+  
+  uploadFile = (event) => {
+	const formData = new FormData();
+    formData.append("dataShareFile", $(`#newResume${this.state.selectedColumnId - 1}`).get(0).files[0]);
+    axios
+      .post(this.state.serverIP + "sendLettersConfirm/uploadTempFile", formData)
+      .then((response) => {
+      });
+  }
 
   valueChange = (event) => {
     this.setState({
