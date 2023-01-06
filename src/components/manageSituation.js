@@ -311,6 +311,7 @@ class manageSituation extends React.Component {
           let resumeInfo1Array = new Array();
           let resumeInfo2Array = new Array();
           let resumeInfoArray = new Array();
+          let completeCount = 0;
           for (let i in result.data) {
             empNoArray.push(result.data[i].employeeNo);
             empNoNameArray.push(
@@ -320,10 +321,18 @@ class manageSituation extends React.Component {
             resumeInfo2Array.push(result.data[i].resumeInfo2);
             resumeInfoArray.push(result.data[i].resumeInfo1);
             resumeInfoArray.push(result.data[i].resumeInfo2);
+            if(result.data[i].salesProgressCode === "0" || result.data[i].salesProgressCode === "1"){
+				completeCount++;
+			}
           }
+          let completePercet = completeCount === 0 ? 0 : parseInt(completeCount) / parseInt(result.data.length);
+	      completePercet =
+	        (Math.round(completePercet * 10000) / 100).toFixed(1) + "%";
+
           var totalPersons = result.data.length;
           this.setState({
             checkDisabledFlag: totalPersons === 0 ? true : false,
+            completePercet: completePercet,
           });
           var decidedPersons = 0;
           if (totalPersons !== 0) {
@@ -2753,7 +2762,7 @@ class manageSituation extends React.Component {
             <div style={{ textAlign: "center" }}></div>
           </div>
           <Row>
-            <Col sm={12}>
+            <Col sm={3}>
               <div style={{ float: "left" }}>
                 {/*<Button onClick={this.selectAllLists} size="sm" variant="info" name="clickButton"><FontAwesomeIcon icon={faListOl} /> すべて選択</Button>{' '}*/}
                 <Button
@@ -2785,6 +2794,23 @@ class manageSituation extends React.Component {
                 </Button>{" "}
                 {/*<Button onClick={this.folderDownload} size="sm" variant="info" name="clickButton" disabled={this.state.makeDirectoryFalg}><FontAwesomeIcon icon={faDownload} /> 営業フォルダ</Button>{' '}*/}
               </div>
+              </Col>
+              <Col sm={2}>
+	            <InputGroup size="sm">
+	              <InputGroup.Prepend>
+	                <InputGroup.Text
+	                  id="inputGroup-sizing-sm"
+	                  className="input-group-indiv"
+	                >
+	                  完成率
+	                </InputGroup.Text>
+	              </InputGroup.Prepend>
+	              <FormControl value={this.state.completePercet} disabled />
+	            </InputGroup>
+              </Col>
+              <Col sm={1}>
+              </Col>
+              <Col sm={6}>
               <div style={{ float: "right" }}>
                 <Button
                   onClick={this.shuseiTo.bind(this, "detailUpdate")}

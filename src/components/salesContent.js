@@ -35,6 +35,7 @@ class salesContent extends React.Component {
     age: "",
     developLanguage: "",
     yearsOfExperience: "",
+    comeToJapanYearAndMonth: "",
     japaneseLevelName: "",
     hopeHighestPrice: "",
     beginMonth: "",
@@ -260,8 +261,14 @@ class salesContent extends React.Component {
       (this.state.yearsOfExperience === ""
         ? ""
         : `
-【業務年数】：` +
+【経験年数】：` +
           this.state.yearsOfExperience +
+          `年`) +
+      (this.state.comeToJapanYearAndMonth === ""
+        ? ""
+        : `
+【来日年数】：` +
+          this.state.comeToJapanYearAndMonth +
           `年`) +
       (this.state.projectPhase === "" ||
       this.state.projectPhase === null ||
@@ -499,6 +506,10 @@ class salesContent extends React.Component {
           data.yearsOfExperience === undefined
             ? ""
             : data.yearsOfExperience,
+        comeToJapanYearAndMonth: data.comeToJapanYearAndMonth === null ||
+          data.comeToJapanYearAndMonth === undefined
+            ? ""
+            : data.comeToJapanYearAndMonth,
         japaneaseConversationLevel: data.japaneaseConversationLevel,
         englishConversationLevel: data.englishConversationLevel,
         beginMonth:
@@ -796,10 +807,23 @@ class salesContent extends React.Component {
             </ListGroup.Item>
             <span style={{ flexFlow: "nowrap" }}>
               <ListGroup.Item style={{ padding: ".3rem 1.25rem" }}>
-                【業務年数】：
+                【経験年数】：
                 <input
                   value={this.state.yearsOfExperience}
                   name="yearsOfExperience"
+                  style={{ width: "45px" }}
+                  onChange={this.valueChange}
+                  className="inputWithoutBorder"
+                />
+                年
+              </ListGroup.Item>
+            </span>
+            <span style={{ flexFlow: "nowrap" }}>
+              <ListGroup.Item style={{ padding: ".3rem 1.25rem" }}>
+                【来日年数】：
+                <input
+                  value={this.state.comeToJapanYearAndMonth}
+                  name="comeToJapanYearAndMonth"
                   style={{ width: "45px" }}
                   onChange={this.valueChange}
                   className="inputWithoutBorder"

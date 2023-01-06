@@ -383,7 +383,18 @@ class salaryDetailSend extends Component {
     });
 
     if (this.state.format === "0") {
-      let letterStatus = this.state.letterStatus === "0" ? "給与" : "源泉";
+      let letterStatus = "";
+      switch (this.state.letterStatus){
+		  case '0':
+		    letterStatus = "給与";
+		    break;
+		  case '1':
+			letterStatus = "源泉";
+		    break;
+		  case '2':
+			letterStatus = "年末調整";
+		    break;
+		}
       let fileNameList = [];
       for (let i = 0; i < $("#pdfUpdate").get(0).files.length; i++) {
         const formData = new FormData();
@@ -557,7 +568,7 @@ class salaryDetailSend extends Component {
           (this.state.format === "0"
             ? this.state.letterStatus === "0"
               ? yearAndMonth + "分の給料明細"
-              : letterYearAndMonth + "年の給与所得の源泉徴収票"
+              : (this.state.letterStatus === "1" ? letterYearAndMonth + "年の給与所得の源泉徴収票" : letterYearAndMonth + "年年末調整通知書")
             : String(employeeList[i].fileName).substring(
                 0,
                 String(employeeList[i].fileName).lastIndexOf(".")
@@ -589,7 +600,7 @@ P-mark：第21004525(02)号
           this.state.format === "0"
             ? this.state.letterStatus === "0"
               ? yearAndMonth + "給料明細"
-              : "給与所得の源泉徴収票_" + letterYearAndMonth + "年分"
+              : (this.state.letterStatus === "1" ? "給与所得の源泉徴収票_" : "年末調整通知書_") + letterYearAndMonth + "年分"
             : String(employeeList[i].fileName).substring(
                 0,
                 String(employeeList[i].fileName).lastIndexOf(".")
@@ -826,13 +837,14 @@ P-mark：第21004525(02)号
               >
                 <option value="0">給料</option>
                 <option value="1">源泉</option>
+                <option value="2">年末调整通知</option>
               </Form.Control>
             </InputGroup>
           </Col>
           <Col
             sm={2}
             hidden={
-              this.state.letterStatus === "1" || this.state.format === "1"
+              this.state.letterStatus !== "0" || this.state.format === "1"
             }
           >
             <InputGroup size="sm" className="mb-3 flexWrapNoWrap">

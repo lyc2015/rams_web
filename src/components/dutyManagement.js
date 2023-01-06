@@ -123,10 +123,41 @@ class dutyManagement extends React.Component {
       }
     );
   };
-  //onchange
+  /**
+   * タイプが違う時に、色々な操作をします。
+   */
   employeeStatusChange = (event) => {
+	const value = event.target.value;
+    let employeeInfoList = this.state.employeeInfoAll;
+    let newEmpInfoList = [];
+    if (value === "-1") {
+      for (let i in employeeInfoList) {
+        newEmpInfoList.push(employeeInfoList[i]);
+      }
+    } else if (value === "0") {
+      for (let i in employeeInfoList) {
+        if (employeeInfoList[i].code.substring(0, 3) === "LYC") {
+          newEmpInfoList.push(employeeInfoList[i]);
+        }
+      }
+    } else if (value === "1") {
+      for (let i in employeeInfoList) {
+        if (employeeInfoList[i].code.substring(0, 2) === "BP") {
+          newEmpInfoList.push(employeeInfoList[i]);
+        }
+      }
+    } else if (value === "2") {
+      for (let i in employeeInfoList) {
+        if (employeeInfoList[i].code.substring(0, 2) === "SP") {
+          newEmpInfoList.push(employeeInfoList[i]);
+        }
+      }
+    }
     this.setState(
       {
+		employeeInfo: newEmpInfoList,
+        employeeName: "",
+        employeeNo: null,
         [event.target.name]: event.target.value,
       },
       () => {
@@ -134,9 +165,39 @@ class dutyManagement extends React.Component {
       }
     );
   };
+  
+      /**
+   * 社員名連想
+   *
+   * @param {}
+   *            event
+   */
+  getEmployeeName = (event, values) => {
+    this.setState(
+      {
+        [event.target.name]: event.target.value,
+      },
+      () => {
+        let employeeName = null;
+        let employeeNo = null;
+        if (values !== null) {
+          employeeName = values.text;
+          employeeNo = values.code;
+        }
+        this.setState({
+          employeeName: employeeName,
+          employeeNo: employeeNo,
+        },() => {
+        this.searchDutyManagement();
+      });
+      }
+    );
+  };
+  
   //　初期化データ
   initialState = {
     employeeStatus: "-1",
+    employeeNo: null,
     //yearAndMonth: new Date(new Date().getFullYear() + '/' + (new Date().getMonth() + 1 < 10 ? '0' + (new Date().getMonth() + 1) : (new Date().getMonth() + 1))).getTime(),
     yearAndMonth: new Date(),
     month: new Date().getMonth() + 1,
@@ -153,6 +214,8 @@ class dutyManagement extends React.Component {
     rowDownload: "",
     customerNo: null,
     loading: true,
+    employeeInfoAll: store.getState().dropDown[9].slice(1),
+    employeeInfo: store.getState().dropDown[9].slice(1),
     customerAbbreviationList: store.getState().dropDown[73].slice(1),
     approvalStatuslist: store.getState().dropDown[27],
     checkSectionlist: store.getState().dropDown[28],
@@ -204,6 +267,7 @@ class dutyManagement extends React.Component {
       approvalStatus: this.state.approvalStatus,
       customerNo: this.state.customerNo,
       employeeStatus: this.state.employeeStatus,
+      employeeNo: this.state.employeeNo,
     };
 
     axios
@@ -566,8 +630,14 @@ class dutyManagement extends React.Component {
     this.props.history.push(path);
   };
 
-  renderShowsTotal(start, to, total) {
-    return (
+  renderShowsTotal = (start, to, total) => {
+	  var approvalStatusCount = 0;
+	  for (var i in this.state.employeeList) {
+	  	if(this.state.employeeList[i].approvalStatus === "1"){
+			  approvalStatusCount++;
+		  }
+	  }
+      return (
       <p
         style={{
           color: "dark",
@@ -575,7 +645,7 @@ class dutyManagement extends React.Component {
           display: total > 0 ? "block" : "none",
         }}
       >
-        {start}から {to}まで , 総計{total}
+        {start}から {to}まで , 総計{total} , 登録済み{approvalStatusCount}
       </p>
     );
   }
@@ -1134,7 +1204,7 @@ class dutyManagement extends React.Component {
             </Form.Group>
             <Form.Group>
               <Row>
-                <Col sm={3}>
+                <Col sm={2}>
                   <InputGroup size="sm" className="mb-2 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
@@ -1155,7 +1225,7 @@ class dutyManagement extends React.Component {
                     />
                   </InputGroup>
                 </Col>
-                <Col sm={3}>
+                <Col sm={2}>
                   <InputGroup size="sm" className="mb-2 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="sixKanji">
@@ -1180,7 +1250,7 @@ class dutyManagement extends React.Component {
                     </Form.Control>
                   </InputGroup>
                 </Col>
-                <Col sm={3}>
+                <Col sm={2}>
                   <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
@@ -1207,6 +1277,47 @@ class dutyManagement extends React.Component {
                         : null}
                     </Form.Control>
                     <font className="site-mark"></font>
+                  </InputGroup>
+                </Col>
+                <Col sm={3}>
+                  <InputGroup size="sm" className="mb-3">
+                    <InputGroup.Prepend>
+                      <InputGroup.Text id="fiveKanji">
+                        社員名(BP)
+                      </InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <Autocomplete
+                      className="fx1"
+                      id="employeeName"
+                      name="employeeName"
+                      value={
+                        this.state.employeeInfo.find(
+                          (v) => v.text === this.state.employeeName
+                        ) || {}
+                      }
+                      options={this.state.employeeInfo}
+                      getOptionLabel={(option) => option.name || ""}
+                      // onSelect={(event) =>
+                      //   this.handleTag(event, "employeeName")
+                      // }
+                      onChange={(event, values) =>
+                        this.getEmployeeName(event, values)
+                      }
+                      renderOption={(option) => {
+                        return (
+                          <React.Fragment>{option.name || ""}</React.Fragment>
+                        );
+                      }}
+                      renderInput={(params) => (
+                        <div ref={params.InputProps.ref}>
+                          <input
+                            type="text"
+                            {...params.inputProps}
+                            className="auto form-control Autocompletestyle-siteInfoSearch-employeeNo w100p"
+                          />
+                        </div>
+                      )}
+                    />
                   </InputGroup>
                 </Col>
                 <Col sm={3}>
