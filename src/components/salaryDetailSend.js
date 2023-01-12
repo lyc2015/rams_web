@@ -568,7 +568,7 @@ class salaryDetailSend extends Component {
           (this.state.format === "0"
             ? this.state.letterStatus === "0"
               ? yearAndMonth + "分の給料明細"
-              : (this.state.letterStatus === "1" ? letterYearAndMonth + "年の給与所得の源泉徴収票" : letterYearAndMonth + "年年末調整通知書")
+              : (this.state.letterStatus === "1" ? letterYearAndMonth + "年の給与所得の源泉徴収票" : letterYearAndMonth + "年の年末調整通知書")
             : String(employeeList[i].fileName).substring(
                 0,
                 String(employeeList[i].fileName).lastIndexOf(".")

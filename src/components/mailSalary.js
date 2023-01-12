@@ -47,7 +47,7 @@ class mailSalary extends React.Component {
               (this.state.format === "0"
                 ? this.state.letterStatus === "0"
                   ? this.state.yearAndMonth + "給料明細"
-                  : "給与所得の源泉徴収票_" +
+                  : (this.state.letterStatus === "1" ? "給与所得の源泉徴収票_" : "年末調整通知書_") +
                     this.state.letterYearAndMonth +
                     "年分"
                 : String(this.state.fileName).substring(
@@ -71,7 +71,7 @@ class mailSalary extends React.Component {
               (this.state.format === "0"
                 ? this.state.letterStatus === "0"
                   ? this.state.yearAndMonth + "分の給料明細"
-                  : this.state.letterYearAndMonth + "年の給与所得の源泉徴収票"
+                  : this.state.letterYearAndMonth + (this.state.letterStatus === "1" ? "年の給与所得の源泉徴収票" : "年の年末調整通知書")
                 : String(this.state.fileName).substring(
                     0,
                     String(this.state.fileName).lastIndexOf(".")

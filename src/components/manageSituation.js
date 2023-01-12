@@ -1712,7 +1712,10 @@ class manageSituation extends React.Component {
       result.data[0].yearsOfExperience === undefined ||
       result.data[0].yearsOfExperience === ""
         ? ""
-        : "【業務年数】：" + result.data[0].yearsOfExperience + "年\n") +
+        : "【経験年数】：" + result.data[0].yearsOfExperience + "年\n") +
+        (result.data[0].comeToJapanYearAndMonth === ""
+        ? ""
+        : "【来日年数】：" +　result.data[0].comeToJapanYearAndMonth +　"年\n") +
       (result.data[0].projectPhase === "" ||
       result.data[0].projectPhase === null ||
       result.data[0].projectPhase === undefined
