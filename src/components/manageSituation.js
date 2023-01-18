@@ -1713,7 +1713,9 @@ class manageSituation extends React.Component {
       result.data[0].yearsOfExperience === ""
         ? ""
         : "【経験年数】：" + result.data[0].yearsOfExperience + "年\n") +
-        (result.data[0].comeToJapanYearAndMonth === ""
+        (result.data[0].comeToJapanYearAndMonth === null ||
+      result.data[0].comeToJapanYearAndMonth === undefined ||
+      result.data[0].comeToJapanYearAndMonth === ""
         ? ""
         : "【来日年数】：" +　result.data[0].comeToJapanYearAndMonth +　"年\n") +
       (result.data[0].projectPhase === "" ||
