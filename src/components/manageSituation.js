@@ -2466,11 +2466,39 @@ class manageSituation extends React.Component {
             </Col>
           </Row>
           <Row>
+          <Col sm={2}>
+              <InputGroup size="sm" className="mb-3">
+                <InputGroup.Prepend>
+                  <InputGroup.Text id="inputGroup-sizing-sm">
+                    優先度
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
+                <Form.Control
+                  as="select"
+                  size="sm"
+                  onChange={this.valueChange}
+                  name="salesPriorityStatus"
+                  value={this.state.salesPriorityStatus}
+                  autoComplete="off"
+                  disabled={
+                    this.state.readFlag || this.state.authorityCode !== "4"
+                      ? true
+                      : false
+                  }
+                >
+                  {this.state?.salesPriorityStatuss.map((date) => (
+                    <option key={date.code} value={date.code}>
+                      {date.name}
+                    </option>
+                  ))}
+                </Form.Control>
+              </InputGroup>
+            </Col>
             <Col sm={4}>
               <InputGroup size="sm" className="mb-3">
                 <InputGroup.Prepend>
                   <InputGroup.Text id="inputGroup-sizing-sm">
-                    希望単価
+                    個人希望
                   </InputGroup.Text>
                 </InputGroup.Prepend>
                 <FormControl
@@ -2518,34 +2546,7 @@ class manageSituation extends React.Component {
                 </InputGroup.Append>
               </InputGroup>
             </Col>
-            <Col sm={2}>
-              <InputGroup size="sm" className="mb-3">
-                <InputGroup.Prepend>
-                  <InputGroup.Text id="inputGroup-sizing-sm">
-                    優先度
-                  </InputGroup.Text>
-                </InputGroup.Prepend>
-                <Form.Control
-                  as="select"
-                  size="sm"
-                  onChange={this.valueChange}
-                  name="salesPriorityStatus"
-                  value={this.state.salesPriorityStatus}
-                  autoComplete="off"
-                  disabled={
-                    this.state.readFlag || this.state.authorityCode !== "4"
-                      ? true
-                      : false
-                  }
-                >
-                  {this.state?.salesPriorityStatuss.map((date) => (
-                    <option key={date.code} value={date.code}>
-                      {date.name}
-                    </option>
-                  ))}
-                </Form.Control>
-              </InputGroup>
-            </Col>
+            
             <Col sm={2} hidden>
               <InputGroup
                 size="sm"
