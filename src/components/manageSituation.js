@@ -75,6 +75,7 @@ class manageSituation extends React.Component {
     interviewCustomer1: "", // 面接1客様
     interviewCustomer2: "", // 面接2客様
     hopeLowestPrice: "", // 希望単価min
+    hopeRemark:"", // 個人希望备注
     hopeHighestPrice: "", // 希望単価max
     remark1: "", // 備考
     remark2: "", // 備考
@@ -1017,6 +1018,8 @@ class manageSituation extends React.Component {
                 row.hopeLowestPrice === null ? "" : row.hopeLowestPrice,
               hopeHighestPrice:
                 row.hopeHighestPrice === null ? "" : row.hopeHighestPrice,
+              hopeRemark:
+                row.hopeRemark === null ? "" : row.hopeRemark,
               salesPriorityStatus:
                 row.salesPriorityStatus === null ? "" : row.salesPriorityStatus,
               salesProgressCode:
@@ -1129,6 +1132,8 @@ class manageSituation extends React.Component {
                   row.hopeLowestPrice === null ? "" : row.hopeLowestPrice,
                 hopeHighestPrice:
                   row.hopeHighestPrice === null ? "" : row.hopeHighestPrice,
+				hopeRemark:
+                  row.hopeRemark === null ? "" : row.hopeRemark,
                 salesPriorityStatus:
                   row.salesPriorityStatus === null
                     ? ""
@@ -1201,6 +1206,7 @@ class manageSituation extends React.Component {
                 interviewCustomer2: "",
                 hopeLowestPrice: "",
                 hopeHighestPrice: "",
+                hopeRemark:"",
                 salesPriorityStatus: "",
                 admissionEndDate: "",
                 remark1: "",
@@ -1273,6 +1279,8 @@ class manageSituation extends React.Component {
                 row.hopeLowestPrice === null ? "" : row.hopeLowestPrice,
               hopeHighestPrice:
                 row.hopeHighestPrice === null ? "" : row.hopeHighestPrice,
+			  hopeRemark:
+                row.hopeRemark === null ? "" : row.hopeRemark,
               salesPriorityStatus:
                 row.salesPriorityStatus === null ? "" : row.salesPriorityStatus,
               salesProgressCode:
@@ -1382,6 +1390,8 @@ class manageSituation extends React.Component {
                   row.hopeLowestPrice === null ? "" : row.hopeLowestPrice,
                 hopeHighestPrice:
                   row.hopeHighestPrice === null ? "" : row.hopeHighestPrice,
+				hopeRemark:
+                  row.hopeRemark === null ? "" : row.hopeRemark,
                 salesPriorityStatus:
                   row.salesPriorityStatus === null
                     ? ""
@@ -1454,6 +1464,7 @@ class manageSituation extends React.Component {
                 interviewCustomer1: "",
                 interviewCustomer2: "",
                 hopeLowestPrice: "",
+                hopeRemark:"",
                 hopeHighestPrice: "",
                 salesPriorityStatus: "",
                 admissionEndDate: "",
@@ -2502,48 +2513,19 @@ class manageSituation extends React.Component {
                   </InputGroup.Text>
                 </InputGroup.Prepend>
                 <FormControl
-                  value={this.state.hopeLowestPrice}
+                  value={this.state.hopeRemark}
                   autoComplete="off"
-                  name="hopeLowestPrice"
+                  name="hopeRemark"
                   style={this.state.style}
-                  onChange={this.valueChangeNUmberOnly.bind(this)}
+                  onChange={this.valueChange.bind(this)}
                   size="sm"
-                  maxLength="3"
+                  maxLength="100"
                   readOnly={
                     this.state.readFlag || this.state.authorityCode !== "4"
                       ? true
                       : false
                   }
                 />
-                <InputGroup.Append>
-                  <InputGroup.Text id="twoKanji">万円</InputGroup.Text>
-                </InputGroup.Append>
-                <font
-                  style={{
-                    marginLeft: "10px",
-                    marginRight: "10px",
-                    marginTop: "5px",
-                  }}
-                >
-                  ～
-                </font>
-                <FormControl
-                  value={this.state.hopeHighestPrice}
-                  autoComplete="off"
-                  name="hopeHighestPrice"
-                  style={this.state.style}
-                  onChange={this.valueChangeNUmberOnly.bind(this)}
-                  size="sm"
-                  maxLength="3"
-                  readOnly={
-                    this.state.readFlag || this.state.authorityCode !== "4"
-                      ? true
-                      : false
-                  }
-                />
-                <InputGroup.Append>
-                  <InputGroup.Text id="twoKanji">万円</InputGroup.Text>
-                </InputGroup.Append>
               </InputGroup>
             </Col>
             
@@ -2987,6 +2969,9 @@ class manageSituation extends React.Component {
                   </TableHeaderColumn>
                   <TableHeaderColumn dataField="hopeHighestPrice" hidden={true}>
                     希望単価max
+                  </TableHeaderColumn>
+                  <TableHeaderColumn dataField="hopeRemark" hidden={true}>
+                    個人希望
                   </TableHeaderColumn>
                   <TableHeaderColumn dataField="remark1" hidden={true}>
                     備考1
