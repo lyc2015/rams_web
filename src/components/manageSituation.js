@@ -74,9 +74,7 @@ class manageSituation extends React.Component {
     stationCode2: "", // 面接2場所
     interviewCustomer1: "", // 面接1客様
     interviewCustomer2: "", // 面接2客様
-    hopeLowestPrice: "", // 希望単価min
     hopeRemark:"", // 個人希望备注
-    hopeHighestPrice: "", // 希望単価max
     remark1: "", // 備考
     remark2: "", // 備考
     salesSituationLists: [], // 明細
@@ -363,8 +361,6 @@ class manageSituation extends React.Component {
 						stationCode2: '',　// 面接2場所
 						interviewCustomer1: '',　// 面接1客様
 						interviewCustomer2: '',　// 面接2客様
-						hopeLowestPrice: '',　// 希望単価min
-						hopeHighestPrice: '',　// 希望単価max
 						remark1: '',　// 備考
 						remark2: '',　// 備考
 						salesPriorityStatus: '',
@@ -1014,10 +1010,6 @@ class manageSituation extends React.Component {
                 row.interviewCustomer1 === null ? "" : row.interviewCustomer1,
               interviewCustomer2:
                 row.interviewCustomer2 === null ? "" : row.interviewCustomer2,
-              hopeLowestPrice:
-                row.hopeLowestPrice === null ? "" : row.hopeLowestPrice,
-              hopeHighestPrice:
-                row.hopeHighestPrice === null ? "" : row.hopeHighestPrice,
               hopeRemark:
                 row.hopeRemark === null ? "" : row.hopeRemark,
               salesPriorityStatus:
@@ -1128,10 +1120,6 @@ class manageSituation extends React.Component {
                   row.interviewCustomer1 === null ? "" : row.interviewCustomer1,
                 interviewCustomer2:
                   row.interviewCustomer2 === null ? "" : row.interviewCustomer2,
-                hopeLowestPrice:
-                  row.hopeLowestPrice === null ? "" : row.hopeLowestPrice,
-                hopeHighestPrice:
-                  row.hopeHighestPrice === null ? "" : row.hopeHighestPrice,
 				hopeRemark:
                   row.hopeRemark === null ? "" : row.hopeRemark,
                 salesPriorityStatus:
@@ -1204,8 +1192,6 @@ class manageSituation extends React.Component {
                 stationCode2: "",
                 interviewCustomer1: "",
                 interviewCustomer2: "",
-                hopeLowestPrice: "",
-                hopeHighestPrice: "",
                 hopeRemark:"",
                 salesPriorityStatus: "",
                 admissionEndDate: "",
@@ -1275,10 +1261,6 @@ class manageSituation extends React.Component {
                 row.interviewCustomer1 === null ? "" : row.interviewCustomer1,
               interviewCustomer2:
                 row.interviewCustomer2 === null ? "" : row.interviewCustomer2,
-              hopeLowestPrice:
-                row.hopeLowestPrice === null ? "" : row.hopeLowestPrice,
-              hopeHighestPrice:
-                row.hopeHighestPrice === null ? "" : row.hopeHighestPrice,
 			  hopeRemark:
                 row.hopeRemark === null ? "" : row.hopeRemark,
               salesPriorityStatus:
@@ -1386,10 +1368,6 @@ class manageSituation extends React.Component {
                   row.interviewCustomer1 === null ? "" : row.interviewCustomer1,
                 interviewCustomer2:
                   row.interviewCustomer2 === null ? "" : row.interviewCustomer2,
-                hopeLowestPrice:
-                  row.hopeLowestPrice === null ? "" : row.hopeLowestPrice,
-                hopeHighestPrice:
-                  row.hopeHighestPrice === null ? "" : row.hopeHighestPrice,
 				hopeRemark:
                   row.hopeRemark === null ? "" : row.hopeRemark,
                 salesPriorityStatus:
@@ -1463,9 +1441,7 @@ class manageSituation extends React.Component {
                 stationCode2: "",
                 interviewCustomer1: "",
                 interviewCustomer2: "",
-                hopeLowestPrice: "",
                 hopeRemark:"",
-                hopeHighestPrice: "",
                 salesPriorityStatus: "",
                 admissionEndDate: "",
                 remark1: "",
@@ -2963,12 +2939,6 @@ class manageSituation extends React.Component {
                     hidden={true}
                   >
                     面接2客様
-                  </TableHeaderColumn>
-                  <TableHeaderColumn dataField="hopeLowestPrice" hidden={true}>
-                    希望単価min
-                  </TableHeaderColumn>
-                  <TableHeaderColumn dataField="hopeHighestPrice" hidden={true}>
-                    希望単価max
                   </TableHeaderColumn>
                   <TableHeaderColumn dataField="hopeRemark" hidden={true}>
                     個人希望
