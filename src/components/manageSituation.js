@@ -103,6 +103,7 @@ class manageSituation extends React.Component {
     getstations: store.getState().dropDown[14], // 全部場所
     genders: store.getState().dropDown[0],
     employees: store.getState().dropDown[4],
+    japaneseLevels: store.getState().dropDown[5],
     japaneaseConversationLevels: store.getState().dropDown[43],
     englishConversationLevels: store.getState().dropDown[44],
     projectPhases: store.getState().dropDown[45],
@@ -654,15 +655,39 @@ class manageSituation extends React.Component {
     }
   }
 
-  showGreySiteRoleCode(cell, row, enumObject, index) {
+  showGreySiteRoleCodeAndJapanese(cell, row, enumObject, index) {
     if (row.salesProgressCode === "0" || row.salesProgressCode === "1") {
-      return (
-        <div>
-          <font color="grey">{row.siteRoleCode}</font>
-        </div>
-      );
+		if ((row.siteRoleCode === "" || row.siteRoleCode === null) && (row.japaneaseLevelDesc === "" || row.japaneaseLevelDesc === null)) {
+			return <div></div>;
+		} else if (row.japaneaseLevelDesc === "" || row.japaneaseLevelDesc === null) {
+			return (
+		        <div>
+		          <font color="grey">{row.siteRoleCode}</font>
+		        </div>
+		      );
+		} else if (row.siteRoleCode === "" || row.siteRoleCode === null) {
+			return (
+		        <div>
+		          <font color="grey">{row.japaneaseLevelDesc}</font>
+		        </div>
+		      );
+		} else {
+			return (
+		        <div>
+		          <font color="grey">{row.siteRoleCode} · {row.japaneaseLevelDesc}</font>
+		        </div>
+		      );
+		}
     } else {
-      return <div>{row.siteRoleCode}</div>;
+		if ((row.siteRoleCode === "" || row.siteRoleCode === null) && (row.japaneaseLevelDesc === "" || row.japaneaseLevelDesc === null)) {
+			return <div></div>;
+		} else if (row.japaneaseLevelDesc === "" || row.japaneaseLevelDesc === null) {
+			return <div>{row.siteRoleCode}</div>;
+		} else if (row.siteRoleCode === "" || row.siteRoleCode === null) {
+			return <div>{row.japaneaseLevelDesc}</div>;
+		} else {
+      		return <div>{row.siteRoleCode} · {row.japaneaseLevelDesc}</div>;
+		}
     }
   }
   showGreyYearsOfExperience(cell, row, enumObject, index) {
@@ -2106,14 +2131,24 @@ class manageSituation extends React.Component {
     });
   };
 
-  setValue = (unitPrice, yearsOfExperience) => {
+  setValue = (unitPrice, yearsOfExperience, japaneaseConversationLevel) => {
     let salesSituationLists = this.state.salesSituationLists;
     salesSituationLists[Number(this.state.rowNo) - 1].unitPrice = unitPrice;
     salesSituationLists[Number(this.state.rowNo) - 1].yearsOfExperience =
       yearsOfExperience;
+    if (japaneaseConversationLevel === "" || japaneaseConversationLevel === null) {
+    	let japaneseLevelCode = salesSituationLists[Number(this.state.rowNo) - 1].japaneseLevelCode
+		salesSituationLists[Number(this.state.rowNo) - 1].japaneaseLevelDesc = this.state.japaneseLevels.find((v) => v.code === japaneseLevelCode).name;
+	} else {		
+		let temp = this.state.japaneaseConversationLevels.find((v) => v.code === japaneaseConversationLevel).name
+		if (temp.endsWith('業務確認')){
+			temp = temp.substring(0, temp.length - 5);
+		}
+    	salesSituationLists[Number(this.state.rowNo) - 1].japaneaseLevelDesc = temp;
+	}
     this.setState({
       salesSituationLists: salesSituationLists,
-      unitPrice: unitPrice,
+      unitPrice: unitPrice
     });
   };
 
@@ -2907,7 +2942,7 @@ class manageSituation extends React.Component {
                     社員番号
                   </TableHeaderColumn>
                   <TableHeaderColumn
-                    width="15%"
+                    width="10%"
                     dataField="employeeName"
                     dataFormat={this.showPriority}
                     editable={false}
@@ -2974,12 +3009,12 @@ class manageSituation extends React.Component {
                     履歴書名前2
                   </TableHeaderColumn>
                   <TableHeaderColumn
-                    width="5%"
+                    width="10%"
                     dataField="siteRoleCode"
-                    dataFormat={this.showGreySiteRoleCode}
+                    dataFormat={this.showGreySiteRoleCodeAndJapanese}
                     editable={false}
                   >
-                    役割
+                    役割 · 日本語
                   </TableHeaderColumn>
                   <TableHeaderColumn
                     width="5%"

@@ -382,7 +382,8 @@ class salesContent extends React.Component {
       () =>
         this.props.allState.setValue(
           this.state.unitPrice,
-          this.state.yearsOfExperience
+          this.state.yearsOfExperience,
+          this.state.japaneaseConversationLevel
         ),
       1000
     );
