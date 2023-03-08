@@ -23,6 +23,7 @@ import {
   faBuilding,
   faDownload,
   faBook,
+  faBlender,
   faCopy,
 } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
@@ -33,6 +34,7 @@ import MyToast from "./myToast";
 import ErrorsMessageToast from "./errorsMessageToast";
 import SalesContent from "./salesContent";
 import InterviewInformation from "./interviewInformation";
+import FinishList from "./finishlist";
 import store from "./redux/store";
 import { notification, message } from "antd";
 axios.defaults.withCredentials = true;
@@ -134,6 +136,7 @@ class manageSituation extends React.Component {
     checkDisabledFlag: false,
     daiologShowFlag: false,
     interviewShowFlag: false,
+    finishListShowFlag: false,
     isSelectedAll: false,
     makeDirectoryFalg: true,
     loading: true,
@@ -1574,6 +1577,22 @@ class manageSituation extends React.Component {
     });
   };
 
+  // // サブ画面表示
+  openFinishList = () => {
+    this.setState({
+      employeeNo: String(this.refs.table.state.selectedRowKeys),
+      finishListShowFlag: true,
+    });
+  };
+  
+  
+  // サブ画面消す
+  closeFinishList = () => {
+    this.setState({
+      finishListShowFlag: false,
+    });
+  };
+  
   initCopy = () => {
     this.clipboard = new Clipboard("#copyId");
     this.clipboard.on("success", function (e) {
@@ -2402,6 +2421,29 @@ class manageSituation extends React.Component {
             />
           </Modal.Body>
         </Modal>
+        <Modal
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
+          backdrop="static"
+          onHide={this.closeFinishList}
+          show={this.state.finishListShowFlag}
+          dialogClassName="modal-interviewInfo"
+        >
+          <Modal.Header closeButton>
+            <Col className="text-center">
+              <h2>終了リスト</h2>
+            </Col>
+          </Modal.Header>
+          <Modal.Body>
+            <FinishList
+              allState={this}
+              sendValue={{
+                interviewLists: this.state.salesSituationLists,
+                yearMonth: this.state.yearMonth,
+              }}
+            />
+          </Modal.Body>
+        </Modal>
         <Row inline="true">
           <Col className="text-center">
             <h2>営業状況確認一覧</h2>
@@ -2471,6 +2513,15 @@ class manageSituation extends React.Component {
                   name="clickButton"
                 >
                   <FontAwesomeIcon icon={faBook} /> 面談情報
+                </Button>
+                <font style={{ marginLeft: "2px", marginRight: "2px" }}></font>
+                <Button
+                  onClick={this.openFinishList}
+                  size="sm"
+                  variant="info"
+                  name="clickButton"
+                >
+                  <FontAwesomeIcon icon={faBlender} /> 終了リスト
                 </Button>
                 <font style={{ marginLeft: "2px", marginRight: "2px" }}></font>
                 <Button
