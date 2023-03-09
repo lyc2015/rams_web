@@ -554,7 +554,7 @@ class finishList extends React.Component {
                   </TableHeaderColumn>
                   
                   <TableHeaderColumn
-                    width="10%"
+                    width="13%"
                     dataField="employeeName"
                     dataFormat={this.showPriority}
                   >
@@ -563,7 +563,7 @@ class finishList extends React.Component {
                   
                 
                   <TableHeaderColumn
-                    width="10%"
+                    width="8%"
                     dataField="unitPrice"
                   >
                     {<div style={{ textAlign: "center" }}>單價</div>}
@@ -578,7 +578,7 @@ class finishList extends React.Component {
                   </TableHeaderColumn>
                   
                   <TableHeaderColumn
-                    width="15%"
+                    width="10%"
                     dataField="finishReason"
                   >
                     {<div style={{ textAlign: "center" }}>終了理由</div>}
