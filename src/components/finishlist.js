@@ -641,7 +641,7 @@ class finishList extends React.Component {
                         : false
                     }
                   >
-                    お客様
+                    {<div style={{ textAlign: "center" }}>お客様</div>}
                   </TableHeaderColumn>
                   
                   <TableHeaderColumn
