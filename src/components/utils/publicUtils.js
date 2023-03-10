@@ -907,6 +907,28 @@ export function dateFormate(dateStr) {
   }
 }
 
+/**
+ * YYYY/MM/DD -> YYYY/MM
+ *
+ * @param {*}
+ *            datestrの数字
+ * @return {*} YYYY/MM
+ */
+export function convertDayToMonth(dateStr) {
+  if (dateStr === null || dateStr === undefined) {
+    return "";
+  }
+  if (dateStr.length == 8) {
+    return (
+      dateStr.substring(0, 4) +
+      "/" +
+      dateStr.substring(4, 6)
+    );
+  } else {
+    return dateStr;
+  }
+}
+
 // isHoliday?
 // input Object or year, month, day
 // output boolean

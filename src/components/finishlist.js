@@ -48,6 +48,7 @@ class finishList extends React.Component {
     yearMonth: "",
     salesYearAndMonth: "",
     salesSituationFinishLists: [],
+    allCustomer: store.getState().dropDown[15], // お客様レコード用
     interviewClassificationCode: "0",
     interviewNumbers: "", // 面接1回数
     interviewDateShow: "", // 面接1日付
@@ -412,8 +413,12 @@ class finishList extends React.Component {
   workDateFormat = (cell, row) => {
     let str = cell;
     if (row.admissionStartDate) {
-      str = publicUtils.dateFormate(row.admissionStartDate)
+      str = publicUtils.convertDayToMonth(row.admissionStartDate)
     }
+	
+	if (row.admissionPeriodDate !== null || row.admissionPeriodDate !== "") {
+		str = str + " (" + row.admissionPeriodDate + ")"
+	}
 
     return str;
   };
@@ -451,6 +456,54 @@ class finishList extends React.Component {
     }
   }
   
+  // レコードおきゃく表示
+  formatCustome = (cell, row) => {
+    var allCustomers = this.state.allCustomer;
+    if (cell === "") {
+      return "";
+    } else {
+      for (var i in allCustomers) {
+        if (cell === allCustomers[i].code) {
+          if (row.salesProgressCode === "0" || row.salesProgressCode === "1") {
+            return (
+              <div>
+                <font color="grey">{allCustomers[i].name}</font>
+              </div>
+            );
+          } else {
+            return <div>{allCustomers[i].name}</div>;
+          }
+        }
+      }
+    }
+  };
+  
+  showGreyUnitPrice(cell, row, enumObject, index) {
+    let unitPrice;
+    /*if(row.employeeNo.indexOf("BP") != -1){
+			unitPrice = row.unitPrice;
+		}else{*/
+    let num = (cell / 10000).toFixed(1).replace(".0", "");
+    unitPrice = cell === "" ? "" : Number(num) === 0 ? cell : num;
+    /*}*/
+    if (row.salesProgressCode === "0" || row.salesProgressCode === "1") {
+      if (row.bpUnitPrice !== null)
+        return (
+          <div>
+            <font color="grey">{row.bpUnitPrice}</font>
+          </div>
+        );
+      else
+        return (
+          <div>
+            <font color="grey">{unitPrice}</font>
+          </div>
+        );
+    } else {
+      return <div>{unitPrice}</div>;
+    }
+  }
+  
   render() {
     const selectRow = {
       mode: "radio",
@@ -480,6 +533,12 @@ class finishList extends React.Component {
       alwaysShowAllBtns: true,
       paginationShowsTotal: this.renderShowsTotal,
     };
+    
+    
+    const tableSelect1 = (onUpdate, props) => (
+      <TableSelect dropdowns={this} flag={1} onUpdate={onUpdate} {...props} />
+    );
+    
     return (
       <div>
         <div style={{ display: this.state.myToastShow ? "block" : "none" }}>
@@ -505,7 +564,7 @@ class finishList extends React.Component {
               <InputGroup size="sm" className="mb-3">
                 <InputGroup.Prepend>
                   <InputGroup.Text id="inputGroup-sizing-sm">
-                    年月
+                    終了年月
                   </InputGroup.Text>
                 </InputGroup.Prepend>
                 <InputGroup.Append>
@@ -563,10 +622,26 @@ class finishList extends React.Component {
                   
                 
                   <TableHeaderColumn
-                    width="8%"
+                    width="5%"
                     dataField="unitPrice"
+                    dataFormat={this.showGreyUnitPrice}
                   >
-                    {<div style={{ textAlign: "center" }}>單價</div>}
+                    {<div style={{ textAlign: "center" }}>単価</div>}
+                  </TableHeaderColumn>
+                
+                  <TableHeaderColumn
+                    width="10%"
+                    dataField="customer"
+                    dataFormat={this.formatCustome}
+                    customEditor={{ getElement: tableSelect1 }}
+                    editable={
+                      this.state.salesProgressCode === "1" ||
+                      this.state.salesProgressCode === "2"
+                        ? true
+                        : false
+                    }
+                  >
+                    お客様
                   </TableHeaderColumn>
                   
                   <TableHeaderColumn
@@ -574,7 +649,7 @@ class finishList extends React.Component {
                     dataField="admissionStartDate"
                  	dataFormat={this.workDateFormat}
                   >
-                    {<div style={{ textAlign: "center" }}>現場開始日</div>}
+                    {<div style={{ textAlign: "center" }}>現場開始月</div>}
                   </TableHeaderColumn>
                   
                   <TableHeaderColumn

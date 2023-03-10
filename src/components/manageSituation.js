@@ -2427,7 +2427,7 @@ class manageSituation extends React.Component {
           backdrop="static"
           onHide={this.closeFinishList}
           show={this.state.finishListShowFlag}
-          dialogClassName="modal-interviewInfo"
+          dialogClassName="modal-finish"
         >
           <Modal.Header closeButton>
             <Col className="text-center">

@@ -173,6 +173,11 @@ body {
   max-width: none !important;
 }
 
+.modal-finish {
+  width: 50%;
+  max-width: none !important;
+}
+
 .modal-subCost {
   width: 90%;
   max-width: none !important;
