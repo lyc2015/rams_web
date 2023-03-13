@@ -2440,6 +2440,7 @@ class manageSituation extends React.Component {
               sendValue={{
                 interviewLists: this.state.salesSituationLists,
                 yearMonth: this.state.yearMonth,
+                history: this.props.history,
               }}
             />
           </Modal.Body>

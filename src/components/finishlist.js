@@ -46,6 +46,7 @@ class finishList extends React.Component {
   // 初期化
   initialState = {
     yearMonth: "",
+    history: "",
     salesYearAndMonth: "",
     salesSituationFinishLists: [],
     allCustomer: store.getState().dropDown[15], // お客様レコード用
@@ -57,6 +58,7 @@ class finishList extends React.Component {
     interviewCustomer: "", // 面接1客様
     interviewInfo: "",
     interviewURL: "",
+    linkDisableFlag: true, // linkDisableFlag
     employeeNo: "",
     row: "",
     makeDirectoryFalg: true,
@@ -70,6 +72,8 @@ class finishList extends React.Component {
   // 初期表示のレコードを取る
   componentDidMount() {
 	this.state.yearMonth = publicUtils.dateFormate(this.props.sendValue.yearMonth)
+	this.state.salesYearAndMonth = publicUtils.dateFormate(this.props.sendValue.yearMonth)
+    this.state.history = this.props.sendValue.history
     this.getSalesSituationFinish(publicUtils.formateDate(this.props.sendValue.yearMonth, false));
   }
 
@@ -293,6 +297,7 @@ class finishList extends React.Component {
         interviewInfo: row.interviewInfo1 === null ? "" : row.interviewInfo1,
         interviewURL: row.interviewUrl1 === null ? "" : row.interviewUrl1,
         interviewInfoNum: "1",
+      	linkDisableFlag: false,
       });
     } else {
       this.setState({
@@ -306,6 +311,7 @@ class finishList extends React.Component {
         interviewInfo: "",
         interviewURL: "",
         interviewInfoNum: "1",
+        linkDisableFlag: true,
       });
     }
   };
@@ -416,7 +422,7 @@ class finishList extends React.Component {
       str = publicUtils.convertDayToMonth(row.admissionStartDate)
     }
 	
-	if (row.admissionPeriodDate !== null || row.admissionPeriodDate !== "") {
+	if (row.admissionPeriodDate !== null &&  row.admissionPeriodDate !== "") {
 		str = str + " (" + row.admissionPeriodDate + ")"
 	}
 
@@ -504,6 +510,32 @@ class finishList extends React.Component {
     }
   }
   
+  shuseiTo = (actionType) => {
+    var path = {};
+    const sendValue = {
+      salesYearAndMonth: publicUtils.formateDate(this.state.yearMonth, false),
+      selectetRowIds: this.refs.table.state.selectedRowKeys,
+      linkDisableFlag: this.state.linkDisableFlag, // linkDisableFlag
+      sendLetterFalg: true,
+      proposeClassificationCode: "2",
+    };
+    switch (actionType) {
+      case "siteInfo":
+        path = {
+          pathname: "/subMenuManager/siteInfo",
+          state: {
+            employeeNo: String(this.refs.table.state.selectedRowKeys),
+            backPage: "manageSituation",
+            sendValue: sendValue,
+          },
+        };
+        break;
+      default:
+    }
+    console.error("salesYearAndMonth=" + publicUtils.formateDate(this.state.yearMonth, false))
+    this.state.history.push(path)
+  };
+  
   render() {
     const selectRow = {
       mode: "radio",
@@ -581,6 +613,19 @@ class finishList extends React.Component {
                   />
                 </InputGroup.Append>
               </InputGroup>
+            </Col>
+            <Col>
+	            <div style={{ float: "right" }}>
+	            	<Button
+                  	  onClick={this.shuseiTo.bind(this, "siteInfo")}
+	                  size="sm"
+	                  variant="info"
+	                  name="clickButton"
+	                  disabled={this.state.linkDisableFlag}
+	                >
+	                  <FontAwesomeIcon icon={faBuilding} /> 現場情報
+	                </Button>{" "}
+	            </div>
             </Col>
           </Row>
           <Row>
