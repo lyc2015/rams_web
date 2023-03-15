@@ -88,7 +88,7 @@ var methodNameList = [
   "getAdditionMoney",  // 83 加算金额
   "getAdditionMoneyReason",  // 84 加算金额原因
   "getAdditionCountOfNumber", // 85 加算回数
-  "getServerIP", // 最後
+  "getServerIP", // 最後, 如果有新增的配置必须在getServerIP之前
 ];
 
 const serverIP = "http://127.0.0.1:8080/";
