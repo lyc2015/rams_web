@@ -88,6 +88,7 @@ class salesAdditionSet extends React.Component {
   // 初期化データ
   initialState = {
     employeeList: [],
+    employeeAdditionList: [],
     resumeInfo1: "",
     resumeName1: "",
     resumeInfo2: "",
@@ -360,7 +361,7 @@ class salesAdditionSet extends React.Component {
         authorityCode === null ? this.state.authorityCode : authorityCode,
     };
     axios
-      .post(this.state.serverIP + "employee/getEmployeeInfo", emp)
+      .post(this.state.serverIP + "/getEmployeeAdditionList", emp)
       .then((response) => {
         if (response.data.errorsMessage != null) {
           this.setState({
@@ -371,11 +372,11 @@ class salesAdditionSet extends React.Component {
           this.setState({
             errorsMessageShow: true,
             errorsMessageValue: response.data.isNullMessage,
-            employeeList: response.data.data,
+            employeeAdditionList: response.data,
           });
         } else {
           this.setState({
-            employeeList: response.data.data,
+            employeeAdditionList: response.data,
             errorsMessageShow: false,
           });
         }
@@ -483,7 +484,7 @@ class salesAdditionSet extends React.Component {
       residentCardInfo: this.state.residentCardInfo,
       passportInfo: this.state.passportInfo,
     };
-    const tableSize = this.state.employeeList.length;
+    const tableSize = this.state.employeeAdditionList.length;
     axios
       .post(this.state.serverIP + "employee/deleteEmployeeInfo", emp)
       .then((result) => {
@@ -504,7 +505,7 @@ class salesAdditionSet extends React.Component {
             // 削除の後で、rowSelectEmployeeNoの値に空白をセットする
             this.setState({
               rowSelectEmployeeNo: "",
-              employeeList: [],
+              employeeAdditionList: [],
             });
             this.setState({ myToastShow: true });
             setTimeout(() => this.setState({ myToastShow: false }), 300);
@@ -531,7 +532,7 @@ class salesAdditionSet extends React.Component {
   // 行Selectファンクション
   handleRowSelect = (row, isSelected, e) => {
     if (isSelected) {
-      /* alert(this.state.employeeList.length); */
+      /* alert(this.state.employeeAdditionList.length); */
       this.setState({
         rowSelectEmployeeNoForPageChange: row.employeeNo,
         rowSelectEmployeeNo: row.employeeNo,
@@ -796,75 +797,6 @@ class salesAdditionSet extends React.Component {
       });
   };
 
-  csvDownload = () => {
-    let employeeNo = [];
-    for (let i in this.state.employeeList) {
-      employeeNo.push(this.state.employeeList[i].employeeNo);
-    }
-
-    axios
-      .post(this.state.serverIP + "employee/csvDownload", employeeNo)
-      .then((response) => response.data)
-      .then((data) => {
-        this.download(data);
-      });
-  };
-
-  download = (employeeList) => {
-    // 导出
-    var str =
-      "社員番号,国籍,社員名,アルファベット,ふりがな,性別," +
-      "社内メール,生年月日,生年月日,年齢,入社年月,入社年数,雇用契約期間,TEL," +
-      "在留資格,在留期間,在留期限,在留カード番号,旅券番号,有効期限,出入国届開始,出入国届終了," +
-      "マイナンバー番号,雇用保険番号,社会保険期限,整理番号,郵便番号,住所(日本),口座,退職年月日" +
-      "\n";
-    for (var i = 0; i < employeeList.length; i++) {
-      str += this.checkEmpty(employeeList[i].employeeNo) + ",";
-      str += this.checkEmpty(employeeList[i].nationality) + ",";
-      str += this.checkEmpty(employeeList[i].employeeName) + ",";
-      str += this.checkEmpty(employeeList[i].alphabetName) + ",";
-      str += this.checkEmpty(employeeList[i].furigana) + ",";
-      str += this.checkEmpty(employeeList[i].genderStatus) + ",";
-
-      str += this.checkEmpty(employeeList[i].companyMail) + ",";
-      str += this.checkEmpty(employeeList[i].birthday) + ",";
-      str += this.checkEmpty(employeeList[i].japaneseCalendar) + ",";
-      str += this.checkEmpty(employeeList[i].age) + ",";
-      str += this.checkEmpty(employeeList[i].intoCompanyYearAndMonth) + ",";
-      str += this.checkEmpty(employeeList[i].intoCompanyYears) + ",";
-      str += this.checkEmpty(employeeList[i].contractDeadline) + ",";
-      str += this.checkEmpty(employeeList[i].phoneNo) + ",";
-
-      str += this.checkEmpty(employeeList[i].residenceName) + ",";
-      str += this.checkEmpty(employeeList[i].stayPeriodYears) + ",";
-      str += this.checkEmpty(employeeList[i].stayPeriod) + ",";
-      str += this.checkEmpty(employeeList[i].residenceCardNo) + ",";
-      str += this.checkEmpty(employeeList[i].passportNo) + ",";
-      str += this.checkEmpty(employeeList[i].passportStayPeriod) + ",";
-      str += this.checkEmpty(employeeList[i].immigrationStartTime) + ",";
-      str += this.checkEmpty(employeeList[i].immigrationEndTime) + ",";
-
-      str += employeeList[i].myNumber + ",";
-      str += this.checkEmpty(employeeList[i].employmentInsuranceNo) + ",";
-      str += this.checkEmpty(employeeList[i].socialInsuranceDate) + ",";
-      str += this.checkEmpty(employeeList[i].socialInsuranceNo) + ",";
-      str += this.checkEmpty(employeeList[i].postcode) + ",";
-      str += this.checkEmpty(employeeList[i].address) + ",";
-      str += this.checkEmpty(employeeList[i].accountInfo) + ",";
-      str += this.checkEmpty(employeeList[i].retirementYearAndMonth) + ",";
-
-      str += "\n";
-    }
-
-    var aaaa = "data:text/csv;charset=utf-8,\ufeff" + str;
-    var link = document.createElement("a");
-    link.setAttribute("href", aaaa);
-    var date = new Date();
-    var filename = "社員情報";
-    link.setAttribute("download", filename + ".csv");
-    link.click();
-  };
-
   checkEmpty = (values) => {
     return values === "" ? "" : "\t" + values;
   };
@@ -1063,6 +995,7 @@ class salesAdditionSet extends React.Component {
       intoCompanyCode,
       socialInsurance,
       employeeList,
+      employeeAdditionList,
       errorsMessageValue,
     } = this.state;
     // テーブルの行の選択
@@ -1316,7 +1249,7 @@ class salesAdditionSet extends React.Component {
             <Col sm={12}>
               <BootstrapTable
                 ref="siteSearchTable"
-                data={employeeList}
+                data={employeeAdditionList}
                 pagination={true}
                 options={options}
                 deleteRow
@@ -1346,21 +1279,21 @@ class salesAdditionSet extends React.Component {
                 <TableHeaderColumn
                     width="10%"
                     tdStyle={{ padding: ".45em" }}
-                    dataField=""
+                    dataField="yearAndMonth"
                   >
                     開始年月
                 </TableHeaderColumn>
                 <TableHeaderColumn
                     width="6%"
                     tdStyle={{ padding: ".45em" }}
-                    dataField=""
+                  	dataField="additionMoneyCode"
                   >
                     金額
                 </TableHeaderColumn>
                 <TableHeaderColumn
                     width="20%"
                     tdStyle={{ padding: ".45em" }}
-                    dataField=""
+                    dataField="additionMoneyResonCode"
                   >
                     加算理由
                 </TableHeaderColumn>
