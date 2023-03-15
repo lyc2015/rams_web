@@ -32,6 +32,7 @@ import salaryDetailSend from "./salaryDetailSend";
 import SendRepot from "./sendRepot";
 import siteSearch from "./siteSearch";
 import salesPointSet from "./salesPointSet";
+import salesAdditionSet from "./salesAdditionSet";
 import salesProfit from "./salesProfit";
 import salesPoint from "./salesPoint";
 import WagesInfo from "./wagesInfo";
@@ -247,7 +248,7 @@ class SubMenu extends Component {
         break;
       case "営業管理":
         this.setClassName("営業管理");
-        this.shuseiTo({ pathname: "/subMenuManager/salesPointSet" });
+        this.shuseiTo({ pathname: "/subMenuManager/salesAdditionSet" });
         break;
       case "勤務":
         this.setClassName("勤務");
@@ -2341,6 +2342,11 @@ class SubMenu extends Component {
                   exact
                   path={`${this.props.match.url}/salesPointSet`}
                   component={salesPointSet}
+                />
+                <Route
+                  exact
+                  path={`${this.props.match.url}/salesAdditionSet`}
+                  component={salesAdditionSet}
                 />
                 <Route
                   exact

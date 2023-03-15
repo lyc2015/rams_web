@@ -9,8 +9,8 @@ import { faEdit, faTrash, faSave } from "@fortawesome/free-solid-svg-icons";
 import store from "./redux/store";
 axios.defaults.withCredentials = true;
 
-// 営業ポイント設定
-class salesPointSet extends React.Component {
+// 營業金額特別設定
+class salesAdditionSet extends React.Component {
   constructor(props) {
     super(props);
     this.state = this.initialState; // 初期化
@@ -558,7 +558,7 @@ class salesPointSet extends React.Component {
                */}
               <Row inline="true">
                 <Col className="text-center">
-                  <h2>営業ポイント設定</h2>
+                  <h2>營業金額特別設定</h2>
                 </Col>
               </Row>
             </Form.Group>
@@ -821,4 +821,4 @@ class salesPointSet extends React.Component {
   }
 }
 
-export default salesPointSet;
+export default salesAdditionSet;
