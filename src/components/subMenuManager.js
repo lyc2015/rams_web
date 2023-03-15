@@ -1558,7 +1558,7 @@ class SubMenu extends Component {
                                       )}
                                       onClick={this.shuseiTo.bind(this, {
                                         pathname:
-                                          "/subMenuManager/salesPointSet",
+                                          "/subMenuManager/salesAdditionSet",
                                       })}
                                     >
                                       <div>
@@ -1568,14 +1568,14 @@ class SubMenu extends Component {
                                               ? "my-tabcolor-font-hover"
                                               : "my-tabcolor-font"
                                           }
-                                          to="/subMenuManager/salesPointSet"
+                                          to="/subMenuManager/salesAdditionSet"
                                         >
                                           <FontAwesomeIcon
                                             className="fa-fw"
                                             size="lg"
                                             icon={faFilePowerpoint}
                                           />{" "}
-                                          ポイント設定
+                                          營業金額特別設定
                                         </Link>
                                       </div>
                                     </ListGroup.Item>
@@ -1612,42 +1612,6 @@ class SubMenu extends Component {
                                             icon={faChartPie}
                                           />{" "}
                                           営業個別売上
-                                        </Link>
-                                      </div>
-                                    </ListGroup.Item>
-                                    <ListGroup.Item
-                                      style={
-                                        this.state.hover.search("3") !== -1
-                                          ? subMenuHover
-                                          : subMenu
-                                      }
-                                      onMouseEnter={this.toggleHover.bind(
-                                        this,
-                                        "営業管理-3"
-                                      )}
-                                      onMouseLeave={this.toggleHover.bind(
-                                        this,
-                                        "営業管理"
-                                      )}
-                                      onClick={this.shuseiTo.bind(this, {
-                                        pathname: "/subMenuManager/salesPoint",
-                                      })}
-                                    >
-                                      <div>
-                                        <Link
-                                          className={
-                                            this.state.hover.search("3") !== -1
-                                              ? "my-tabcolor-font-hover"
-                                              : "my-tabcolor-font"
-                                          }
-                                          to="/subMenuManager/salesPoint"
-                                        >
-                                          <FontAwesomeIcon
-                                            className="fa-fw"
-                                            size="lg"
-                                            icon={faBars}
-                                          />{" "}
-                                          営業ポイント
                                         </Link>
                                       </div>
                                     </ListGroup.Item>
