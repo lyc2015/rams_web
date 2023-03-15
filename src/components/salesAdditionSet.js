@@ -108,7 +108,11 @@ class salesAdditionSet extends React.Component {
     serverIP: store.getState().dropDown[store.getState().dropDown.length - 1],
     customerMaster: store.getState().dropDown[15].slice(1),
     socialInsuranceStatus: store.getState().dropDown[68],
+    additionMoneyMap:store.getState().dropDown[83],
+    additionMoneyReasonMap:store.getState().dropDown[84],
+    additionCountOfNumberMap:store.getState().dropDown[85],
     searchFlag: false,
+    employeeNameSelect: "",
     ageFrom: "",
     ageTo: "",
     authorityCode: "",
@@ -537,10 +541,12 @@ class salesAdditionSet extends React.Component {
         resumeInfo1: row.resumeInfo1,
         resumeName1: row.resumeName1,
         resumeInfo2: row.resumeInfo2,
-        resumeName2: row.resumeName2,
         linkDisableFlag: false, // linkDisableFlag
         currPage: this.refs.siteSearchTable.state.currPage,
       });
+      this.state.employeeName = row.employeeName
+      this.state.employeeStatus = row.employeeStatus
+      console.error("employeeNameisSelected=" + this.state.employeeName + "," + row.employeeName)
       $("#residentCardInfo").prop("disabled", false);
       $("#passportInfo").prop("disabled", false);
       $("#delete").attr("disabled", false);
@@ -550,6 +556,9 @@ class salesAdditionSet extends React.Component {
       $("#workRepot").attr("disabled", false);
       $("#siteInfo").attr("disabled", false);
     } else {
+      this.state.employeeName = ""
+      this.state.employeeStatus = ""
+      console.error("employeeName isNotSelected=" + this.state.employeeName + "," + row.employeeName)
       this.setState({
         rowSelectEmployeeNoForPageChange: "",
         rowSelectEmployeeNo: "",
@@ -610,26 +619,6 @@ class salesAdditionSet extends React.Component {
           );
     return value;
   }
-
-  // // AUTOSELECT select事件
-  // handleTag = ({ target }, fieldName) => {
-  //   const { value, id } = target;
-  //   if (value === "") {
-  //     this.setState({
-  //       [id]: "",
-  //     });
-  //   } else {
-  //     if (this.state.employeeInfo.find((v) => v.name === value) !== undefined) {
-  //       switch (fieldName) {
-  //         case "employeeName":
-  //           this.setState({
-  //             employeeName: value,
-  //           });
-  //           break;
-  //       }
-  //     }
-  //   }
-  // };
 
   /**
    * 社員名連想
@@ -1165,8 +1154,8 @@ class salesAdditionSet extends React.Component {
                 <Col sm={3}>
                   <InputGroup size="sm" className="mb-3">
                     <InputGroup.Prepend>
-                      <InputGroup.Text id="fiveKanji">
-                        社員名(BP)
+                      <InputGroup.Text id="inputGroup-sizing-sm">
+                        社員名
                       </InputGroup.Text>
                     </InputGroup.Prepend>
                     <Autocomplete
@@ -1203,94 +1192,20 @@ class salesAdditionSet extends React.Component {
                     />
                   </InputGroup>
                 </Col>
-              </Row>
-              <Row>
+                
                 <Col sm={3}>
                   <InputGroup size="sm" className="mb-3">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
-                        性別
+                        加算金額
                       </InputGroup.Text>
                     </InputGroup.Prepend>
                     <Form.Control
                       as="select"
                       size="sm"
-                      onChange={this.valueChange}
-                      name="genderStatus"
-                      value={genderStatus}
                       autoComplete="off"
                     >
-                      {this.state.genderStatuss.map((data) => (
-                        <option key={data.code} value={data.code}>
-                          {data.name}
-                        </option>
-                      ))}
-                    </Form.Control>
-                  </InputGroup>
-                </Col>
-                <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
-                    <InputGroup.Prepend>
-                      <InputGroup.Text id="fiveKanji">年齢</InputGroup.Text>
-                    </InputGroup.Prepend>
-                    <Form.Control
-                      type="number"
-                      name="ageFrom"
-                      value={ageFrom}
-                      autoComplete="off"
-                      onChange={this.ageValueChange}
-                      size="sm"
-                    />{" "}
-                    ～{" "}
-                    <Form.Control
-                      type="number"
-                      name="ageTo"
-                      value={ageTo}
-                      autoComplete="off"
-                      onChange={this.ageValueChange}
-                      size="sm"
-                    />
-                  </InputGroup>
-                </Col>
-                <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
-                    <InputGroup.Prepend>
-                      <InputGroup.Text id="inputGroup-sizing-sm">
-                        在留資格
-                      </InputGroup.Text>
-                    </InputGroup.Prepend>
-                    <Form.Control
-                      as="select"
-                      size="sm"
-                      onChange={this.valueChange}
-                      name="residenceCode"
-                      value={residenceCode}
-                      autoComplete="off"
-                    >
-                      {this.state.residenceCodes.map((data) => (
-                        <option key={data.code} value={data.code}>
-                          {data.name}
-                        </option>
-                      ))}
-                    </Form.Control>
-                  </InputGroup>
-                </Col>
-                <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
-                    <InputGroup.Prepend>
-                      <InputGroup.Text id="inputGroup-sizing-sm">
-                        国籍
-                      </InputGroup.Text>
-                    </InputGroup.Prepend>
-                    <Form.Control
-                      as="select"
-                      onChange={this.valueChange}
-                      size="sm"
-                      name="nationalityCode"
-                      value={nationalityCode}
-                      autoComplete="off"
-                    >
-                      {this.state.nationalityCodes.map((data) => (
+                      {this.state.additionMoneyMap.map((data) => (
                         <option key={data.code} value={data.code}>
                           {data.name}
                         </option>
@@ -1301,32 +1216,10 @@ class salesAdditionSet extends React.Component {
               </Row>
               <Row>
                 <Col sm={3}>
-                  {/*
-                   * <InputGroup size="sm"
-                   * className="mb-3">
-                   * <InputGroup.Prepend> <InputGroup.Text
-                   * id="inputGroup-sizing-sm">お客様先</InputGroup.Text>
-                   * </InputGroup.Prepend> <Autocomplete
-                   * id="customerNo" name="customerNo"
-                   * value={this.state.customerMaster.find(v =>
-                   * v.code === this.state.customerNo) ||
-                   * {}} onChange={(event, values) =>
-                   * this.getCustomerNo(event, values)}
-                   * options={this.state.customerMaster}
-                   * getOptionLabel={(option) =>
-                   * option.name||''} renderInput={(params) => (
-                   * <div ref={params.InputProps.ref}>
-                   * <input type="text"
-                   * {...params.inputProps}
-                   * className="auto form-control
-                   * Autocompletestyle-customer" /> </div> )} />
-                   *
-                   * </InputGroup>
-                   */}
                   <InputGroup size="sm" className="mb-3">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
-                        社員形式
+                        回數
                       </InputGroup.Text>
                     </InputGroup.Prepend>
                     <Form.Control
@@ -1338,7 +1231,7 @@ class salesAdditionSet extends React.Component {
                       value={employeeFormCode}
                       autoComplete="off"
                     >
-                      {this.state.employeeFormCodes.map((data) => (
+                      {this.state.additionCountOfNumberMap.map((data) => (
                         <option key={data.code} value={data.code}>
                           {data.name}
                         </option>
@@ -1347,57 +1240,37 @@ class salesAdditionSet extends React.Component {
                   </InputGroup>
                 </Col>
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
+	              <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
-                        採用区分
+                        開始年月
+                      
                       </InputGroup.Text>
                     </InputGroup.Prepend>
-                    <Form.Control
-                      as="select"
-                      onChange={this.valueChange}
-                      size="sm"
-                      name="intoCompanyCode"
-                      value={intoCompanyCode}
-                      disabled={employeeStatus === "1" ? true : false}
-                      autoComplete="off"
-                    >
-                      {this.state.intoCompanyCodes.map((data) => (
-                        <option key={data.code} value={data.code}>
-                          {data.name}
-                        </option>
-                      ))}
-                    </Form.Control>
-                  </InputGroup>
-                </Col>
+	                <DatePicker
+	                  selected={this.state.businessStartDate}
+	                  onChange={this.businessStartDateChange}
+	                  dateFormat={"yyyy/MM"}
+	                  autoComplete="off"
+	                  locale="ja"
+	                  showYearDropdown
+	                  yearDropdownItemNumber={15}
+	                  scrollableYearDropdown
+	                  showMonthYearPicker
+	                  showFullMonthYearPicker
+	                  // minDate={new Date()}
+	                  showDisabledMonthNavigation
+	                  className="form-control form-control-sm"
+	                  id="customerInfoDatePicker-customerInfoSearch"
+	                  name="businessStartDate"
+	                />
+	              </InputGroup>
+	            </Col>
                 <Col sm={3}>
                   <InputGroup size="sm" className="mb-3">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
-                        日本語
-                      </InputGroup.Text>
-                    </InputGroup.Prepend>
-                    <Form.Control
-                      as="select"
-                      onChange={this.valueChange}
-                      size="sm"
-                      name="japaneseLevelCode"
-                      value={japaneseLevelCode}
-                      autoComplete="off"
-                    >
-                      {this.state.japaneaseLevelCodes.map((data) => (
-                        <option key={data.code} value={data.code}>
-                          {data.name}
-                        </option>
-                      ))}
-                    </Form.Control>
-                  </InputGroup>
-                </Col>
-                <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
-                    <InputGroup.Prepend>
-                      <InputGroup.Text id="inputGroup-sizing-sm">
-                        役割
+                        加算理由
                       </InputGroup.Text>
                     </InputGroup.Prepend>
                     <Form.Control
@@ -1408,176 +1281,11 @@ class salesAdditionSet extends React.Component {
                       value={siteRoleCode}
                       autoComplete="off"
                     >
-                      {this.state.siteMaster.map((data) => (
+                      {this.state.additionMoneyReasonMap.map((data) => (
                         <option key={data.code} value={data.code}>
                           {data.name}
                         </option>
                       ))}
-                    </Form.Control>
-                  </InputGroup>
-                </Col>
-              </Row>
-              <Row>
-                <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
-                    <InputGroup.Prepend>
-                      <InputGroup.Text id="inputGroup-sizing-sm">
-                        社会保険
-                      </InputGroup.Text>
-                    </InputGroup.Prepend>
-                    <Form.Control
-                      as="select"
-                      size="sm"
-                      onChange={this.socialInsuranceValueChange}
-                      name="socialInsurance"
-                      value={socialInsurance}
-                      autoComplete="off"
-                    >
-                      {this.state.socialInsuranceStatus.map((data) => (
-                        <option key={data.code} value={data.code}>
-                          {data.name}
-                        </option>
-                      ))}
-                    </Form.Control>
-                    <InputGroup.Append>
-                      <DatePicker
-                        selected={this.state.socialInsuranceDate}
-                        onChange={this.socialInsuranceDateChange}
-                        locale="ja"
-                        dateFormat="yyyy/MM/dd"
-                        className="form-control form-control-sm"
-                        autoComplete="off"
-                        disabled={socialInsurance !== "1" ? true : false}
-                        id={
-                          socialInsurance !== "1"
-                            ? "datePickerReadonlyDefault-employeeSearch"
-                            : "datePicker-employeeSearch"
-                        }
-                      />
-                    </InputGroup.Append>
-                  </InputGroup>
-                </Col>
-                <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
-                    <InputGroup.Prepend>
-                      <InputGroup.Text id="inputGroup-sizing-sm">
-                        開発言語
-                      </InputGroup.Text>
-                    </InputGroup.Prepend>
-                    <Autocomplete
-                      className="fx1"
-                      id="developLanguage1"
-                      name="developLanguage1"
-                      value={
-                        this.state.developLanguageMaster.find(
-                          (v) => v.code === this.state.developLanguage1
-                        ) || {}
-                      }
-                      onChange={(event, values) =>
-                        this.getDevelopLanguage1(event, values)
-                      }
-                      options={this.state.developLanguageMaster}
-                      getOptionLabel={(option) => option.name || ""}
-                      renderInput={(params) => (
-                        <div ref={params.InputProps.ref}>
-                          <input
-                            type="text"
-                            {...params.inputProps}
-                            className="auto form-control Autocompletestyle-developLanguage w100p"
-                            id="developLanguage1"
-                          />
-                        </div>
-                      )}
-                    />
-
-                    <Autocomplete
-                      className="fx1"
-                      id="developLanguage2"
-                      name="developLanguage2"
-                      value={
-                        this.state.developLanguageMaster.find(
-                          (v) => v.code === this.state.developLanguage2
-                        ) || {}
-                      }
-                      onChange={(event, values) =>
-                        this.getDevelopLanguage2(event, values)
-                      }
-                      options={this.state.developLanguageMaster}
-                      getOptionLabel={(option) => option.name || ""}
-                      renderInput={(params) => (
-                        <div ref={params.InputProps.ref}>
-                          <input
-                            type="text"
-                            {...params.inputProps}
-                            className="auto form-control Autocompletestyle-developLanguage w100p"
-                            id="developLanguage2"
-                          />
-                        </div>
-                      )}
-                    />
-                  </InputGroup>
-                </Col>
-
-                <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
-                    <InputGroup.Prepend>
-                      <InputGroup.Text id="inputGroup-sizing-sm">
-                        入社年月
-                      </InputGroup.Text>
-                    </InputGroup.Prepend>
-                    <DatePicker
-                      disabled={employeeStatus === "1" ? true : false}
-                      id={
-                        employeeStatus === "1"
-                          ? "datePickerReadonlyDefault"
-                          : "datePicker"
-                      }
-                      selected={this.state.intoCompanyYearAndMonthFrom}
-                      onChange={this.inactiveintoCompanyYearAndMonthFrom}
-                      locale="ja"
-                      dateFormat="yyyy/MM"
-                      showMonthYearPicker
-                      showFullMonthYearPicker
-                      className="form-control form-control-sm "
-                      autoComplete="off"
-                    />
-                    ～
-                    <DatePicker
-                      selected={this.state.intoCompanyYearAndMonthTo}
-                      onChange={this.inactiveintoCompanyYearAndMonthTo}
-                      locale="ja"
-                      dateFormat="yyyy/MM"
-                      showMonthYearPicker
-                      showFullMonthYearPicker
-                      disabled={employeeStatus === "1" ? true : false}
-                      id={
-                        employeeStatus === "1"
-                          ? "datePickerReadonlyDefault"
-                          : "datePicker"
-                      }
-                      className="form-control form-control-sm "
-                      autoComplete="off"
-                    />
-                  </InputGroup>
-                </Col>
-                <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
-                    <InputGroup.Prepend>
-                      <InputGroup.Text id="inputGroup-sizing-sm">
-                        稼働　　
-                      </InputGroup.Text>
-                    </InputGroup.Prepend>
-                    <Form.Control
-                      as="select"
-                      size="sm"
-                      onChange={this.valueChange}
-                      name="kadou"
-                      value={kadou}
-                      autoComplete="off"
-                    >
-                      <option value=""></option>
-                      <option value="0">はい</option>
-                      <option value="1">いいえ</option>
                     </Form.Control>
                   </InputGroup>
                 </Col>
@@ -1588,187 +1296,21 @@ class salesAdditionSet extends React.Component {
         <div style={{ textAlign: "center" }}>
           <Button
             size="sm"
-            variant="info"
-            type="submit"
-            onClick={this.searchEmployee.bind(this, this.state.authorityCode)}
-          >
-            <FontAwesomeIcon icon={faSearch} /> 検索
-          </Button>{" "}
-          <Button
-            size="sm"
             onClick={this.shuseiTo.bind(this, "insert")}
             variant="info"
           >
-            <FontAwesomeIcon icon={faSave} /> 追加
+            <FontAwesomeIcon icon={faSave} /> 登錄
           </Button>{" "}
-          <Button
-            size="sm"
-            variant="info"
-            type="reset"
-            onClick={this.resetBook}
-          >
-            <FontAwesomeIcon icon={faUndo} /> Reset
-          </Button>
+	      <Button
+	          size="sm"
+	          onClick={this.employeeDelete}
+	          id="delete"
+	          variant="info"
+	      >
+	         <FontAwesomeIcon icon={faTrash} /> 削除
+	      </Button>
         </div>
         <div style={{ height: "10px" }}></div>
-        <div>
-          <Row>
-            <Col sm={8}>
-              <div style={{ float: "left" }}>
-                <Button
-                  size="sm"
-                  onClick={this.shuseiTo.bind(this, "siteInfo")}
-                  name="clickButton"
-                  variant="info"
-                  id="siteInfo"
-                >
-                  現場情報
-                </Button>{" "}
-                <Button
-                  size="sm"
-                  onClick={this.shuseiTo.bind(this, "wagesInfo")}
-                  hidden={this.state.authorityCode === "4" ? false : true}
-                  name="clickButton"
-                  variant="info"
-                  id="wagesInfo"
-                >
-                  給料情報
-                </Button>{" "}
-                <Button
-                  size="sm"
-                  variant="info"
-                  name="clickButton"
-                  id="resumeInfo1"
-                  onClick={this.downloadResume.bind(
-                    this,
-                    this.state.resumeInfo1,
-                    1
-                  )}
-                  disabled={
-                    this.state.linkDisableFlag ||
-                    this.state.resumeInfo1 === null ||
-                    this.state.resumeInfo1 === ""
-                      ? true
-                      : false
-                  }
-                >
-                  <FontAwesomeIcon icon={faDownload} />
-                  {this.state.linkDisableFlag ||
-                  this.state.resumeInfo1 === null ||
-                  this.state.resumeInfo1 === ""
-                    ? "履歴書1"
-                    : this.state.resumeName1}
-                </Button>{" "}
-                <Button
-                  size="sm"
-                  variant="info"
-                  name="clickButton"
-                  id="resumeInfo2"
-                  onClick={this.downloadResume.bind(
-                    this,
-                    this.state.resumeInfo2,
-                    2
-                  )}
-                  disabled={
-                    this.state.linkDisableFlag ||
-                    this.state.resumeInfo2 === null ||
-                    this.state.resumeInfo2 === ""
-                      ? true
-                      : false
-                  }
-                >
-                  <FontAwesomeIcon icon={faDownload} />
-                  {this.state.linkDisableFlag ||
-                  this.state.resumeInfo2 === null ||
-                  this.state.resumeInfo2 === ""
-                    ? "履歴書2"
-                    : this.state.resumeName2}
-                </Button>{" "}
-                <Button
-                  size="sm"
-                  variant="info"
-                  name="clickButton"
-                  id="residentCardInfo"
-                  onClick={publicUtils.handleDownload.bind(
-                    this,
-                    this.state.residentCardInfo,
-                    this.state.serverIP
-                  )}
-                >
-                  <FontAwesomeIcon icon={faDownload} /> 在留カード
-                </Button>{" "}
-                <Button
-                  size="sm"
-                  variant="info"
-                  name="clickButton"
-                  id="passportInfo"
-                  onClick={publicUtils.handleDownload.bind(
-                    this,
-                    this.state.passportInfo,
-                    this.state.serverIP
-                  )}
-                >
-                  <FontAwesomeIcon icon={faDownload} /> パスポート
-                </Button>{" "}
-                <Button
-                  size="sm"
-                  onClick={this.shuseiTo.bind(this, "workRepot")}
-                  hidden={this.state.authorityCode === "4" ? false : true}
-                  name="clickButton"
-                  variant="info"
-                  id="workRepot"
-                >
-                  勤務管理
-                </Button>{" "}
-              </div>
-            </Col>
-            <Col sm={4}>
-              <div style={{ float: "right" }}>
-                <Button
-                  size="sm"
-                  variant="info"
-                  name="clickButton"
-                  id="csvDownload"
-                  onClick={this.csvDownload.bind(this)}
-                  disabled={this.state.employeeList.length > 0 ? false : true}
-                >
-                  <FontAwesomeIcon icon={faDownload} /> CSV出力
-                </Button>{" "}
-                <Button
-                  size="sm"
-                  onClick={this.shuseiTo.bind(this, "detail")}
-                  name="clickButton"
-                  id="detail"
-                  variant="info"
-                >
-                  <FontAwesomeIcon icon={faList} />
-                  詳細
-                </Button>{" "}
-                <Button
-                  size="sm"
-                  onClick={this.shuseiTo.bind(this, "update")}
-                  name="clickButton"
-                  id="update"
-                  variant="info"
-                >
-                  <FontAwesomeIcon icon={faEdit} />
-                  修正
-                </Button>{" "}
-                <Button
-                  size="sm"
-                  variant="info"
-                  onClick={this.employeeDelete}
-                  hidden={this.state.authorityCode === "4" ? false : true}
-                  name="clickButton"
-                  id="delete"
-                  variant="info"
-                >
-                  <FontAwesomeIcon icon={faTrash} /> 削除
-                </Button>
-              </div>
-            </Col>
-          </Row>
-        </div>
         <div>
           <Row>
             <Col sm={12}>
@@ -1788,119 +1330,39 @@ class salesAdditionSet extends React.Component {
                   width="6%"
                   tdStyle={{ padding: ".45em" }}
                   dataField="rowNo"
+                  isKey
                   dataSort
                 >
                   番号
                 </TableHeaderColumn>
                 <TableHeaderColumn
-                  width="9%"
-                  tdStyle={{ padding: ".45em" }}
-                  dataField="employeeNo"
-                  isKey
-                  dataSort
-                >
-                  社員番号
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  width="9%"
+                  width="10%"
                   tdStyle={{ padding: ".45em" }}
                   dataField="employeeName"
-                  dataFormat={this.employeeNameFormat.bind(this)}
-                  dataSort
                 >
-                  社員名
+                  氏名
                 </TableHeaderColumn>
+                
                 <TableHeaderColumn
-                  width="12%"
-                  tdStyle={{ padding: ".45em" }}
-                  dataField="furigana"
-                  dataSort
-                >
-                  カタカナ
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  width="15%"
-                  tdStyle={{ padding: ".45em" }}
-                  dataField="alphabetName"
-                  dataSort
-                >
-                  ローマ字
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  width="12%"
-                  tdStyle={{ padding: ".45em" }}
-                  dataField="birthday"
-                  dataSort
-                >
-                  年齢
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  width="12%"
-                  tdStyle={{ padding: ".45em" }}
-                  dataField="phoneNo"
-                  dataSort
-                >
-                  電話番号
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  width="9%"
-                  tdStyle={{ padding: ".45em" }}
-                  dataField="stationName"
-                  dataSort
-                >
-                  寄り駅
-                </TableHeaderColumn>
-                {this.state.changeFlag ? (
-                  <TableHeaderColumn
-                    width="9%"
+                    width="10%"
                     tdStyle={{ padding: ".45em" }}
-                    dataField="intoCompanyYearAndMonth"
-                    dataSort
+                    dataField=""
                   >
-                    入社年月
-                  </TableHeaderColumn>
-                ) : (
-                  <TableHeaderColumn
-                    width="9%"
+                    開始年月
+                </TableHeaderColumn>
+                <TableHeaderColumn
+                    width="6%"
                     tdStyle={{ padding: ".45em" }}
-                    dataField="bpfrom"
-                    dataSort
+                    dataField=""
                   >
-                    所属
-                  </TableHeaderColumn>
-                )}
-                <TableHeaderColumn
-                  width="9%"
-                  tdStyle={{ padding: ".45em" }}
-                  dataField="admissionTime"
-                  dataSort
-                >
-                  入場年月
+                    金額
                 </TableHeaderColumn>
                 <TableHeaderColumn
-                  dataField="stayPeriod"
-                  hidden={true}
-                  /* dataFormat={this.formatStayPeriod.bind(this)} */ dataSort
-                >
-                  ビザ期限
-                </TableHeaderColumn>
-                <TableHeaderColumn dataField="resumeInfo1" hidden={true}>
-                  履歴書1
-                </TableHeaderColumn>
-                <TableHeaderColumn dataField="resumeName1" hidden={true}>
-                  履歴書名前1
-                </TableHeaderColumn>
-                <TableHeaderColumn dataField="resumeInfo2" hidden={true}>
-                  履歴書2
-                </TableHeaderColumn>
-                <TableHeaderColumn dataField="resumeName2" hidden={true}>
-                  履歴書名前2
-                </TableHeaderColumn>
-                <TableHeaderColumn dataField="residentCardInfo" hidden={true}>
-                  在留カード
-                </TableHeaderColumn>
-                <TableHeaderColumn dataField="passportInfo" hidden={true}>
-                  パスポート
+                    width="20%"
+                    tdStyle={{ padding: ".45em" }}
+                    dataField=""
+                  >
+                    加算理由
                 </TableHeaderColumn>
               </BootstrapTable>
             </Col>
