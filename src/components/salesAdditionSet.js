@@ -1,542 +1,1123 @@
+/* 
+社員を検索
+ */
 import React from "react";
+import {
+  Button,
+  Form,
+  Col,
+  Row,
+  InputGroup,
+  FormControl,
+} from "react-bootstrap";
+import axios from "axios";
+import "../asserts/css/development.css";
+import "../asserts/css/style.css";
+import $ from "jquery";
 import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
-import { Row, Form, Col, InputGroup, Button } from "react-bootstrap";
+import DatePicker, { registerLocale } from "react-datepicker";
+import ja from "date-fns/locale/ja";
+import "react-datepicker/dist/react-datepicker.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faSave,
+  faUndo,
+  faSearch,
+  faEdit,
+  faTrash,
+  faDownload,
+  faList,
+} from "@fortawesome/free-solid-svg-icons";
+import * as publicUtils from "./utils/publicUtils.js";
+import { Link } from "react-router-dom";
+import * as utils from "./utils/publicUtils.js";
 import MyToast from "./myToast";
 import ErrorsMessageToast from "./errorsMessageToast";
-import axios from "axios";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faTrash, faSave } from "@fortawesome/free-solid-svg-icons";
+import Autocomplete from "@material-ui/lab/Autocomplete";
 import store from "./redux/store";
+import { notification } from "antd";
 axios.defaults.withCredentials = true;
+registerLocale("ja", ja);
 
-// 營業金額特別設定
 class salesAdditionSet extends React.Component {
   constructor(props) {
     super(props);
     this.state = this.initialState; // 初期化
-    this.onchange = this.onchange.bind(this);
-    this.checkRows = this.checkRows.bind(this);
+    this.valueChange = this.valueChange.bind(this);
+    this.socialInsuranceValueChange =
+      this.socialInsuranceValueChange.bind(this);
+    this.ageValueChange = this.ageValueChange.bind(this);
   }
 
-  initialState = {
-    no: "",
-    employee: "",
-    newMember: "",
-    customerContract: "",
-    updateFlag: true,
-    insertFlag: false,
-    currentPage: 1, // 今のページ
-    insertNo: "",
-    employeefrom: "",
-    employeeStatus: store.getState().dropDown[4],
-    newMemberStatus: store.getState().dropDown[23],
-    customerContractStatus: store.getState().dropDown[24],
-    levelStatus: store.getState().dropDown[18],
-    salesPutternStatus: store.getState().dropDown[25],
-    specialPointStatus: store.getState().dropDown[26],
-    bpGrossProfitStatus: store.getState().dropDown[81],
-    serverIP: store.getState().dropDown[store.getState().dropDown.length - 1],
+  // ageValueChange
+  ageValueChange = (event) => {
+    if (event.target.value > 0) {
+      this.setState({
+        [event.target.name]: event.target.value,
+      });
+    }
   };
 
-  // 页面加载
+  // onchange
+  valueChange = (event) => {
+    this.setState({
+      [event.target.name]: event.target.value,
+    });
+  };
+
+  socialInsuranceValueChange = (event) => {
+    this.setState({
+      [event.target.name]: event.target.value,
+    });
+    if (event.target.value !== "1") {
+      this.setState({
+        socialInsuranceDate: "",
+      });
+    }
+  };
+
+  // reset
+  resetBook = () => {
+    this.setState(() => this.resetStates);
+  };
+
+  employeeNameFormat = (cell) => {
+    return <span title={cell}>{cell}</span>;
+  };
+
+  // 初期化データ
+  initialState = {
+    employeeList: [],
+    resumeInfo1: "",
+    resumeName1: "",
+    resumeInfo2: "",
+    resumeName2: "",
+    residentCardInfo: "",
+    passportInfo: "",
+    genderStatuss: store.getState().dropDown[0],
+    intoCompanyCodes: store.getState().dropDown[1],
+    employeeFormCodes: store.getState().dropDown[2],
+    siteMaster: store.getState().dropDown[3],
+    employeeStatuss: store.getState().dropDown[4],
+    japaneaseLevelCodes: store.getState().dropDown[5].slice(1),
+    residenceCodes: store.getState().dropDown[6],
+    nationalityCodes: store.getState().dropDown[7],
+    developLanguageMaster: store.getState().dropDown[8].slice(1),
+    employeeInfoAll: store.getState().dropDown[9].slice(1),
+    employeeInfo: store.getState().dropDown[9].slice(1),
+    serverIP: store.getState().dropDown[store.getState().dropDown.length - 1],
+    customerMaster: store.getState().dropDown[15].slice(1),
+    socialInsuranceStatus: store.getState().dropDown[68],
+    searchFlag: false,
+    ageFrom: "",
+    ageTo: "",
+    authorityCode: "",
+    linkDisableFlag: true, // linkDisableFlag
+    changeFlag: true, // 協力を検索する場合、入社年月->所属
+  };
+  // リセット reset
+  resetStates = {
+    employeeName: "",
+    employeeFormCode: "",
+    employeeStatus: "",
+    genderStatus: "",
+    ageFrom: "",
+    ageTo: "",
+    residenceCode: "",
+    nationalityCode: "",
+    customerNo: "",
+    intoCompanyCode: "",
+    japaneseLevelCode: "",
+    siteRoleCode: "",
+    intoCompanyYearAndMonthFrom: "",
+    intoCompanyYearAndMonthTo: "",
+    kadou: "",
+    developLanguage1: "",
+    developLanguage2: "",
+    socialInsurance: "",
+  };
+
+  // 初期化メソッド
   componentDidMount() {
-    let employeeStatus = [];
-    for (let i in this.state.employeeStatus) {
-      if (
-        this.state.employeeStatus[i].code === "0" ||
-        this.state.employeeStatus[i].code === "1"
-      ) {
-        employeeStatus.push(this.state.employeeStatus[i]);
+    axios
+      .post(this.state.serverIP + "sendLettersConfirm/getLoginUserInfo")
+      .then((result) => {
+        this.setState({
+          authorityCode: result.data[0].authorityCode,
+        });
+        this.searchEmployee(result.data[0].authorityCode);
+      })
+      .catch(function (error) {
+        //alert(error);
+      });
+    this.clickButtonDisabled();
+    if (this.props.location.state !== undefined) {
+      var sendValue = this.props.location.state.sendValue;
+      $("#employeeStatus").val(sendValue.employeeStatus);
+      $("#genderStatus").val(sendValue.genderStatus);
+      $("#customerNo").val(sendValue.customerNo);
+      $("#employeeFormCode").val(sendValue.employeeFormCode);
+      $("#employeeName").val(sendValue.employeeName);
+      $("#ageFrom").val(sendValue.ageFromValue);
+      $("#ageTo").val(sendValue.ageToValue);
+      $("#intoCompanyCode").val(sendValue.intoCompanyCode);
+      $("#developLanguage1").val(sendValue.developLanguage1);
+      $("#developLanguage2").val(sendValue.developLanguage2);
+      $("#residenceCode").val(sendValue.residenceCode);
+      $("#japaneseLevelCode").val(sendValue.japaneseLevelCode);
+      $("#nationalityCode").val(sendValue.nationalityCode);
+      $("#siteRoleCode").val(sendValue.siteRoleCode);
+      $("#kadou").val(sendValue.kadou);
+      $("#socialInsurance").val(sendValue.socialInsurance);
+      this.setState(
+        {
+          employeeStatus: sendValue.employeeStatus,
+          genderStatus: sendValue.genderStatus,
+          customerNo: sendValue.customerNo,
+          employeeFormCode: sendValue.employeeFormCode,
+          employeeName: sendValue.employeeName,
+          ageFrom: sendValue.ageFromValue,
+          ageTo: sendValue.ageToValue,
+          intoCompanyCode: sendValue.intoCompanyCode,
+          developLanguage1: sendValue.developLanguage1,
+          developLanguage2: sendValue.developLanguage2,
+          residenceCode: sendValue.residenceCode,
+          japaneseLevelCode: sendValue.japaneseLevelCode,
+          nationalityCode: sendValue.nationalityCode,
+          siteRoleCode: sendValue.siteRoleCode,
+          kadou: sendValue.kadou,
+          socialInsurance: sendValue.socialInsurance,
+          authorityCode: sendValue.authorityCode,
+          intoCompanyYearAndMonthFrom: utils.converToLocalTime(
+            sendValue.intoCompanyYearAndMonthFrom,
+            false
+          ),
+          intoCompanyYearAndMonthTo: utils.converToLocalTime(
+            sendValue.intoCompanyYearAndMonthTo,
+            false
+          ),
+          currPage: sendValue.currPage,
+          rowSelectEmployeeNoForPageChange:
+            sendValue.rowSelectEmployeeNoForPageChange,
+          linkDisableFlag: sendValue.linkDisableFlag,
+          resumeInfo1: sendValue.resumeInfo1,
+          resumeName1: sendValue.resumeName1,
+          resumeInfo2: sendValue.resumeInfo2,
+          resumeName2: sendValue.resumeName2,
+          residentCardInfo: sendValue.residentCardInfo,
+          passportInfo: sendValue.passportInfo,
+          employeeInfo: sendValue.employeeInfo,
+        },
+        () => {
+          this.searchEmployee(this.state.authorityCode);
+        }
+      );
+    }
+
+    let temp = [];
+    for (let i in this.state.employeeStatuss) {
+      if (i == 1) {
+        let add = { name: "協力以外", code: "5" };
+        temp.push(add);
       }
+      temp.push(this.state.employeeStatuss[i]);
     }
     this.setState({
-      employeeStatus: employeeStatus,
+      employeeStatuss: temp,
     });
-    this.select();
   }
-  // 明细查询
-  onchange = (event) => {
-    this.refs.table.setState({
-      selectedRowKeys: [],
+
+  // 初期化の時、disabledをセットします
+  clickButtonDisabled = () => {
+    $('button[name="clickButton"]').attr("disabled", true);
+    /*
+     * this.refs.siteSearchTable.handleSort('asc', 'rowNo');
+     * this.refs.siteSearchTable.handleSort('asc', 'employeeFristName');
+     * this.refs.siteSearchTable.handleSort('asc', 'furigana');
+     * this.refs.siteSearchTable.handleSort('asc', 'alphabetName');
+     * this.refs.siteSearchTable.handleSort('asc', 'birthday');
+     * this.refs.siteSearchTable.handleSort('asc', 'phoneNo');
+     * this.refs.siteSearchTable.handleSort('asc', 'stationName');
+     * this.refs.siteSearchTable.handleSort('asc',
+     * 'intoCompanyYearAndMonth');
+     * this.refs.siteSearchTable.handleSort('asc', 'admissionTime');
+     * this.refs.siteSearchTable.handleSort('asc', 'stayPeriod');
+     * this.refs.siteSearchTable.handleSort('asc', 'employeeNo');
+     */
+  };
+
+  // 検索s
+  searchEmployee = (authorityCode) => {
+    if (this.state.employeeStatus === "1") {
+      this.setState({
+        changeFlag: false,
+      });
+    } else {
+      this.setState({
+        changeFlag: true,
+      });
+    }
+    var age = parseInt(this.state.ageTo) + 1;
+    const emp = {
+      employeeName:
+        this.state.employeeName === "" ? undefined : this.state.employeeName,
+      employeeFormCode:
+        this.state.employeeFormCode === ""
+          ? undefined
+          : this.state.employeeFormCode,
+      employeeStatus:
+        this.state.employeeStatus === ""
+          ? undefined
+          : this.state.employeeStatus,
+      genderStatus:
+        this.state.genderStatus === "" ? undefined : this.state.genderStatus,
+      ageFrom:
+        this.state.ageFrom === "" || this.state.ageFrom === undefined
+          ? undefined
+          : publicUtils.birthday_age(this.state.ageFrom),
+      ageTo:
+        this.state.ageTo === "" || this.state.ageTo === undefined
+          ? undefined
+          : publicUtils.birthday_age(age),
+      residenceCode:
+        this.state.residenceCode === "" ? undefined : this.state.residenceCode,
+      nationalityCode:
+        this.state.nationalityCode === ""
+          ? undefined
+          : this.state.nationalityCode,
+      customer:
+        this.props.location.state !== undefined
+          ? this.state.customerNo
+          : publicUtils.labelGetValue(
+              $("#customerNo").val(),
+              this.state.customerMaster
+            ),
+      intoCompanyCode:
+        this.state.intoCompanyCode === ""
+          ? undefined
+          : this.state.intoCompanyCode,
+      japaneseLevelCode:
+        this.state.japaneseLevelCode === "" ||
+        this.state.japaneseLevelCode === "0"
+          ? undefined
+          : this.state.japaneseLevelCode,
+      siteRoleCode:
+        this.state.siteRoleCode === "" ? undefined : this.state.siteRoleCode,
+      developLanguage1:
+        this.props.location.state !== undefined
+          ? this.state.developLanguage1
+          : $("#developLanguage1").val() === "" ||
+            $("#developLanguage1").val() === "0"
+          ? null
+          : publicUtils.labelGetValue(
+              $("#developLanguage1").val(),
+              this.state.developLanguageMaster
+            ),
+      developLanguage2:
+        this.props.location.state !== undefined
+          ? this.state.developLanguage2
+          : $("#developLanguage2").val() === "" ||
+            $("#developLanguage2").val() === "0"
+          ? null
+          : publicUtils.labelGetValue(
+              $("#developLanguage2").val(),
+              this.state.developLanguageMaster
+            ),
+      intoCompanyYearAndMonthFrom:
+        this.state.intoCompanyYearAndMonthFrom === "" ||
+        this.state.intoCompanyYearAndMonthFrom === null ||
+        this.state.intoCompanyYearAndMonthFrom === undefined
+          ? undefined
+          : publicUtils.formateDate(
+              this.state.intoCompanyYearAndMonthFrom,
+              false
+            ),
+      intoCompanyYearAndMonthTo:
+        this.state.intoCompanyYearAndMonthTo === "" ||
+        this.state.intoCompanyYearAndMonthTo === null ||
+        this.state.intoCompanyYearAndMonthTo === undefined
+          ? undefined
+          : publicUtils.formateDate(
+              this.state.intoCompanyYearAndMonthTo,
+              false
+            ),
+      kadou: this.state.kadou === "" ? undefined : this.state.kadou,
+      socialInsuranceStatus:
+        this.state.socialInsurance === ""
+          ? undefined
+          : this.state.socialInsurance,
+      socialInsuranceDate:
+        this.state.socialInsuranceDate === "" ||
+        this.state.socialInsuranceDate === null ||
+        this.state.socialInsuranceDate === undefined
+          ? undefined
+          : publicUtils.formateDate(this.state.socialInsuranceDate, true),
+      authorityCode:
+        authorityCode === null ? this.state.authorityCode : authorityCode,
+    };
+    axios
+      .post(this.state.serverIP + "employee/getEmployeeInfo", emp)
+      .then((response) => {
+        if (response.data.errorsMessage != null) {
+          this.setState({
+            errorsMessageShow: true,
+            errorsMessageValue: response.data.errorsMessage,
+          });
+        } else if (response.data.isNullMessage != null) {
+          this.setState({
+            errorsMessageShow: true,
+            errorsMessageValue: response.data.isNullMessage,
+            employeeList: response.data.data,
+          });
+        } else {
+          this.setState({
+            employeeList: response.data.data,
+            errorsMessageShow: false,
+          });
+        }
+        if (
+          this.state.rowSelectEmployeeNoForPageChange !== "" &&
+          this.state.rowSelectEmployeeNoForPageChange !== undefined
+        ) {
+          this.setState({
+            linkDisableFlag: this.state.linkDisableFlag,
+            resumeInfo1: this.state.resumeInfo1,
+            resumeName1: this.state.resumeName1,
+            resumeInfo2: this.state.resumeInfo2,
+            resumeName2: this.state.resumeName2,
+            residentCardInfo: this.state.residentCardInfo,
+            passportInfo: this.state.passportInfo,
+          });
+
+          this.refs.siteSearchTable.setState({
+            selectedRowKeys: this.state.rowSelectEmployeeNoForPageChange,
+            currPage: this.state.currPage,
+          });
+          $("#residentCardInfo").prop("disabled", false);
+          $("#passportInfo").prop("disabled", false);
+          $("#delete").attr("disabled", false);
+          $("#update").attr("disabled", false);
+          $("#detail").attr("disabled", false);
+          $("#wagesInfo").attr("disabled", false);
+          $("#workRepot").attr("disabled", false);
+          $("#siteInfo").attr("disabled", false);
+        } else {
+          this.refs.siteSearchTable.setState({
+            selectedRowKeys: [],
+          });
+          $("#resumeInfo1").prop("disabled", true);
+          $("#resumeInfo2").prop("disabled", true);
+          $("#residentCardInfo").prop("disabled", true);
+          $("#passportInfo").prop("disabled", true);
+          $("#delete").attr("disabled", true);
+          $("#update").attr("disabled", true);
+          $("#detail").attr("disabled", true);
+          $("#wagesInfo").attr("disabled", true);
+          $("#workRepot").attr("disabled", true);
+          $("#siteInfo").attr("disabled", true);
+        }
+
+        this.setState({
+          searchFlag: true,
+          rowSelectEmployeeNo:
+            this.state.rowSelectEmployeeNoForPageChange !== undefined
+              ? this.state.rowSelectEmployeeNoForPageChange
+              : "",
+        });
+      })
+      .catch((error) => {
+        this.props.history.push("/loginManager");
+        console.error("Error - " + error);
+      });
+  };
+
+  state = {
+    intoCompanyYearAndMonthFrom: new Date(),
+    intoCompanyYearAndMonthTo: new Date(),
+  };
+
+  // 入社年月form
+  inactiveintoCompanyYearAndMonthFrom = (date) => {
+    this.setState({
+      intoCompanyYearAndMonthFrom: date,
     });
+  };
+  // 入社年月To
+  inactiveintoCompanyYearAndMonthTo = (date) => {
+    this.setState({
+      intoCompanyYearAndMonthTo: date,
+    });
+  };
+
+  socialInsuranceDateChange = (date) => {
+    this.setState({
+      socialInsuranceDate: date,
+    });
+  };
+
+  employeeDelete = () => {
+    // 将id进行数据类型转换，强制转换为数字类型，方便下面进行判断。
+    var a = window.confirm("削除してもよろしいでしょうか？");
+    if (a) {
+      $("#deleteBtn").click();
+    }
+  };
+  // 隠した削除ボタン
+  createCustomDeleteButton = (onClick) => {
+    return (
+      <Button variant="info" id="deleteBtn" hidden onClick={onClick}>
+        删除
+      </Button>
+    );
+  };
+  // 隠した削除ボタンの実装
+  onDeleteRow = (rows) => {
+    const emp = {
+      employeeNo: this.state.rowSelectEmployeeNo,
+      resumeInfo1: this.state.resumeInfo1,
+      resumeInfo2: this.state.resumeInfo2,
+      residentCardInfo: this.state.residentCardInfo,
+      passportInfo: this.state.passportInfo,
+    };
+    const tableSize = this.state.employeeList.length;
+    axios
+      .post(this.state.serverIP + "employee/deleteEmployeeInfo", emp)
+      .then((result) => {
+        if (result.data) {
+          if (tableSize > 1) {
+            this.searchEmployee(this.state.authorityCode);
+            // 削除の後で、rowSelectEmployeeNoの値に空白をセットする
+            this.setState({
+              rowSelectEmployeeNo: "",
+            });
+            this.setState({ myToastShow: true });
+            setTimeout(() => this.setState({ myToastShow: false }), 3000);
+            store.dispatch({
+              type: "UPDATE_STATE",
+              dropName: "getEmployeeName",
+            });
+          } else {
+            // 削除の後で、rowSelectEmployeeNoの値に空白をセットする
+            this.setState({
+              rowSelectEmployeeNo: "",
+              employeeList: [],
+            });
+            this.setState({ myToastShow: true });
+            setTimeout(() => this.setState({ myToastShow: false }), 300);
+            window.location.reload(); // 刷新当前页面.
+          }
+        } else {
+          this.setState({ myToastShow: false });
+        }
+      })
+      .catch(function (error) {
+        notification.error({
+          message: "エラー",
+          description: "删除错误，请检查程序",
+          placement: "topLeft",
+        });
+      });
+  };
+  // 削除前のデフォルトお知らせの削除
+  customConfirm(next, dropRowKeys) {
+    const dropRowKeysStr = dropRowKeys.join(",");
+    next();
+  }
+
+  // 行Selectファンクション
+  handleRowSelect = (row, isSelected, e) => {
+    if (isSelected) {
+      /* alert(this.state.employeeList.length); */
+      this.setState({
+        rowSelectEmployeeNoForPageChange: row.employeeNo,
+        rowSelectEmployeeNo: row.employeeNo,
+        rowSelectEmployeeName: row.employeeName.replaceAll(" ", ""),
+        residentCardInfo: row.residentCardInfo,
+        passportInfo: row.passportInfo,
+        resumeInfo1: row.resumeInfo1,
+        resumeName1: row.resumeName1,
+        resumeInfo2: row.resumeInfo2,
+        resumeName2: row.resumeName2,
+        linkDisableFlag: false, // linkDisableFlag
+        currPage: this.refs.siteSearchTable.state.currPage,
+      });
+      $("#residentCardInfo").prop("disabled", false);
+      $("#passportInfo").prop("disabled", false);
+      $("#delete").attr("disabled", false);
+      $("#update").attr("disabled", false);
+      $("#detail").attr("disabled", false);
+      $("#wagesInfo").attr("disabled", false);
+      $("#workRepot").attr("disabled", false);
+      $("#siteInfo").attr("disabled", false);
+    } else {
+      this.setState({
+        rowSelectEmployeeNoForPageChange: "",
+        rowSelectEmployeeNo: "",
+        rowSelectEmployeeName: "",
+        linkDisableFlag: true, // linkDisableFlag
+        currPage: "",
+      });
+      $("#residentCardInfo").prop("disabled", true);
+      $("#passportInfo").prop("disabled", true);
+      $("#delete").attr("disabled", true);
+      $("#update").attr("disabled", true);
+      $("#detail").attr("disabled", true);
+      $("#wagesInfo").attr("disabled", true);
+      $("#workRepot").attr("disabled", true);
+      $("#siteInfo").attr("disabled", true);
+    }
+  };
+
+  renderShowsTotal(start, to, total) {
+    return (
+      <p
+        style={{
+          color: "dark",
+          float: "left",
+          display: total > 0 ? "block" : "none",
+        }}
+      >
+        {start}から {to}まで , 総計{total}
+      </p>
+    );
+  }
+
+  formatBrthday(birthday) {
+    let date = birthday;
+    birthday = birthday.replace(/[/]/g, "");
+    let value =
+      publicUtils.converToLocalTime(birthday, true) === ""
+        ? ""
+        : Math.ceil(
+            (new Date().getTime() -
+              publicUtils.converToLocalTime(birthday, true).getTime()) /
+              31536000000
+          );
+    date =
+      publicUtils.converToLocalTime(birthday, true) === ""
+        ? ""
+        : date + "(" + value + ")";
+    return date;
+  }
+
+  formatStayPeriod(stayPeriod) {
+    let value =
+      publicUtils.converToLocalTime(stayPeriod, false) === ""
+        ? ""
+        : publicUtils.getFullYearMonth(
+            new Date(),
+            publicUtils.converToLocalTime(stayPeriod, false)
+          );
+    return value;
+  }
+
+  // // AUTOSELECT select事件
+  // handleTag = ({ target }, fieldName) => {
+  //   const { value, id } = target;
+  //   if (value === "") {
+  //     this.setState({
+  //       [id]: "",
+  //     });
+  //   } else {
+  //     if (this.state.employeeInfo.find((v) => v.name === value) !== undefined) {
+  //       switch (fieldName) {
+  //         case "employeeName":
+  //           this.setState({
+  //             employeeName: value,
+  //           });
+  //           break;
+  //       }
+  //     }
+  //   }
+  // };
+
+  /**
+   * 社員名連想
+   *
+   * @param {}
+   *            event
+   */
+  getEmployeeName = (event, values) => {
     this.setState(
       {
         [event.target.name]: event.target.value,
       },
       () => {
-        this.select();
+        let employeeName = null;
+        if (values !== null) {
+          employeeName = values.text;
+        }
+        this.setState({
+          employeeName: employeeName,
+        });
       }
     );
   };
 
-  // レコードのステータス
-  employeeStatusFormat = (cell) => {
-    var statuss = this.state.employeeStatus;
-    for (var i in statuss) {
-      if (cell === statuss[i].value) {
-        return statuss[i].text;
-      }
-    }
-  };
-
-  newMemberStatusFormat = (cell, row) => {
-    if (row.employee === "0") {
-      var statuss = this.state.newMemberStatus;
-      for (var i in statuss) {
-        if (cell === statuss[i].value) {
-          return statuss[i].text;
+  /**
+   * タイプが違う時に、色々な操作をします。
+   */
+  employeeStatusChange = (event) => {
+    const value = event.target.value;
+    let employeeInfoList = this.state.employeeInfoAll;
+    if (value === "0") {
+      let newEmpInfoList = [];
+      for (let i in employeeInfoList) {
+        if (
+          employeeInfoList[i].code.substring(0, 2) !== "BP" &&
+          employeeInfoList[i].code.substring(0, 2) !== "SP" &&
+          employeeInfoList[i].code.substring(0, 2) !== "SC"
+        ) {
+          newEmpInfoList.push(employeeInfoList[i]);
         }
       }
-    } else {
-      return "";
-    }
-  };
-
-  customerContractStatusFormat = (cell) => {
-    var statuss = this.state.customerContractStatus;
-    for (var i in statuss) {
-      if (cell === statuss[i].value) {
-        return statuss[i].text;
-      }
-    }
-  };
-
-  levelStatusFormat = (cell) => {
-    var statuss = this.state.levelStatus;
-    for (var i in statuss) {
-      if (cell === statuss[i].value) {
-        return statuss[i].text;
-      }
-    }
-  };
-
-  salesPutternStatusFormat = (cell) => {
-    var statuss = this.state.salesPutternStatus;
-    for (var i in statuss) {
-      if (cell === statuss[i].value) {
-        return statuss[i].text;
-      }
-    }
-  };
-
-  bpGrossProfitStatusFormat = (cell, row) => {
-    if (row.employee === "1") {
-      var statuss = this.state.bpGrossProfitStatus;
-      for (var i in statuss) {
-        if (cell === statuss[i].value) {
-          return statuss[i].text;
+      this.setState({ employeeInfo: newEmpInfoList, employeeName: "" });
+    } else if (value === "1") {
+      let newEmpInfoList = [];
+      for (let i in employeeInfoList) {
+        if (employeeInfoList[i].code.substring(0, 2) === "BP") {
+          newEmpInfoList.push(employeeInfoList[i]);
         }
       }
-    } else {
-      return "";
-    }
-  };
-
-  specialPointStatusFormat = (cell) => {
-    var statuss = this.state.specialPointStatus;
-    for (var i in statuss) {
-      if (cell === statuss[i].value) {
-        return <span title={statuss[i].text}>{statuss[i].text}</span>;
+      this.setState({
+        intoCompanyYearAndMonthFrom: "",
+        intoCompanyCode: "",
+        employeeFormCode: "",
+        intoCompanyYearAndMonthTo: "",
+        employeeInfo: newEmpInfoList,
+        employeeName: "",
+      });
+    } else if (value === "2") {
+      let newEmpInfoList = [];
+      for (let i in employeeInfoList) {
+        if (employeeInfoList[i].code.substring(0, 2) === "SP") {
+          newEmpInfoList.push(employeeInfoList[i]);
+        }
       }
+      this.setState({ employeeInfo: newEmpInfoList, employeeName: "" });
+    } else if (value === "3") {
+      let newEmpInfoList = [];
+      for (let i in employeeInfoList) {
+        if (employeeInfoList[i].code.substring(0, 2) === "SC") {
+          newEmpInfoList.push(employeeInfoList[i]);
+        }
+      }
+      this.setState({ employeeInfo: newEmpInfoList, employeeName: "" });
+    } else if (value === "4") {
+      let newEmpInfoList = [];
+      for (let i in employeeInfoList) {
+        if (employeeInfoList[i].code.substring(0, 3) === "BPR") {
+          newEmpInfoList.push(employeeInfoList[i]);
+        }
+      }
+      this.setState({
+        intoCompanyYearAndMonthFrom: "",
+        intoCompanyCode: "",
+        employeeFormCode: "",
+        intoCompanyYearAndMonthTo: "",
+        employeeInfo: newEmpInfoList,
+        employeeName: "",
+      });
+    } else if (value === "5") {
+      let newEmpInfoList = [];
+      for (let i in employeeInfoList) {
+        if (!(employeeInfoList[i].code.substring(0, 2) === "BP")) {
+          newEmpInfoList.push(employeeInfoList[i]);
+        }
+      }
+      this.setState({ employeeInfo: newEmpInfoList, employeeName: "" });
+    } else {
+      this.setState({ employeeInfo: employeeInfoList });
     }
-  };
-  pointFormat = (cell) => {
-    if (cell != null && cell.length > 3) {
-      cell = cell.substring(0, 3);
-    }
-    return cell;
+    this.setState({ employeeStatus: value });
   };
 
-  remarkFormat = (cell) => {
-    if (cell != null && cell.length > 50) {
-      cell = cell.substring(0, 50);
+  getDevelopLanguage1 = (event, values) => {
+    if (values != null) {
+      this.setState({
+        developLanguage1: values.code,
+      });
+    } else {
+      this.setState({
+        developLanguage1: "",
+      });
     }
-    return <span title={cell}>{cell}</span>;
+  };
+  getDevelopLanguage2 = (event, values) => {
+    if (values != null) {
+      this.setState({
+        developLanguage2: values.code,
+      });
+    } else {
+      this.setState({
+        developLanguage2: "",
+      });
+    }
   };
 
-  select = () => {
-    var salesPointSetModel = {};
-    salesPointSetModel["employee"] = this.state.employeeSearch;
-    salesPointSetModel["newMember"] = this.state.newMemberSearch;
-    salesPointSetModel["customerContract"] = this.state.customerContractSearch;
+  downloadResume = (resumeInfo, no) => {
+    let fileKey = "";
+    let downLoadPath = "";
+    if (resumeInfo !== null && resumeInfo.split("file/").length > 1) {
+      fileKey = resumeInfo.split("file/")[1];
+      downLoadPath = (
+        resumeInfo.substring(0, resumeInfo.lastIndexOf("_") + 1) +
+        (no === 1
+          ? this.state.resumeName1.split("_").length > 1
+            ? this.state.resumeName1.split("_")[1]
+            : this.state.resumeName1
+          : this.state.resumeName2.split("_").length > 1
+          ? this.state.resumeName2.split("_")[1]
+          : this.state.resumeName2) +
+        "." +
+        resumeInfo.split(".")[resumeInfo.split(".").length - 1]
+      ).replaceAll("/", "//");
+    }
     axios
-      .post(this.state.serverIP + "getSalesPointInfo", salesPointSetModel)
-      .then((response) => {
-        if (response.data != null) {
-          this.setState({
-            salesPointData: response.data,
-          });
-        }
+      .post(this.state.serverIP + "s3Controller/downloadFile", {
+        fileKey: fileKey,
+        downLoadPath: downLoadPath,
       })
-      .catch((error) => {
-        console.error("Error - " + error);
-      });
-  };
-  /**
-   * 行Selectファンクション
-   */
-  handleRowSelect = (row, isSelected) => {
-    if (isSelected) {
-      this.setState({
-        no: row.no,
-        employeefrom: row.employee === null ? "" : row.employee,
-        updateFlag: false,
-      });
-    } else {
-      this.setState({
-        updateFlag: true,
-      });
-    }
-  };
-
-  /**
-   * 行追加
-   */
-  insertRow = () => {
-    var salesPointData = this.state.salesPointData;
-    var salesPointSetModel = {};
-    if (salesPointData.length > 0) {
-      salesPointSetModel["no"] =
-        parseInt(salesPointData[salesPointData.length - 1].no) + 1;
-    } else {
-      salesPointSetModel["no"] = 1;
-    }
-    salesPointSetModel["employee"] = "";
-    salesPointSetModel["newMember"] = "";
-    salesPointSetModel["customerContract"] = "0";
-    salesPointSetModel["level"] = "";
-    //salesPointSetModel["salesPuttern"] = "";
-    salesPointSetModel["bpGrossProfit"] = "";
-    salesPointSetModel["specialPoint"] = "";
-    salesPointSetModel["point"] = "";
-    salesPointSetModel["remark"] = "";
-    salesPointData.push(salesPointSetModel);
-    var currentPage = Math.ceil(salesPointData.length / 10);
-    this.setState({
-      no: salesPointSetModel["no"],
-      salesPointData: salesPointData,
-      currentPage: currentPage,
-      updateFlag: true,
-      insertFlag: true,
-    });
-    this.refs.table.setState({
-      selectedRowKeys: [],
-    });
-  };
-  /**
-   * 登録ボタン
-   */
-  insert = () => {
-    var salesPointSetModel = {};
-    if (this.checkRows() !== "") {
-      this.setState({
-        errorsMessageShow: true,
-        errorsMessageValue:
-          "ROW " +
-          this.state.salesPointData.length +
-          this.checkRows() +
-          "入力してください。",
-      });
-      return;
-    }
-    for (let i = 0; i < this.state.salesPointData.length; i++) {
-      if (this.state.salesPointData[i].no === this.state.no) {
-        salesPointSetModel["no"] = this.state.no;
-        salesPointSetModel["employee"] = this.state.salesPointData[i].employee;
-        salesPointSetModel["newMember"] =
-          this.state.salesPointData[i].employee == "0"
-            ? this.state.salesPointData[i].newMember
-            : null;
-        salesPointSetModel["customerContract"] =
-          this.state.salesPointData[i].customerContract;
-        salesPointSetModel["level"] = this.state.salesPointData[i].level;
-        //salesPointSetModel["salesPuttern"] = this.state.salesPointData[i].salesPuttern
-        salesPointSetModel["bpGrossProfit"] =
-          this.state.salesPointData[i].bpGrossProfit;
-        salesPointSetModel["specialPoint"] =
-          this.state.salesPointData[i].specialPoint;
-        salesPointSetModel["specialPointNo"] =
-          this.state.salesPointData[i].specialPointNo != null &&
-          this.state.salesPointData[i].specialPointNo.length >= 3
-            ? this.state.salesPointData[i].specialPointNo.substring(0, 3)
-            : this.state.salesPointData[i].specialPointNo;
-        salesPointSetModel["point"] =
-          this.state.salesPointData[i].point != null &&
-          this.state.salesPointData[i].point.length >= 3
-            ? this.state.salesPointData[i].point.substring(0, 3)
-            : this.state.salesPointData[i].point;
-        salesPointSetModel["remark"] =
-          this.state.salesPointData[i].remark != null &&
-          this.state.salesPointData[i].remark.length >= 50
-            ? this.state.salesPointData[i].remark.substring(0, 50)
-            : this.state.salesPointData[i].remark;
-      }
-    }
-    axios
-      .post(this.state.serverIP + "salesPointInsert", salesPointSetModel)
       .then((result) => {
-        if (result.data.errorsMessage != null) {
-          this.setState({
-            errorsMessageShow: true,
-            errorsMessageValue: result.data.errorsMessage,
-          });
-        } else {
-          this.setState({
-            myToastShow: true,
-            method: "put",
-            errorsMessageShow: false,
-          });
-          setTimeout(() => this.setState({ myToastShow: false }), 3000);
-          this.refs.table.setState({
-            selectedRowKeys: [],
-          });
-          this.setState({
-            insertFlag: false,
-            updateFlag: true,
-          });
-          this.select();
+        let path = downLoadPath.replaceAll("//", "/");
+        if (no === 1) {
+          publicUtils.resumeDownload(
+            path,
+            this.state.serverIP,
+            this.state.resumeName1.split("_").length > 1
+              ? this.state.resumeName1.split("_")[1]
+              : this.state.resumeName1
+          );
+        } else if (no === 2) {
+          publicUtils.resumeDownload(
+            path,
+            this.state.serverIP,
+            this.state.resumeName2.split("_").length > 1
+              ? this.state.resumeName2.split("_")[1]
+              : this.state.resumeName2
+          );
         }
       })
-      .catch((error) => {
-        console.error("Error - " + error);
-      });
-  };
-
-  /**
-   * 修正ボタン
-   */
-  update = () => {
-    var salesPointSetModel = {};
-
-    for (let i = 0; i < this.state.salesPointData.length; i++) {
-      if (this.state.salesPointData[i].no === this.state.no) {
-        let isNull = "";
-        if (
-          this.state.salesPointData[i].employee === "" ||
-          this.state.salesPointData[i].employee == null
-        ) {
-          isNull += " 社員区分 ";
-        }
-        if (
-          this.state.salesPointData[i].employee === "0" &&
-          (this.state.salesPointData[i].newMember === "" ||
-            this.state.salesPointData[i].newMember == null)
-        ) {
-          isNull += " 新人区分 ";
-        }
-        if (
-          this.state.salesPointData[i].customerContract === "" ||
-          this.state.salesPointData[i].customerContract == null
-        ) {
-          isNull += " 契約区分 ";
-        }
-        /*if (this.state.salesPointData[i].level === ""　|| this.state.salesPointData[i].level == null){
-					isNull += " お客様レベル ";
-				}
-				if (this.state.salesPointData[i].salesPuttern === ""　|| this.state.salesPointData[i].salesPuttern == null){
-					isNull += " 営業結果パタンー ";
-				}*/
-        if (
-          this.state.salesPointData[i].point === "" ||
-          this.state.salesPointData[i].point == null
-        ) {
-          isNull += " ポイント ";
-        }
-        if (isNull !== "") {
-          this.setState({
-            errorsMessageShow: true,
-            errorsMessageValue:
-              "ROW " +
-              this.state.salesPointData[i].no +
-              isNull +
-              "入力してください。",
-          });
-          return;
-        }
-      }
-    }
-
-    for (let i = 0; i < this.state.salesPointData.length; i++) {
-      if (this.state.salesPointData[i].no === this.state.no) {
-        salesPointSetModel["no"] = this.state.no;
-        salesPointSetModel["employee"] = this.state.salesPointData[i].employee;
-        salesPointSetModel["newMember"] =
-          this.state.salesPointData[i].employee == "0"
-            ? this.state.salesPointData[i].newMember
-            : null;
-        salesPointSetModel["customerContract"] =
-          this.state.salesPointData[i].customerContract;
-        salesPointSetModel["level"] = this.state.salesPointData[i].level;
-        //salesPointSetModel["salesPuttern"] = this.state.salesPointData[i].salesPuttern
-        salesPointSetModel["bpGrossProfit"] =
-          this.state.salesPointData[i].bpGrossProfit;
-        salesPointSetModel["specialPoint"] =
-          this.state.salesPointData[i].specialPoint;
-        salesPointSetModel["specialPointNo"] =
-          this.state.salesPointData[i].specialPointNo != null &&
-          this.state.salesPointData[i].specialPointNo.length >= 3
-            ? this.state.salesPointData[i].specialPointNo.substring(0, 3)
-            : this.state.salesPointData[i].specialPointNo;
-        salesPointSetModel["point"] =
-          this.state.salesPointData[i].point != null &&
-          this.state.salesPointData[i].point.length >= 3
-            ? this.state.salesPointData[i].point.substring(0, 3)
-            : this.state.salesPointData[i].point;
-        salesPointSetModel["remark"] =
-          this.state.salesPointData[i].remark != null &&
-          this.state.salesPointData[i].remark.length >= 50
-            ? this.state.salesPointData[i].remark.substring(0, 50)
-            : this.state.salesPointData[i].remark;
-      }
-    }
-    axios
-      .post(this.state.serverIP + "salesPointUpdate", salesPointSetModel)
-      .then((result) => {
-        if (result.data.errorsMessage != null) {
-          this.setState({
-            errorsMessageShow: true,
-            errorsMessageValue: result.data.errorsMessage,
-          });
-        } else {
-          this.setState({
-            myToastShow: true,
-            method: "put",
-            errorsMessageShow: false,
-          });
-          setTimeout(() => this.setState({ myToastShow: false }), 3000);
-          this.refs.table.setState({
-            selectedRowKeys: [],
-          });
-          this.setState({
-            updateFlag: true,
-          });
-          this.select();
-        }
-      })
-      .catch((error) => {
-        console.error("Error - " + error);
-      });
-  };
-
-  /**
-   * 削除ボタン
-   */
-  delete = () => {
-    var a = window.confirm("削除してもよろしいでしょうか？");
-    if (a) {
-      var salesPointSetModel = {};
-      salesPointSetModel["no"] = this.state.no;
-      axios
-        .post(this.state.serverIP + "salesPointDelete", salesPointSetModel)
-        .then((result) => {
-          this.setState({
-            myToastShow: true,
-            method: "post",
-            errorsMessageShow: false,
-          });
-          setTimeout(() => this.setState({ myToastShow: false }), 3000);
-          this.setState({
-            updateFlag: true,
-          });
-          this.select();
-        })
-        .catch((error) => {
-          console.error("Error - " + error);
+      .catch(function (error) {
+        notification.error({
+          message: "エラー",
+          description: "ファイルが存在しません。",
+          placement: "topLeft",
         });
-    }
+      });
   };
 
-  checkRows = () => {
-    let isNull = "";
-    if (
-      this.state.salesPointData[this.state.salesPointData.length - 1]
-        .employee === "" ||
-      this.state.salesPointData[this.state.salesPointData.length - 1]
-        .employee == null
-    ) {
-      isNull += " 社員区分 ";
+  csvDownload = () => {
+    let employeeNo = [];
+    for (let i in this.state.employeeList) {
+      employeeNo.push(this.state.employeeList[i].employeeNo);
     }
-    if (
-      this.state.salesPointData[this.state.salesPointData.length - 1]
-        .employee === "0" &&
-      (this.state.salesPointData[this.state.salesPointData.length - 1]
-        .newMember === "" ||
-        this.state.salesPointData[this.state.salesPointData.length - 1]
-          .newMember == null)
-    ) {
-      isNull += " 新人区分 ";
+
+    axios
+      .post(this.state.serverIP + "employee/csvDownload", employeeNo)
+      .then((response) => response.data)
+      .then((data) => {
+        this.download(data);
+      });
+  };
+
+  download = (employeeList) => {
+    // 导出
+    var str =
+      "社員番号,国籍,社員名,アルファベット,ふりがな,性別," +
+      "社内メール,生年月日,生年月日,年齢,入社年月,入社年数,雇用契約期間,TEL," +
+      "在留資格,在留期間,在留期限,在留カード番号,旅券番号,有効期限,出入国届開始,出入国届終了," +
+      "マイナンバー番号,雇用保険番号,社会保険期限,整理番号,郵便番号,住所(日本),口座,退職年月日" +
+      "\n";
+    for (var i = 0; i < employeeList.length; i++) {
+      str += this.checkEmpty(employeeList[i].employeeNo) + ",";
+      str += this.checkEmpty(employeeList[i].nationality) + ",";
+      str += this.checkEmpty(employeeList[i].employeeName) + ",";
+      str += this.checkEmpty(employeeList[i].alphabetName) + ",";
+      str += this.checkEmpty(employeeList[i].furigana) + ",";
+      str += this.checkEmpty(employeeList[i].genderStatus) + ",";
+
+      str += this.checkEmpty(employeeList[i].companyMail) + ",";
+      str += this.checkEmpty(employeeList[i].birthday) + ",";
+      str += this.checkEmpty(employeeList[i].japaneseCalendar) + ",";
+      str += this.checkEmpty(employeeList[i].age) + ",";
+      str += this.checkEmpty(employeeList[i].intoCompanyYearAndMonth) + ",";
+      str += this.checkEmpty(employeeList[i].intoCompanyYears) + ",";
+      str += this.checkEmpty(employeeList[i].contractDeadline) + ",";
+      str += this.checkEmpty(employeeList[i].phoneNo) + ",";
+
+      str += this.checkEmpty(employeeList[i].residenceName) + ",";
+      str += this.checkEmpty(employeeList[i].stayPeriodYears) + ",";
+      str += this.checkEmpty(employeeList[i].stayPeriod) + ",";
+      str += this.checkEmpty(employeeList[i].residenceCardNo) + ",";
+      str += this.checkEmpty(employeeList[i].passportNo) + ",";
+      str += this.checkEmpty(employeeList[i].passportStayPeriod) + ",";
+      str += this.checkEmpty(employeeList[i].immigrationStartTime) + ",";
+      str += this.checkEmpty(employeeList[i].immigrationEndTime) + ",";
+
+      str += employeeList[i].myNumber + ",";
+      str += this.checkEmpty(employeeList[i].employmentInsuranceNo) + ",";
+      str += this.checkEmpty(employeeList[i].socialInsuranceDate) + ",";
+      str += this.checkEmpty(employeeList[i].socialInsuranceNo) + ",";
+      str += this.checkEmpty(employeeList[i].postcode) + ",";
+      str += this.checkEmpty(employeeList[i].address) + ",";
+      str += this.checkEmpty(employeeList[i].accountInfo) + ",";
+      str += this.checkEmpty(employeeList[i].retirementYearAndMonth) + ",";
+
+      str += "\n";
     }
-    if (
-      this.state.salesPointData[this.state.salesPointData.length - 1]
-        .customerContract === "" ||
-      this.state.salesPointData[this.state.salesPointData.length - 1]
-        .customerContract == null
-    ) {
-      isNull += " 契約区分 ";
+
+    var aaaa = "data:text/csv;charset=utf-8,\ufeff" + str;
+    var link = document.createElement("a");
+    link.setAttribute("href", aaaa);
+    var date = new Date();
+    var filename = "社員情報";
+    link.setAttribute("download", filename + ".csv");
+    link.click();
+  };
+
+  checkEmpty = (values) => {
+    return values === "" ? "" : "\t" + values;
+  };
+
+  getCustomerNo = (event, values) => {
+    if (values != null) {
+      this.setState({
+        customerNo: values.code,
+      });
+    } else {
+      this.setState({
+        customerNo: "",
+      });
     }
-    /*if (this.state.salesPointData[this.state.salesPointData.length - 1].level === ""　|| this.state.salesPointData[this.state.salesPointData.length - 1].level == null){
-			isNull += " お客様レベル ";
-		}
-		if (this.state.salesPointData[this.state.salesPointData.length - 1].salesPuttern === ""　|| this.state.salesPointData[this.state.salesPointData.length - 1].salesPuttern == null){
-			isNull += " 営業結果パタンー ";
-		}*/
-    if (
-      this.state.salesPointData[this.state.salesPointData.length - 1].point ===
-        "" ||
-      this.state.salesPointData[this.state.salesPointData.length - 1].point ==
-        null
-    ) {
-      isNull += " ポイント ";
+  };
+  shuseiTo = (actionType) => {
+    var path = {};
+    const sendValue = {
+      employeeName:
+        this.state.employeeName === "" ? undefined : this.state.employeeName,
+      employeeFormCode:
+        this.state.employeeFormCode === ""
+          ? undefined
+          : this.state.employeeFormCode,
+      employeeStatus:
+        this.state.employeeStatus === ""
+          ? undefined
+          : this.state.employeeStatus,
+      genderStatus:
+        this.state.genderStatus === "" ? undefined : this.state.genderStatus,
+      ageFromValue: this.state.ageFrom === "" ? undefined : this.state.ageFrom,
+      ageFrom:
+        this.state.ageFrom === ""
+          ? undefined
+          : publicUtils.birthday_age(this.state.ageFrom),
+      ageToValue: this.state.ageFrom === "" ? undefined : this.state.ageTo,
+      ageTo:
+        this.state.ageTo === ""
+          ? undefined
+          : publicUtils.birthday_age(this.state.ageTo),
+      residenceCode:
+        this.state.residenceCode === "" ? undefined : this.state.residenceCode,
+      nationalityCode:
+        this.state.nationalityCode === ""
+          ? undefined
+          : this.state.nationalityCode,
+      customer: publicUtils.labelGetValue(
+        $("#customerNo").val(),
+        this.state.customerMaster
+      ),
+      customerNo:
+        this.state.customerMaster === "" ? undefined : this.state.customerNo,
+      intoCompanyCode:
+        this.state.intoCompanyCode === ""
+          ? undefined
+          : this.state.intoCompanyCode,
+      japaneseLevelCode:
+        this.state.japaneseLevelCode === ""
+          ? undefined
+          : this.state.japaneseLevelCode,
+      siteRoleCode:
+        this.state.siteRoleCode === "" ? undefined : this.state.siteRoleCode,
+      developLanguage1: publicUtils.labelGetValue(
+        $("#developLanguage1").val(),
+        this.state.developLanguageMaster
+      ),
+      developLanguage2: publicUtils.labelGetValue(
+        $("#developLanguage2").val(),
+        this.state.developLanguageMaster
+      ),
+      intoCompanyYearAndMonthFrom:
+        this.state.intoCompanyYearAndMonthFrom === "" ||
+        this.state.intoCompanyYearAndMonthFrom === undefined
+          ? undefined
+          : publicUtils.formateDate(
+              this.state.intoCompanyYearAndMonthFrom,
+              false
+            ),
+      intoCompanyYearAndMonthTo:
+        this.state.intoCompanyYearAndMonthTo === "" ||
+        this.state.intoCompanyYearAndMonthTo === undefined
+          ? undefined
+          : publicUtils.formateDate(
+              this.state.intoCompanyYearAndMonthTo,
+              false
+            ),
+      kadou: this.state.kadou === "" ? undefined : this.state.kadou,
+      authorityCode: this.state.authorityCode,
+      socialInsurance: this.state.socialInsurance,
+      linkDisableFlag: this.state.socialInsurance,
+      currPage: this.state.currPage,
+      rowSelectEmployeeNoForPageChange:
+        this.state.rowSelectEmployeeNoForPageChange,
+      resumeInfo1: this.state.resumeInfo1,
+      resumeName1: this.state.resumeName1,
+      resumeInfo2: this.state.resumeInfo2,
+      resumeName2: this.state.resumeName2,
+      residentCardInfo: this.state.residentCardInfo,
+      passportInfo: this.state.passportInfo,
+      employeeInfo: this.state.employeeInfo,
+    };
+    switch (actionType) {
+      case "update":
+        path = {
+          pathname: "/subMenuManager/employeeUpdateNew",
+          state: {
+            actionType: "update",
+            id: this.state.rowSelectEmployeeNo,
+            backPage: "employeeSearch",
+            sendValue: sendValue,
+            searchFlag: this.state.searchFlag,
+          },
+        };
+        break;
+      case "detail":
+        path = {
+          pathname: "/subMenuManager/employeeDetailNew",
+          state: {
+            actionType: "detail",
+            id: this.state.rowSelectEmployeeNo,
+            backPage: "employeeSearch",
+            sendValue: sendValue,
+            searchFlag: this.state.searchFlag,
+          },
+        };
+        break;
+      case "insert":
+        path = {
+          pathname: "/subMenuManager/employeeInsertNew",
+          state: {
+            actionType: "insert",
+            backPage: "employeeSearch",
+            sendValue: sendValue,
+            searchFlag: this.state.searchFlag,
+          },
+        };
+        break;
+      case "wagesInfo":
+        path = {
+          pathname: "/subMenuManager/wagesInfo",
+          state: {
+            employeeNo: this.state.rowSelectEmployeeNo,
+            backPage: "employeeSearch",
+            sendValue: sendValue,
+            searchFlag: this.state.searchFlag,
+          },
+        };
+        break;
+      case "siteInfo":
+        path = {
+          pathname: "/subMenuManager/siteInfo",
+          state: {
+            employeeNo: this.state.rowSelectEmployeeNo,
+            backPage: "employeeSearch",
+            sendValue: sendValue,
+            searchFlag: this.state.searchFlag,
+          },
+        };
+        break;
+      case "workRepot":
+        path = {
+          pathname: "/subMenuManager/workRepot",
+          state: {
+            employeeNo: this.state.rowSelectEmployeeNo,
+            employeeName: this.state.rowSelectEmployeeName,
+            backPage: "employeeSearch",
+            sendValue: sendValue,
+            searchFlag: this.state.searchFlag,
+          },
+        };
+        break;
+      default:
     }
-    return isNull;
+    this.props.history.push(path);
+  };
+
+  test = (event) => {
+    if (event.keyCode === 13) {
+      this.searchEmployee(this.state.authorityCode);
+    }
   };
 
   render() {
-    // 表格样式设定
-    this.options = {
-      onPageChange: (page) => {
-        this.setState({ currentPage: page });
-      },
-      page: this.state.currentPage,
-      sizePerPage: 10, // which size per page you want to locate as
-      // default
-      pageStartIndex: 1, // where to start counting the pages
-      paginationSize: 3, // the pagination bar size.
-      prePage: "<", // Previous page button text
-      nextPage: ">", // Next page button text
-      firstPage: "<<", // First page button text
-      lastPage: ">>", // Last page button text
-      paginationShowsTotal: this.renderShowsTotal, // Accept bool or
-      // function
-      hideSizePerPage: true, // > You can hide the dropdown for
-      // sizePerPage
-    };
     const {
-      employeeSearch,
-      newMemberSearch,
-      customerContractSearch,
+      employeeFormCode,
+      genderStatus,
+      employeeStatus,
+      ageFrom,
+      ageTo,
+      residenceCode,
+      nationalityCode,
+      customer,
+      japaneseLevelCode,
+      siteRoleCode,
+      kadou,
+      intoCompanyCode,
+      socialInsurance,
+      employeeList,
       errorsMessageValue,
     } = this.state;
-    // テーブルの列の選択
+    // テーブルの行の選択
     const selectRow = {
       mode: "radio",
       bgColor: "pink",
-      clickToSelectAndEditCell: true,
       hideSelectColumn: true,
-      clickToExpand: true, // click to expand row, default is false
+      clickToSelect: true,
+      clickToExpand: true,
       onSelect: this.handleRowSelect,
     };
-    const cellEdit = {
-      mode: "click",
-      blurToSave: true,
+    // テーブルの定義
+    const options = {
+      page: 1,
+      sizePerPage: 10,
+      pageStartIndex: 1,
+      paginationSize: 3,
+      prePage: "<",
+      nextPage: ">",
+      firstPage: "<<",
+      lastPage: ">>",
+      paginationShowsTotal: this.renderShowsTotal,
+      hideSizePerPage: true,
+      expandRowBgColor: "rgb(165, 165, 165)",
+      deleteBtn: this.createCustomDeleteButton,
+      onDeleteRow: this.onDeleteRow,
+      handleConfirmDeleteRow: this.customConfirm,
+      sortIndicator: false, // 隐藏初始排序箭头
     };
+
+    console.log({ state: this.state }, "render");
+
     return (
       <div>
+        <FormControl
+          id="rowSelectEmployeeNo"
+          name="rowSelectEmployeeNo"
+          hidden
+        />
         <div style={{ display: this.state.myToastShow ? "block" : "none" }}>
           <MyToast
             myToastShow={this.state.myToastShow}
-            message={this.state.method === "put" ? "登録成功！" : "削除成功！"}
-            type={"success"}
+            message={"削除成功！"}
+            type={"danger"}
           />
         </div>
         <div
@@ -548,20 +1129,14 @@ class salesAdditionSet extends React.Component {
             type={"danger"}
           />
         </div>
-        <div>
-          <Form id="siteForm">
-            <Form.Group>
-              {/*
-               * <Row> <Col sm={3}></Col> <Col sm={7}> <img
-               * className="mb-4" alt="title" src={title}/>
-               * </Col> </Row>
-               */}
-              <Row inline="true">
-                <Col className="text-center">
-                  <h2>營業金額特別設定</h2>
-                </Col>
-              </Row>
-            </Form.Group>
+        <Row inline="true">
+          <Col className="text-center">
+            <h2>營業金額特別設定</h2>
+          </Col>
+        </Row>
+        <br />
+        <Form>
+          <div onKeyDown={this.test}>
             <Form.Group>
               <Row>
                 <Col sm={3}>
@@ -574,14 +1149,129 @@ class salesAdditionSet extends React.Component {
                     <Form.Control
                       as="select"
                       size="sm"
-                      onChange={this.onchange}
-                      name="employeeSearch"
-                      value={employeeSearch}
+                      onChange={this.employeeStatusChange.bind(this)}
+                      name="employeeStatus"
+                      value={employeeStatus}
                       autoComplete="off"
                     >
-                      <option value="">選択ください</option>
-                      <option value="0">社員</option>
-                      <option value="1">協力</option>
+                      {this.state.employeeStatuss.map((data) => (
+                        <option key={data.code} value={data.code}>
+                          {data.name}
+                        </option>
+                      ))}
+                    </Form.Control>
+                  </InputGroup>
+                </Col>
+                <Col sm={3}>
+                  <InputGroup size="sm" className="mb-3">
+                    <InputGroup.Prepend>
+                      <InputGroup.Text id="fiveKanji">
+                        社員名(BP)
+                      </InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <Autocomplete
+                      className="fx1"
+                      id="employeeName"
+                      name="employeeName"
+                      value={
+                        this.state.employeeInfo.find(
+                          (v) => v.text === this.state.employeeName
+                        ) || {}
+                      }
+                      options={this.state.employeeInfo}
+                      getOptionLabel={(option) => option.name || ""}
+                      // onSelect={(event) =>
+                      //   this.handleTag(event, "employeeName")
+                      // }
+                      onChange={(event, values) =>
+                        this.getEmployeeName(event, values)
+                      }
+                      renderOption={(option) => {
+                        return (
+                          <React.Fragment>{option.name || ""}</React.Fragment>
+                        );
+                      }}
+                      renderInput={(params) => (
+                        <div ref={params.InputProps.ref}>
+                          <input
+                            type="text"
+                            {...params.inputProps}
+                            className="auto form-control Autocompletestyle-siteInfoSearch-employeeNo w100p"
+                          />
+                        </div>
+                      )}
+                    />
+                  </InputGroup>
+                </Col>
+              </Row>
+              <Row>
+                <Col sm={3}>
+                  <InputGroup size="sm" className="mb-3">
+                    <InputGroup.Prepend>
+                      <InputGroup.Text id="inputGroup-sizing-sm">
+                        性別
+                      </InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <Form.Control
+                      as="select"
+                      size="sm"
+                      onChange={this.valueChange}
+                      name="genderStatus"
+                      value={genderStatus}
+                      autoComplete="off"
+                    >
+                      {this.state.genderStatuss.map((data) => (
+                        <option key={data.code} value={data.code}>
+                          {data.name}
+                        </option>
+                      ))}
+                    </Form.Control>
+                  </InputGroup>
+                </Col>
+                <Col sm={3}>
+                  <InputGroup size="sm" className="mb-3">
+                    <InputGroup.Prepend>
+                      <InputGroup.Text id="fiveKanji">年齢</InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <Form.Control
+                      type="number"
+                      name="ageFrom"
+                      value={ageFrom}
+                      autoComplete="off"
+                      onChange={this.ageValueChange}
+                      size="sm"
+                    />{" "}
+                    ～{" "}
+                    <Form.Control
+                      type="number"
+                      name="ageTo"
+                      value={ageTo}
+                      autoComplete="off"
+                      onChange={this.ageValueChange}
+                      size="sm"
+                    />
+                  </InputGroup>
+                </Col>
+                <Col sm={3}>
+                  <InputGroup size="sm" className="mb-3">
+                    <InputGroup.Prepend>
+                      <InputGroup.Text id="inputGroup-sizing-sm">
+                        在留資格
+                      </InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <Form.Control
+                      as="select"
+                      size="sm"
+                      onChange={this.valueChange}
+                      name="residenceCode"
+                      value={residenceCode}
+                      autoComplete="off"
+                    >
+                      {this.state.residenceCodes.map((data) => (
+                        <option key={data.code} value={data.code}>
+                          {data.name}
+                        </option>
+                      ))}
                     </Form.Control>
                   </InputGroup>
                 </Col>
@@ -589,232 +1279,632 @@ class salesAdditionSet extends React.Component {
                   <InputGroup size="sm" className="mb-3">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
-                        新人区分
+                        国籍
+                      </InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <Form.Control
+                      as="select"
+                      onChange={this.valueChange}
+                      size="sm"
+                      name="nationalityCode"
+                      value={nationalityCode}
+                      autoComplete="off"
+                    >
+                      {this.state.nationalityCodes.map((data) => (
+                        <option key={data.code} value={data.code}>
+                          {data.name}
+                        </option>
+                      ))}
+                    </Form.Control>
+                  </InputGroup>
+                </Col>
+              </Row>
+              <Row>
+                <Col sm={3}>
+                  {/*
+                   * <InputGroup size="sm"
+                   * className="mb-3">
+                   * <InputGroup.Prepend> <InputGroup.Text
+                   * id="inputGroup-sizing-sm">お客様先</InputGroup.Text>
+                   * </InputGroup.Prepend> <Autocomplete
+                   * id="customerNo" name="customerNo"
+                   * value={this.state.customerMaster.find(v =>
+                   * v.code === this.state.customerNo) ||
+                   * {}} onChange={(event, values) =>
+                   * this.getCustomerNo(event, values)}
+                   * options={this.state.customerMaster}
+                   * getOptionLabel={(option) =>
+                   * option.name||''} renderInput={(params) => (
+                   * <div ref={params.InputProps.ref}>
+                   * <input type="text"
+                   * {...params.inputProps}
+                   * className="auto form-control
+                   * Autocompletestyle-customer" /> </div> )} />
+                   *
+                   * </InputGroup>
+                   */}
+                  <InputGroup size="sm" className="mb-3">
+                    <InputGroup.Prepend>
+                      <InputGroup.Text id="inputGroup-sizing-sm">
+                        社員形式
                       </InputGroup.Text>
                     </InputGroup.Prepend>
                     <Form.Control
                       as="select"
                       size="sm"
-                      onChange={this.onchange}
-                      name="newMemberSearch"
-                      value={newMemberSearch}
+                      onChange={this.valueChange}
+                      disabled={employeeStatus === "1" ? true : false}
+                      name="employeeFormCode"
+                      value={employeeFormCode}
                       autoComplete="off"
                     >
-                      <option value="">選択ください</option>
-                      <option value="0">新人</option>
-                      <option value="1">経験者</option>
+                      {this.state.employeeFormCodes.map((data) => (
+                        <option key={data.code} value={data.code}>
+                          {data.name}
+                        </option>
+                      ))}
                     </Form.Control>
                   </InputGroup>
                 </Col>
-                {/*								<Col sm={3}>
-									<InputGroup size="sm" className="mb-3">
-										<InputGroup.Prepend>
-											<InputGroup.Text id="inputGroup-sizing-sm">契約区分</InputGroup.Text>
-										</InputGroup.Prepend>
-										<Form.Control as="select" size="sm" onChange={this.onchange} name="customerContractSearch" value={customerContractSearch} autoComplete="off" >
-											<option value="">選択ください</option>
-											<option value="0">既存</option>
-											<option value="1">新規</option>
-										</Form.Control>
-									</InputGroup>
-								</Col>*/}
-              </Row>
-              <Row>
-                <Col sm={9}></Col>
                 <Col sm={3}>
-                  <div style={{ float: "right" }}>
-                    <Button
-                      variant="info"
+                  <InputGroup size="sm" className="mb-3">
+                    <InputGroup.Prepend>
+                      <InputGroup.Text id="inputGroup-sizing-sm">
+                        採用区分
+                      </InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <Form.Control
+                      as="select"
+                      onChange={this.valueChange}
                       size="sm"
-                      id="revise"
-                      onClick={
-                        this.state.insertFlag === true
-                          ? this.insert
-                          : this.insertRow
-                      }
+                      name="intoCompanyCode"
+                      value={intoCompanyCode}
+                      disabled={employeeStatus === "1" ? true : false}
+                      autoComplete="off"
                     >
-                      <FontAwesomeIcon icon={faSave} />{" "}
-                      {this.state.insertFlag === true ? "登録" : "追加"}
-                    </Button>{" "}
-                    <Button
-                      variant="info"
+                      {this.state.intoCompanyCodes.map((data) => (
+                        <option key={data.code} value={data.code}>
+                          {data.name}
+                        </option>
+                      ))}
+                    </Form.Control>
+                  </InputGroup>
+                </Col>
+                <Col sm={3}>
+                  <InputGroup size="sm" className="mb-3">
+                    <InputGroup.Prepend>
+                      <InputGroup.Text id="inputGroup-sizing-sm">
+                        日本語
+                      </InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <Form.Control
+                      as="select"
+                      onChange={this.valueChange}
                       size="sm"
-                      id="revise"
-                      onClick={this.update.bind(this)}
-                      disabled={
-                        this.state.updateFlag === false &&
-                        this.state.insertFlag === false
-                          ? false
-                          : true
-                      }
+                      name="japaneseLevelCode"
+                      value={japaneseLevelCode}
+                      autoComplete="off"
                     >
-                      <FontAwesomeIcon icon={faEdit} />
-                      更新
-                    </Button>{" "}
-                    <Button
-                      variant="info"
+                      {this.state.japaneaseLevelCodes.map((data) => (
+                        <option key={data.code} value={data.code}>
+                          {data.name}
+                        </option>
+                      ))}
+                    </Form.Control>
+                  </InputGroup>
+                </Col>
+                <Col sm={3}>
+                  <InputGroup size="sm" className="mb-3">
+                    <InputGroup.Prepend>
+                      <InputGroup.Text id="inputGroup-sizing-sm">
+                        役割
+                      </InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <Form.Control
+                      as="select"
                       size="sm"
-                      id="revise"
-                      onClick={this.delete}
-                      disabled={
-                        this.state.updateFlag === false &&
-                        this.state.insertFlag === false
-                          ? false
-                          : true
-                      }
+                      onChange={this.valueChange}
+                      name="siteRoleCode"
+                      value={siteRoleCode}
+                      autoComplete="off"
                     >
-                      <FontAwesomeIcon icon={faTrash} />
-                      削除
-                    </Button>{" "}
-                  </div>
+                      {this.state.siteMaster.map((data) => (
+                        <option key={data.code} value={data.code}>
+                          {data.name}
+                        </option>
+                      ))}
+                    </Form.Control>
+                  </InputGroup>
                 </Col>
               </Row>
               <Row>
-                <Col sm={12}>
-                  <BootstrapTable
-                    selectRow={selectRow}
-                    data={this.state.salesPointData}
-                    ref="table"
-                    pagination={true}
-                    options={this.options}
-                    insertRow
-                    cellEdit={cellEdit}
-                    headerStyle={{ background: "#5599FF" }}
-                    striped
-                    hover
-                    condensed
-                  >
-                    <TableHeaderColumn
-                      dataField="no"
-                      width="58"
-                      tdStyle={{ padding: ".45em" }}
-                      isKey
+                <Col sm={3}>
+                  <InputGroup size="sm" className="mb-3">
+                    <InputGroup.Prepend>
+                      <InputGroup.Text id="inputGroup-sizing-sm">
+                        社会保険
+                      </InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <Form.Control
+                      as="select"
+                      size="sm"
+                      onChange={this.socialInsuranceValueChange}
+                      name="socialInsurance"
+                      value={socialInsurance}
+                      autoComplete="off"
                     >
-                      番号
-                    </TableHeaderColumn>
-
-                    <TableHeaderColumn
-                      dataField="employee"
-                      editable={{
-                        type: "select",
-                        options: { values: this.state.employeeStatus },
-                      }}
-                      editColumnClassName="dutyRegistration-DataTableEditingCell"
-                      dataFormat={this.employeeStatusFormat.bind(this)}
-                      width="95"
-                      tdStyle={{ padding: ".45em" }}
-                    >
-                      社員区分
-                    </TableHeaderColumn>
-
-                    <TableHeaderColumn
-                      dataField="newMember"
-                      editable={
-                        this.state.employeefrom === "0"
-                          ? {
-                              type: "select",
-                              options: { values: this.state.newMemberStatus },
-                            }
-                          : false
+                      {this.state.socialInsuranceStatus.map((data) => (
+                        <option key={data.code} value={data.code}>
+                          {data.name}
+                        </option>
+                      ))}
+                    </Form.Control>
+                    <InputGroup.Append>
+                      <DatePicker
+                        selected={this.state.socialInsuranceDate}
+                        onChange={this.socialInsuranceDateChange}
+                        locale="ja"
+                        dateFormat="yyyy/MM/dd"
+                        className="form-control form-control-sm"
+                        autoComplete="off"
+                        disabled={socialInsurance !== "1" ? true : false}
+                        id={
+                          socialInsurance !== "1"
+                            ? "datePickerReadonlyDefault-employeeSearch"
+                            : "datePicker-employeeSearch"
+                        }
+                      />
+                    </InputGroup.Append>
+                  </InputGroup>
+                </Col>
+                <Col sm={3}>
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
+                    <InputGroup.Prepend>
+                      <InputGroup.Text id="inputGroup-sizing-sm">
+                        開発言語
+                      </InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <Autocomplete
+                      className="fx1"
+                      id="developLanguage1"
+                      name="developLanguage1"
+                      value={
+                        this.state.developLanguageMaster.find(
+                          (v) => v.code === this.state.developLanguage1
+                        ) || {}
                       }
-                      editColumnClassName="dutyRegistration-DataTableEditingCell"
-                      dataFormat={this.newMemberStatusFormat.bind(this)}
-                      width="95"
-                      tdStyle={{ padding: ".45em" }}
-                    >
-                      新人区分
-                    </TableHeaderColumn>
-
-                    <TableHeaderColumn
-                      dataField="customerContract"
-                      editable={{
-                        type: "select",
-                        options: { values: this.state.customerContractStatus },
-                      }}
-                      hidden
-                      editColumnClassName="dutyRegistration-DataTableEditingCell"
-                      dataFormat={this.customerContractStatusFormat.bind(this)}
-                      width="95"
-                      tdStyle={{ padding: ".45em" }}
-                    >
-                      契約区分
-                    </TableHeaderColumn>
-
-                    {/*<TableHeaderColumn dataField='level' editable={{ type: 'select', options: { values: this.state.levelStatus } }}
-											editColumnClassName="dutyRegistration-DataTableEditingCell" dataFormat={this.levelStatusFormat.bind(this)}
-											width='125' tdStyle={{ padding: '.45em' }} >お客様レベル</TableHeaderColumn>
-
-										<TableHeaderColumn dataField='salesPuttern' editable={{ type: 'select', options: { values: this.state.salesPutternStatus } }}
-											editColumnClassName="dutyRegistration-DataTableEditingCell" dataFormat={this.salesPutternStatusFormat.bind(this)}
-											width='155' tdStyle={{ padding: '.45em' }} >営業結果パタンー</TableHeaderColumn>*/}
-
-                    <TableHeaderColumn
-                      dataField="bpGrossProfit"
-                      editable={
-                        this.state.employeefrom === "1"
-                          ? {
-                              type: "select",
-                              options: {
-                                values: this.state.bpGrossProfitStatus,
-                              },
-                            }
-                          : false
+                      onChange={(event, values) =>
+                        this.getDevelopLanguage1(event, values)
                       }
-                      editColumnClassName="dutyRegistration-DataTableEditingCell"
-                      dataFormat={this.bpGrossProfitStatusFormat.bind(this)}
-                      width="155"
-                      tdStyle={{ padding: ".45em" }}
-                    >
-                      BP粗利
-                    </TableHeaderColumn>
+                      options={this.state.developLanguageMaster}
+                      getOptionLabel={(option) => option.name || ""}
+                      renderInput={(params) => (
+                        <div ref={params.InputProps.ref}>
+                          <input
+                            type="text"
+                            {...params.inputProps}
+                            className="auto form-control Autocompletestyle-developLanguage w100p"
+                            id="developLanguage1"
+                          />
+                        </div>
+                      )}
+                    />
 
-                    <TableHeaderColumn
-                      dataField="point"
-                      width="95"
-                      tdStyle={{ padding: ".45em" }}
-                      editColumnClassName="dutyRegistration-DataTableEditingCell"
-                      dataFormat={this.pointFormat.bind(this)}
-                    >
-                      ポイント
-                    </TableHeaderColumn>
+                    <Autocomplete
+                      className="fx1"
+                      id="developLanguage2"
+                      name="developLanguage2"
+                      value={
+                        this.state.developLanguageMaster.find(
+                          (v) => v.code === this.state.developLanguage2
+                        ) || {}
+                      }
+                      onChange={(event, values) =>
+                        this.getDevelopLanguage2(event, values)
+                      }
+                      options={this.state.developLanguageMaster}
+                      getOptionLabel={(option) => option.name || ""}
+                      renderInput={(params) => (
+                        <div ref={params.InputProps.ref}>
+                          <input
+                            type="text"
+                            {...params.inputProps}
+                            className="auto form-control Autocompletestyle-developLanguage w100p"
+                            id="developLanguage2"
+                          />
+                        </div>
+                      )}
+                    />
+                  </InputGroup>
+                </Col>
 
-                    <TableHeaderColumn
-                      dataField="specialPoint"
-                      editable={{
-                        type: "select",
-                        options: { values: this.state.specialPointStatus },
-                      }}
-                      editColumnClassName="dutyRegistration-DataTableEditingCell"
-                      dataFormat={this.specialPointStatusFormat.bind(this)}
-                      width="220"
-                      tdStyle={{ padding: ".45em" }}
+                <Col sm={3}>
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
+                    <InputGroup.Prepend>
+                      <InputGroup.Text id="inputGroup-sizing-sm">
+                        入社年月
+                      </InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <DatePicker
+                      disabled={employeeStatus === "1" ? true : false}
+                      id={
+                        employeeStatus === "1"
+                          ? "datePickerReadonlyDefault"
+                          : "datePicker"
+                      }
+                      selected={this.state.intoCompanyYearAndMonthFrom}
+                      onChange={this.inactiveintoCompanyYearAndMonthFrom}
+                      locale="ja"
+                      dateFormat="yyyy/MM"
+                      showMonthYearPicker
+                      showFullMonthYearPicker
+                      className="form-control form-control-sm "
+                      autoComplete="off"
+                    />
+                    ～
+                    <DatePicker
+                      selected={this.state.intoCompanyYearAndMonthTo}
+                      onChange={this.inactiveintoCompanyYearAndMonthTo}
+                      locale="ja"
+                      dateFormat="yyyy/MM"
+                      showMonthYearPicker
+                      showFullMonthYearPicker
+                      disabled={employeeStatus === "1" ? true : false}
+                      id={
+                        employeeStatus === "1"
+                          ? "datePickerReadonlyDefault"
+                          : "datePicker"
+                      }
+                      className="form-control form-control-sm "
+                      autoComplete="off"
+                    />
+                  </InputGroup>
+                </Col>
+                <Col sm={3}>
+                  <InputGroup size="sm" className="mb-3">
+                    <InputGroup.Prepend>
+                      <InputGroup.Text id="inputGroup-sizing-sm">
+                        稼働　　
+                      </InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <Form.Control
+                      as="select"
+                      size="sm"
+                      onChange={this.valueChange}
+                      name="kadou"
+                      value={kadou}
+                      autoComplete="off"
                     >
-                      特別ポイント条件
-                    </TableHeaderColumn>
-
-                    <TableHeaderColumn
-                      dataField="specialPointNo"
-                      width="160"
-                      tdStyle={{ padding: ".45em" }}
-                      editColumnClassName="dutyRegistration-DataTableEditingCell"
-                      dataFormat={this.pointFormat.bind(this)}
-                    >
-                      特別ポイント
-                    </TableHeaderColumn>
-
-                    <TableHeaderColumn
-                      dataField="remark"
-                      tdStyle={{ padding: ".45em" }}
-                      editColumnClassName="dutyRegistration-DataTableEditingCell"
-                      dataFormat={this.remarkFormat.bind(this)}
-                    >
-                      備考
-                    </TableHeaderColumn>
-                  </BootstrapTable>
+                      <option value=""></option>
+                      <option value="0">はい</option>
+                      <option value="1">いいえ</option>
+                    </Form.Control>
+                  </InputGroup>
                 </Col>
               </Row>
             </Form.Group>
-          </Form>
+          </div>
+        </Form>
+        <div style={{ textAlign: "center" }}>
+          <Button
+            size="sm"
+            variant="info"
+            type="submit"
+            onClick={this.searchEmployee.bind(this, this.state.authorityCode)}
+          >
+            <FontAwesomeIcon icon={faSearch} /> 検索
+          </Button>{" "}
+          <Button
+            size="sm"
+            onClick={this.shuseiTo.bind(this, "insert")}
+            variant="info"
+          >
+            <FontAwesomeIcon icon={faSave} /> 追加
+          </Button>{" "}
+          <Button
+            size="sm"
+            variant="info"
+            type="reset"
+            onClick={this.resetBook}
+          >
+            <FontAwesomeIcon icon={faUndo} /> Reset
+          </Button>
+        </div>
+        <div style={{ height: "10px" }}></div>
+        <div>
+          <Row>
+            <Col sm={8}>
+              <div style={{ float: "left" }}>
+                <Button
+                  size="sm"
+                  onClick={this.shuseiTo.bind(this, "siteInfo")}
+                  name="clickButton"
+                  variant="info"
+                  id="siteInfo"
+                >
+                  現場情報
+                </Button>{" "}
+                <Button
+                  size="sm"
+                  onClick={this.shuseiTo.bind(this, "wagesInfo")}
+                  hidden={this.state.authorityCode === "4" ? false : true}
+                  name="clickButton"
+                  variant="info"
+                  id="wagesInfo"
+                >
+                  給料情報
+                </Button>{" "}
+                <Button
+                  size="sm"
+                  variant="info"
+                  name="clickButton"
+                  id="resumeInfo1"
+                  onClick={this.downloadResume.bind(
+                    this,
+                    this.state.resumeInfo1,
+                    1
+                  )}
+                  disabled={
+                    this.state.linkDisableFlag ||
+                    this.state.resumeInfo1 === null ||
+                    this.state.resumeInfo1 === ""
+                      ? true
+                      : false
+                  }
+                >
+                  <FontAwesomeIcon icon={faDownload} />
+                  {this.state.linkDisableFlag ||
+                  this.state.resumeInfo1 === null ||
+                  this.state.resumeInfo1 === ""
+                    ? "履歴書1"
+                    : this.state.resumeName1}
+                </Button>{" "}
+                <Button
+                  size="sm"
+                  variant="info"
+                  name="clickButton"
+                  id="resumeInfo2"
+                  onClick={this.downloadResume.bind(
+                    this,
+                    this.state.resumeInfo2,
+                    2
+                  )}
+                  disabled={
+                    this.state.linkDisableFlag ||
+                    this.state.resumeInfo2 === null ||
+                    this.state.resumeInfo2 === ""
+                      ? true
+                      : false
+                  }
+                >
+                  <FontAwesomeIcon icon={faDownload} />
+                  {this.state.linkDisableFlag ||
+                  this.state.resumeInfo2 === null ||
+                  this.state.resumeInfo2 === ""
+                    ? "履歴書2"
+                    : this.state.resumeName2}
+                </Button>{" "}
+                <Button
+                  size="sm"
+                  variant="info"
+                  name="clickButton"
+                  id="residentCardInfo"
+                  onClick={publicUtils.handleDownload.bind(
+                    this,
+                    this.state.residentCardInfo,
+                    this.state.serverIP
+                  )}
+                >
+                  <FontAwesomeIcon icon={faDownload} /> 在留カード
+                </Button>{" "}
+                <Button
+                  size="sm"
+                  variant="info"
+                  name="clickButton"
+                  id="passportInfo"
+                  onClick={publicUtils.handleDownload.bind(
+                    this,
+                    this.state.passportInfo,
+                    this.state.serverIP
+                  )}
+                >
+                  <FontAwesomeIcon icon={faDownload} /> パスポート
+                </Button>{" "}
+                <Button
+                  size="sm"
+                  onClick={this.shuseiTo.bind(this, "workRepot")}
+                  hidden={this.state.authorityCode === "4" ? false : true}
+                  name="clickButton"
+                  variant="info"
+                  id="workRepot"
+                >
+                  勤務管理
+                </Button>{" "}
+              </div>
+            </Col>
+            <Col sm={4}>
+              <div style={{ float: "right" }}>
+                <Button
+                  size="sm"
+                  variant="info"
+                  name="clickButton"
+                  id="csvDownload"
+                  onClick={this.csvDownload.bind(this)}
+                  disabled={this.state.employeeList.length > 0 ? false : true}
+                >
+                  <FontAwesomeIcon icon={faDownload} /> CSV出力
+                </Button>{" "}
+                <Button
+                  size="sm"
+                  onClick={this.shuseiTo.bind(this, "detail")}
+                  name="clickButton"
+                  id="detail"
+                  variant="info"
+                >
+                  <FontAwesomeIcon icon={faList} />
+                  詳細
+                </Button>{" "}
+                <Button
+                  size="sm"
+                  onClick={this.shuseiTo.bind(this, "update")}
+                  name="clickButton"
+                  id="update"
+                  variant="info"
+                >
+                  <FontAwesomeIcon icon={faEdit} />
+                  修正
+                </Button>{" "}
+                <Button
+                  size="sm"
+                  variant="info"
+                  onClick={this.employeeDelete}
+                  hidden={this.state.authorityCode === "4" ? false : true}
+                  name="clickButton"
+                  id="delete"
+                  variant="info"
+                >
+                  <FontAwesomeIcon icon={faTrash} /> 削除
+                </Button>
+              </div>
+            </Col>
+          </Row>
+        </div>
+        <div>
+          <Row>
+            <Col sm={12}>
+              <BootstrapTable
+                ref="siteSearchTable"
+                data={employeeList}
+                pagination={true}
+                options={options}
+                deleteRow
+                selectRow={selectRow}
+                headerStyle={{ background: "#5599FF" }}
+                striped
+                hover
+                condensed
+              >
+                <TableHeaderColumn
+                  width="6%"
+                  tdStyle={{ padding: ".45em" }}
+                  dataField="rowNo"
+                  dataSort
+                >
+                  番号
+                </TableHeaderColumn>
+                <TableHeaderColumn
+                  width="9%"
+                  tdStyle={{ padding: ".45em" }}
+                  dataField="employeeNo"
+                  isKey
+                  dataSort
+                >
+                  社員番号
+                </TableHeaderColumn>
+                <TableHeaderColumn
+                  width="9%"
+                  tdStyle={{ padding: ".45em" }}
+                  dataField="employeeName"
+                  dataFormat={this.employeeNameFormat.bind(this)}
+                  dataSort
+                >
+                  社員名
+                </TableHeaderColumn>
+                <TableHeaderColumn
+                  width="12%"
+                  tdStyle={{ padding: ".45em" }}
+                  dataField="furigana"
+                  dataSort
+                >
+                  カタカナ
+                </TableHeaderColumn>
+                <TableHeaderColumn
+                  width="15%"
+                  tdStyle={{ padding: ".45em" }}
+                  dataField="alphabetName"
+                  dataSort
+                >
+                  ローマ字
+                </TableHeaderColumn>
+                <TableHeaderColumn
+                  width="12%"
+                  tdStyle={{ padding: ".45em" }}
+                  dataField="birthday"
+                  dataSort
+                >
+                  年齢
+                </TableHeaderColumn>
+                <TableHeaderColumn
+                  width="12%"
+                  tdStyle={{ padding: ".45em" }}
+                  dataField="phoneNo"
+                  dataSort
+                >
+                  電話番号
+                </TableHeaderColumn>
+                <TableHeaderColumn
+                  width="9%"
+                  tdStyle={{ padding: ".45em" }}
+                  dataField="stationName"
+                  dataSort
+                >
+                  寄り駅
+                </TableHeaderColumn>
+                {this.state.changeFlag ? (
+                  <TableHeaderColumn
+                    width="9%"
+                    tdStyle={{ padding: ".45em" }}
+                    dataField="intoCompanyYearAndMonth"
+                    dataSort
+                  >
+                    入社年月
+                  </TableHeaderColumn>
+                ) : (
+                  <TableHeaderColumn
+                    width="9%"
+                    tdStyle={{ padding: ".45em" }}
+                    dataField="bpfrom"
+                    dataSort
+                  >
+                    所属
+                  </TableHeaderColumn>
+                )}
+                <TableHeaderColumn
+                  width="9%"
+                  tdStyle={{ padding: ".45em" }}
+                  dataField="admissionTime"
+                  dataSort
+                >
+                  入場年月
+                </TableHeaderColumn>
+                <TableHeaderColumn
+                  dataField="stayPeriod"
+                  hidden={true}
+                  /* dataFormat={this.formatStayPeriod.bind(this)} */ dataSort
+                >
+                  ビザ期限
+                </TableHeaderColumn>
+                <TableHeaderColumn dataField="resumeInfo1" hidden={true}>
+                  履歴書1
+                </TableHeaderColumn>
+                <TableHeaderColumn dataField="resumeName1" hidden={true}>
+                  履歴書名前1
+                </TableHeaderColumn>
+                <TableHeaderColumn dataField="resumeInfo2" hidden={true}>
+                  履歴書2
+                </TableHeaderColumn>
+                <TableHeaderColumn dataField="resumeName2" hidden={true}>
+                  履歴書名前2
+                </TableHeaderColumn>
+                <TableHeaderColumn dataField="residentCardInfo" hidden={true}>
+                  在留カード
+                </TableHeaderColumn>
+                <TableHeaderColumn dataField="passportInfo" hidden={true}>
+                  パスポート
+                </TableHeaderColumn>
+              </BootstrapTable>
+            </Col>
+          </Row>
         </div>
       </div>
     );
