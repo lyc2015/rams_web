@@ -1029,6 +1029,7 @@ class employeeInsertNew extends React.Component {
   };
 
   changePage = () => {
+    const sendValue = {};
     var path = {
       pathname: "/subMenuManager/employeeUpdateNew",
       state: {
@@ -1038,7 +1039,6 @@ class employeeInsertNew extends React.Component {
         sendValue: sendValue,
       },
     };
-    const sendValue = {};
     this.props.history.push(path);
   };
 
