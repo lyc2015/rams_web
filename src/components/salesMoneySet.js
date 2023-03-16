@@ -113,7 +113,12 @@ class salesMoneySet extends React.Component {
     additionMoneyReasonMap:store.getState().dropDown[84],
     additionCountOfNumberMap:store.getState().dropDown[85],
     searchFlag: false,
-    employeeNameSelect: "",
+    employeeName: "",
+    employeeNo: "",
+    additionMoney: "",
+    additionMoneyReason: "",
+    additionNumberOfTimes: "",
+    startYearAndMonth: "",
     ageFrom: "",
     ageTo: "",
     authorityCode: "",
@@ -123,6 +128,11 @@ class salesMoneySet extends React.Component {
   // リセット reset
   resetStates = {
     employeeName: "",
+    employeeNo: "",
+    additionMoney: "",
+    additionMoneyReason: "",
+    additionNumberOfTimes: "",
+    startYearAndMonth: "",
     employeeFormCode: "",
     employeeStatus: "",
     genderStatus: "",
@@ -633,17 +643,54 @@ class salesMoneySet extends React.Component {
         [event.target.name]: event.target.value,
       },
       () => {
+        let employeeNo = null;
         let employeeName = null;
         if (values !== null) {
+          employeeNo = values.code;
           employeeName = values.text;
         }
         this.setState({
           employeeName: employeeName,
+          employeeNo: employeeNo,
         });
       }
     );
   };
-
+  
+  onAdditionMoneyChange = (event) => {
+	  console.log("onAdditionMoneyChange=" + event.target.value)
+      this.setState({
+        additionMoney: event.target.value,
+      });
+  };
+  
+  onAdditionMoneyReasonChange = (event) => {
+	  console.log("onAdditionMoneyReasonChange=" + event.target.value)
+      this.setState({
+        additionMoneyReason: event.target.value,
+      });
+  };
+  
+  onAdditionNumberOfTimesChange = (event) => {
+	  console.log("onAdditionNumberOfTimesChange=" + event.target.value)
+      this.setState({
+        additionNumberOfTimes: event.target.value,
+      });
+  };
+  
+  onStartYearAndMonthChange = (date) => {
+	  console.log("onStartYearAndMonthChange=" + date)
+    if (date !== null) {
+      this.setState({
+        startYearAndMonth: date
+      });
+    } else {
+      this.setState({
+        startYearAndMonth: "",
+      });
+    }
+  };
+  
   /**
    * タイプが違う時に、色々な操作をします。
    */
@@ -901,7 +948,7 @@ class salesMoneySet extends React.Component {
     switch (actionType) {
       case "update":
         path = {
-          pathname: "/subMenuManager/employeeUpdateNew",
+          pathname: "/salesMoneySet/updateMoneySet",
           state: {
             actionType: "update",
             id: this.state.rowSelectEmployeeNo,
@@ -925,7 +972,7 @@ class salesMoneySet extends React.Component {
         break;
       case "insert":
         path = {
-          pathname: "/subMenuManager/employeeInsertNew",
+          pathname: "/salesMoneySet/insertMoneySet",
           state: {
             actionType: "insert",
             backPage: "employeeSearch",
@@ -973,6 +1020,51 @@ class salesMoneySet extends React.Component {
     this.props.history.push(path);
   };
 
+addMoneySet = () => {
+    var requestModel = {};
+    requestModel["employeeNo"] = this.state.employeeNo;
+    requestModel["employeeName"] = this.state.employeeName;
+    requestModel["additionMoney"] = this.state.additionMoney;
+    requestModel["additionMoneyReason"] = this.state.additionMoneyReason;
+    requestModel["additionNumberOfTimes"] = this.state.additionNumberOfTimes;
+    requestModel["startYearAndMonth"] = utils.formateDate(
+      this.state.startYearAndMonth,
+      false
+    );
+    
+    axios
+      .post(this.state.serverIP + "salesMoneySet/insertMoneySet", requestModel)
+      .then((result) => {
+        if (
+          result.data.errorsMessage === null ||
+          result.data.errorsMessage === undefined
+        ) {
+          this.setState({
+            myMessageShow: true,
+            type: "success",
+            errorsMessageShow: false,
+            myUpdateShow: false,
+            myDeleteShow: false,
+            message: "処理成功",
+          });
+          setTimeout(() => this.setState({ myMessageShow: false }), 3000);
+        } else {
+          this.setState({
+            errorsMessageShow: true,
+            errorsMessageValue: result.data.errorsMessage,
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        this.setState({
+          errorsMessageShow: true,
+          errorsMessageValue:
+            "エラーが発生してしまいました、画面をリフレッシュしてください",
+        });
+      });
+  };
+  
   test = (event) => {
     if (event.keyCode === 13) {
       this.searchEmployee(this.state.authorityCode);
@@ -1102,9 +1194,6 @@ class salesMoneySet extends React.Component {
                       }
                       options={this.state.employeeInfo}
                       getOptionLabel={(option) => option.name || ""}
-                      // onSelect={(event) =>
-                      //   this.handleTag(event, "employeeName")
-                      // }
                       onChange={(event, values) =>
                         this.getEmployeeName(event, values)
                       }
@@ -1137,6 +1226,9 @@ class salesMoneySet extends React.Component {
                       as="select"
                       size="sm"
                       autoComplete="off"
+                      id="additionMoney"
+                      name="additionMoney"
+                      onChange={this.onAdditionMoneyChange.bind(this)}
                     >
                       {this.state.additionMoneyMap.map((data) => (
                         <option key={data.code} value={data.code}>
@@ -1158,10 +1250,9 @@ class salesMoneySet extends React.Component {
                     <Form.Control
                       as="select"
                       size="sm"
-                      onChange={this.valueChange}
-                      disabled={employeeStatus === "1" ? true : false}
-                      name="employeeFormCode"
-                      value={employeeFormCode}
+                      id="additionNumberOfTimes"
+                      name="additionNumberOfTimes"
+                      onChange={this.onAdditionNumberOfTimesChange.bind(this)}
                       autoComplete="off"
                     >
                       {this.state.additionCountOfNumberMap.map((data) => (
@@ -1177,25 +1268,23 @@ class salesMoneySet extends React.Component {
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         開始年月
-                      
                       </InputGroup.Text>
                     </InputGroup.Prepend>
 	                <DatePicker
-	                  selected={this.state.businessStartDate}
-	                  onChange={this.businessStartDateChange}
+	                  selected={this.state.startYearAndMonth}
+	                  onChange={this.onStartYearAndMonthChange}
 	                  dateFormat={"yyyy/MM"}
 	                  autoComplete="off"
-	                  locale="ja"
+                      locale="ja"
 	                  showYearDropdown
 	                  yearDropdownItemNumber={15}
 	                  scrollableYearDropdown
 	                  showMonthYearPicker
 	                  showFullMonthYearPicker
-	                  // minDate={new Date()}
 	                  showDisabledMonthNavigation
 	                  className="form-control form-control-sm"
 	                  id="customerInfoDatePicker-customerInfoSearch"
-	                  name="businessStartDate"
+	                  name="startYearAndMonth"
 	                />
 	              </InputGroup>
 	            </Col>
@@ -1209,10 +1298,10 @@ class salesMoneySet extends React.Component {
                     <Form.Control
                       as="select"
                       size="sm"
-                      onChange={this.valueChange}
-                      name="siteRoleCode"
-                      value={siteRoleCode}
                       autoComplete="off"
+                      id="additionMoneyReason"
+                      name="additionMoneyReason"
+                      onChange={this.onAdditionMoneyReasonChange.bind(this)}
                     >
                       {this.state.additionMoneyReasonMap.map((data) => (
                         <option key={data.code} value={data.code}>
@@ -1229,7 +1318,7 @@ class salesMoneySet extends React.Component {
         <div style={{ textAlign: "center" }}>
           <Button
             size="sm"
-            onClick={this.shuseiTo.bind(this, "insert")}
+            onClick={this.addMoneySet}
             variant="info"
           >
             <FontAwesomeIcon icon={faSave} /> 登錄
