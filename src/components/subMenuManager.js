@@ -32,7 +32,7 @@ import salaryDetailSend from "./salaryDetailSend";
 import SendRepot from "./sendRepot";
 import siteSearch from "./siteSearch";
 import salesPointSet from "./salesPointSet";
-import salesAdditionSet from "./salesAdditionSet";
+import salesMoneySet from "./salesMoneySet";
 import salesProfit from "./salesProfit";
 import salesPoint from "./salesPoint";
 import WagesInfo from "./wagesInfo";
@@ -248,7 +248,7 @@ class SubMenu extends Component {
         break;
       case "営業管理":
         this.setClassName("営業管理");
-        this.shuseiTo({ pathname: "/subMenuManager/salesAdditionSet" });
+        this.shuseiTo({ pathname: "/subMenuManager/salesMoneySet" });
         break;
       case "勤務":
         this.setClassName("勤務");
@@ -1559,7 +1559,7 @@ class SubMenu extends Component {
                                       )}
                                       onClick={this.shuseiTo.bind(this, {
                                         pathname:
-                                          "/subMenuManager/salesAdditionSet",
+                                          "/subMenuManager/salesMoneySet",
                                       })}
                                     >
                                       <div>
@@ -1569,7 +1569,7 @@ class SubMenu extends Component {
                                               ? "my-tabcolor-font-hover"
                                               : "my-tabcolor-font"
                                           }
-                                          to="/subMenuManager/salesAdditionSet"
+                                          to="/subMenuManager/salesMoneySet"
                                         >
                                           <FontAwesomeIcon
                                             className="fa-fw"
@@ -2345,8 +2345,8 @@ class SubMenu extends Component {
                 />
                 <Route
                   exact
-                  path={`${this.props.match.url}/salesAdditionSet`}
-                  component={salesAdditionSet}
+                  path={`${this.props.match.url}/salesMoneySet`}
+                  component={salesMoneySet}
                 />
                 <Route
                   exact

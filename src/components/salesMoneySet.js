@@ -39,7 +39,7 @@ import { notification } from "antd";
 axios.defaults.withCredentials = true;
 registerLocale("ja", ja);
 
-class salesAdditionSet extends React.Component {
+class salesMoneySet extends React.Component {
   constructor(props) {
     super(props);
     this.state = this.initialState; // 初期化
@@ -361,7 +361,7 @@ class salesAdditionSet extends React.Component {
         authorityCode === null ? this.state.authorityCode : authorityCode,
     };
     axios
-      .post(this.state.serverIP + "/getEmployeeAdditionList", emp)
+      .post(this.state.serverIP + "/salesMoneySet/getMoneySetList", emp)
       .then((response) => {
         if (response.data.errorsMessage != null) {
           this.setState({
@@ -1262,7 +1262,7 @@ class salesAdditionSet extends React.Component {
                 <TableHeaderColumn
                   width="6%"
                   tdStyle={{ padding: ".45em" }}
-                  dataField="rowNo"
+                  dataField="id"
                   isKey
                   dataSort
                 >
@@ -1306,4 +1306,4 @@ class salesAdditionSet extends React.Component {
   }
 }
 
-export default salesAdditionSet;
+export default salesMoneySet;
