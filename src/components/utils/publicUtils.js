@@ -907,6 +907,18 @@ export function dateFormate(dateStr) {
   }
 }
 
+export function convertDate(dateStr) {
+  if (dateStr === null || dateStr === undefined) {
+    return "";
+  }
+  if (dateStr.length == 7) {
+    return new Date(dateStr.substring(0, 4), dateStr.substring(5, 7), 0)
+  } else {
+    return dateStr;
+  }
+}
+
+
 /**
  * YYYY/MM/DD -> YYYY/MM
  *
