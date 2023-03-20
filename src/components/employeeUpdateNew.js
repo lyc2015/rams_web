@@ -431,7 +431,7 @@ class employeeUpdateNew extends React.Component {
       [event.target.name]: event.target.value,
     });
 	console.log("old=" + this.state.oldEmployeeNo + " target.value=" + event.target.value + " this.state.empNoHead=" + this.state.empNoHead)
-    if (event.target.value === "0") {
+    if (event.target.value === "12") {
 		if(null != this.state.oldEmployeeNo && this.state.oldEmployeeNo.substring(0,4) === "LYCG"){
 			this.setState({
 			        employeeNo: this.state.oldEmployeeNo,
