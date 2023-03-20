@@ -342,6 +342,12 @@ class employeeUpdateNew extends React.Component {
       .post(this.state.serverIP + "employee/updateEmployee", formData)
       .then((response) => {
         this.setState({ loading: true });
+        /*
+      	console.log("old 1=" + this.state.oldEmployeeNo + ", =" + this.state.employeeNo)
+        this.setState({
+          oldEmployeeNo: this.state.employeeNo,
+        });
+      	console.log("old 2=" + this.state.oldEmployeeNo + ", =" + this.state.employeeNo)*/
         if (response.data.errorsMessage != null) {
           this.setState({
             errorsMessageShow: true,
@@ -397,6 +403,7 @@ class employeeUpdateNew extends React.Component {
           });
           //window.location.reload();
           //this.getNO(this.state.empNoHead);// 採番番号
+          this.getEmployeeByEmployeeNo(this.state.employeeNo)
         }
       })
       .catch((error) => {
@@ -423,8 +430,15 @@ class employeeUpdateNew extends React.Component {
     this.setState({
       [event.target.name]: event.target.value,
     });
+	console.log("old=" + this.state.oldEmployeeNo + " target.value=" + event.target.value + " this.state.empNoHead=" + this.state.empNoHead)
     if (event.target.value === "0") {
-      this.getNO(this.state.empNoHead + "G"); // 採番番号
+		if(null != this.state.oldEmployeeNo && this.state.oldEmployeeNo.substring(0,4) === "LYCG"){
+			this.setState({
+			        employeeNo: this.state.oldEmployeeNo,
+			      });
+		} else {
+      		this.getNO(this.state.empNoHead + "G"); // 採番番号
+		}
       this.setState({
         siteRoleCode: "",
         projectTypeCode: "",
@@ -434,7 +448,13 @@ class employeeUpdateNew extends React.Component {
         resumeName2: "",
       });
     } else {
-      this.getNO(this.state.empNoHead); // 採番番号
+		if(null != this.state.oldEmployeeNo && this.state.oldEmployeeNo.substring(0,3) === "LYC" && this.state.oldEmployeeNo.substring(0,4) !== "LYCG"){
+			this.setState({
+			        employeeNo: this.state.oldEmployeeNo,
+			      });
+		} else {
+			this.getNO(this.state.empNoHead); // 採番番号
+		}
     }
   };
 
@@ -892,11 +912,20 @@ class employeeUpdateNew extends React.Component {
   employeeStatusChange = (event) => {
     const value = event.target.value;
     this.setState({ employeeStatus: value });
+	console.log("old=" + this.state.oldEmployeeNo + " target.value=" + event.target.value)
     if (value === "1" || value === "4") {
       if (value === "1") {
-        this.getNO("BP");
+		if(null != this.state.oldEmployeeNo && this.state.oldEmployeeNo.substring(0,3) !== "BPR" && this.state.oldEmployeeNo.substring(0,2) === "BP"){
+			this.setState({employeeNo: this.state.oldEmployeeNo,});
+		} else {
+    		this.getNO("BP");
+		}
       } else {
-        this.getNO("BPR");
+		if(null != this.state.oldEmployeeNo && this.state.oldEmployeeNo.substring(0,3) === "BPR"){
+			this.setState({employeeNo: this.state.oldEmployeeNo,});
+		} else {
+    		this.getNO("BPR");
+		}
       }
       this.setState({
         contractDeadline: "",
@@ -931,7 +960,11 @@ class employeeUpdateNew extends React.Component {
         socialInsurance: "",
       });
     } else if (value === "0") {
-      this.getNO(this.state.empNoHead);
+		if(null != this.state.oldEmployeeNo && this.state.oldEmployeeNo.substring(0,3) === "LYC"){
+			this.setState({employeeNo: this.state.oldEmployeeNo,});
+		} else {
+      		this.getNO(this.state.empNoHead);
+		}
       this.setState({
         bpDisabled: false,
         residenceTimeDisabled: this.state.residenceCode === "5" ? true : false,
@@ -969,13 +1002,22 @@ class employeeUpdateNew extends React.Component {
         socialInsuranceNo: "",
         socialInsurance: "0",
       });
-      this.getNO("SP");
+      
+		if(null != this.state.oldEmployeeNo && this.state.oldEmployeeNo.substring(0,2) === "SP"){
+			this.setState({employeeNo: this.state.oldEmployeeNo,});
+		} else {
+      		this.getNO("SP");
+		}
     } else if (value === "3") {
       this.setState({
         authorityCode: "1",
         employeeFormCodes: this.state.employeeFormCodesAll,
       });
-      this.getNO("SC");
+		if(null != this.state.oldEmployeeNo && this.state.oldEmployeeNo.substring(0,2) === "SC"){
+			this.setState({employeeNo: this.state.oldEmployeeNo,});
+		} else {
+      		this.getNO("SC");
+		}
     }
   };
 
