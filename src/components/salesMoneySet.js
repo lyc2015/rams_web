@@ -274,20 +274,6 @@ class salesMoneySet extends React.Component {
   // 初期化の時、disabledをセットします
   clickButtonDisabled = () => {
     $('button[name="clickButton"]').attr("disabled", true);
-    /*
-     * this.refs.siteSearchTable.handleSort('asc', 'rowNo');
-     * this.refs.siteSearchTable.handleSort('asc', 'employeeFristName');
-     * this.refs.siteSearchTable.handleSort('asc', 'furigana');
-     * this.refs.siteSearchTable.handleSort('asc', 'alphabetName');
-     * this.refs.siteSearchTable.handleSort('asc', 'birthday');
-     * this.refs.siteSearchTable.handleSort('asc', 'phoneNo');
-     * this.refs.siteSearchTable.handleSort('asc', 'stationName');
-     * this.refs.siteSearchTable.handleSort('asc',
-     * 'intoCompanyYearAndMonth');
-     * this.refs.siteSearchTable.handleSort('asc', 'admissionTime');
-     * this.refs.siteSearchTable.handleSort('asc', 'stayPeriod');
-     * this.refs.siteSearchTable.handleSort('asc', 'employeeNo');
-     */
   };
 
   // 検索s
@@ -419,7 +405,7 @@ class salesMoneySet extends React.Component {
             errorsMessageShow: false,
           });
         }
-        if (
+        /*if (
           this.state.rowSelectEmployeeNoForPageChange !== "" &&
           this.state.rowSelectEmployeeNoForPageChange !== undefined
         ) {
@@ -459,7 +445,7 @@ class salesMoneySet extends React.Component {
           $("#wagesInfo").attr("disabled", true);
           $("#workRepot").attr("disabled", true);
           $("#siteInfo").attr("disabled", true);
-        }
+        }*/
 
         this.setState({
           searchFlag: true,
@@ -480,88 +466,7 @@ class salesMoneySet extends React.Component {
     intoCompanyYearAndMonthTo: new Date(),
   };
 
-  // 入社年月form
-  inactiveintoCompanyYearAndMonthFrom = (date) => {
-    this.setState({
-      intoCompanyYearAndMonthFrom: date,
-    });
-  };
-  // 入社年月To
-  inactiveintoCompanyYearAndMonthTo = (date) => {
-    this.setState({
-      intoCompanyYearAndMonthTo: date,
-    });
-  };
-
-  socialInsuranceDateChange = (date) => {
-    this.setState({
-      socialInsuranceDate: date,
-    });
-  };
-
-  employeeDelete = () => {
-    // 将id进行数据类型转换，强制转换为数字类型，方便下面进行判断。
-    var a = window.confirm("削除してもよろしいでしょうか？");
-    if (a) {
-      $("#deleteBtn").click();
-    }
-  };
-  // 隠した削除ボタン
-  createCustomDeleteButton = (onClick) => {
-    return (
-      <Button variant="info" id="deleteBtn" hidden onClick={onClick}>
-        删除
-      </Button>
-    );
-  };
-  // 隠した削除ボタンの実装
-  onDeleteRow = (rows) => {
-    const emp = {
-      employeeNo: this.state.rowSelectEmployeeNo,
-      resumeInfo1: this.state.resumeInfo1,
-      resumeInfo2: this.state.resumeInfo2,
-      residentCardInfo: this.state.residentCardInfo,
-      passportInfo: this.state.passportInfo,
-    };
-    const tableSize = this.state.employeeAdditionList.length;
-    axios
-      .post(this.state.serverIP + "employee/deleteEmployeeInfo", emp)
-      .then((result) => {
-        if (result.data) {
-          if (tableSize > 1) {
-            this.searchEmployee(this.state.authorityCode);
-            // 削除の後で、rowSelectEmployeeNoの値に空白をセットする
-            this.setState({
-              rowSelectEmployeeNo: "",
-            });
-            this.setState({ myToastShow: true });
-            setTimeout(() => this.setState({ myToastShow: false }), 3000);
-            store.dispatch({
-              type: "UPDATE_STATE",
-              dropName: "getEmployeeName",
-            });
-          } else {
-            // 削除の後で、rowSelectEmployeeNoの値に空白をセットする
-            this.setState({
-              rowSelectEmployeeNo: "",
-              employeeAdditionList: [],
-            });
-            this.setState({ myToastShow: true });
-            setTimeout(() => this.setState({ myToastShow: false }), 300);
-            window.location.reload(); // 刷新当前页面.
-          }
-        } else {
-          this.setState({ myToastShow: false });
-        }
-      })
-      .catch(function (error) {
-        notification.error({
-          message: "エラー",
-          description: "删除错误，请检查程序",
-          placement: "topLeft",
-        });
-      });
-  };
+  
   // 削除前のデフォルトお知らせの削除
   customConfirm(next, dropRowKeys) {
     const dropRowKeysStr = dropRowKeys.join(",");
@@ -570,6 +475,7 @@ class salesMoneySet extends React.Component {
 
   // 行Selectファンクション
   handleRowSelect = (row, isSelected, e) => {
+      console.log("handleRowSelect isFinalSiteFinish=" + row.isFinalSiteFinish)
 	if (row.isFinalSiteFinish) {
           this.setState({
             myMessageShow: true,
@@ -612,8 +518,7 @@ class salesMoneySet extends React.Component {
       this.state.startYearAndMonth = row.startYearAndMonth
       this.state.additionNumberOfTimesStatus = row.additionNumberOfTimesStatus
       
-      console.log("employeeName isNotSelected=" +  row.startYearAndMonth)
-      console.log("employeeName isSelected=" + row.employeeName)
+      console.log("handleRowSelect isSelected=" + row.employeeNo + ", " + row.employeeName)
       if(row.employeeNo.substring(0, 3) == "BPR") {
       	$("#employeeStatus").prop("value", 4);
       	this.state.employeeStatus = 4
@@ -651,17 +556,9 @@ class salesMoneySet extends React.Component {
       this.state.employeeNo = ""
       this.state.employeeName = ""
   	  this.state.employeeStatus = ""
-/*      this.state.additionMoneyCode = ""
-      this.state.additionMoneyResonCode = ""
-      this.state.startYearAndMonth = ""
-      this.state.additionNumberOfTimesStatus = ""*/
-      console.log("employeeName isNotSelected=" + row.employeeName)
+      console.log("handleRowSelect isNotSelected=" + row.employeeNo)
       
       $("#employeeStatus").prop("value", "");
-/*      $("#additionMoneyCode").prop("value", "");
-      $("#additionMoneyResonCode").prop("value", "");
-      $("#startYearAndMonth").prop("value", "");
-      $("#additionNumberOfTimesStatus").prop("value", "");*/
       
       this.setState(() => this.resetStates);
       $("#residentCardInfo").prop("disabled", true);
@@ -687,35 +584,6 @@ class salesMoneySet extends React.Component {
         {start}から {to}まで , 総計{total}
       </p>
     );
-  }
-
-  formatBrthday(birthday) {
-    let date = birthday;
-    birthday = birthday.replace(/[/]/g, "");
-    let value =
-      publicUtils.converToLocalTime(birthday, true) === ""
-        ? ""
-        : Math.ceil(
-            (new Date().getTime() -
-              publicUtils.converToLocalTime(birthday, true).getTime()) /
-              31536000000
-          );
-    date =
-      publicUtils.converToLocalTime(birthday, true) === ""
-        ? ""
-        : date + "(" + value + ")";
-    return date;
-  }
-
-  formatStayPeriod(stayPeriod) {
-    let value =
-      publicUtils.converToLocalTime(stayPeriod, false) === ""
-        ? ""
-        : publicUtils.getFullYearMonth(
-            new Date(),
-            publicUtils.converToLocalTime(stayPeriod, false)
-          );
-    return value;
   }
 
   /**
@@ -781,6 +649,15 @@ class salesMoneySet extends React.Component {
       this.setState({
         additionNumberOfTimesStatus: event.target.value,
       });
+      
+      if(event.target.value == 2) {
+	      console.log("startYearAndMonthFix=" + utils.convertDate($("#startYearAndMonthFix").val()))
+		  this.state.startYearAndMonth = utils.convertDate($("#startYearAndMonthFix").val())
+	  } else {
+	 	  console.log("startYearAndMonthFix=" + $("#startYearAndMonth").val())
+		  this.state.startYearAndMonth = utils.convertDate($("#startYearAndMonth").val())
+	  }
+      /*$("#startYearAndMonthFix").attr("value", "");*/
   };
   
   onAdditionNumberOfTimesChangeFix = (event) => {
@@ -816,6 +693,7 @@ class salesMoneySet extends React.Component {
   employeeStatusChange = (event) => {
     const value = event.target.value;
     let employeeInfoList = this.state.employeeInfoAll;
+    console.log("handleRowSelect employeeStatusChange=" + value)
     if (value === "0") {
       let newEmpInfoList = [];
       for (let i in employeeInfoList) {
@@ -888,255 +766,9 @@ class salesMoneySet extends React.Component {
     this.setState({ employeeStatus: value });
   };
 
-  getDevelopLanguage1 = (event, values) => {
-    if (values != null) {
-      this.setState({
-        developLanguage1: values.code,
-      });
-    } else {
-      this.setState({
-        developLanguage1: "",
-      });
-    }
-  };
-  getDevelopLanguage2 = (event, values) => {
-    if (values != null) {
-      this.setState({
-        developLanguage2: values.code,
-      });
-    } else {
-      this.setState({
-        developLanguage2: "",
-      });
-    }
-  };
-
-  downloadResume = (resumeInfo, no) => {
-    let fileKey = "";
-    let downLoadPath = "";
-    if (resumeInfo !== null && resumeInfo.split("file/").length > 1) {
-      fileKey = resumeInfo.split("file/")[1];
-      downLoadPath = (
-        resumeInfo.substring(0, resumeInfo.lastIndexOf("_") + 1) +
-        (no === 1
-          ? this.state.resumeName1.split("_").length > 1
-            ? this.state.resumeName1.split("_")[1]
-            : this.state.resumeName1
-          : this.state.resumeName2.split("_").length > 1
-          ? this.state.resumeName2.split("_")[1]
-          : this.state.resumeName2) +
-        "." +
-        resumeInfo.split(".")[resumeInfo.split(".").length - 1]
-      ).replaceAll("/", "//");
-    }
-    axios
-      .post(this.state.serverIP + "s3Controller/downloadFile", {
-        fileKey: fileKey,
-        downLoadPath: downLoadPath,
-      })
-      .then((result) => {
-        let path = downLoadPath.replaceAll("//", "/");
-        if (no === 1) {
-          publicUtils.resumeDownload(
-            path,
-            this.state.serverIP,
-            this.state.resumeName1.split("_").length > 1
-              ? this.state.resumeName1.split("_")[1]
-              : this.state.resumeName1
-          );
-        } else if (no === 2) {
-          publicUtils.resumeDownload(
-            path,
-            this.state.serverIP,
-            this.state.resumeName2.split("_").length > 1
-              ? this.state.resumeName2.split("_")[1]
-              : this.state.resumeName2
-          );
-        }
-      })
-      .catch(function (error) {
-        notification.error({
-          message: "エラー",
-          description: "ファイルが存在しません。",
-          placement: "topLeft",
-        });
-      });
-  };
 
   checkEmpty = (values) => {
     return values === "" ? "" : "\t" + values;
-  };
-
-  getCustomerNo = (event, values) => {
-    if (values != null) {
-      this.setState({
-        customerNo: values.code,
-      });
-    } else {
-      this.setState({
-        customerNo: "",
-      });
-    }
-  };
-  shuseiTo = (actionType) => {
-    var path = {};
-    const sendValue = {
-      employeeName:
-        this.state.employeeName === "" ? undefined : this.state.employeeName,
-      employeeFormCode:
-        this.state.employeeFormCode === ""
-          ? undefined
-          : this.state.employeeFormCode,
-      employeeStatus:
-        this.state.employeeStatus === ""
-          ? undefined
-          : this.state.employeeStatus,
-      genderStatus:
-        this.state.genderStatus === "" ? undefined : this.state.genderStatus,
-      ageFromValue: this.state.ageFrom === "" ? undefined : this.state.ageFrom,
-      ageFrom:
-        this.state.ageFrom === ""
-          ? undefined
-          : publicUtils.birthday_age(this.state.ageFrom),
-      ageToValue: this.state.ageFrom === "" ? undefined : this.state.ageTo,
-      ageTo:
-        this.state.ageTo === ""
-          ? undefined
-          : publicUtils.birthday_age(this.state.ageTo),
-      residenceCode:
-        this.state.residenceCode === "" ? undefined : this.state.residenceCode,
-      nationalityCode:
-        this.state.nationalityCode === ""
-          ? undefined
-          : this.state.nationalityCode,
-      customer: publicUtils.labelGetValue(
-        $("#customerNo").val(),
-        this.state.customerMaster
-      ),
-      customerNo:
-        this.state.customerMaster === "" ? undefined : this.state.customerNo,
-      intoCompanyCode:
-        this.state.intoCompanyCode === ""
-          ? undefined
-          : this.state.intoCompanyCode,
-      japaneseLevelCode:
-        this.state.japaneseLevelCode === ""
-          ? undefined
-          : this.state.japaneseLevelCode,
-      siteRoleCode:
-        this.state.siteRoleCode === "" ? undefined : this.state.siteRoleCode,
-      developLanguage1: publicUtils.labelGetValue(
-        $("#developLanguage1").val(),
-        this.state.developLanguageMaster
-      ),
-      developLanguage2: publicUtils.labelGetValue(
-        $("#developLanguage2").val(),
-        this.state.developLanguageMaster
-      ),
-      intoCompanyYearAndMonthFrom:
-        this.state.intoCompanyYearAndMonthFrom === "" ||
-        this.state.intoCompanyYearAndMonthFrom === undefined
-          ? undefined
-          : publicUtils.formateDate(
-              this.state.intoCompanyYearAndMonthFrom,
-              false
-            ),
-      intoCompanyYearAndMonthTo:
-        this.state.intoCompanyYearAndMonthTo === "" ||
-        this.state.intoCompanyYearAndMonthTo === undefined
-          ? undefined
-          : publicUtils.formateDate(
-              this.state.intoCompanyYearAndMonthTo,
-              false
-            ),
-      kadou: this.state.kadou === "" ? undefined : this.state.kadou,
-      authorityCode: this.state.authorityCode,
-      socialInsurance: this.state.socialInsurance,
-      linkDisableFlag: this.state.socialInsurance,
-      currPage: this.state.currPage,
-      rowSelectEmployeeNoForPageChange:
-        this.state.rowSelectEmployeeNoForPageChange,
-      resumeInfo1: this.state.resumeInfo1,
-      resumeName1: this.state.resumeName1,
-      resumeInfo2: this.state.resumeInfo2,
-      resumeName2: this.state.resumeName2,
-      residentCardInfo: this.state.residentCardInfo,
-      passportInfo: this.state.passportInfo,
-      employeeInfo: this.state.employeeInfo,
-    };
-    switch (actionType) {
-      case "update":
-        path = {
-          pathname: "/salesMoneySet/updateMoneySet",
-          state: {
-            actionType: "update",
-            id: this.state.rowSelectEmployeeNo,
-            backPage: "employeeSearch",
-            sendValue: sendValue,
-            searchFlag: this.state.searchFlag,
-          },
-        };
-        break;
-      case "detail":
-        path = {
-          pathname: "/subMenuManager/employeeDetailNew",
-          state: {
-            actionType: "detail",
-            id: this.state.rowSelectEmployeeNo,
-            backPage: "employeeSearch",
-            sendValue: sendValue,
-            searchFlag: this.state.searchFlag,
-          },
-        };
-        break;
-      case "insert":
-        path = {
-          pathname: "/salesMoneySet/insertMoneySet",
-          state: {
-            actionType: "insert",
-            backPage: "employeeSearch",
-            sendValue: sendValue,
-            searchFlag: this.state.searchFlag,
-          },
-        };
-        break;
-      case "wagesInfo":
-        path = {
-          pathname: "/subMenuManager/wagesInfo",
-          state: {
-            employeeNo: this.state.rowSelectEmployeeNo,
-            backPage: "employeeSearch",
-            sendValue: sendValue,
-            searchFlag: this.state.searchFlag,
-          },
-        };
-        break;
-      case "siteInfo":
-        path = {
-          pathname: "/subMenuManager/siteInfo",
-          state: {
-            employeeNo: this.state.rowSelectEmployeeNo,
-            backPage: "employeeSearch",
-            sendValue: sendValue,
-            searchFlag: this.state.searchFlag,
-          },
-        };
-        break;
-      case "workRepot":
-        path = {
-          pathname: "/subMenuManager/workRepot",
-          state: {
-            employeeNo: this.state.rowSelectEmployeeNo,
-            employeeName: this.state.rowSelectEmployeeName,
-            backPage: "employeeSearch",
-            sendValue: sendValue,
-            searchFlag: this.state.searchFlag,
-          },
-        };
-        break;
-      default:
-    }
-    this.props.history.push(path);
   };
   
   addMoneySet = () => {
@@ -1340,11 +972,11 @@ class salesMoneySet extends React.Component {
     }
   };
   
-  employeeNameFormat = (cell) => {
+  employeeNameFormat = (cell, row) => {
     if (cell === "") {
       return "";
     } else {
-      return cell;
+      return cell + row.employeeNameTitle;
     }
   };
   
@@ -1377,9 +1009,6 @@ class salesMoneySet extends React.Component {
   getTableRowStyle(cell, row) {
 	 var chooseDate = utils.formateDate(new Date())
 	 	 console.log("getTableRowStyle=" + row.startYearAndMonth + ", " + chooseDate)
-	 if (this.state.isUpdateFlag == true) {
-		 return; 
-	 }
 	 if (null != chooseDate && undefined != chooseDate && null != row.startYearAndMonth && undefined != row.startYearAndMonth) {
 		 var rowYear = row.startYearAndMonth.substring(0,4);
 		 var rowMonth = row.startYearAndMonth.substring(4,6);
@@ -1445,8 +1074,6 @@ class salesMoneySet extends React.Component {
       paginationShowsTotal: this.renderShowsTotal,
       hideSizePerPage: true,
       expandRowBgColor: "rgb(165, 165, 165)",
-      deleteBtn: this.createCustomDeleteButton,
-      onDeleteRow: this.onDeleteRow,
       handleConfirmDeleteRow: this.customConfirm,
       sortIndicator: false, // 隐藏初始排序箭头
     };
