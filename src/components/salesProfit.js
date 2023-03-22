@@ -19,9 +19,19 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import * as publicUtils from "./utils/publicUtils.js";
 import moment from "moment";
 import { message } from "antd";
+import { withStyles, makeStyles } from "@material-ui/core/styles";
+import Tooltip from "@material-ui/core/Tooltip";
 axios.defaults.withCredentials = true;
 
 registerLocale("ja", ja);
+const LightTooltip = withStyles((theme) => ({
+  tooltip: {
+    backgroundColor: theme.palette.common.white,
+    color: "rgba(0, 0, 0, 0.87)",
+    boxShadow: theme.shadows[1],
+    fontSize: 11,
+  },
+}))(Tooltip);
 
 const defaultData = {
   startDate: moment().date(1).toDate(),
@@ -461,6 +471,27 @@ class salesProfit extends React.Component {
     return profitFormat;
   };
 
+  grayRow = (cell, row, cb) => {
+    const style = {
+      fontSize: "15px",
+      textOverflow: "ellipsis",
+      overflow: "hidden",
+    };
+    if (row.endFlag === "0") style.color = "#9495aa";
+    else if (row.successRate === "0" || row.successRate === "1")
+      style.color = "red";
+
+    return (
+      <LightTooltip
+        title={typeof cb === "function" ? cb(cell, row, true) : cell}
+      >
+        <div id="projectInfoSearchCol" style={style}>
+          {typeof cb === "function" ? cb(cell, row) : cell}
+        </div>
+      </LightTooltip>
+    );
+  };
+  
   render() {
     // 表格样式设定
     this.options = {
@@ -755,13 +786,6 @@ class salesProfit extends React.Component {
                         番号
                       </TableHeaderColumn>
                       <TableHeaderColumn
-                        dataField="yearAndMonth"
-                        width="90"
-                        tdStyle={{ padding: ".45em" }}
-                      >
-                        年月
-                      </TableHeaderColumn>
-                      <TableHeaderColumn
                         dataField="employeeStatus"
                         width="90"
                         tdStyle={{ padding: ".45em" }}
@@ -772,7 +796,7 @@ class salesProfit extends React.Component {
                       <TableHeaderColumn
                         dataField="employeeName"
                         tdStyle={{ padding: ".45em" }}
-                        width="180"
+                        width="120"
                         dataFormat={this.employeeNameFormat}
                       >
                         氏名
@@ -850,11 +874,19 @@ class salesProfit extends React.Component {
                       </TableHeaderColumn>
                       <TableHeaderColumn
                         dataField="bpSiteRoleName"
-                        width="150"
+                        width="130"
                         tdStyle={{ padding: ".45em" }}
                         dataFormat={(cell) => parseFloat(cell)}
                       >
                         担当者粗利
+                      </TableHeaderColumn>
+                      <TableHeaderColumn
+                        dataField="remarks"
+                        width="280"
+                    	dataFormat={this.grayRow}
+                        tdStyle={{ padding: ".45em" }}
+                      >
+                        備考
                       </TableHeaderColumn>
                     </BootstrapTable>
                   </Col>
