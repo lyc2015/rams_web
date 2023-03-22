@@ -85,7 +85,10 @@ var methodNameList = [
   "getNotWorkingEmployeeNo", // 80稼働してなの社員番号取得
   "getBpGrossProfit", // 81 BP粗利取得
   "getBankBranch", // 82 銀行支店名、支店番号取得
-  "getServerIP", // 最後
+  "getAdditionMoney",  // 83 加算金额
+  "getAdditionMoneyReason",  // 84 加算金额原因
+  "getAdditionCountOfNumber", // 85 加算回数
+  "getServerIP", // 最後, 如果有新增的配置必须在getServerIP之前
 ];
 
 const serverIP = "http://127.0.0.1:8080/";

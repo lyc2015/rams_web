@@ -32,6 +32,7 @@ import salaryDetailSend from "./salaryDetailSend";
 import SendRepot from "./sendRepot";
 import siteSearch from "./siteSearch";
 import salesPointSet from "./salesPointSet";
+import salesMoneySet from "./salesMoneySet";
 import salesProfit from "./salesProfit";
 import salesPoint from "./salesPoint";
 import WagesInfo from "./wagesInfo";
@@ -247,7 +248,7 @@ class SubMenu extends Component {
         break;
       case "営業管理":
         this.setClassName("営業管理");
-        this.shuseiTo({ pathname: "/subMenuManager/salesPointSet" });
+        this.shuseiTo({ pathname: "/subMenuManager/salesMoneySet" });
         break;
       case "勤務":
         this.setClassName("勤務");
@@ -1558,7 +1559,7 @@ class SubMenu extends Component {
                                       )}
                                       onClick={this.shuseiTo.bind(this, {
                                         pathname:
-                                          "/subMenuManager/salesPointSet",
+                                          "/subMenuManager/salesMoneySet",
                                       })}
                                     >
                                       <div>
@@ -1568,14 +1569,14 @@ class SubMenu extends Component {
                                               ? "my-tabcolor-font-hover"
                                               : "my-tabcolor-font"
                                           }
-                                          to="/subMenuManager/salesPointSet"
+                                          to="/subMenuManager/salesMoneySet"
                                         >
                                           <FontAwesomeIcon
                                             className="fa-fw"
                                             size="lg"
                                             icon={faFilePowerpoint}
                                           />{" "}
-                                          ポイント設定
+                                          營業金額特別設定
                                         </Link>
                                       </div>
                                     </ListGroup.Item>
@@ -1612,42 +1613,6 @@ class SubMenu extends Component {
                                             icon={faChartPie}
                                           />{" "}
                                           営業個別売上
-                                        </Link>
-                                      </div>
-                                    </ListGroup.Item>
-                                    <ListGroup.Item
-                                      style={
-                                        this.state.hover.search("3") !== -1
-                                          ? subMenuHover
-                                          : subMenu
-                                      }
-                                      onMouseEnter={this.toggleHover.bind(
-                                        this,
-                                        "営業管理-3"
-                                      )}
-                                      onMouseLeave={this.toggleHover.bind(
-                                        this,
-                                        "営業管理"
-                                      )}
-                                      onClick={this.shuseiTo.bind(this, {
-                                        pathname: "/subMenuManager/salesPoint",
-                                      })}
-                                    >
-                                      <div>
-                                        <Link
-                                          className={
-                                            this.state.hover.search("3") !== -1
-                                              ? "my-tabcolor-font-hover"
-                                              : "my-tabcolor-font"
-                                          }
-                                          to="/subMenuManager/salesPoint"
-                                        >
-                                          <FontAwesomeIcon
-                                            className="fa-fw"
-                                            size="lg"
-                                            icon={faBars}
-                                          />{" "}
-                                          営業ポイント
                                         </Link>
                                       </div>
                                     </ListGroup.Item>
@@ -2377,6 +2342,11 @@ class SubMenu extends Component {
                   exact
                   path={`${this.props.match.url}/salesPointSet`}
                   component={salesPointSet}
+                />
+                <Route
+                  exact
+                  path={`${this.props.match.url}/salesMoneySet`}
+                  component={salesMoneySet}
                 />
                 <Route
                   exact
