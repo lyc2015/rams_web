@@ -116,7 +116,7 @@ class salesMoneySet extends React.Component {
     employeeNo: "",
     additionMoneyCode: "0",
     additionMoneyResonCode: "0",
-    additionNumberOfTimesStatus: "1",
+    additionNumberOfTimesStatus: "0",
     startYearAndMonth: new Date(
       new Date().getMonth() + 1 === 12
         ? new Date().getFullYear() + 1 + "/01"
@@ -145,10 +145,6 @@ class salesMoneySet extends React.Component {
     id: "",
     employeeName: "",
     employeeNo: "",
-    additionMoneyCode: "",
-    additionMoneyResonCode: "",
-    additionNumberOfTimesStatus: "",
-    startYearAndMonth: "",
     employeeFormCode: "",
     employeeStatus: "",
     genderStatus: "",
@@ -169,7 +165,7 @@ class salesMoneySet extends React.Component {
     isUpdateFlag: false,
     additionMoneyCode: "0",
     additionMoneyResonCode: "0",
-    additionNumberOfTimesStatus: "1",
+    additionNumberOfTimesStatus: "0",
     startYearAndMonth: new Date(
       new Date().getMonth() + 1 === 12
         ? new Date().getFullYear() + 1 + "/01"
@@ -475,26 +471,7 @@ class salesMoneySet extends React.Component {
 
   // 行Selectファンクション
   handleRowSelect = (row, isSelected, e) => {
-      console.log("handleRowSelect isFinalSiteFinish=" + row.isFinalSiteFinish)
-	if (row.isFinalSiteFinish) {
-          this.setState({
-            myMessageShow: true,
-            type: "success",
-            errorsMessageShow: false,
-            myUpdateShow: false,
-            myDeleteShow: false,
-            isUpdateFlag: false,
-            message: "現場は終わった",
-            employeeStatus: "",
-            employeeNo: "",
-            employeeName: "",
-            
-          });
-          setTimeout(() => this.setState({ myMessageShow: false }), 3000);
-          return
-	}
-	
-    if (isSelected) {
+    if (isSelected && row.isFinalSiteFinish !== true) {
       this.setState({
 		isUpdateFlag: true,
         rowSelectEmployeeNoForPageChange: row.employeeNo,
@@ -539,6 +516,8 @@ class salesMoneySet extends React.Component {
       	$("#employeeStatus").prop("value", 0);
       	this.state.employeeStatus = 0
 	  }
+	  
+	  this.employeeStatusValueChange(this.state.employeeStatus)
       $("#additionMoneyCode").prop("value", row.additionMoneyCode);
       $("#additionMoneyResonCode").prop("value", row.additionMoneyResonCode);
       $("#additionNumberOfTimesStatus").prop("value", row.additionNumberOfTimesStatus);
@@ -552,6 +531,20 @@ class salesMoneySet extends React.Component {
       $("#workRepot").attr("disabled", false);
       $("#siteInfo").attr("disabled", false);
     } else {
+		if (row.isFinalSiteFinish) {
+		      this.setState({
+		        myMessageShow: true,
+		        type: "success",
+		        errorsMessageShow: false,
+		        myUpdateShow: false,
+		        myDeleteShow: false,
+		        isUpdateFlag: false,
+		        message: "現場は終わった",
+		        
+		      });
+		      setTimeout(() => this.setState({ myMessageShow: false }), 3000);
+		}
+	
       this.state.id = ""
       this.state.employeeNo = ""
       this.state.employeeName = ""
@@ -650,12 +643,20 @@ class salesMoneySet extends React.Component {
         additionNumberOfTimesStatus: event.target.value,
       });
       
-      if(event.target.value == 2) {
+      if(event.target.value == 1) {
 	      console.log("startYearAndMonthFix=" + utils.convertDate($("#startYearAndMonthFix").val()))
 		  this.state.startYearAndMonth = utils.convertDate($("#startYearAndMonthFix").val())
 	  } else {
 	 	  console.log("startYearAndMonthFix=" + $("#startYearAndMonth").val())
-		  this.state.startYearAndMonth = utils.convertDate($("#startYearAndMonth").val())
+		  this.state.startYearAndMonth = new Date(
+		      new Date().getMonth() + 1 === 12
+		        ? new Date().getFullYear() + 1 + "/01"
+		        : new Date().getFullYear() +
+		          "/" +
+		          (new Date().getMonth() + 1 < 10
+		            ? "0" + (new Date().getMonth() + 2)
+		            : new Date().getMonth() + 2)
+		    ).getTime()
 	  }
       /*$("#startYearAndMonthFix").attr("value", "");*/
   };
@@ -692,8 +693,12 @@ class salesMoneySet extends React.Component {
    */
   employeeStatusChange = (event) => {
     const value = event.target.value;
+    this.employeeStatusValueChange(value)
+  };
+
+
+  employeeStatusValueChange(value) {
     let employeeInfoList = this.state.employeeInfoAll;
-    console.log("handleRowSelect employeeStatusChange=" + value)
     if (value === "0") {
       let newEmpInfoList = [];
       for (let i in employeeInfoList) {
@@ -764,8 +769,7 @@ class salesMoneySet extends React.Component {
       this.setState({ employeeInfo: employeeInfoList });
     }
     this.setState({ employeeStatus: value });
-  };
-
+  }
 
   checkEmpty = (values) => {
     return values === "" ? "" : "\t" + values;
@@ -853,23 +857,11 @@ class salesMoneySet extends React.Component {
             errorsMessageShow: false,
             myUpdateShow: false,
             myDeleteShow: false,
-            isUpdateFlag: false,
             message: "更新成功",
-            employeeStatus: "",
-            employeeNo: "",
-            employeeName: "",
-            additionMoneyCode: "",
-            additionMoneyResonCode: "",
-            additionNumberOfTimesStatus: "",
-            startYearAndMonth: "",
             
           });
           setTimeout(() => this.setState({ myMessageShow: false }), 3000);
    		 	
-   		  $("#employeeStatus").val("");
-   		  $("#employeeName").val("");
-   		 	
-    	  this.setState(() => this.resetStates);
           this.searchEmployee(this.state.authorityCode);
         } else {
           this.setState({
@@ -916,7 +908,7 @@ class salesMoneySet extends React.Component {
             employeeName: "",
             additionMoneyCode: "",
             additionMoneyResonCode: "",
-            additionNumberOfTimesStatus: "",
+            additionNumberOfTimesStatus: "0",
             startYearAndMonth: "",
             
           });
@@ -955,7 +947,7 @@ class salesMoneySet extends React.Component {
     if (cell === "") {
       return "";
     } 
-	if (row.additionNumberOfTimesStatus === "2") {
+	if (row.additionNumberOfTimesStatus === "1") {
 	  return utils.dateFormate(cell) + " (1回)";
 	} else {
         console.log("cell ");
@@ -1234,7 +1226,7 @@ class salesMoneySet extends React.Component {
                   </InputGroup>
                 </Col>
                 <Col sm={3}>
-	              <InputGroup size="sm" className="mb-3 flexWrapNoWrap" hidden ={this.state.additionNumberOfTimesStatus == 2}>
+	              <InputGroup size="sm" className="mb-3 flexWrapNoWrap" hidden ={this.state.additionNumberOfTimesStatus == 1}>
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
 						開始年月
@@ -1257,7 +1249,7 @@ class salesMoneySet extends React.Component {
                       name="startYearAndMonth"
 	                />
 	              </InputGroup>
-	              <InputGroup size="sm" className="mb-3" hidden ={this.state.additionNumberOfTimesStatus != 2}>
+	              <InputGroup size="sm" className="mb-3" hidden ={this.state.additionNumberOfTimesStatus != 1}>
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         加算年月
