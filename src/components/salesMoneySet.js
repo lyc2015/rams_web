@@ -26,8 +26,10 @@ import {
   faEdit,
   faTrash,
   faDownload,
+  faBuilding,
   faList,
 } from "@fortawesome/free-solid-svg-icons";
+
 import * as publicUtils from "./utils/publicUtils.js";
 import { Link } from "react-router-dom";
 import * as utils from "./utils/publicUtils.js";
@@ -133,6 +135,7 @@ class salesMoneySet extends React.Component {
     myUpdateShow: false,
     myDeleteShow: false,
     errorsMessageShow: false,
+    isFinalSiteFinish: false,
     errorsMessageValue: "",
     ageFrom: "",
     ageTo: "",
@@ -163,6 +166,7 @@ class salesMoneySet extends React.Component {
     developLanguage2: "",
     socialInsurance: "",
     isUpdateFlag: false,
+    isFinalSiteFinish: false,
     additionMoneyCode: "0",
     additionMoneyResonCode: "0",
     additionNumberOfTimesStatus: "0",
@@ -265,6 +269,8 @@ class salesMoneySet extends React.Component {
     this.setState({
       employeeStatuss: temp,
     });
+    
+   
   }
 
   // 初期化の時、disabledをセットします
@@ -471,7 +477,8 @@ class salesMoneySet extends React.Component {
 
   // 行Selectファンクション
   handleRowSelect = (row, isSelected, e) => {
-    if (isSelected && row.isFinalSiteFinish !== true) {
+      console.log("handleRowSelect isSelected=" + isSelected)
+    if (isSelected) {
       this.setState({
 		isUpdateFlag: true,
         rowSelectEmployeeNoForPageChange: row.employeeNo,
@@ -488,6 +495,7 @@ class salesMoneySet extends React.Component {
         currPage: this.refs.siteSearchTable.state.currPage,
       });
       this.state.id = row.id
+      this.state.isFinalSiteFinish = row.isFinalSiteFinish
       this.state.employeeNo = row.employeeNo
       this.state.employeeName = row.employeeName
       this.state.additionMoneyCode = row.additionMoneyCode
@@ -495,7 +503,18 @@ class salesMoneySet extends React.Component {
       this.state.startYearAndMonth = row.startYearAndMonth
       this.state.additionNumberOfTimesStatus = row.additionNumberOfTimesStatus
       
-      console.log("handleRowSelect isSelected=" + row.employeeNo + ", " + row.employeeName)
+      console.log("handleRowSelect isSelected=" + row.employeeNo + ", " + row.employeeName + ", row.startYearAndMonth=" + row.startYearAndMonth)
+      if (row.additionNumberOfTimesStatus == 1) {
+      	console.log("handleRowSelect startYearAndMonthFix=" + $("#startYearAndMonthFix").val() + ", " + utils.converToYYYYMM($("#startYearAndMonthFix").val()))
+      	if (utils.converToYYYYMM($("#startYearAndMonthFix").val()) != row.startYearAndMonth) {
+		//	$("#startYearAndMonthFix").prop("value", utils.converToYYYY_MM(row.startYearAndMonth));
+      		  this.setState({
+        		startYearAndMonth: ""
+			  })
+      		console.log("handleRowSelect isSelected=" + this.state.startYearAndMonth)
+		}
+      		$("#startYearAndMonthFix").prop("value", utils.converToYYYY_MM(row.startYearAndMonth));
+	  }
       if(row.employeeNo.substring(0, 3) == "BPR") {
       	$("#employeeStatus").prop("value", 4);
       	this.state.employeeStatus = 4
@@ -521,7 +540,11 @@ class salesMoneySet extends React.Component {
       $("#additionMoneyCode").prop("value", row.additionMoneyCode);
       $("#additionMoneyResonCode").prop("value", row.additionMoneyResonCode);
       $("#additionNumberOfTimesStatus").prop("value", row.additionNumberOfTimesStatus);
-      
+      if(row.isFinalSiteFinish == true) {
+      	$("#addOrUpdate").attr("disabled", true);
+	  } else {
+      	$("#addOrUpdate").attr("disabled", false);
+	  }
       $("#residentCardInfo").prop("disabled", false);
       $("#passportInfo").prop("disabled", false);
       $("#delete").attr("disabled", false);
@@ -531,21 +554,9 @@ class salesMoneySet extends React.Component {
       $("#workRepot").attr("disabled", false);
       $("#siteInfo").attr("disabled", false);
     } else {
-		if (row.isFinalSiteFinish) {
-		      this.setState({
-		        myMessageShow: true,
-		        type: "success",
-		        errorsMessageShow: false,
-		        myUpdateShow: false,
-		        myDeleteShow: false,
-		        isUpdateFlag: false,
-		        message: "現場は終わった",
-		        
-		      });
-		      setTimeout(() => this.setState({ myMessageShow: false }), 3000);
-		}
 	
       this.state.id = ""
+      this.state.isFinalSiteFinish = false
       this.state.employeeNo = ""
       this.state.employeeName = ""
   	  this.state.employeeStatus = ""
@@ -554,6 +565,7 @@ class salesMoneySet extends React.Component {
       $("#employeeStatus").prop("value", "");
       
       this.setState(() => this.resetStates);
+      	$("#addOrUpdate").attr("disabled", false);
       $("#residentCardInfo").prop("disabled", true);
       $("#passportInfo").prop("disabled", true);
       $("#delete").attr("disabled", true);
@@ -881,10 +893,18 @@ class salesMoneySet extends React.Component {
   };
   
  deleteMoneySet = () => {
-    var confirmDelete = window.confirm("削除してもよろしいでしょうか？");
-        console.log("deleteMoneySet=" + confirmDelete);
-    if (confirmDelete != true) {
-		return
+	 if (this.state.isFinalSiteFinish == true) {
+	    var confirmDelete = window.confirm("現場終了しました");
+	        console.log("deleteMoneySet isFinalSiteFinish=" + confirmDelete);
+	    if (confirmDelete != true) {
+			return
+		}
+	 } else {
+	    var confirmDelete = window.confirm("削除してもよろしいでしょうか？");
+	        console.log("deleteMoneySet=" + confirmDelete);
+	    if (confirmDelete != true) {
+			return
+		}
 	}
     var requestModel = {};
     requestModel["id"] = this.state.id;
@@ -1022,6 +1042,29 @@ class salesMoneySet extends React.Component {
 	 }
 	return { color: "#000000"}
   }
+  
+  shuseiTo = (actionType) => {
+    var path = {};
+    const sendValue = {
+      employeeName: this.state.employeeName,
+      employeeInfo: this.state.employeeInfo,
+    };
+    switch (actionType) {
+      case "siteInfo":
+        path = {
+          pathname: "/subMenuManager/siteInfo",
+          state: {
+            employeeNo: this.state.employeeNo,
+            backPage: "salesMoneySet",
+            sendValue: sendValue,
+            searchFlag: this.state.searchFlag,
+          },
+        };
+        break;
+      default:
+    }
+    this.props.history.push(path);
+  };
   
   render() {
     const {
@@ -1175,30 +1218,6 @@ class salesMoneySet extends React.Component {
                   </InputGroup>
                 </Col>
                 
-                <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3">
-                    <InputGroup.Prepend>
-                      <InputGroup.Text id="inputGroup-sizing-sm">
-                        加算金額
-                      </InputGroup.Text>
-                    </InputGroup.Prepend>
-                    <Form.Control
-                      as="select"
-                      size="sm"
-                      autoComplete="off"
-                      id="additionMoneyCode"
-                      name="additionMoneyCode"
-                      value={this.state.additionMoneyCode}
-                      onChange={this.onAdditionMoneyChange.bind(this)}
-                    >
-                      {this.state.additionMoneyMap.map((data) => (
-                        <option key={data.code} value={data.code}>
-                          {data.name}
-                        </option>
-                      ))}
-                    </Form.Control>
-                  </InputGroup>
-                </Col>
               </Row>
               <Row>
                 <Col sm={3}>
@@ -1272,6 +1291,31 @@ class salesMoneySet extends React.Component {
                   </InputGroup>
 	             
 	            </Col>
+	            
+                <Col sm={3}>
+                  <InputGroup size="sm" className="mb-3">
+                    <InputGroup.Prepend>
+                      <InputGroup.Text id="inputGroup-sizing-sm">
+                        加算金額
+                      </InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <Form.Control
+                      as="select"
+                      size="sm"
+                      autoComplete="off"
+                      id="additionMoneyCode"
+                      name="additionMoneyCode"
+                      value={this.state.additionMoneyCode}
+                      onChange={this.onAdditionMoneyChange.bind(this)}
+                    >
+                      {this.state.additionMoneyMap.map((data) => (
+                        <option key={data.code} value={data.code}>
+                          {data.name}
+                        </option>
+                      ))}
+                    </Form.Control>
+                  </InputGroup>
+                </Col>
                 <Col sm={3}>
                   <InputGroup size="sm" className="mb-3">
                     <InputGroup.Prepend>
@@ -1300,10 +1344,26 @@ class salesMoneySet extends React.Component {
             </Form.Group>
           </div>
         </Form>
+        <div style={{ textAlign: "left" }}>
+       		<Col sm={3}>
+              <div style={{ float: "left" }}>
+                <Button
+                  onClick={this.shuseiTo.bind(this, "siteInfo")}
+                  size="sm"
+                  variant="info"
+                  name="clickButton"
+                  disabled={this.state.isUpdateFlag != true}
+                >
+                  <FontAwesomeIcon icon={faBuilding} /> 現場情報
+                </Button>{" "}
+                </div>
+            </Col>
+        </div>
         <div style={{ textAlign: "center" }}>
           <Button
             size="sm"
             onClick={this.state.isUpdateFlag === true ? this.updateMoneySet : this.addMoneySet}
+	          id="addOrUpdate"
             variant="info"
           >
             <FontAwesomeIcon icon={faSave} /> {this.state.isUpdateFlag === true ? "更新" : "登録"}
