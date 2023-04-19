@@ -1268,9 +1268,9 @@ Email：` +
 
   handleCtmSelect = (row, isSelected, e) => {
     let { selectedCusInfos } = this.state;
-
+	
     let index = selectedCusInfos.findIndex(
-      (item) => (item.customerNo = row.customerNo)
+      (item) => (item.customerNo == row.customerNo)
     );
     this.setState({
       selectedCusInfoIndex: index,
