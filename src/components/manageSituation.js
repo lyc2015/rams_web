@@ -2685,7 +2685,7 @@ class manageSituation extends React.Component {
               <InputGroup size="sm" className="mb-3">
                 <InputGroup.Prepend>
                   <InputGroup.Text id="inputGroup-sizing-sm">
-                    備考{this.state.readFlag}
+                    備考
                   </InputGroup.Text>
                 </InputGroup.Prepend>
                 <FormControl
