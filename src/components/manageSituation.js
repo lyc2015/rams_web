@@ -2555,9 +2555,7 @@ class manageSituation extends React.Component {
                   value={this.state.salesPriorityStatus}
                   autoComplete="off"
                   disabled={
-                    this.state.readFlag || this.state.authorityCode !== "4"
-                      ? true
-                      : false
+                    false
                   }
                 >
                   {this.state?.salesPriorityStatuss.map((date) => (
@@ -2584,9 +2582,7 @@ class manageSituation extends React.Component {
                   size="sm"
                   maxLength="100"
                   readOnly={
-                    this.state.readFlag || this.state.authorityCode !== "4"
-                      ? true
-                      : false
+                   false
                   }
                 />
               </InputGroup>
@@ -2689,7 +2685,7 @@ class manageSituation extends React.Component {
               <InputGroup size="sm" className="mb-3">
                 <InputGroup.Prepend>
                   <InputGroup.Text id="inputGroup-sizing-sm">
-                    備考
+                    備考{this.state.readFlag}
                   </InputGroup.Text>
                 </InputGroup.Prepend>
                 <FormControl
@@ -2699,7 +2695,7 @@ class manageSituation extends React.Component {
                   onChange={this.valueChange}
                   size="sm"
                   maxLength="30"
-                  readOnly={this.state.readFlag}
+                  readOnly={false}
                 />
                 <font className="site-mark"></font>
                 <FormControl
@@ -2709,7 +2705,7 @@ class manageSituation extends React.Component {
                   onChange={this.valueChange}
                   size="sm"
                   maxLength="30"
-                  readOnly={this.state.readFlag}
+                  readOnly={false}
                 />
               </InputGroup>
             </Col>
