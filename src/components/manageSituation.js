@@ -823,16 +823,6 @@ class manageSituation extends React.Component {
 
   // 更新ボタン
   changeState = () => {
-    if (this.state.readFlag) {
-      /*
-       * if (!this.state.updateBtnflag) { alert("エラーメッセージ"); } else { this.setState({
-       * readFlag: !this.state.readFlag, }) }
-       */
-      this.setState({
-        readFlag: !this.state.readFlag,
-        updateBtnflag: true,
-      });
-    } else {
       this.state.employeeNo = String(this.refs.table.state.selectedRowKeys);
       axios
         .post(
@@ -865,7 +855,6 @@ class manageSituation extends React.Component {
         .catch(function (error) {
           alert("ERR");
         });
-    }
   };
 
   // onchange
@@ -2523,9 +2512,7 @@ class manageSituation extends React.Component {
                   disabled={this.state.linkDisableFlag}
                 >
                   <FontAwesomeIcon icon={faSave} />{" "}
-                  {!this.state.readFlag && this.state.updateBtnflag
-                    ? " 更新"
-                    : " 解除"}
+                  {" 更新"}
                 </Button>
                 <font style={{ marginLeft: "2px", marginRight: "2px" }}></font>
                 <Button
