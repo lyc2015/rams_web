@@ -258,7 +258,8 @@ class employeeUpdateNew extends React.Component {
       myNumber: publicUtils.nullToEmpty(this.state.myNumber), // マイナンバー
       passportNo: publicUtils.nullToEmpty(this.state.passportNo), // パスポート番号
       resumeName1: publicUtils.nullToEmpty(this.state.resumeName1), // 履歴書備考1
-      resumeName2: publicUtils.nullToEmpty(this.state.resumeName2), // 履歴書備考1
+      //resumeName2: publicUtils.nullToEmpty(this.state.resumeName2), // 履歴書備考1
+      updateTime: publicUtils.nullToEmpty(this.state.updateTime),
       accountInfo: this.state.accountInfo, // 口座情報
       password: publicUtils.nullToEmpty(this.state.passwordSetInfo), // pw設定
       yearsOfExperience: publicUtils.formateDate(
@@ -299,13 +300,13 @@ class employeeUpdateNew extends React.Component {
         : this.state.resumeInfo1URL
     );
     formData.append("resumeInfo1Key", this.state.resumeInfo1URL);
-    formData.append(
-      "resumeInfo2URL",
-      publicUtils.nullToEmpty(this.state.resumeName2) === ""
-        ? ""
-        : this.state.resumeInfo2URL
-    );
-    formData.append("resumeInfo2Key", this.state.resumeInfo2URL);
+    // formData.append(
+    //   "resumeInfo2URL",
+    //   publicUtils.nullToEmpty(this.state.resumeName2) === ""
+    //     ? ""
+    //     : this.state.resumeInfo2URL
+    // );
+    // formData.append("resumeInfo2Key", this.state.resumeInfo2URL);
     formData.append("residentCardInfoURL", this.state.residentCardInfoURL);
     formData.append("passportInfoURL", this.state.passportInfoURL);
     /*		if(this.state.isBp && this.state.employeeNo.substring(0,2)!=="BP"){
@@ -369,7 +370,7 @@ class employeeUpdateNew extends React.Component {
             sendValue.resumeInfo2 = response.data.resumeInfo2;
           }
           sendValue.resumeName1 = this.state.resumeName1;
-          sendValue.resumeName2 = this.state.resumeName2;
+          //sendValue.resumeName2 = this.state.resumeName2;          
 
           if (this.state.resumeName1 === "") {
             this.setState({
@@ -378,13 +379,13 @@ class employeeUpdateNew extends React.Component {
             });
             sendValue.resumeInfo1 = "";
           }
-          if (this.state.resumeName2 === "") {
-            this.setState({
-              resumeInfo2: undefined,
-              resumeInfo2URL: "",
-            });
-            sendValue.resumeInfo2 = "";
-          }
+          // if (this.state.resumeName2 === "") {
+          //   this.setState({
+          //     resumeInfo2: undefined,
+          //     resumeInfo2URL: "",
+          //   });
+          //   sendValue.resumeInfo2 = "";
+          // }
           this.setState({ sendValue: sendValue });
           this.setState({ myToastShow: true, errorsMessageShow: false });
           setTimeout(() => this.setState({ myToastShow: false }), 3000);
@@ -445,7 +446,7 @@ class employeeUpdateNew extends React.Component {
         contractDeadline: "",
         temporary_contractDeadline: "",
         resumeName1: "",
-        resumeName2: "",
+        // resumeName2: "",
       });
     } else {
 		if(null != this.state.oldEmployeeNo && this.state.oldEmployeeNo.substring(0,3) === "LYC" && this.state.oldEmployeeNo.substring(0,4) !== "LYCG"){
@@ -552,6 +553,19 @@ class employeeUpdateNew extends React.Component {
   getEmployeeByEmployeeNo = (employeeNo) => {
     const emp = {
       employeeNo: employeeNo,
+    };
+    const formatDate = (time) => {
+      const year = time.getFullYear();
+      const month = time.getMonth() + 1;
+      const day = time.getDate();
+      const hours = time.getHours();
+      const minutes = time.getMinutes();
+  
+      return `${year}-${padZero(month)}-${padZero(day)} ${padZero(hours)}:${padZero(minutes)}`;
+    };
+  
+    const padZero = (value) => {
+      return value.toString().padStart(2, '0');
     };
     axios
       .post(this.state.serverIP + "employee/getEmployeeByEmployeeNo", emp)
@@ -698,8 +712,9 @@ class employeeUpdateNew extends React.Component {
           residentCardInfoURL: publicUtils.nullToEmpty(data.residentCardInfo), // 在留カード
           resumeInfo1URL: publicUtils.nullToEmpty(data.resumeInfo1), // 履歴書
           resumeName1: data.resumeName1, // 履歴書備考1
-          resumeInfo2URL: publicUtils.nullToEmpty(data.resumeInfo2), // 履歴書2
-          resumeName2: data.resumeName2, // 履歴書備考1
+          // resumeInfo2URL: publicUtils.nullToEmpty(data.resumeInfo2), // 履歴書2
+          // resumeName2: data.resumeName2, // 履歴書備考1
+          updateTime: data.updateTime?formatDate(new Date(data.updateTime)):'',//更新時間
           passportInfoURL: publicUtils.nullToEmpty(data.passportInfo), // パスポート
           yearsOfExperience: publicUtils.converToLocalTime(
             data.yearsOfExperience,
@@ -726,6 +741,7 @@ class employeeUpdateNew extends React.Component {
       });
   };
 
+  
   /**
    * 漢字をカタカナに変更する
    */
@@ -1452,6 +1468,7 @@ class employeeUpdateNew extends React.Component {
       lastHalfAddress,
       resumeName1,
       resumeName2,
+      updateTime,
       temporary_stayPeriod,
       temporary_contractDeadline,
       temporary_yearsOfExperience,
@@ -2427,47 +2444,17 @@ class employeeUpdateNew extends React.Component {
                   <InputGroup size="sm" className="flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
-                        履歴書2
+                      更新時間
                       </InputGroup.Text>
                     </InputGroup.Prepend>
                     <FormControl
-                      placeholder="履歴書2名"
-                      value={resumeName2}
+                      value={updateTime}
                       autoComplete="off"
-                      disabled={
-                        employeeStatus === "0" || employeeStatus === "3"
-                          ? false
-                          : true
-                      }
-                      maxlength="30"
+                      disabled
                       onChange={this.valueChange}
                       size="sm"
-                      name="resumeName2"
-                      disabled={departmentCode === "0" ? true : false}
-                    />
-                    <Button
-                      size="sm"
-                      style={
-                        this.state.resumeInfo2URL !== "" ||
-                        this.state.resumeInfo2 !== undefined
-                          ? { backgroundColor: "#53A100", border: "none" }
-                          : { backgroundColor: "", border: "none" }
-                      }
-                      onClick={(event) => this.addFile(event, "resumeInfo2")}
-                      disabled={
-                        (employeeStatus === "0" || employeeStatus === "3"
-                          ? false
-                          : true) || departmentCode === "0"
-                          ? true
-                          : false
-                      }
-                    >
-                      <FontAwesomeIcon icon={faFile} />{" "}
-                      {this.state.resumeInfo2URL !== "" ||
-                      this.state.resumeInfo2 !== undefined
-                        ? "済み"
-                        : "添付"}
-                    </Button>
+                      name="employeeNo"
+                    />                   
                     <font className="site-mark"></font>
                   </InputGroup>
                 </Col>

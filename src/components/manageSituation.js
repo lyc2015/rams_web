@@ -122,6 +122,7 @@ class manageSituation extends React.Component {
     resumeInfo2: "", // 履歴情報２
     resumeName1: "", // 履歴情報１
     resumeName2: "", // 履歴情報２
+    resume1Date: "",
     admissionEndDate: "", // 現場終了情報
     myToastShow: false, // 状態ダイアログ
     myDirectoryShow: false, // 状態ダイアログ
@@ -414,6 +415,8 @@ class manageSituation extends React.Component {
         // alert("ERR");
       });
   };
+
+  
 
   // レコードのステータス
   formatType = (cell) => {
@@ -1082,6 +1085,7 @@ class manageSituation extends React.Component {
               resumeInfo2: row.resumeInfo2 === null ? "" : row.resumeInfo2,
               resumeName1: row.resumeName1 === null ? "" : row.resumeName1,
               resumeName2: row.resumeName2 === null ? "" : row.resumeName2,
+              resume1Date: row.resume1Date === null ? "" : row.resume1Date,
               customerContractStatus:
                 row.customerContractStatus === null
                   ? ""
@@ -1196,6 +1200,7 @@ class manageSituation extends React.Component {
                 resumeInfo2: row.resumeInfo2 === null ? "" : row.resumeInfo2,
                 resumeName1: row.resumeName1 === null ? "" : row.resumeName1,
                 resumeName2: row.resumeName2 === null ? "" : row.resumeName2,
+                resume1Date: row.resume1Date === null ? "" : row.resume1Date,
                 customerContractStatus:
                   row.customerContractStatus === null
                     ? ""
@@ -1329,6 +1334,7 @@ class manageSituation extends React.Component {
               resumeInfo2: row.resumeInfo2 === null ? "" : row.resumeInfo2,
               resumeName1: row.resumeName1 === null ? "" : row.resumeName1,
               resumeName2: row.resumeName2 === null ? "" : row.resumeName2,
+              resume1Date: row.resume1Date === null ? "" : row.resume1Date,
               customerContractStatus:
                 row.customerContractStatus === null
                   ? ""
@@ -1442,6 +1448,7 @@ class manageSituation extends React.Component {
                 unitPrice: row.price === null ? row.unitPrice : row.price,
                 resumeInfo1: row.resumeInfo1 === null ? "" : row.resumeInfo1,
                 resumeInfo2: row.resumeInfo2 === null ? "" : row.resumeInfo2,
+                resume1Date: row.resume1Date === null ? "" : row.resume1Date,
                 resumeName1: row.resumeName1 === null ? "" : row.resumeName1,
                 resumeName2: row.resumeName2 === null ? "" : row.resumeName2,
                 customerContractStatus:
@@ -1797,6 +1804,20 @@ class manageSituation extends React.Component {
         }, 100);
       }
     );
+  };
+
+  formatDate = (time) => {
+    const year = time.getFullYear();
+    const month = time.getMonth() + 1;
+    const day = time.getDate();
+    const hours = time.getHours();
+    const minutes = time.getMinutes();
+
+    return `${year}-${this.padZero(month)}-${this.padZero(day)} ${this.padZero(hours)}:${this.padZero(minutes)}`;
+  };
+
+  padZero = (value) => {
+    return value.toString().padStart(2, '0');
   };
 
   downloadResume = (resumeInfo, no) => {
@@ -2916,8 +2937,9 @@ class manageSituation extends React.Component {
                   this.state.resumeInfo1 === ""
                     ? "履歴書1"
                     : this.state.resumeName1.split("_")[1]}
+                    {this.state.resume1Date}
                 </Button>{" "}
-                <Button
+                {/* <Button
                   onClick={this.downloadResume.bind(
                     this,
                     this.state.resumeInfo2,
@@ -2940,7 +2962,7 @@ class manageSituation extends React.Component {
                   this.state.resumeInfo2 === ""
                     ? "履歴書2"
                     : this.state.resumeName2.split("_")[1]}
-                </Button>
+                </Button> */}
               </div>
             </Col>
           </Row>
@@ -3047,12 +3069,15 @@ class manageSituation extends React.Component {
                   <TableHeaderColumn dataField="resumeInfo1" hidden={true}>
                     履歴書1
                   </TableHeaderColumn>
+                  <TableHeaderColumn dataField="resume1Date" hidden={true}>
+                    履歴書1時間
+                  </TableHeaderColumn>
                   <TableHeaderColumn dataField="resumeInfo2" hidden={true}>
                     履歴書2
                   </TableHeaderColumn>
                   <TableHeaderColumn dataField="resumeName1" hidden={true}>
                     履歴書名前1
-                  </TableHeaderColumn>
+                  </TableHeaderColumn>                  
                   <TableHeaderColumn dataField="resumeName2" hidden={true}>
                     履歴書名前2
                   </TableHeaderColumn>

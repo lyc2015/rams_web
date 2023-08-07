@@ -1125,7 +1125,13 @@ class CustomerInfo extends Component {
                     id="customerAbbreviation"
                     name="customerAbbreviation"
                   />
-
+                </InputGroup>
+              </Col>
+              <Col sm={3}>
+                <InputGroup
+                  size="sm"
+                  className="mb-3 flexWrapNoWrap required-mark"
+                >
                   <InputGroup.Prepend>
                     <InputGroup.Text id="twoKanji">番号</InputGroup.Text>
                   </InputGroup.Prepend>
@@ -1137,6 +1143,7 @@ class CustomerInfo extends Component {
                   />
                 </InputGroup>
               </Col>
+              
             </Row>
             <Row>
               <Col sm={3}>
