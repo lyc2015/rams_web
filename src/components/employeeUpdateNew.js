@@ -561,7 +561,7 @@ class employeeUpdateNew extends React.Component {
       const hours = time.getHours();
       const minutes = time.getMinutes();
   
-      return `${year}-${padZero(month)}-${padZero(day)} ${padZero(hours)}:${padZero(minutes)}`;
+      return `${year}/${padZero(month)}/${padZero(day)} ${padZero(hours)}:${padZero(minutes)}`;
     };
   
     const padZero = (value) => {
@@ -714,7 +714,7 @@ class employeeUpdateNew extends React.Component {
           resumeName1: data.resumeName1, // 履歴書備考1
           // resumeInfo2URL: publicUtils.nullToEmpty(data.resumeInfo2), // 履歴書2
           // resumeName2: data.resumeName2, // 履歴書備考1
-          updateTime: data.updateTime?formatDate(new Date(data.updateTime)):'',//更新時間
+          updateTime: data.updateTime?formatDate(new Date(data.updateTime)) + (data.updateUser?' (' + data.updateUser.substring(0,1) + ')':''):'',//更新時間
           passportInfoURL: publicUtils.nullToEmpty(data.passportInfo), // パスポート
           yearsOfExperience: publicUtils.converToLocalTime(
             data.yearsOfExperience,

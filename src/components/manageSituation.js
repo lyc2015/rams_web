@@ -122,7 +122,7 @@ class manageSituation extends React.Component {
     resumeInfo2: "", // 履歴情報２
     resumeName1: "", // 履歴情報１
     resumeName2: "", // 履歴情報２
-    resume1Date: "",
+    resumeDate: "",
     admissionEndDate: "", // 現場終了情報
     myToastShow: false, // 状態ダイアログ
     myDirectoryShow: false, // 状態ダイアログ
@@ -1074,7 +1074,7 @@ class manageSituation extends React.Component {
               resumeInfo2: row.resumeInfo2 === null ? "" : row.resumeInfo2,
               resumeName1: row.resumeName1 === null ? "" : row.resumeName1,
               resumeName2: row.resumeName2 === null ? "" : row.resumeName2,
-              resume1Date: row.resume1Date === null ? "" : row.resume1Date,
+              resumeDate: row.resumeDate === null ? "" : row.resumeDate,
               customerContractStatus:
                 row.customerContractStatus === null
                   ? ""
@@ -1189,7 +1189,7 @@ class manageSituation extends React.Component {
                 resumeInfo2: row.resumeInfo2 === null ? "" : row.resumeInfo2,
                 resumeName1: row.resumeName1 === null ? "" : row.resumeName1,
                 resumeName2: row.resumeName2 === null ? "" : row.resumeName2,
-                resume1Date: row.resume1Date === null ? "" : row.resume1Date,
+                resumeDate: row.resumeDate === null ? "" : row.resumeDate,
                 customerContractStatus:
                   row.customerContractStatus === null
                     ? ""
@@ -1323,7 +1323,7 @@ class manageSituation extends React.Component {
               resumeInfo2: row.resumeInfo2 === null ? "" : row.resumeInfo2,
               resumeName1: row.resumeName1 === null ? "" : row.resumeName1,
               resumeName2: row.resumeName2 === null ? "" : row.resumeName2,
-              resume1Date: row.resume1Date === null ? "" : row.resume1Date,
+              resumeDate: row.resumeDate === null ? "" : row.resumeDate,
               customerContractStatus:
                 row.customerContractStatus === null
                   ? ""
@@ -1437,7 +1437,7 @@ class manageSituation extends React.Component {
                 unitPrice: row.price === null ? row.unitPrice : row.price,
                 resumeInfo1: row.resumeInfo1 === null ? "" : row.resumeInfo1,
                 resumeInfo2: row.resumeInfo2 === null ? "" : row.resumeInfo2,
-                resume1Date: row.resume1Date === null ? "" : row.resume1Date,
+                resumeDate: row.resumeDate === null ? "" : row.resumeDate,
                 resumeName1: row.resumeName1 === null ? "" : row.resumeName1,
                 resumeName2: row.resumeName2 === null ? "" : row.resumeName2,
                 customerContractStatus:
@@ -2924,7 +2924,7 @@ class manageSituation extends React.Component {
                   this.state.resumeInfo1 === ""
                     ? "履歴書1"
                     : this.state.resumeName1.split("_")[1]}
-                    {this.state.resume1Date}
+                    {this.state.resumeDate}
                 </Button>{" "}
                 {/* <Button
                   onClick={this.downloadResume.bind(
@@ -3056,7 +3056,7 @@ class manageSituation extends React.Component {
                   <TableHeaderColumn dataField="resumeInfo1" hidden={true}>
                     履歴書1
                   </TableHeaderColumn>
-                  <TableHeaderColumn dataField="resume1Date" hidden={true}>
+                  <TableHeaderColumn dataField="resumeDate" hidden={true}>
                     履歴書1時間
                   </TableHeaderColumn>
                   <TableHeaderColumn dataField="resumeInfo2" hidden={true}>
