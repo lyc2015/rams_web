@@ -2924,7 +2924,7 @@ class manageSituation extends React.Component {
                   this.state.resumeInfo1 === ""
                     ? "履歴書1"
                     : this.state.resumeName1.split("_")[1]}
-                    {this.state.resumeDate}
+                    {" " + this.state.resumeDate}
                 </Button>{" "}
                 {/* <Button
                   onClick={this.downloadResume.bind(
