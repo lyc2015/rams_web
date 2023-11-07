@@ -1018,6 +1018,13 @@ class salesMoneySet extends React.Component {
     }
   };
   
+  salesStaffFormat = (cell) => {
+	if (cell === "") {
+     return "";
+	}
+	return cell;
+  }
+  
   getTableRowStyle(cell, row) {
 	 var chooseDate = utils.formateDate(new Date())
 	 	 console.log("getTableRowStyle=" + row.startYearAndMonth + ", " + chooseDate)
@@ -1435,6 +1442,14 @@ class salesMoneySet extends React.Component {
                   	dataFormat={this.additionMoneyResonCodeFormat.bind(this)}
                   >
                     加算理由
+                </TableHeaderColumn>
+                <TableHeaderColumn
+                    width="20%"
+                    dataField="salesStaff"
+                    tdStyle={this.getTableRowStyle.bind(this)}
+                    dataFormat={this.salesStaffFormat.bind(this)}
+                  >
+                    営業担当
                 </TableHeaderColumn>
               </BootstrapTable>
             </Col>
