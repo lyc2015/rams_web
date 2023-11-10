@@ -570,11 +570,22 @@ class siteInfo extends Component {
                       "code",
                       employeeStatus
                     ).name;
+
                     notification.warning({
                       message: `該当${str}情報なし`,
                       description: `まず${str}情報を入力してください。`,
                       placement: "topLeft",
                     });
+                    //BP社員かつ情報なしの場合は非活性化に設定する
+                    if(this.state.employeeName!=null && this.state.employeeName!=""){
+                        let mark = this.state.employeeName.substring(0,2);
+                        if(mark=="BP"){
+                            this.setState({
+                              pageDisabledFlag: true,
+                            });
+                        }
+                    }
+
                   } else message.error(response.data.errorsMessage);
                   this.setState({
                     siteData: [],
