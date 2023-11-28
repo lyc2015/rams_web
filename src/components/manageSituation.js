@@ -35,6 +35,7 @@ import ErrorsMessageToast from "./errorsMessageToast";
 import SalesContent from "./salesContent";
 import InterviewInformation from "./interviewInformation";
 import FinishList from "./finishlist";
+import SiteTermList from "./siteTermList";
 import store from "./redux/store";
 import { notification, message } from "antd";
 axios.defaults.withCredentials = true;
@@ -141,6 +142,7 @@ class manageSituation extends React.Component {
     isSelectedAll: false,
     makeDirectoryFalg: true,
     loading: true,
+    siteListShowFlag: false,
   };
 
   componentWillUnmount() {
@@ -1589,6 +1591,21 @@ class manageSituation extends React.Component {
     });
   };
   
+    // 現場期限サブ画面表示
+  openSiteList = () => {
+    this.setState({
+      employeeNo: String(this.refs.table.state.selectedRowKeys),
+      siteListShowFlag: true,
+    });
+  };
+
+  // 現場期限サブ画面消す
+  closeSiteList = () => {
+    this.setState({
+      siteListShowFlag: false,
+    });
+  };
+
   initCopy = () => {
     this.clipboard = new Clipboard("#copyId");
     this.clipboard.on("success", function (e) {
@@ -2160,7 +2177,7 @@ class manageSituation extends React.Component {
     });
   };
 
-  setValue = (unitPrice, yearsOfExperience, japaneaseConversationLevel) => {
+  setValue = (unitPrice, yearsOfExperience, japaneaseConversationLevel, nearestStation, developLanguage) => {
     let salesSituationLists = this.state.salesSituationLists;
     salesSituationLists[Number(this.state.rowNo) - 1].unitPrice = unitPrice;
     salesSituationLists[Number(this.state.rowNo) - 1].yearsOfExperience =
@@ -2175,6 +2192,14 @@ class manageSituation extends React.Component {
 		}
     	salesSituationLists[Number(this.state.rowNo) - 1].japaneaseLevelDesc = temp;
 	}
+
+  salesSituationLists[Number(this.state.rowNo) - 1].nearestStation = this.state.getstations.find((v) => v.code === nearestStation).name;
+  let developLanguageArry = developLanguage.split("、");
+  if (developLanguageArry.length-1 > 3){
+	  developLanguage = developLanguageArry.slice(0,4).join();
+  }
+
+  salesSituationLists[Number(this.state.rowNo) - 1].developLanguage = developLanguage;
     this.setState({
       salesSituationLists: salesSituationLists,
       unitPrice: unitPrice
@@ -2455,6 +2480,30 @@ class manageSituation extends React.Component {
             />
           </Modal.Body>
         </Modal>
+        <Modal
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
+          backdrop="static"
+          onHide={this.closeSiteList}
+          show={this.state.siteListShowFlag}
+          dialogClassName="modal-finish"
+        >
+          <Modal.Header closeButton>
+            <Col className="text-center">
+              <h2>現場期限</h2>
+            </Col>
+          </Modal.Header>
+          <Modal.Body>
+            <SiteTermList
+              allState={this}
+              sendValue={{
+                interviewLists: this.state.salesSituationLists,
+                yearMonth: this.state.yearMonth,
+                history: this.props.history,
+              }}
+            />
+          </Modal.Body>
+        </Modal>
         <Row inline="true">
           <Col className="text-center">
             <h2>営業状況確認一覧</h2>
@@ -2532,7 +2581,7 @@ class manageSituation extends React.Component {
                 >
                   <FontAwesomeIcon icon={faBlender} /> 終了リスト
                 </Button>
-                <font style={{ marginLeft: "2px", marginRight: "2px" }}></font>
+                {/*<font style={{ marginLeft: "2px", marginRight: "2px" }}></font>
                 <Button
                   onClick={this.makeDirectory}
                   size="sm"
@@ -2543,6 +2592,15 @@ class manageSituation extends React.Component {
                   {this.state.makeDirectoryFalg
                     ? "営業フォルダ作成"
                     : "営業フォルダ更新"}
+                </Button>*/}
+                <font style={{ marginLeft: "2px", marginRight: "2px" }}></font>
+                <Button
+                  onClick={this.openSiteList}
+                  size="sm"
+                  variant="info"
+                  name="clickButton"
+                >
+                  <FontAwesomeIcon icon={faBlender} /> 現場期限
                 </Button>
               </div>
             </Col>

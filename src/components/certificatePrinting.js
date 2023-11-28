@@ -28,8 +28,10 @@ import {
   faBook,
   faEdit,
 } from "@fortawesome/free-solid-svg-icons";
-import { notification } from "antd";
+import { DatePicker as AntdDatePicker,notification } from "antd";
+import moment from "moment";
 axios.defaults.withCredentials = true;
+moment.locale("ja");
 
 class certificatePrinting extends Component {
   // 状況変動一覧
@@ -222,6 +224,7 @@ class certificatePrinting extends Component {
    * 年齢と和暦
    */
   inactiveBirthday = (date) => {
+	date = date?.toDate();
     if (date !== undefined && date !== null && date !== "") {
       this.setState({
         birthday: date,
@@ -237,6 +240,7 @@ class certificatePrinting extends Component {
    * 入社年月
    */
   inactiveintoCompanyYearAndMonth = (date) => {
+	date = date?.toDate();
     this.setState({
       intoCompanyYearAndMonth: date,
     });
@@ -255,6 +259,7 @@ class certificatePrinting extends Component {
   };
 
   inactiveintoNowYearAndMonth = (date) => {
+	date = date?.toDate();
     this.setState({
       nowYearAndMonth: date,
     });
@@ -485,9 +490,31 @@ class certificatePrinting extends Component {
             <Col>
               <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                 <InputGroup.Prepend>
-                  <InputGroup.Text id="fiveKanji">生年月日</InputGroup.Text>
+                  <InputGroup.Text id="fiveKanji">
+                     生年月日
+                  </InputGroup.Text>
                 </InputGroup.Prepend>
-                <DatePicker
+                <InputGroup.Prepend>
+                 <AntdDatePicker
+                        allowClear={false}
+                        suffixIcon={false}
+                        value={
+                          this.state.birthday
+                            ? moment(this.state.birthday)
+                            : ""
+                        }
+                        onChange={this.inactiveBirthday}
+                        format="YYYY/MM/DD"
+                        locale="ja"
+                        id="datePicker-certificatePrinting-birthday"
+                        disabledDate={(current)=>{
+                          return current > Date.now();
+                        }}
+                        bordered={true}
+                        style={{padding:"0px",width: '100%'}}
+                />
+                </InputGroup.Prepend>
+                {/*<DatePicker
                   selected={this.state.birthday}
                   onChange={this.inactiveBirthday}
                   autoComplete="off"
@@ -499,7 +526,7 @@ class certificatePrinting extends Component {
                   className="form-control form-control-sm w100p"
                   showYearDropdown
                   dateFormat="yyyy/MM/dd"
-                />
+                />*/}
               </InputGroup>
             </Col>
           </Row>
@@ -513,7 +540,21 @@ class certificatePrinting extends Component {
                         就職年月日
                       </InputGroup.Text>
                     </InputGroup.Prepend>
-                    <DatePicker
+                    <AntdDatePicker
+                        allowClear={false}
+                        suffixIcon={false}
+                        value={
+                          this.state.intoCompanyYearAndMonth
+                            ? moment(this.state.intoCompanyYearAndMonth)
+                            : ""
+                        }
+                        onChange={this.inactiveintoCompanyYearAndMonth}
+                        format="YYYY/MM/DD"
+                        locale="ja"
+                        id={"datePicker-certificatePrinting-intoCompanyYearAndMonth"}
+                        style={{padding:"0px",width: '100%'}}
+                      />
+                     {/*<DatePicker
                       selected={this.state.intoCompanyYearAndMonth}
                       onChange={this.inactiveintoCompanyYearAndMonth}
                       locale="ja"
@@ -521,13 +562,27 @@ class certificatePrinting extends Component {
                       className="form-control form-control-sm"
                       autoComplete="off"
                       id="datePicker-certificatePrinting-intoCompanyYearAndMonth"
-                    />
+                    />*/}
                     <InputGroup.Prepend>
                       <InputGroup.Text className="width-auto bdr0">
                         ～
                       </InputGroup.Text>
                     </InputGroup.Prepend>
-                    <DatePicker
+                    <AntdDatePicker
+                        allowClear={false}
+                        suffixIcon={false}
+                        value={
+                          this.state.nowYearAndMonth
+                            ? moment(this.state.nowYearAndMonth)
+                            : ""
+                        }
+                        onChange={this.inactiveintoNowYearAndMonth}
+                        format="YYYY/MM/DD"
+                        locale="ja"
+                        id={"datePicker-certificatePrinting-intoCompanyYearAndMonth"}
+                        style={{padding:"0px",width: '100%'}}
+                      />
+                    {/*<DatePicker
                       selected={this.state.nowYearAndMonth}
                       onChange={this.inactiveintoNowYearAndMonth}
                       locale="ja"
@@ -535,7 +590,7 @@ class certificatePrinting extends Component {
                       className="form-control form-control-sm"
                       autoComplete="off"
                       id="datePicker-certificatePrinting-intoCompanyYearAndMonth"
-                    />
+                    />*/}
                   </InputGroup>
                 </Col>
               </Row>

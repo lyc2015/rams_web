@@ -18,10 +18,11 @@ import "../asserts/css/style.css";
 import axios from "axios";
 import * as publicUtils from "./utils/publicUtils.js";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import { message } from "antd";
+import { DatePicker as AntdDatePicker,message } from "antd";
 import store from "./redux/store";
+import moment from "moment";
 axios.defaults.withCredentials = true;
-
+moment.locale("ja");
 registerLocale("ja", ja);
 
 //現場情報検索
@@ -180,6 +181,7 @@ class siteSearch extends Component {
   };
   //　入場年月
   admissionStartDate = (date) => {
+	date = date?.toDate();
     if (date !== null) {
       this.setState({
         admissionStartDate: date,
@@ -204,6 +206,7 @@ class siteSearch extends Component {
   };
   //　退場年月
   admissionEndDate = (date) => {
+	date = date?.toDate();
     if (date !== null) {
       this.setState({
         admissionEndDate: date,
@@ -943,7 +946,29 @@ class siteSearch extends Component {
                       </InputGroup.Text>
                     </InputGroup.Prepend>
                     <InputGroup.Prepend>
-                      <DatePicker
+                    <AntdDatePicker
+                        allowClear={false}
+                        suffixIcon={false}
+                        value={
+                          this.state.admissionStartDate ? moment(this.state.admissionStartDate): ""
+                        }
+                        onChange={this.admissionStartDate}
+                        format="YYYY/MM/DD"
+                        name="admissionStartDate"
+                        locale="ja"
+                        id={
+                          this.state.dataAcquisitionPeriod === "1"
+                            ? "admissionStartDateReadOnly"
+                            : "admissionStartDate"
+                        }
+                        inputReadOnly={
+                            this.state.dataAcquisitionPeriod === "1"
+                            ? true
+                            : false
+                        }
+                        style={{padding:"0px",width: '100%'}}
+                      />
+                      {/*<DatePicker
                         selected={this.state.admissionStartDate}
                         onChange={this.admissionStartDate}
                         dateFormat="yyyy/MM/dd"
@@ -961,9 +986,31 @@ class siteSearch extends Component {
                             ? true
                             : false
                         }
-                      />
+                      />*/}
                       〜
-                      <DatePicker
+                      <AntdDatePicker
+                        allowClear={false}
+                        suffixIcon={false}
+                        value={
+                          this.state.admissionEndDate ? moment(this.state.admissionEndDate): ""
+                        }
+                        onChange={this.admissionEndDate}
+                        format="YYYY/MM/DD"
+                        name="admissionEndDate"
+                        locale="ja"
+                        id={
+                          this.state.dataAcquisitionPeriod === "1"
+                            ? "admissionStartDateReadOnly"
+                            : "admissionStartDate"
+                        }
+                        inputReadOnly={
+                          this.state.dataAcquisitionPeriod === "1"
+                            ? true
+                            : false
+                        }
+                        style={{padding:"0px",width: '100%'}}
+                      />
+                      {/*<DatePicker
                         selected={this.state.admissionEndDate}
                         onChange={this.admissionEndDate}
                         dateFormat="yyyy/MM/dd"
@@ -981,7 +1028,7 @@ class siteSearch extends Component {
                             ? true
                             : false
                         }
-                      />
+                      />*/}
                     </InputGroup.Prepend>
                   </InputGroup>
                 </Col>

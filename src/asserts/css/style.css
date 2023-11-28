@@ -290,7 +290,7 @@ body {
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
-  background-color: white;
+  /*background-color: white;*/
   /* width: 20rem !important; */
 }
 
@@ -301,7 +301,7 @@ body {
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
-  background-color: white;
+  /* background-color: white;*/
   /* width: 9.5rem !important; */
 }
 
@@ -414,7 +414,7 @@ body {
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
-  background-color: white;
+  /*background-color: white;*/
   /* width: 6.7rem; */
 }
 
@@ -436,8 +436,8 @@ body {
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
-  background-color: white;
-  width: 14.4rem;
+  /*background-color: white;*/
+  /*width: 14.4rem;*/
 }
 
 #wagesInfoDatePicker {
@@ -847,7 +847,7 @@ body {
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
-  background-color: white;
+  /*background-color: white*/;
 }
 
 #datePicker-empInsert-right-immigrationTime {
@@ -1938,7 +1938,7 @@ body {
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
-    background-color: white;
+    /*background-color: white;*/
     /* width: 10rem; */
   }
   #admissionStartDateReadOnly {
@@ -2238,7 +2238,7 @@ body {
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
-    background-color: white;
+    /*background-color: white;*/
     width: 6.5rem !important;
   }
 
@@ -2418,7 +2418,7 @@ body {
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: #e9ecef;
-    width: 9.95rem;
+    /*width: 9.95rem;*/
   }
   #admissionEndDate {
     background-repeat: no-repeat;
@@ -2427,8 +2427,8 @@ body {
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
-    background-color: white;
-    width: 9.95rem;
+    /*background-color: white;*/
+    /*width: 9.95rem;*/
   }
   #siteAdmissionStartReadonlyDefault {
     background-repeat: no-repeat;
@@ -2524,7 +2524,7 @@ body {
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
-    background-color: white;
+    /*background-color: white;*/
     /* width: 4.5rem; */
   }
   #admissionStartDateReadOnly {
@@ -2876,7 +2876,7 @@ body {
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
-    background-color: white;
+    /*background-color: white;*/
     /* width: 6.2rem !important; */
   }
 

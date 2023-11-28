@@ -335,7 +335,8 @@ class siteInfo extends Component {
     }
   };
   // 退場年月
-  admissionEndDate = (date) => {
+  admissionEndDate = (date, dateString) => {
+	date = date?.toDate();
     this.setState({
       admissionEndDate: date,
     });
@@ -1727,28 +1728,32 @@ class siteInfo extends Component {
                   >
                     <InputGroup.Prepend>
                       <InputGroup.Text id="fiveKanji">
-                        退場年月日
+                       退場年月日
                       </InputGroup.Text>
                     </InputGroup.Prepend>
-                    <DatePicker
-                      filterDate={this.setGray}
-                      selected={this.state.admissionEndDate}
-                      onChange={this.admissionEndDate.bind(this)}
-                      dateFormat="yyyy/MM/dd"
-                      name="admissionEndDate"
-                      className="form-control form-control-sm w100p"
-                      locale="ja"
-                      autoComplete="off"
-                      id={
-                        this.state.workState !== "0" &&
-                        this.state.workState !== "3"
+                    <InputGroup.Prepend>
+                      <AntdDatePicker
+                        allowClear={false}
+                        suffixIcon={false}
+                        value={
+                          this.state.admissionEndDate
+                            ? moment(this.state.admissionEndDate)
+                            : ""
+                        }
+                        onChange={this.admissionEndDate}
+                        format="YYYY/MM/DD"
+                        name="admissionEndDate"
+                        locale="ja"
+                        id={
+                          this.state.workState !== "0" &&
+                          this.state.workState !== "3"
                           ? pageDisabledFlag
                             ? "siteDatePickerReadonlyDefault"
                             : "admissionEndDate"
                           : "siteDatePickerReadonlyDefault"
-                      }
-                      disabled={
-                        this.state.employeeName === ""
+                        }
+                        disabled={
+                         this.state.employeeName === ""
                           ? true
                           : this.state.workState === "0" ||
                             this.state.workState === "3"
@@ -1756,8 +1761,11 @@ class siteInfo extends Component {
                           : pageDisabledFlag
                           ? true
                           : false
-                      }
-                    />
+                        }
+                       style={{padding:"0px",width: '100%'}}
+                      />
+                    </InputGroup.Prepend>
+
                   </InputGroup>
                 </Col>
                 <Col sm={3}>
