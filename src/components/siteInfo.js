@@ -1731,7 +1731,7 @@ class siteInfo extends Component {
                        退場年月日
                       </InputGroup.Text>
                     </InputGroup.Prepend>
-                    <InputGroup.Prepend>
+                    <InputGroup.Prepend style={{width:'100%'}}>
                       <AntdDatePicker
                         allowClear={false}
                         suffixIcon={false}
