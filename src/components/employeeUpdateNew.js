@@ -802,7 +802,7 @@ class employeeUpdateNew extends React.Component {
       promise.then((data) => {
         this.setState({
           birthday: date,
-          japaneseCalendar: data[0][0].text,
+          japaneseCalendar: data[0]?.[0].text,
           temporary_age: data[1],
         });
       });
