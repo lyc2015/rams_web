@@ -711,7 +711,12 @@ class salesProfit extends React.Component {
                     </InputGroup>
                   </Col>
 
-                  <Col>
+                  <Col
+                    hidden={
+                      this.state.occupationCode !== "5" &&
+                      this.state.authorityCode !== "4"
+                    }
+                  >
                     <InputGroup size="sm">
                       <InputGroup.Prepend>
                         <InputGroup.Text
@@ -729,13 +734,7 @@ class salesProfit extends React.Component {
                   </Col>
 
                   <Col>
-                    <InputGroup
-                      size="sm"
-                      hidden={
-                        this.state.occupationCode !== "5" &&
-                        this.state.authorityCode !== "4"
-                      }
-                    >
+                    <InputGroup size="sm">
                       <InputGroup.Prepend>
                         <InputGroup.Text className="input-group-indiv width-auto">
                           担当者粗利合計
@@ -869,6 +868,10 @@ class salesProfit extends React.Component {
                         tdStyle={{ padding: ".45em" }}
                         width="150"
                         dataFormat={this.siteRoleNameFormat}
+                        hidden={
+                          this.state.occupationCode !== "5" &&
+                          this.state.authorityCode !== "4"
+                        }
                       >
                         粗利
                       </TableHeaderColumn>
@@ -883,7 +886,7 @@ class salesProfit extends React.Component {
                       <TableHeaderColumn
                         dataField="remarks"
                         width="280"
-                    	dataFormat={this.grayRow}
+                        dataFormat={this.grayRow}
                         tdStyle={{ padding: ".45em" }}
                       >
                         備考
