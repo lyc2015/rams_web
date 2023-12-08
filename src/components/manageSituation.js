@@ -1782,8 +1782,9 @@ class manageSituation extends React.Component {
         ? ""
         : "【単　　価】：" + result.data[0].unitPrice / 10000 + "万円\n") +
       "【稼働開始】：" +
-      (Number(admissionEndDate) + 1 <
-      this.getNextMonth(new Date(), 1).replace("/", "")
+      /** 修复12月 + 1 变成了13月的问题 */
+      (Number(admissionEndDate) <
+      this.getNextMonth(new Date(), 0).replace("/", "")
         ? "即日\n"
         : publicUtils
             .formateDate(beginMonth, false)
