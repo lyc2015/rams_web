@@ -295,8 +295,8 @@ class salesContent extends React.Component {
           utils.enToManEn(utils.deleteComma(this.state.unitPriceShow))) +
       `
 【稼働開始】：` /*(this.state.beginMonth !== "" && this.state.beginMonth !== null ? publicUtils.formateDate(this.state.beginMonth, false).substring(0,4) + "/" + */ +
-      (Number(this.state.admissionEndDate) + 1 <
-      this.getNextMonth(new Date(), 1).replace("/", "")
+      (Number(this.state.admissionEndDate) <
+      this.getNextMonth(new Date(), 0).replace("/", "")
         ? "即日"
         : publicUtils
             .formateDate(this.state.beginMonth, false)
