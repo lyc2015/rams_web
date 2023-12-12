@@ -42,6 +42,14 @@ axios.defaults.withCredentials = true;
 
 const SIZE_PER_SIZE = 12;
 
+const getProjectPhase = (siteRoleCode) => {
+    if (siteRoleCode === "2") {
+      return "1";
+    } else if (siteRoleCode === "3") {
+      return "2";
+    }
+  };
+
 /**
  * 営業状況画面
  */
@@ -1708,6 +1716,21 @@ class manageSituation extends React.Component {
         interviewDate = "";
       }
     }
+
+    let projectPhase = result.data?.[0]?.projectPhase,
+      unitPrice = result.data?.[0]?.unitPrice;
+
+    if (projectPhase !== 0 && !projectPhase) {
+      projectPhase = getProjectPhase(result.data?.[0]?.siteRoleCode);
+    }
+    if (unitPrice === null | unitPrice === "" | unitPrice === undefined) {
+      unitPrice = this.state.unitPrice;
+    }
+
+    console.log(result.data);
+    console.log("salesProgressCode", salesProgressCode);
+    console.log("salesProgressCodes", this.state.salesProgressCodes);
+
     text =
       "【名　　前】：" +
       result.data[0].employeeFullName +
@@ -1762,25 +1785,23 @@ class manageSituation extends React.Component {
       result.data[0].comeToJapanYearAndMonth === ""
         ? ""
         : "【来日年数】：" + result.data[0].comeToJapanYearAndMonth + "年\n") +
-      (result.data[0].projectPhase === "" ||
-      result.data[0].projectPhase === null ||
-      result.data[0].projectPhase === undefined
+      (projectPhase !== 0 && !projectPhase
         ? ""
         : "【対応工程】：" +
           this.state.projectPhases.find(
-            (v) => v.code === result.data[0].projectPhase
-          ).name +
+            (v) => v.code === projectPhase
+          )?.name +
           "から\n") +
       (developLanguage === null ||
       developLanguage === undefined ||
       developLanguage === ""
         ? ""
         : "【得意言語】：" + developLanguage + "\n") +
-      (result.data[0].unitPrice === null ||
-      result.data[0].unitPrice === undefined ||
-      result.data[0].unitPrice === ""
+      (unitPrice === null ||
+      unitPrice === undefined ||
+      unitPrice === ""
         ? ""
-        : "【単　　価】：" + result.data[0].unitPrice / 10000 + "万円\n") +
+        : "【単　　価】：" + unitPrice / 10000 + "万円\n") +
       "【稼働開始】：" +
       /** 修复12月 + 1 变成了13月的问题 */
       (Number(admissionEndDate) <
@@ -1793,16 +1814,13 @@ class manageSituation extends React.Component {
             .split("")
             .toSpliced(4, 0, "/")
             .join("") + "\n") +
-      (salesProgressCode === "" ||
-      salesProgressCode === null ||
-      salesProgressCode === undefined
-        ? ""
-        : "【営業状況】：" +
-          this.state.salesProgressCodes.find(
-            (v) => v.code === salesProgressCode
-          ).name +
-          (salesProgressCode === "6" ? interviewDate : "") +
-          "\n") +
+      ("【営業状況】：" +
+          ((salesProgressCode !== "" && salesProgressCode !== undefined && salesProgressCode !== null)
+          ? this.state.salesProgressCodes.find(
+              (v) => v.code === salesProgressCode
+            ).name + "\n"
+          : "並行営業\n"
+      )) +
       (remark === "" || remark === " " ? "" : "【備　　考】：" + remark + "\n");
     this.setState(
       {

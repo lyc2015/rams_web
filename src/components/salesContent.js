@@ -207,6 +207,7 @@ class salesContent extends React.Component {
   };
 
   getText = () => {
+    console.log("sales content", this.state);
     let employeeStatusName =
       this.state.employees.find((v) => v.code === this.state.employeeStatus)
         .name || "";
