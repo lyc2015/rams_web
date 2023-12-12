@@ -300,8 +300,11 @@ class salesContent extends React.Component {
         ? "即日"
         : publicUtils
             .formateDate(this.state.beginMonth, false)
-            .substring(4, 6)
-            .replace(/\b(0+)/gi, "") + "月") +
+            .substring(0, 6)
+            .replace(/\b(0+)/gi, "")
+            .split("")
+            .toSpliced(4, 0, "/")
+            .join("")) +
       `
 【営業状況】：` +
       (this.state.salesProgressCode + ""

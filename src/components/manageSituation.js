@@ -1761,7 +1761,7 @@ class manageSituation extends React.Component {
       result.data[0].comeToJapanYearAndMonth === undefined ||
       result.data[0].comeToJapanYearAndMonth === ""
         ? ""
-        : "【来日年数】：" +　result.data[0].comeToJapanYearAndMonth +　"年\n") +
+        : "【来日年数】：" + result.data[0].comeToJapanYearAndMonth + "年\n") +
       (result.data[0].projectPhase === "" ||
       result.data[0].projectPhase === null ||
       result.data[0].projectPhase === undefined
@@ -1788,8 +1788,11 @@ class manageSituation extends React.Component {
         ? "即日\n"
         : publicUtils
             .formateDate(beginMonth, false)
-            .substring(4, 6)
-            .replace(/\b(0+)/gi, "") + "月\n") +
+            .substring(0, 6)
+            .replace(/\b(0+)/gi, "")
+            .split("")
+            .toSpliced(4, 0, "/")
+            .join("") + "\n") +
       (salesProgressCode === "" ||
       salesProgressCode === null ||
       salesProgressCode === undefined
