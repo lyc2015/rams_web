@@ -1727,10 +1727,6 @@ class manageSituation extends React.Component {
       unitPrice = this.state.unitPrice;
     }
 
-    console.log(result.data);
-    console.log("salesProgressCode", salesProgressCode);
-    console.log("salesProgressCodes", this.state.salesProgressCodes);
-
     text =
       "【名　　前】：" +
       result.data[0].employeeFullName +
