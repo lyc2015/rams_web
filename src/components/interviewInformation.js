@@ -24,6 +24,7 @@ import MyToast from "./myToast";
 import ErrorsMessageToast from "./errorsMessageToast";
 import store from "./redux/store";
 import "../asserts/css/interviewInformation.css";
+import moment from "moment";
 axios.defaults.withCredentials = true;
 
 /**
@@ -141,14 +142,16 @@ class interviewInformation extends React.Component {
     } 
 
     if (!!this.state.interviewResultAwaiting) {
+      const interviewCustomer = this.state.customers.find(v => v.code === this.state.interviewCustomer)?.name ?? "";
+      const salesStaff = this.state.customerDrop.find(v => v.code === this.state.salesStaff)?.name ?? "";
+      const interviewDate = moment(this.state.interviewDate, "YYYYMMDDHHmm").format("YYYY/MM/DD");
+
       if (!!interviewModel["interviewResultAwaiting1"]) {
-        interviewModel["interviewResultAwaiting2"] = `${this.state.interviewCustomer}(${this.state.interviewDate}, ${this.state.salesStaff})`;
+        interviewModel["interviewResultAwaiting2"] = `${interviewCustomer}(${interviewDate}, ${salesStaff})`;
       } else {
-        interviewModel["interviewResultAwaiting1"] = `${this.state.interviewCustomer}(${this.state.interviewDate}, ${this.state.salesStaff})`;
+        interviewModel["interviewResultAwaiting1"] = `${interviewCustomer}(${interviewDate}, ${salesStaff})`;
       }
     }
-
-    console.log(interviewModel["interviewResultAwaiting2"]);
 
     if (this.state.interviewInfoNum === "1") {
       interviewModel["interviewClassificationCode1"] =
@@ -1021,7 +1024,7 @@ class interviewInformation extends React.Component {
                     日付
                   </TableHeaderColumn>
                   <TableHeaderColumn
-                    width="11%"
+                    width="8%"
                     row="1"
                     dataField="interviewCustomer1"
                     dataFormat={this.formatInterviewCustomer}
@@ -1069,7 +1072,7 @@ class interviewInformation extends React.Component {
                     日付
                   </TableHeaderColumn>
                   <TableHeaderColumn
-                    width="15%"
+                    width="8%"
                     row="1"
                     dataField="interviewCustomer2"
                     dataFormat={this.formatInterviewCustomer}
@@ -1099,7 +1102,7 @@ class interviewInformation extends React.Component {
                     {<div style={{ textAlign: "center" }}>結果待ち</div>}
                   </TableHeaderColumn>
                   <TableHeaderColumn
-                    width="11%"
+                    width="19%"
                     row="1"
                     colSpan="1"
                     dataField="interviewResultAwaiting1"
@@ -1108,7 +1111,7 @@ class interviewInformation extends React.Component {
                     結果待ち１
                   </TableHeaderColumn>
                   <TableHeaderColumn
-                    width="11%"
+                    width="19%"
                     row="1"
                     colSpan="1"
                     dataField="interviewResultAwaiting2"
