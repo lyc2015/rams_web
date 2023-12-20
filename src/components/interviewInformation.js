@@ -127,6 +127,29 @@ class interviewInformation extends React.Component {
     let interviewModel = {};
     interviewModel["employeeNo"] = this.state.employeeNo;
     interviewModel["salesYearAndMonth"] = this.state.yearMonth;
+
+    interviewModel["interviewResultAwaiting1"] =
+      this.state.row.interviewResultAwaiting1 ?? "";
+    interviewModel["interviewResultAwaiting2"] =
+      this.state.row.interviewResultAwaiting2 ?? "";
+
+    if (!!this.state.interviewResultAwaiting
+      && !!interviewModel["interviewResultAwaiting1"]
+      && !!interviewModel["interviewResultAwaiting2"]) {
+      alert("すでに二つの面接が結果待ちの状態にあるので、面接を結果待ちに追加したいの場合はまず一つの結果待ちのアイテムを削除してください。");
+      return;
+    } 
+
+    if (!!this.state.interviewResultAwaiting) {
+      if (!!interviewModel["interviewResultAwaiting1"]) {
+        interviewModel["interviewResultAwaiting2"] = `${this.state.interviewCustomer}(${this.state.interviewDate}, ${this.state.salesStaff})`;
+      } else {
+        interviewModel["interviewResultAwaiting1"] = `${this.state.interviewCustomer}(${this.state.interviewDate}, ${this.state.salesStaff})`;
+      }
+    }
+
+    console.log(interviewModel["interviewResultAwaiting2"]);
+
     if (this.state.interviewInfoNum === "1") {
       interviewModel["interviewClassificationCode1"] =
         this.state.interviewClassificationCode;
@@ -177,7 +200,8 @@ class interviewInformation extends React.Component {
       interviewModel["interviewInfo2"] = this.state.interviewInfo;
       interviewModel["successRate2"] = this.state.successRate;
       interviewModel["salesStaff2"] = this.state.salesStaff;
-    }
+    } 
+
     axios
       .post(
         this.state.serverIP + "salesSituation/updateInterviewLists",
@@ -250,6 +274,11 @@ class interviewInformation extends React.Component {
             : this.state.row.successRate2;
         interviewModel["salesStaff2"] =
           this.state.row.salesStaff2 === null ? "" : this.state.row.salesStaff2;
+        
+        interviewModel["interviewResultAwaiting1"] =
+          this.state.row.interviewResultAwaiting1 ?? ""
+        interviewModel["interviewResultAwaiting2"] =
+          this.state.row.interviewResultAwaiting2 ?? ""
       } else if (this.state.interviewInfoNum === "2") {
         interviewModel["interviewClassificationCode1"] =
           this.state.row.interviewClassificationCode1;
@@ -268,6 +297,57 @@ class interviewInformation extends React.Component {
         interviewModel["interviewInfo2"] = "";
         interviewModel["successRate2"] = "";
         interviewModel["salesStaff2"] = "";
+
+        interviewModel["interviewResultAwaiting1"] =
+          this.state.row.interviewResultAwaiting1 ?? ""
+        interviewModel["interviewResultAwaiting2"] =
+          this.state.row.interviewResultAwaiting2 ?? ""
+      } else if (this.state.interviewInfoNum === "3") {
+        interviewModel["interviewClassificationCode1"] =
+          this.state.row.interviewClassificationCode1 ?? "";
+        interviewModel["interviewDate1"] = this.state.row.interviewDate1 ?? "";
+        interviewModel["stationCode1"] = this.state.row.stationCode1 ?? "";
+        interviewModel["interviewCustomer1"] =
+          this.state.row.interviewCustomer1 ?? "";
+        interviewModel["interviewInfo1"] = this.state.row.interviewInfo1 ?? "";
+        interviewModel["successRate1"] = this.state.row.successRate1 ?? "";
+        interviewModel["salesStaff1"] = this.state.row.salesStaff1 ?? "";
+        interviewModel["interviewClassificationCode2"] =
+          this.state.row.interviewClassificationCode2 ?? "";
+        interviewModel["interviewDate2"] = this.state.row.interviewDate2 ?? "";
+        interviewModel["stationCode2"] = this.state.row.stationCode2 ?? "";
+        interviewModel["interviewCustomer2"] =
+          this.state.row.interviewCustomer2 ?? "";
+        interviewModel["interviewInfo2"] = this.state.row.interviewInfo2 ?? "";
+        interviewModel["successRate2"] = this.state.row.successRate2 ?? "";
+        interviewModel["salesStaff2"] = this.state.row.salesStaff2 ?? "";
+
+        interviewModel["interviewResultAwaiting1"] = "";
+        interviewModel["interviewResultAwaiting2"] =
+          this.state.row.interviewResultAwaiting2 ?? "";
+      } else if (this.state.interviewInfoNum === "4") {
+        interviewModel["interviewClassificationCode1"] =
+          this.state.row.interviewClassificationCode1 ?? "";
+        interviewModel["interviewDate1"] = this.state.row.interviewDate1 ?? "";
+        interviewModel["stationCode1"] = this.state.row.stationCode1 ?? "";
+        interviewModel["interviewCustomer1"] =
+          this.state.row.interviewCustomer1 ?? "";
+        interviewModel["interviewInfo1"] = this.state.row.interviewInfo1 ?? "";
+        interviewModel["successRate1"] = this.state.row.successRate1 ?? "";
+        interviewModel["salesStaff1"] = this.state.row.salesStaff1 ?? "";
+        interviewModel["interviewClassificationCode2"] =
+          this.state.row.interviewClassificationCode2 ?? "";
+        interviewModel["interviewDate2"] = this.state.row.interviewDate2 ?? "";
+        interviewModel["stationCode2"] = this.state.row.stationCode2 ?? "";
+        interviewModel["interviewCustomer2"] =
+          this.state.row.interviewCustomer2 ?? "";
+        interviewModel["interviewInfo2"] = this.state.row.interviewInfo2 ?? "";
+        interviewModel["successRate2"] = this.state.row.successRate2 ?? "";
+        interviewModel["salesStaff2"] = this.state.row.salesStaff2 ?? "";
+
+        interviewModel["interviewResultAwaiting1"] =
+          this.state.row.interviewResultAwaiting1 ?? "";
+        interviewModel["interviewResultAwaiting2"] = "";
       }
       axios
         .post(
@@ -426,15 +506,7 @@ class interviewInformation extends React.Component {
   };
 
   changeInterviewInfo = (interviewInfoNum) => {
-    if (interviewInfoNum === 1) {
-      this.setState({
-        interviewInfoNum: "1",
-      });
-    } else {
-      this.setState({
-        interviewInfoNum: "2",
-      });
-    }
+    this.setState({ interviewInfoNum: interviewInfoNum.toString() });
   };
 
   /**
@@ -496,7 +568,17 @@ class interviewInformation extends React.Component {
   };
 
   columnClassNameFormat(_fieldValue, row, rowIdx, colIdx) {
-    const columnInterviewInfoNum = colIdx >= 1 && colIdx <= 5 ? "1" : "2";
+    let columnInterviewInfoNum = "1";
+
+    if (colIdx >= 1 && colIdx < 6) {
+      columnInterviewInfoNum = "1";
+    } else if (colIdx >= 6 && colIdx < 11) {
+      columnInterviewInfoNum = "2";
+    } else if (colIdx === 11) {
+      columnInterviewInfoNum = "3";
+    } else {
+      columnInterviewInfoNum = "4";
+    }
 
     if (
       this.state.selectedRowIndex === rowIdx &&
@@ -544,13 +626,17 @@ class interviewInformation extends React.Component {
       onRowClick: (_row, columnIndex, _rowIndex, event) => {
         if (event.target?.tabIndex === -1) {
           const tabIndex = event.target?.parentNode?.tabIndex;
-          columnIndex = (tabIndex % 11) - 2;
+          columnIndex = (tabIndex % 13) - 2;
         }
 
         if (columnIndex >= 0 && columnIndex < 5) {
           this.changeInterviewInfo(1);
-        } else {
+        } else if (columnIndex >= 5 && columnIndex < 10) {
           this.changeInterviewInfo(2);
+        } else if (columnIndex === 10) {
+          this.changeInterviewInfo(3);
+        } else {
+          this.changeInterviewInfo(4);
         }
       },
     };
@@ -800,9 +886,8 @@ class interviewInformation extends React.Component {
                       }
                       value={{ name: this.state.interviewResultAwaiting }}
                       onChange={(_event, values) => {
-                        this.setState({ interviewResultAwaiting: values.name})
-                      }
-                      }
+                        this.setState({ interviewResultAwaiting: values?.name  ?? ""});
+                      }}
                       renderInput={(params) => (
                         <div ref={params.InputProps.ref}>
                           <input
@@ -836,7 +921,13 @@ class interviewInformation extends React.Component {
                     }}
                     name="clickButton"
                     onClick={this.update}
-                    disabled={this.state.employeeNo === "" ? true : false}
+                    disabled={
+                      this.state.employeeNo === "" ||
+                      this.state.interviewInfoNum === "3" ||
+                      this.state.interviewInfoNum === "4"
+                        ? true
+                        : false
+                    }
                   >
                     <div>
                       <FontAwesomeIcon icon={faSave} />
@@ -874,6 +965,12 @@ class interviewInformation extends React.Component {
             </Col>
           </Row>
         </Container>
+
+        <div>
+          <p className="warningInfo">
+            ※面接の予定が3日を超えると、自動的に削除されます
+          </p>
+        </div>
 
         <Form onSubmit={this.savealesSituation}>
           <Row>
@@ -963,13 +1060,12 @@ class interviewInformation extends React.Component {
                     回数
                   </TableHeaderColumn>
                   <TableHeaderColumn
-                    width="17%"
+                    width="15%"
                     row="1"
                     dataField="interviewDate2"
                     dataFormat={this.formatInterviewDate}
                     columnClassName={this.columnClassNameFormat}
                   >
-                    {" "}
                     日付
                   </TableHeaderColumn>
                   <TableHeaderColumn
@@ -1007,7 +1103,6 @@ class interviewInformation extends React.Component {
                     row="1"
                     colSpan="1"
                     dataField="interviewResultAwaiting1"
-                    dataFormat={this.formatInterviewClassificationCode}
                     columnClassName={this.columnClassNameFormat}
                   >
                     結果待ち１
@@ -1017,7 +1112,6 @@ class interviewInformation extends React.Component {
                     row="1"
                     colSpan="1"
                     dataField="interviewResultAwaiting2"
-                    dataFormat={this.formatInterviewClassificationCode}
                     columnClassName={this.columnClassNameFormat}
                   >
                     結果待ち2

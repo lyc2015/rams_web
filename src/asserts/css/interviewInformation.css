@@ -14,3 +14,11 @@
 .rowContainer1 {
   flex-wrap: nowrap;
 }
+
+.warningInfo {
+  margin-top: 15px;
+  margin-bottom: 2px;
+  padding-left: 32px;
+  font-size: 14px;
+  color: red;
+}
