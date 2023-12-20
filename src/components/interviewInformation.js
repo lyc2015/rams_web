@@ -64,6 +64,7 @@ class interviewInformation extends React.Component {
       ),
     salesStaff: "",
     selectedRowIndex: "",
+    interviewResultAwaiting: "",
   };
 
   // 初期表示のレコードを取る
@@ -495,12 +496,15 @@ class interviewInformation extends React.Component {
   };
 
   columnClassNameFormat(_fieldValue, row, rowIdx, colIdx) {
-    const columnInterviewInfoNum = (colIdx >= 1 && colIdx <= 5) ? "1" : "2";
+    const columnInterviewInfoNum = colIdx >= 1 && colIdx <= 5 ? "1" : "2";
 
-    if (this.state.selectedRowIndex === rowIdx && columnInterviewInfoNum === this.state.interviewInfoNum) {
+    if (
+      this.state.selectedRowIndex === rowIdx &&
+      columnInterviewInfoNum === this.state.interviewInfoNum
+    ) {
       return "selected";
     }
-    
+
     if (row.successRate1 === "0" && colIdx >= 1 && colIdx <= 5) {
       return "highSuccessRate";
     }
@@ -570,10 +574,10 @@ class interviewInformation extends React.Component {
           />
         </div>
 
-        <Container fluid="sm">
-          <Row>
-            <Col sm={11}>
-              <Row>
+        <Container fluid>
+          <Row className="rowContainer">
+            <Col sm={15}>
+              <Row className="rowContainer1">
                 <Col sm={3}>
                   <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
@@ -692,8 +696,6 @@ class interviewInformation extends React.Component {
                     />
                   </InputGroup>
                 </Col>
-              </Row>
-              <Row>
                 <Col sm={3}>
                   <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
@@ -730,6 +732,8 @@ class interviewInformation extends React.Component {
                     />
                   </InputGroup>
                 </Col>
+              </Row>
+              <Row className="rowContainer1">
                 <Col sm={3}>
                   <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
@@ -751,7 +755,7 @@ class interviewInformation extends React.Component {
                     </FormControl>
                   </InputGroup>
                 </Col>
-                <Col sm={6}>
+                <Col sm={9}>
                   <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
@@ -770,8 +774,45 @@ class interviewInformation extends React.Component {
                         resize: "vertical",
                         overflow: "auto",
                         height: `calc(1.5em + 0.5rem + 2px)`,
-                        marginRight: '1em',
+                        marginRight: "1em",
                       }}
+                    />
+                  </InputGroup>
+                </Col>
+                <Col sm={3}>
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
+                    <InputGroup.Prepend>
+                      <InputGroup.Text id="inputGroup-sizing-sm">
+                        結果待ち
+                      </InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <Autocomplete
+                      options={[
+                        {
+                          name: "",
+                        },
+                        {
+                          name: "設定",
+                        },
+                      ]}
+                      getOptionLabel={(option) =>
+                        option.name ? option.name : ""
+                      }
+                      value={{ name: this.state.interviewResultAwaiting }}
+                      onChange={(_event, values) => {
+                        this.setState({ interviewResultAwaiting: values.name})
+                      }
+                      }
+                      renderInput={(params) => (
+                        <div ref={params.InputProps.ref}>
+                          <input
+                            type="text"
+                            {...params.inputProps}
+                            id="stationCode"
+                            className="auto form-control Autocompletestyle-interview"
+                          />
+                        </div>
+                      )}
                     />
                   </InputGroup>
                 </Col>
@@ -784,21 +825,23 @@ class interviewInformation extends React.Component {
                     size="sm"
                     variant="info"
                     style={{
-                      width: "40px",
+                      width: "80px",
                       height: "40px",
                       marginLeft: "-20px",
                       marginTop: "0px",
-                      fontSize: "10px",
+                      fontSize: "16px",
+                      display: "flex",
+                      justifyContent: "space-around",
+                      alignItems: "center",
                     }}
                     name="clickButton"
                     onClick={this.update}
                     disabled={this.state.employeeNo === "" ? true : false}
                   >
-                    <span>
+                    <div>
                       <FontAwesomeIcon icon={faSave} />
-                    </span>
-                    <br />
-                    更新
+                    </div>
+                    <div>更新</div>
                   </Button>
                 </InputGroup.Prepend>
               </Row>
@@ -808,21 +851,23 @@ class interviewInformation extends React.Component {
                     size="sm"
                     variant="info"
                     style={{
-                      width: "40px",
+                      width: "80px",
                       height: "40px",
                       marginLeft: "-20px",
                       marginTop: "5px",
-                      fontSize: "10px",
+                      fontSize: "16px",
+                      display: "flex",
+                      justifyContent: "space-around",
+                      alignItems: "center",
                     }}
                     name="clickButton"
                     onClick={this.clear}
                     disabled={this.state.employeeNo === "" ? true : false}
                   >
-                    <span>
+                    <div>
                       <FontAwesomeIcon icon={faTrash} />
-                    </span>
-                    <br />
-                    削除
+                    </div>
+                    <div>削除</div>
                   </Button>
                 </InputGroup.Prepend>
               </Row>
@@ -861,7 +906,7 @@ class interviewInformation extends React.Component {
                     {<div style={{ textAlign: "center" }}>面談情報1</div>}
                   </TableHeaderColumn>
                   <TableHeaderColumn
-                    width="7%"
+                    width="6%"
                     row="1"
                     dataField="interviewClassificationCode1"
                     dataFormat={this.formatInterviewClassificationCode}
@@ -870,7 +915,7 @@ class interviewInformation extends React.Component {
                     回数
                   </TableHeaderColumn>
                   <TableHeaderColumn
-                    width="17%"
+                    width="15%"
                     row="1"
                     dataField="interviewDate1"
                     dataFormat={this.formatInterviewDate}
@@ -909,7 +954,7 @@ class interviewInformation extends React.Component {
                     {<div style={{ textAlign: "center" }}>面談情報2</div>}
                   </TableHeaderColumn>
                   <TableHeaderColumn
-                    width="7%"
+                    width="6%"
                     row="1"
                     dataField="interviewClassificationCode2"
                     dataFormat={this.formatInterviewClassificationCode}
@@ -928,7 +973,7 @@ class interviewInformation extends React.Component {
                     日付
                   </TableHeaderColumn>
                   <TableHeaderColumn
-                    width="11%"
+                    width="15%"
                     row="1"
                     dataField="interviewCustomer2"
                     dataFormat={this.formatInterviewCustomer}
@@ -953,6 +998,29 @@ class interviewInformation extends React.Component {
                     columnClassName={this.columnClassNameFormat}
                   >
                     担当
+                  </TableHeaderColumn>
+                  <TableHeaderColumn row="0" colSpan="2">
+                    {<div style={{ textAlign: "center" }}>結果待ち</div>}
+                  </TableHeaderColumn>
+                  <TableHeaderColumn
+                    width="11%"
+                    row="1"
+                    colSpan="1"
+                    dataField="interviewResultAwaiting1"
+                    dataFormat={this.formatInterviewClassificationCode}
+                    columnClassName={this.columnClassNameFormat}
+                  >
+                    結果待ち１
+                  </TableHeaderColumn>
+                  <TableHeaderColumn
+                    width="11%"
+                    row="1"
+                    colSpan="1"
+                    dataField="interviewResultAwaiting2"
+                    dataFormat={this.formatInterviewClassificationCode}
+                    columnClassName={this.columnClassNameFormat}
+                  >
+                    結果待ち2
                   </TableHeaderColumn>
                 </BootstrapTable>
               </Col>

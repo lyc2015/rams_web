@@ -5,3 +5,12 @@
 .highSuccessRate {
   color: red;
 }
+
+.rowContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.rowContainer1 {
+  flex-wrap: nowrap;
+}
