@@ -13,6 +13,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
 import * as publicUtils from "./utils/publicUtils.js";
 import "../asserts/css/style.css";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -34,8 +35,8 @@ class interviewInformation extends React.Component {
   constructor(props) {
     super(props);
     this.state = this.initialState; // 初期化
-    this.changeInterviewInfo = this.changeInterviewInfo.bind(this);
     this.columnClassNameFormat = this.columnClassNameFormat.bind(this);
+    this.getInterviewResultAwaitingOption = this.getInterviewResultAwaitingOption.bind(this);
   }
 
   // 初期化
@@ -130,14 +131,14 @@ class interviewInformation extends React.Component {
     interviewModel["salesYearAndMonth"] = this.state.yearMonth;
 
     interviewModel["interviewResultAwaiting1"] =
-      this.state.row.interviewResultAwaiting1 ?? "";
+      this.state.interviewLists?.[this.state.selectedRowIndex]?.interviewResultAwaiting1 ?? "";
     interviewModel["interviewResultAwaiting2"] =
-      this.state.row.interviewResultAwaiting2 ?? "";
+      this.state.interviewLists?.[this.state.selectedRowIndex]?.interviewResultAwaiting2 ?? "";
 
     if (!!this.state.interviewResultAwaiting
       && !!interviewModel["interviewResultAwaiting1"]
       && !!interviewModel["interviewResultAwaiting2"]) {
-      alert("すでに二つの面接が結果待ちの状態にあるので、面接を結果待ちに追加したいの場合はまず一つの結果待ちのアイテムを削除してください。");
+      alert("【結果待ち】2件以上は追加できません。");
       return;
     } 
 
@@ -400,29 +401,92 @@ class interviewInformation extends React.Component {
   };
 
   // レコードselect事件
-  handleRowSelect = (row, isSelected, _e, rowIndex) => {
+  handleRowSelect = (row, isSelected, event, rowIndex) => {
+    let columnIndex = 0;
+    let interviewInfoNum = 1;
+
+    if (event.target?.tabIndex === -1) {
+      const tabIndex = event.target?.parentNode?.tabIndex;
+      columnIndex = (tabIndex % 13) - 2;
+    } else {
+      const tabIndex = event.target?.tabIndex;
+      columnIndex = (tabIndex % 13) - 2;
+    }
+
+    if (columnIndex >= 0 && columnIndex < 5) {
+      interviewInfoNum = 1;
+    } else if (columnIndex >= 5 && columnIndex < 10) {
+      interviewInfoNum = 2;
+    } else if (columnIndex === 10) {
+      interviewInfoNum = 3;
+    } else {
+      // current columnIndex is -2
+      interviewInfoNum = 4;
+    }
+
     if (isSelected) {
-      this.setState({
-        row: row,
-        selectedRowIndex: rowIndex,
-        employeeNo: row.employeeNo,
-        interviewClassificationCode:
-          row.interviewClassificationCode1 === null ||
-          row.interviewClassificationCode1 === ""
-            ? "0"
-            : row.interviewClassificationCode1,
-        interviewDateShow:
-          row.interviewDate1 === null
-            ? ""
-            : new Date(publicUtils.strToTime(row.interviewDate1)).getTime(),
-        interviewDate: row.interviewDate1 === null ? "" : row.interviewDate1,
-        stationCode: row.stationCode1 === null ? "" : row.stationCode1,
-        interviewCustomer:
-          row.interviewCustomer1 === null ? "" : row.interviewCustomer1,
-        interviewInfo: row.interviewInfo1 === null ? "" : row.interviewInfo1,
-        successRate: row.successRate1 === null ? "" : row.successRate1,
-        salesStaff: row.salesStaff1 === null ? "" : row.salesStaff1,
-      });
+      if (interviewInfoNum === 1) {
+        this.setState({
+          row: row,
+          selectedRowIndex: rowIndex,
+          employeeNo: row.employeeNo,
+          interviewClassificationCode:
+            row.interviewClassificationCode1 === null ||
+            row.interviewClassificationCode1 === ""
+              ? "0"
+              : row.interviewClassificationCode1,
+          interviewDateShow:
+            row.interviewDate1 === null
+              ? ""
+              : new Date(publicUtils.strToTime(row.interviewDate1)).getTime(),
+          interviewDate: row.interviewDate1 === null ? "" : row.interviewDate1,
+          stationCode: row.stationCode1 === null ? "" : row.stationCode1,
+          interviewCustomer:
+            row.interviewCustomer1 === null ? "" : row.interviewCustomer1,
+          interviewInfo: row.interviewInfo1 === null ? "" : row.interviewInfo1,
+          successRate: row.successRate1 === null ? "" : row.successRate1,
+          salesStaff: row.salesStaff1 === null ? "" : row.salesStaff1,
+          interviewInfoNum: interviewInfoNum.toString(),
+        });
+      } else if (interviewInfoNum === 2) {
+        this.setState({
+          row: row,
+          selectedRowIndex: rowIndex,
+          employeeNo: row.employeeNo,
+          interviewClassificationCode:
+            row.interviewClassificationCode2 === null ||
+            row.interviewClassificationCode2 === ""
+              ? "0"
+              : row.interviewClassificationCode2,
+          interviewDateShow:
+            row.interviewDate2 === null
+              ? ""
+              : new Date(publicUtils.strToTime(row.interviewDate2)).getTime(),
+          interviewDate: row.interviewDate2 === null ? "" : row.interviewDate2,
+          stationCode: row.stationCode2 === null ? "" : row.stationCode2,
+          interviewCustomer:
+            row.interviewCustomer2 === null ? "" : row.interviewCustomer2,
+          interviewInfo: row.interviewInfo2 === null ? "" : row.interviewInfo2,
+          successRate: row.successRate2 === null ? "" : row.successRate2,
+          salesStaff: row.salesStaff2 === null ? "" : row.salesStaff2,
+          interviewInfoNum: interviewInfoNum.toString(),
+        });
+      } else {
+        this.setState({
+          row: row,
+          selectedRowIndex: rowIndex,
+          employeeNo: row.employeeNo,
+          interviewClassificationCode: "0",
+          interviewDateShow: "",
+          interviewDate: "",
+          stationCode: "",
+          interviewCustomer: "",
+          interviewInfo: "",
+          successRate: "",
+          salesStaff: "",
+          interviewInfoNum: interviewInfoNum.toString(),
+        });
+      }
     } else {
       this.setState({
         row: "",
@@ -507,10 +571,29 @@ class interviewInformation extends React.Component {
     const targetCustomer = this.state.customerDrop.find((v) => v.code === cell);
     return targetCustomer?.name;
   };
+  
+  // 結果待ち
+  formatInterviewResultAwaiting = (cell) => {
+    if (!cell) {
+      return "";
+    }
 
-  changeInterviewInfo = (interviewInfoNum) => {
-    this.setState({ interviewInfoNum: interviewInfoNum.toString() });
-  };
+    const tooltip = (
+      <Tooltip id="tooltip">
+        {cell}
+      </Tooltip>
+    );
+
+    return (
+      <OverlayTrigger
+        placement="bottom"
+        overlay={tooltip}
+        trigger={"hover"}
+      >
+          <div>{cell}</div>
+        </OverlayTrigger>
+    );
+  } 
 
   /**
    * 社員名連想
@@ -599,6 +682,25 @@ class interviewInformation extends React.Component {
     }
   }
 
+  // 結果待ちオプション
+  getInterviewResultAwaitingOption() {
+    if ((this.state.interviewInfoNum === "1" && !this.state.interviewLists[this.state.selectedRowIndex]?.interviewDate1)
+      || (this.state.interviewInfoNum === "2" && !this.state.interviewLists[this.state.selectedRowIndex]?.interviewDate2)) {
+      return [{
+        name: "",
+      }];
+    } else {
+      return [
+        {
+          name: "",
+        },
+        {
+          name: "設定"
+        }
+      ];
+    }
+  }
+
   render() {
     const selectRow = {
       mode: "radio",
@@ -626,22 +728,6 @@ class interviewInformation extends React.Component {
       hideSizePerPage: true,
       alwaysShowAllBtns: true,
       paginationShowsTotal: this.renderShowsTotal,
-      onRowClick: (_row, columnIndex, _rowIndex, event) => {
-        if (event.target?.tabIndex === -1) {
-          const tabIndex = event.target?.parentNode?.tabIndex;
-          columnIndex = (tabIndex % 13) - 2;
-        }
-
-        if (columnIndex >= 0 && columnIndex < 5) {
-          this.changeInterviewInfo(1);
-        } else if (columnIndex >= 5 && columnIndex < 10) {
-          this.changeInterviewInfo(2);
-        } else if (columnIndex === 10) {
-          this.changeInterviewInfo(3);
-        } else {
-          this.changeInterviewInfo(4);
-        }
-      },
     };
 
     return (
@@ -868,7 +954,7 @@ class interviewInformation extends React.Component {
                     />
                   </InputGroup>
                 </Col>
-                <Col sm={3}>
+                <Col sm={2}>
                   <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
@@ -876,14 +962,7 @@ class interviewInformation extends React.Component {
                       </InputGroup.Text>
                     </InputGroup.Prepend>
                     <Autocomplete
-                      options={[
-                        {
-                          name: "",
-                        },
-                        {
-                          name: "設定",
-                        },
-                      ]}
+                      options={this.getInterviewResultAwaitingOption()}
                       getOptionLabel={(option) =>
                         option.name ? option.name : ""
                       }
@@ -913,7 +992,7 @@ class interviewInformation extends React.Component {
                     size="sm"
                     variant="info"
                     style={{
-                      width: "80px",
+                      width: "90px",
                       height: "40px",
                       marginLeft: "-20px",
                       marginTop: "0px",
@@ -945,7 +1024,7 @@ class interviewInformation extends React.Component {
                     size="sm"
                     variant="info"
                     style={{
-                      width: "80px",
+                      width: "90px",
                       height: "40px",
                       marginLeft: "-20px",
                       marginTop: "5px",
@@ -1015,7 +1094,7 @@ class interviewInformation extends React.Component {
                     回数
                   </TableHeaderColumn>
                   <TableHeaderColumn
-                    width="15%"
+                    width="10%"
                     row="1"
                     dataField="interviewDate1"
                     dataFormat={this.formatInterviewDate}
@@ -1024,7 +1103,7 @@ class interviewInformation extends React.Component {
                     日付
                   </TableHeaderColumn>
                   <TableHeaderColumn
-                    width="8%"
+                    width="16%"
                     row="1"
                     dataField="interviewCustomer1"
                     dataFormat={this.formatInterviewCustomer}
@@ -1033,7 +1112,7 @@ class interviewInformation extends React.Component {
                     お客様
                   </TableHeaderColumn>
                   <TableHeaderColumn
-                    width="11%"
+                    width="6%"
                     row="1"
                     dataField="stationCode1"
                     dataFormat={this.formatStationCode}
@@ -1042,7 +1121,7 @@ class interviewInformation extends React.Component {
                     場所
                   </TableHeaderColumn>
                   <TableHeaderColumn
-                    width="11%"
+                    width="6%"
                     row="1"
                     dataField="salesStaff1"
                     dataFormat={this.formatSalesStaff}
@@ -1063,7 +1142,7 @@ class interviewInformation extends React.Component {
                     回数
                   </TableHeaderColumn>
                   <TableHeaderColumn
-                    width="15%"
+                    width="10%"
                     row="1"
                     dataField="interviewDate2"
                     dataFormat={this.formatInterviewDate}
@@ -1072,7 +1151,7 @@ class interviewInformation extends React.Component {
                     日付
                   </TableHeaderColumn>
                   <TableHeaderColumn
-                    width="8%"
+                    width="16%"
                     row="1"
                     dataField="interviewCustomer2"
                     dataFormat={this.formatInterviewCustomer}
@@ -1081,7 +1160,7 @@ class interviewInformation extends React.Component {
                     お客様
                   </TableHeaderColumn>
                   <TableHeaderColumn
-                    width="11%"
+                    width="6%"
                     row="1"
                     dataField="stationCode2"
                     dataFormat={this.formatStationCode}
@@ -1090,7 +1169,7 @@ class interviewInformation extends React.Component {
                     場所
                   </TableHeaderColumn>
                   <TableHeaderColumn
-                    width="11%"
+                    width="6%"
                     row="1"
                     dataField="salesStaff2"
                     dataFormat={this.formatSalesStaff}
@@ -1106,6 +1185,7 @@ class interviewInformation extends React.Component {
                     row="1"
                     colSpan="1"
                     dataField="interviewResultAwaiting1"
+                    dataFormat={this.formatInterviewResultAwaiting.bind(this)}
                     columnClassName={this.columnClassNameFormat}
                   >
                     結果待ち１
@@ -1114,6 +1194,7 @@ class interviewInformation extends React.Component {
                     width="19%"
                     row="1"
                     colSpan="1"
+                    dataFormat={this.formatInterviewResultAwaiting.bind(this)}
                     dataField="interviewResultAwaiting2"
                     columnClassName={this.columnClassNameFormat}
                   >
