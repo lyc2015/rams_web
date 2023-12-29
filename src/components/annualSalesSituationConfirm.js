@@ -202,6 +202,12 @@ const AnnualSalesSituationConfirm = ({ serverIP, customerDrop }) => {
       return;
     }
 
+    if (displayedSalesStaff.includes(selectedSalesStaffCode)) {
+      message.warning("すでに展示してるのデータがあります！");
+      return;
+    }
+
+
     setDisplayedSalesStaff((state) => {
       return [...state, selectedSalesStaffCode];
     });
