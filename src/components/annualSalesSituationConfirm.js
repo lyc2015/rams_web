@@ -192,7 +192,6 @@ const AnnualSalesSituationConfirm = ({ serverIP, customerDrop }) => {
   };
 
   const handleReflectClick = () => {
-    console.log(detailsMap, selectedSalesStaffCode);
     if (!detailsMap.has(selectedSalesStaffCode)) {
       message.warning("データは存在していません！");
       return;
@@ -228,8 +227,6 @@ const AnnualSalesSituationConfirm = ({ serverIP, customerDrop }) => {
   };
 
   useEffect(() => {
-    console.log(detailsMap, numsArray, numsMap);
-
     if (numsArray?.length >= 2) {
       setDisplayedSalesStaff([numsArray[0][0], numsArray[1][0]]);
     } else if (numsArray?.length >= 1) {
