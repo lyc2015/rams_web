@@ -106,7 +106,7 @@ ul {
   justify-content: space-between;
   align-items: stretch;
   margin-top: 5px;
-  border: 2px solid #F0F0F0;
+  border: 1px solid #312d2d;
 }
 .cardContainer .card {
   flex: 1;
@@ -161,6 +161,9 @@ th.ant-table-cell.columnHead {
 }
 td.ant-table-cell.columnHead:nth-child(1) {
   border-left: 1px solid #ccc !important;
+}
+td.ant-table-cell.columnHead {
+  border-right: 1px solid #ccc !important;
 }
 td.ant-table-cell.columnHead {
   border-right: 1px solid #ccc !important;
