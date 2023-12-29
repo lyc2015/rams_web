@@ -16,13 +16,13 @@ const columns = [
     title: "日付",
     dataIndex: "date",
     key: "date",
-    className: "columnHead"
+    className: "columnHead",
   },
   {
     title: "人数",
     dataIndex: "nums",
     key: "nums",
-    className: "columnHead"
+    className: "columnHead",
   },
   {
     title: "詳細",
@@ -42,7 +42,7 @@ const columns = [
           renderItem={(value, index) => {
             const content = `${value.employeeFirstName}${
               value.employeeLastName
-            }(${value.customerName}, ${
+            }(${value.customerAbbreviation}, ${
               value.admissionEndDate
                 ? moment(value.admissionEndDate).format("YYYY/MM") + "終了"
                 : "稼働中"
@@ -94,7 +94,7 @@ const useFetchAnnualSalesSituationConfirmList = ({ requestIP, year }) => {
                 employeeFirstName: v.employeeFirstName,
                 employeeLastName: v.employeeLastName,
                 admissionEndDate: v.admissionEndDate,
-                customerName: v.customerName,
+                customerAbbreviation: v.customerAbbreviation,
                 salesStaffFirstName: v.salesStaffFirstName,
               })
             : detailsMap.set(salesStaffCode, [
@@ -103,7 +103,7 @@ const useFetchAnnualSalesSituationConfirmList = ({ requestIP, year }) => {
                   employeeFirstName: v.employeeFirstName,
                   employeeLastName: v.employeeLastName,
                   admissionEndDate: v.admissionEndDate,
-                  customerName: v.customerName,
+                  customerAbbreviation: v.customerAbbreviation,
                   salesStaffFirstName: v.salesStaffFirstName,
                 },
               ]);
@@ -160,7 +160,7 @@ const useFetchAnnualSalesSituationConfirmList = ({ requestIP, year }) => {
 const SalesTitle = ({ salesStaff, totalNums }) => {
   return (
     <h3 className="salesTitle">
-      <span style={{marginRight: "20px"}}>担当: {salesStaff}</span>
+      <span style={{ marginRight: "20px" }}>担当: {salesStaff}</span>
       <span>合計人数: {totalNums}</span>{" "}
     </h3>
   );
@@ -217,7 +217,7 @@ const AnnualSalesSituationConfirm = ({ serverIP, customerDrop }) => {
   };
 
   const handleCardClick = (index) => {
-    setSelectedCardIndex(prev => {
+    setSelectedCardIndex((prev) => {
       if (prev === index) {
         return 0;
       } else {
@@ -274,7 +274,11 @@ const AnnualSalesSituationConfirm = ({ serverIP, customerDrop }) => {
           <Button
             className="filterButton"
             onClick={handleClearClick}
-            disabled={displayedSalesStaff.length === 0}
+            disabled={
+              selectedCardIndex === 0 ||
+              (selectedCardIndex === 1 && !isShowFirstSalesStaff) ||
+              (selectedCardIndex === 2 && !isShowSecondSalesStaff)
+            }
           >
             明細クリア
           </Button>
@@ -284,6 +288,7 @@ const AnnualSalesSituationConfirm = ({ serverIP, customerDrop }) => {
         <Button className="filterButton">個人情報</Button>
         <Button className="filterButton">現場情報</Button>
       </div>
+      {/* Card container */}
       <div className="cardContainer">
         <Card
           bordered={true}
