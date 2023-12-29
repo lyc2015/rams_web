@@ -32,6 +32,7 @@ import salaryDetailSend from "./salaryDetailSend";
 import SendRepot from "./sendRepot";
 import siteSearch from "./siteSearch";
 import salesPointSet from "./salesPointSet";
+import AnnualSalesSituationConfirm from "./annualSalesSituationConfirm";
 import salesMoneySet from "./salesMoneySet";
 import salesProfit from "./salesProfit";
 import salesPoint from "./salesPoint";
@@ -95,6 +96,7 @@ import {
   faFileContract,
   faChartBar,
   faFileInvoiceDollar,
+  faFile,
 } from "@fortawesome/free-solid-svg-icons";
 import "../asserts/css/subMenu.css";
 import store from "./redux/store";
@@ -248,7 +250,7 @@ class SubMenu extends Component {
         break;
       case "営業管理":
         this.setClassName("営業管理");
-        this.shuseiTo({ pathname: "/subMenuManager/salesMoneySet" });
+        this.shuseiTo({ pathname: "/subMenuManager/annualSalesSituationConfirm" });
         break;
       case "勤務":
         this.setClassName("勤務");
@@ -1559,7 +1561,7 @@ class SubMenu extends Component {
                                       )}
                                       onClick={this.shuseiTo.bind(this, {
                                         pathname:
-                                          "/subMenuManager/salesMoneySet",
+                                          "/subMenuManager/annualSalesSituationConfirm",
                                       })}
                                     >
                                       <div>
@@ -1569,14 +1571,14 @@ class SubMenu extends Component {
                                               ? "my-tabcolor-font-hover"
                                               : "my-tabcolor-font"
                                           }
-                                          to="/subMenuManager/salesMoneySet"
+                                          to="/subMenuManager/annualSalesSituationConfirm"
                                         >
                                           <FontAwesomeIcon
                                             className="fa-fw"
                                             size="lg"
-                                            icon={faFilePowerpoint}
+                                            icon={faFile}
                                           />{" "}
-                                          營業金額特別設定
+                                          年度営業状況確認(正社員)
                                         </Link>
                                       </div>
                                     </ListGroup.Item>
@@ -1613,6 +1615,43 @@ class SubMenu extends Component {
                                             icon={faChartPie}
                                           />{" "}
                                           営業個別売上
+                                        </Link>
+                                      </div>
+                                    </ListGroup.Item>
+                                    <ListGroup.Item
+                                      style={
+                                        this.state.hover.search("3") !== -1
+                                          ? subMenuHover
+                                          : subMenu
+                                      }
+                                      onMouseEnter={this.toggleHover.bind(
+                                        this,
+                                        "営業管理-3"
+                                      )}
+                                      onMouseLeave={this.toggleHover.bind(
+                                        this,
+                                        "営業管理"
+                                      )}
+                                      onClick={this.shuseiTo.bind(this, {
+                                        pathname:
+                                          "/subMenuManager/salesMoneySet",
+                                      })}
+                                    >
+                                      <div>
+                                        <Link
+                                          className={
+                                            this.state.hover.search("3") !== -1
+                                              ? "my-tabcolor-font-hover"
+                                              : "my-tabcolor-font"
+                                          }
+                                          to="/subMenuManager/salesMoneySet"
+                                        >
+                                          <FontAwesomeIcon
+                                            className="fa-fw"
+                                            size="lg"
+                                            icon={faFilePowerpoint}
+                                          />{" "}
+                                          營業金額特別設定
                                         </Link>
                                       </div>
                                     </ListGroup.Item>
@@ -2342,6 +2381,11 @@ class SubMenu extends Component {
                   exact
                   path={`${this.props.match.url}/salesPointSet`}
                   component={salesPointSet}
+                />
+                <Route
+                  exact
+                  path={`${this.props.match.url}/annualSalesSituationConfirm`}
+                  component={AnnualSalesSituationConfirm}
                 />
                 <Route
                   exact

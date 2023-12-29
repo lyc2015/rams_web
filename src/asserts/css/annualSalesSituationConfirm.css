@@ -1,0 +1,164 @@
+ul {
+  margin-inline-start: 0;
+  margin-inline-end: 0;
+  margin-block-end: 0;
+  margin-block-start: 0;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  list-style: none;
+}
+
+.salesTitle {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.box {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.title {
+  font-family: "幼园", Sans-serif;
+  font-size: 22px;
+  font-weight: 900;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+  text-align: center;
+  color: #018ec5;
+}
+
+.filterButtonContaier {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 40px;
+  margin-bottom: 30px;
+}
+.filterButtonLeft {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.filterButtonBox {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.filterButtonBox:first-of-type {
+  margin-right: 30px;
+}
+.filterButtonTitle {
+  font-size: 0.85rem;
+  font-family: "幼�?";
+  width: 5.1rem;
+  text-align: center;
+  padding: 0.25rem 0.5rem;
+  line-height: 1.5;
+  border-bottom-left-radius: 0.2rem;
+  border-top-left-radius: 0.2rem;
+  background-color: #76a8af;
+  color: rgb(255, 255, 255);
+}
+.filterButtonSelect .ant-select-selector {
+  width: 100%;
+  min-width: 8rem;
+  font-size: "0.85rem"; 
+  line-height: "1.5";
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.filterButtonSelect .ant-select {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.filterButton {
+  color: #fff;
+  background-color: #17a2b8;
+  border-color: #17a2b8;
+  padding: 0.25rem 0.5rem;
+  font-size: .875rem;
+  line-height: 1.5;
+  border-radius: 0.2rem;
+}
+.filterButton:first-of-type {
+  margin-right: 4px;
+}
+.filterButton:hover {
+  color: #fff;
+    background-color: #138496;
+    border-color: #117a8b;
+}
+.filterButton:focus,
+.filterButton:active {
+  color: #fff;
+  background-color: #117a8b;
+  border-color: #10707f;
+  box-shadow: 0 0 0 0.2rem rgba(58, 176, 195, .5);
+}
+
+.cardContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  margin-top: 5px;
+  padding-bottom: 10px;
+}
+.cardContainer .card {
+  flex: 1;
+}
+.cardContainer .card.selected {
+  border: 1px solid rgba(242, 36, 149, 0.5);
+}
+
+.cardContainer .ant-card-body {
+  padding: 0;
+}
+
+.listItem {
+  list-style-type: none;
+  display: flex;
+  align-items: stretch;
+  margin: 0 !important;
+  border-right: 1px solid #ccc;
+}
+.listItemNoBorder {
+  border-right: none;
+}
+.listItemContent {
+  width: 100%;
+  padding-right: 5px;
+  padding-left: 5px;
+  text-wrap: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; 
+  white-space: nowrap;
+}
+
+table td.ant-table-cell {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+table td.ant-table-cell:nth-child(3) {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+tbody tr:nth-child(odd) {
+  background-color: rgba(0, 0, 0, .05);
+  border-color: #dee2e6;
+}
+th.ant-table-cell.columnHead {
+  padding-top: 6px;
+  padding-bottom: 6px;
+  background-color: #5599FF;
+  font-family: Helvetica, sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+talbe .ant-list-grid .ant-col>.ant-list-item {
+  margin-bottom: 0;
+}
