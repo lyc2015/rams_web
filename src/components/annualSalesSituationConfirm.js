@@ -11,18 +11,6 @@ axios.defaults.withCredentials = true;
 
 const CURRENT_YEAR = moment().year();
 
-/*
-admissionEndDate;
-customerName;
-customerNo;
-employeeFristName;
-employeeLastName;
-employeeNo;
-salesStaff;
-salesStaffFirstName;
-salesYearAndMonth;
-*/
-
 const columns = [
   {
     title: "日付",
@@ -45,31 +33,6 @@ const columns = [
       if (details.length === 0) {
         return <></>;
       }
-
-      // details.push({
-      //   admissionEndDate: null,
-      //   salesYearAndMonth: "202304",
-      //   employeeFristName: "测试社员",
-      //   customerName: null,
-      // });
-      // details.push({
-      //   admissionEndDate: null,
-      //   salesYearAndMonth: "202304",
-      //   employeeFristName: "测试社员",
-      //   customerName: null,
-      // });
-      // details.push({
-      //   admissionEndDate: null,
-      //   salesYearAndMonth: "202304",
-      //   employeeFristName: "测试社员",
-      //   customerName: null,
-      // });
-      // details.push({
-      //   admissionEndDate: null,
-      //   salesYearAndMonth: "202304",
-      //   employeeFristName: "测试社员",
-      //   customerName: null,
-      // });
 
       return (
         <List
@@ -272,17 +235,7 @@ const AnnualSalesSituationConfirm = ({ serverIP, customerDrop }) => {
     } else if (numsArray?.length >= 1) {
       setDisplayedSalesStaff([numsArray[0][0]]);
     }
-  }, [numsArray]);
-
-  useEffect(() => {
-    console.log(customerDrop);
-
-    customerDrop.push({
-      code: "LYC116",
-      name: "呉十",
-      text: "呉十",
-    });
-  }, []);
+  }, [numsArray, detailsMap, numsMap]);
 
   return (
     <div className="box">
