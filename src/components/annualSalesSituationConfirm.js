@@ -45,7 +45,7 @@ const columns = [
             }(${value.customerAbbreviation}, ${
               value.admissionEndDate
                 ? moment(value.admissionEndDate).format("YYYY/MM") + "終了"
-                : "稼働中"
+                : "稼働"
             })`;
 
             return (
@@ -121,7 +121,7 @@ const useFetchAnnualSalesSituationConfirmList = ({ requestIP, year }) => {
             temp[`${year}${month}`] = [];
           }
 
-          value.forEach((v, k) => {
+          value.forEach((v) => {
             temp[v.salesYearAndMonth].push(v);
           });
 
@@ -203,10 +203,9 @@ const AnnualSalesSituationConfirm = ({ serverIP, customerDrop }) => {
     }
 
     if (displayedSalesStaff.includes(selectedSalesStaffCode)) {
-      message.warning("すでに展示してるのデータがあります！");
+      message.warning("選択された担当がすでに展示されています！");
       return;
     }
-
 
     setDisplayedSalesStaff((state) => {
       return [...state, selectedSalesStaffCode];
