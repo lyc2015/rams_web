@@ -4,6 +4,7 @@ import { useQuery } from "react-query";
 import axios from "axios";
 import { connect } from "react-redux";
 import moment from "moment";
+import { useHistory } from "react-router-dom";
 
 import "../asserts/css/annualSalesSituationConfirm.css";
 
@@ -11,7 +12,7 @@ axios.defaults.withCredentials = true;
 
 const CURRENT_YEAR = moment().year();
 
-const columns = [
+const getColumns = (setSelectedItemEmployeeId) => [
   {
     title: "日付",
     dataIndex: "date",
@@ -55,6 +56,11 @@ const columns = [
                     ? "listItem listItemNoBorder"
                     : "listItem"
                 }
+                onClick={() =>
+                  setSelectedItemEmployeeId((prevState) => {
+                    return prevState === "" ? value.employeeNo : "";
+                  })
+                }
               >
                 <Tooltip title={content}>
                   <div className="listItemContent">{content}</div>
@@ -96,6 +102,7 @@ const useFetchAnnualSalesSituationConfirmList = ({ requestIP, year }) => {
                 admissionEndDate: v.admissionEndDate,
                 customerAbbreviation: v.customerAbbreviation,
                 salesStaffFirstName: v.salesStaffFirstName,
+                employeeNo: v.employeeNo,
               })
             : detailsMap.set(salesStaffCode, [
                 {
@@ -105,6 +112,7 @@ const useFetchAnnualSalesSituationConfirmList = ({ requestIP, year }) => {
                   admissionEndDate: v.admissionEndDate,
                   customerAbbreviation: v.customerAbbreviation,
                   salesStaffFirstName: v.salesStaffFirstName,
+                  employeeNo: v.employeeNo,
                 },
               ]);
 
@@ -171,6 +179,11 @@ const AnnualSalesSituationConfirm = ({ serverIP, customerDrop }) => {
   const [selectedSalesStaffCode, setSelectedSalesStaffCode] = useState("");
   const [displayedSalesStaff, setDisplayedSalesStaff] = useState([]);
   const [selectedCardIndex, setSelectedCardIndex] = useState(0);
+  const [selectedItemEmployeeId, setSelectedItemEmployeeId] = useState("");
+
+  const history = useHistory();
+
+  const columns = getColumns(setSelectedItemEmployeeId);
 
   const requestIP = `${serverIP}annualSalesSituationConfirm/getAnnualSalesSituationConfirmList`;
   const { detailsMap, numsArray, numsMap } =
@@ -189,6 +202,29 @@ const AnnualSalesSituationConfirm = ({ serverIP, customerDrop }) => {
   const handleSelectSalesStaffChange = (value, option) => {
     setSelectedSalesStaff(value);
     setSelectedSalesStaffCode(option.code);
+  };
+
+  const handlePersonalInfoClick = () => {
+    const path = {
+      pathname: "/subMenuManager/employeeUpdateNew",
+      state: {
+        actionType: "update",
+        id: selectedItemEmployeeId,
+      },
+    };
+
+    history.push(path);
+  };
+
+  const handleSiteInfoClick = () => {
+    const path = {
+      pathname: "/subMenuManager/siteInfo",
+      state: {
+        employeeNo: selectedItemEmployeeId,
+      },
+    };
+
+    history.push(path);
   };
 
   const handleReflectClick = () => {
@@ -290,8 +326,20 @@ const AnnualSalesSituationConfirm = ({ serverIP, customerDrop }) => {
         </div>
       </div>
       <div>
-        <Button className="filterButton">個人情報</Button>
-        <Button className="filterButton">現場情報</Button>
+        <Button
+          className="filterButton"
+          onClick={handlePersonalInfoClick}
+          disabled={!selectedItemEmployeeId}
+        >
+          個人情報
+        </Button>
+        <Button
+          className="filterButton"
+          onClick={handleSiteInfoClick}
+          disabled={!selectedItemEmployeeId}
+        >
+          現場情報
+        </Button>
       </div>
       {/* Card container */}
       <div className="cardContainer">
