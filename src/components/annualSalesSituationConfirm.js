@@ -246,6 +246,8 @@ const AnnualSalesSituationConfirm = ({ serverIP, customerDrop }) => {
     setDisplayedSalesStaff((state) => {
       return [...state, selectedSalesStaffCode];
     });
+
+    setSelectedItemEmployeeId("");
   };
 
   const handleClearClick = () => {
@@ -255,6 +257,8 @@ const AnnualSalesSituationConfirm = ({ serverIP, customerDrop }) => {
       } else if (selectedCardIndex === 2 && displayedSalesStaff.length >= 2)
         return [state[0]];
     });
+
+    setSelectedItemEmployeeId("");
   };
 
   const handleCardClick = (index) => {
