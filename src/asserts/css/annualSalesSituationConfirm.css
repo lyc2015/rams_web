@@ -162,8 +162,8 @@ th.ant-table-cell.columnHead {
 td.ant-table-cell.columnHead:nth-child(1) {
   border-left: 1px solid #ccc !important;
 }
-td.ant-table-cell.columnHead {
-  border-right: 1px solid #ccc !important;
+td.ant-table-cell.columnHead:nth-child(2) {
+  width: 65px;
 }
 td.ant-table-cell.columnHead {
   border-right: 1px solid #ccc !important;
