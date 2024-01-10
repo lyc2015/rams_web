@@ -11,6 +11,11 @@ import "../asserts/css/annualSalesSituationConfirm.css";
 axios.defaults.withCredentials = true;
 
 const CURRENT_YEAR = moment().year();
+const YEAR_OPTION = [];
+
+for (let year = 2023; year <= CURRENT_YEAR; year++) {
+  YEAR_OPTION.push({ value: year, label: year });
+}
 
 const getColumns = (setSelectedItemEmployeeId) => [
   {
@@ -175,6 +180,7 @@ const SalesTitle = ({ salesStaff, totalNums }) => {
 };
 
 const AnnualSalesSituationConfirm = ({ serverIP, customerDrop }) => {
+  const [selectedYear, setSelectedYear] = useState(CURRENT_YEAR);
   const [selectedSalesStaff, setSelectedSalesStaff] = useState("");
   const [selectedSalesStaffCode, setSelectedSalesStaffCode] = useState("");
   const [displayedSalesStaff, setDisplayedSalesStaff] = useState([]);
@@ -189,7 +195,7 @@ const AnnualSalesSituationConfirm = ({ serverIP, customerDrop }) => {
   const { detailsMap, numsArray, numsMap } =
     useFetchAnnualSalesSituationConfirmList({
       requestIP,
-      year: CURRENT_YEAR,
+      year: selectedYear,
     });
 
   const isShowFirstSalesStaff =
@@ -198,6 +204,12 @@ const AnnualSalesSituationConfirm = ({ serverIP, customerDrop }) => {
     displayedSalesStaff.length >= 2 && detailsMap.has(displayedSalesStaff[1]);
   const firstSalesStaff = displayedSalesStaff[0];
   const secondSalesStaff = displayedSalesStaff[1];
+
+  const handleSelectYearChange = (value) => {
+    setSelectedYear(value);
+    setSelectedSalesStaff("");
+    setSelectedSalesStaffCode("");
+  }
 
   const handleSelectSalesStaffChange = (value, option) => {
     setSelectedSalesStaff(value);
@@ -288,9 +300,10 @@ const AnnualSalesSituationConfirm = ({ serverIP, customerDrop }) => {
             <div className="filterButtonTitle">年度</div>
             <Select
               placeholder="年度"
-              value={CURRENT_YEAR}
+              onChange={handleSelectYearChange}
+              value={selectedYear}
               className="filterButtonSelect"
-              options={[{ value: CURRENT_YEAR, label: CURRENT_YEAR }]}
+              options={YEAR_OPTION}
             />
           </div>
           <div className="filterButtonBox">
