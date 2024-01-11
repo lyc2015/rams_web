@@ -1168,6 +1168,9 @@ class siteInfo extends Component {
     siteModel["unitPrice"] = utils.deleteComma(this.state.unitPrice);
     siteModel["systemName"] = this.state.systemName;
 
+    const prevWorkState = this.state.siteData[this.state.siteData.length - 1]["workState"];
+    const prevAdmissionEndDate = this.state.siteData[this.state.siteData.length - 1]["admissionEndDate"]?.slice(0, 6);
+
     if (this.state.siteData.length > 1) {
       siteModel["checkDate"] =
         this.state.siteData[this.state.siteData.length - 2].admissionEndDate;
@@ -1177,7 +1180,7 @@ class siteInfo extends Component {
     siteModel["workDate"] =
       this.state.siteData[this.state.siteData.length - 1].admissionStartDate;
     axios
-      .post(this.state.serverIP + "updateSiteInfo", siteModel)
+      .post(this.state.serverIP + "updateSiteInfo", { siteModel, prevWorkState, prevAdmissionEndDate })
       .then((result) => {
         if (result.data.errorsMessage != null) {
           message.error(result.data.errorsMessage);
