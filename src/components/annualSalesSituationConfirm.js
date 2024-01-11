@@ -17,6 +17,38 @@ for (let year = 2023; year <= CURRENT_YEAR; year++) {
   YEAR_OPTION.push({ value: year, label: year });
 }
 
+const ListItem = ({
+  isLastOne,
+  setSelectedItemEmployeeId,
+  employeeNo,
+  content }
+) => {
+  const [isClicked, setIsClicked] = useState(false);
+
+  const className = isLastOne
+    ? isClicked
+      ? "listItem listItemNoBorder listItemClicked"
+      : "listItem listItemNoBorder"
+    : isClicked
+    ? "listItem listItemClicked"
+    : "listItem";
+
+  const clickHandler = () => {
+    setIsClicked((prevState) => !prevState);
+    setSelectedItemEmployeeId((prevState) => {
+      return prevState === "" ? employeeNo : "";
+    });
+  };
+
+  return (
+    <List.Item className={className} onClick={clickHandler}>
+      <Tooltip title={content}>
+        <div className="listItemContent">{content}</div>
+      </Tooltip>
+    </List.Item>
+  );
+};
+
 const getColumns = (setSelectedItemEmployeeId) => [
   {
     title: "日付",
@@ -55,22 +87,12 @@ const getColumns = (setSelectedItemEmployeeId) => [
             })`;
 
             return (
-              <List.Item
-                className={
-                  index === details.length - 1
-                    ? "listItem listItemNoBorder"
-                    : "listItem"
-                }
-                onClick={() =>
-                  setSelectedItemEmployeeId((prevState) => {
-                    return prevState === "" ? value.employeeNo : "";
-                  })
-                }
-              >
-                <Tooltip title={content}>
-                  <div className="listItemContent">{content}</div>
-                </Tooltip>
-              </List.Item>
+                <ListItem
+                  isLastOne={index === details.length - 1}
+                  setSelectedItemEmployeeId={setSelectedItemEmployeeId}
+                  employeeNo={value.employeeNo}
+                  content={content}
+                />
             );
           }}
         />
@@ -209,7 +231,7 @@ const AnnualSalesSituationConfirm = ({ serverIP, customerDrop }) => {
     setSelectedYear(value);
     setSelectedSalesStaff("");
     setSelectedSalesStaffCode("");
-  }
+  };
 
   const handleSelectSalesStaffChange = (value, option) => {
     setSelectedSalesStaff(value);
