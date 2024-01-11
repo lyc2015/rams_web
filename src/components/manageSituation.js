@@ -766,7 +766,7 @@ class manageSituation extends React.Component {
     /*if(row.employeeNo.indexOf("BP") != -1){
 			unitPrice = row.unitPrice;
 		}else{*/
-    let num = (cell.replace(",", "") / 10000).toFixed(1).replace(".0", "");
+    let num = (cell?.replace(",", "") / 10000).toFixed(1).replace(".0", "");
     unitPrice = cell === "" ? "" : Number(num) === 0 ? cell : num;
     /*}*/
     if (row.salesProgressCode === "0" || row.salesProgressCode === "1") {
