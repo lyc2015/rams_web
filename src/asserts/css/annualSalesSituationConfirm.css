@@ -129,6 +129,9 @@ ul {
 .listItemNoBorder {
   border-right: none;
 }
+.listItemClicked {
+  color: #117a8b;
+}
 .listItemContent {
   width: 100%;
   padding-right: 5px;
@@ -148,7 +151,7 @@ table td.ant-table-cell:nth-child(3) {
   padding-bottom: 0;
 }
 tbody tr:nth-child(odd) {
-  background-color: rgba(0, 0, 0, .05);
+  background-color:#F2F2F2;
   border-color: #dee2e6;
 }
 th.ant-table-cell.columnHead {
