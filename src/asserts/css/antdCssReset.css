@@ -1,0 +1,160 @@
+.ant-message-error {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+}
+
+.ant-message-info {
+  display: flex;
+  align-items: center;
+}
+
+.ant-message-success {
+  display: flex;
+  align-items: center;
+}
+
+.ant-message-notice {
+  text-align: left !important;
+}
+
+.ant-picker {
+  height: calc(1.5em + 0.5rem + 2px);
+}
+
+.ant-picker-date-panel .ant-picker-content th:nth-of-type(1),
+.ant-picker-date-panel .ant-picker-content th:nth-of-type(7) {
+  color: red;
+}
+
+.react-datepicker-wrapper {
+  width: 100%;
+}
+
+.react-bs-table-container {
+  /* min-width: 1200px; */
+}
+
+.react-datepicker__day-names .react-datepicker__day-name:nth-of-type(6),
+.react-datepicker__day-names .react-datepicker__day-name:nth-of-type(7) {
+  color: red;
+  font-weight: bold;
+}
+
+.react-datepicker__navigation--previous {
+  border-right-color: black !important;
+}
+.react-datepicker__navigation--next {
+  border-left-color: black !important;
+}
+
+.ant-modal-confirm .ant-modal-body {
+  box-shadow: #007bff 0px 0px 10px;
+  border: 1px solid #007bff;
+}
+
+.ant-popover-inner-content {
+  box-shadow: #007bff 0px 0px 12px;
+}
+
+.ant-tag {
+  font-size: 14px;
+}
+
+.myCss {
+  box-shadow: 0 0.125rem 0.25rem rgb(0 0 0 / 8%) !important;
+}
+
+.myCss .ant-menu-horizontal > .ant-menu-submenu > .ant-menu-submenu-title {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.myCss .ant-menu {
+  background: transparent;
+  height: 100%;
+  /* border: 1px solid #333; */
+}
+
+.ant-picker-header button {
+  color: black !important;
+}
+
+.confirmModalBtnCenterClass.ant-modal-confirm .ant-modal-confirm-btns {
+  float: none;
+  text-align: center;
+}
+
+.employeeNavBar {
+  background-color: #fffaf0;
+  position: sticky;
+  position: -webkit-sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.ant-collapse-header {
+  color: #018ec5 !important;
+  font-weight: bold;
+}
+
+.react-datepicker-popper {
+  min-width: 14rem;
+}
+
+.form-control {
+  background: #ffffff;
+}
+
+.ant-picker-month-panel {
+  width: 220px !important;
+}
+
+.ant-picker-month-panel .ant-picker-content {
+  height: 150px !important;
+}
+
+.ant-collapse-ghost
+  > .ant-collapse-item
+  > .ant-collapse-content
+  > .ant-collapse-content-box {
+  padding: 0 !important;
+}
+
+.input-group .input-group-right-item {
+  flex: 1 !important;
+}
+
+.required-mark::after {
+  position: absolute;
+  width: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  color: red;
+  content: "★";
+}
+
+.ant-input-number-input {
+  height: auto !important;
+  padding: 0 !important;
+}
+
+@media screen and (max-width: 1200px) {
+  .ant-message {
+    font-size: 14px !important;
+  }
+}
+
+.btn.btn-link.reset-link-btn {
+  padding: 0;
+  line-height: unset;
+}
+
+@media screen and (height< 960px) {
+  /* 表格td内边距,尽可能不显示滚动条 */
+  .table td {
+    padding: 0.55rem;
+  }
+}
