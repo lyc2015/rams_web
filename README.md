@@ -1,13 +1,25 @@
 # LYC homes Web
 
-## 1. 安装依赖
+## 1. 安装依赖（使用 Yarn 或 npm）
 
-> 请确保你已安装 Yarn 和 Node.js。
+### 使用 Yarn（推荐使用）
 
-使用以下命令来安装项目的依赖：
-
+- 安装 Yarn（ Windows 需要使用管理员打开）
+```bash
+npm install --global yarn
+```
+- 使用以下命令来安装项目的依赖：
 ```bash
 yarn install
+```
+
+### 使用 npm
+
+- 安装 Node.js
+
+- 使用以下命令来安装项目的依赖：
+```bash
+npm install
 ```
 
 ## 2. 启动项目
@@ -16,6 +28,11 @@ yarn install
 
 ```bash
 yarn start
+```
+Node 版本太高需要添加 `NODE_OPTIONS=--openssl-legacy-provider`
+
+```bash
+NODE_OPTIONS=--openssl-legacy-provider yarn start
 ```
 
 或者
