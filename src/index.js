@@ -7,7 +7,7 @@ import store from "./components/redux/store";
 import "react-app-polyfill/ie9";
 import "react-app-polyfill/stable";
 
-// antd
+// 
 import { ConfigProvider } from "antd";
 import locale from "antd/lib/locale/ja_JP";
 import "moment/locale/ja";
