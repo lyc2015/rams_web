@@ -7,6 +7,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../asserts/css/style.css";
 import "../asserts/css/newCssInsert.css"
+import * as publicUtils from "./utils/publicUtils.js";
 
 import { 
   Form, 
@@ -33,13 +34,12 @@ class EmployeeInsertNew extends React.Component {
       genderStatus: "",
       nationalityCode: "",
       birthplace: "",
-      birthday: new Date(),
+      birthday: "",
       image: "https://images.669pic.com/element_pic/54/25/82/94/d2825498dd97a2594c35d633e8454d19.jpg_w700wb",
       temporary_age: "",
       companyMail: "",
       socialInsuranceNo: "",
       socialInsuranceDate: null,
-      employeeStatus: "",
       employeeFristName: "",
       employeeLastName: "",      
       employmentInsurance: "",
@@ -53,6 +53,17 @@ class EmployeeInsertNew extends React.Component {
         { code: "0", name: "未加入" },
         { code: "1", name: "加入済み" }
       ],
+      graduationYearAndMonth: null,
+      comeToJapanYearAndMonth: null,
+      intoCompanyYearAndMonth: null,
+      yearsOfExperience: null,
+      temporary_graduationYearAndMonth: "",
+      temporary_comeToJapanYearAndMonth: "",
+      temporary_intoCompanyYearAndMonth: "",
+      temporary_yearsOfExperience: "",
+      employeeStatus: "0",
+      postalCode: '',
+      firstHalfAddress: '',
     };
   }
 
@@ -112,12 +123,123 @@ class EmployeeInsertNew extends React.Component {
     });
   };
 
+  // 卒業
+
+  formatDuration = (years, months) => {
+    if (years === 0) {
+      return `${months}ヶ月`;
+    }
+    return `${years}年${months}ヶ月`;
+  };
+
+  inactiveGraduationYearAndMonth = (date) => {
+    const yearsDiff = moment().diff(date, 'years');
+    const monthsDiff = moment().diff(date, 'months') % 12;
+    const formattedDuration = this.formatDuration(yearsDiff, monthsDiff);
+
+    this.setState({
+      graduationYearAndMonth: date,
+      temporary_graduationYearAndMonth: formattedDuration
+    }, () => {
+      if (!this.state.yearsOfExperience) {
+        this.setState({
+          yearsOfExperience: date,
+          temporary_yearsOfExperience: formattedDuration
+        });
+      }
+    });
+  };
+
+  inactiveComeToJapanYearAndMonth = (date) => {
+    const yearsDiff = moment().diff(date, 'years');
+    const monthsDiff = moment().diff(date, 'months') % 12;
+    const formattedDuration = this.formatDuration(yearsDiff, monthsDiff);
+
+    this.setState({
+      comeToJapanYearAndMonth: date,
+      temporary_comeToJapanYearAndMonth: formattedDuration
+    });
+  };
+
+  inactiveintoCompanyYearAndMonth = (date) => {
+    const yearsDiff = moment().diff(date, 'years');
+    const monthsDiff = moment().diff(date, 'months') % 12;
+    const formattedDuration = this.formatDuration(yearsDiff, monthsDiff);
+
+    this.setState({
+      intoCompanyYearAndMonth: date,
+      temporary_intoCompanyYearAndMonth: formattedDuration
+    });
+  };
+
+  inactiveyearsOfExperience = (date) => {
+    const yearsDiff = moment().diff(date, 'years');
+    const monthsDiff = moment().diff(date, 'months') % 12;
+    const formattedDuration = this.formatDuration(yearsDiff, monthsDiff);
+
+    this.setState({
+      yearsOfExperience: date,
+      temporary_yearsOfExperience: formattedDuration
+    });
+  };
+
+  /**
+   * 郵便番号API
+   */
+  postApi = (event) => {
+    let value = event.target.value;
+    const promise = Promise.resolve(publicUtils.postcodeApi(value));
+    promise.then((data) => {
+      if (data !== undefined && data !== null && data !== "") {
+        this.setState({ firstHalfAddress: data });
+      }
+    });
+  };
+
+  /**
+   * 漢字をカタカナに変更する
+   */
+  katakanaApiChange = (event) => {
+    let name = event.target.name;
+    let value = event.target.value;
+    let promise = Promise.resolve(publicUtils.katakanaApi(value));
+    promise.then((date) => {
+      switch (name) {
+        case "employeeFristName":
+          this.setState({
+            furigana1: date,
+            employeeFristName: value,
+          });
+          break;
+        case "employeeLastName":
+          this.setState({
+            furigana2: date,
+            employeeLastName: value,
+          });
+          break;
+        default:
+      }
+    });
+  };
+
   render() {
-    const { 
+    const {
+      companyMail,
+      phoneNo1,
+      phoneNo2,
+      phoneNo3,
       employmentInsurance, 
       socialInsurance, 
       socialInsuranceDate, 
       employeeStatus,
+      graduationYearAndMonth,
+      comeToJapanYearAndMonth,
+      intoCompanyYearAndMonth,
+      yearsOfExperience,
+      temporary_graduationYearAndMonth,
+      temporary_comeToJapanYearAndMonth,
+      temporary_intoCompanyYearAndMonth,
+      temporary_yearsOfExperience,      
     } = this.state;
     const residenceTimeDisabled = false; // 示例值，需根据实际情况设置
 
@@ -164,6 +286,7 @@ class EmployeeInsertNew extends React.Component {
                   placeholder="社員氏"
                   value={this.state.employeeFristName}
                   onChange={this.valueChange}
+                  onBlur={this.katakanaApiChange.bind(this)}
                   name="employeeFristName"
                   size="sm"
                 />
@@ -171,6 +294,7 @@ class EmployeeInsertNew extends React.Component {
                   placeholder="社員名"
                   value={this.state.employeeLastName}
                   onChange={this.valueChange}
+                  onBlur={this.katakanaApiChange.bind(this)}
                   name="employeeLastName"
                   size="sm"
                 />
@@ -306,28 +430,67 @@ class EmployeeInsertNew extends React.Component {
                   disabled
                 />
               </InputGroup>
-              <InputGroup size="sm" >
+              <InputGroup size="sm" className="required-mark">
                 <InputGroup.Prepend>
-                  <InputGroup.Text>社内メール</InputGroup.Text>
+                  <InputGroup.Text>
+                    社内メール
+                  </InputGroup.Text>
                 </InputGroup.Prepend>
-                <FormControl
-                  placeholder="社内メール"
-                  value={this.state.phone}
+                <Form.Control
+                  type="email"
+                  placeholder="メール"
+                  value={companyMail}
+                  autoComplete="off"
+                  disabled={
+                    employeeStatus === "0" ||
+                    employeeStatus === "2" ||
+                    employeeStatus === "3"
+                      ? false
+                      : true
+                  }
                   onChange={this.valueChange}
-                  name="phone"
                   size="sm"
+                  name="companyMail"
                 />
+                <FormControl value="@lyc.co.jp" size="sm" disabled />
               </InputGroup>
-              <InputGroup size="sm" >
+              <InputGroup size="sm" className="">
                 <InputGroup.Prepend>
                   <InputGroup.Text>携帯電話</InputGroup.Text>
                 </InputGroup.Prepend>
                 <FormControl
-                  placeholder="携帯電話"
-                  value={this.state.phone}
+                  value={phoneNo1}
+                  autoComplete="off"
                   onChange={this.valueChange}
-                  name="phone"
                   size="sm"
+                  name="phoneNo1"
+                  maxlength="3"
+                />
+                <InputGroup.Prepend>
+                  <InputGroup.Text className="width-auto bdr0">
+                    —
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl
+                  value={phoneNo2}
+                  autoComplete="off"
+                  onChange={this.valueChange}
+                  size="sm"
+                  name="phoneNo2"
+                  maxlength="4"
+                />
+                <InputGroup.Prepend>
+                  <InputGroup.Text className="width-auto bdr0">
+                    —
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl
+                  value={phoneNo3}
+                  autoComplete="off"
+                  onChange={this.valueChange}
+                  size="sm"
+                  name="phoneNo3"
+                  maxlength="4"
                 />
               </InputGroup>
               <InputGroup size="sm" >
@@ -338,8 +501,11 @@ class EmployeeInsertNew extends React.Component {
                   placeholder="郵便番号"
                   value={this.state.postalCode}
                   onChange={this.valueChange}
+                  onBlur={this.postApi.bind(this)}
                   name="postalCode"
                   size="sm"
+                  id="postcode"
+                  maxlength="7"
                 />
               </InputGroup>
               <InputGroup size="sm" >
@@ -348,10 +514,11 @@ class EmployeeInsertNew extends React.Component {
                 </InputGroup.Prepend>
                 <FormControl
                   placeholder="都道府県"
-                  value={this.state.prefecture}
+                  value={this.state.firstHalfAddress}
                   onChange={this.valueChange}
-                  name="prefecture"
+                  name="firstHalfAddress"
                   size="sm"
+                  disabled
                 />
               </InputGroup>
               <InputGroup size="sm" >
@@ -423,54 +590,122 @@ class EmployeeInsertNew extends React.Component {
                   size="sm"
                 />
               </InputGroup>
-              <InputGroup size="sm" >
-                <InputGroup.Prepend>
-                  <InputGroup.Text>卒業年月</InputGroup.Text>
-                </InputGroup.Prepend>
-                <FormControl
-                  placeholder="卒業年月"
-                  value={this.state.permission}
-                  onChange={this.valueChange}
-                  name="permission"
-                  size="sm"
+
+              <InputGroup size="sm" className="">
+              <InputGroup.Prepend>
+                <InputGroup.Text id="inputGroup-sizing-sm">
+                  卒業年月
+                </InputGroup.Text>
+              </InputGroup.Prepend>
+              <InputGroup.Append>
+                <AntdDatePicker
+                  allowClear={false}
+                  suffixIcon={false}
+                  value={graduationYearAndMonth ? moment(graduationYearAndMonth) : ""}
+                  onChange={this.inactiveGraduationYearAndMonth}
+                  format="YYYY/MM"
+                  locale="ja"
+                  showMonthYearPicker
+                  id="datePicker-empInsert-left"
+                  className="form-control form-control-sm"
+                  autoComplete="off"
                 />
-              </InputGroup>
-              <InputGroup size="sm" >
-                <InputGroup.Prepend>
-                  <InputGroup.Text>来日年月</InputGroup.Text>
-                </InputGroup.Prepend>
-                <FormControl
-                  placeholder="来日年月"
-                  value={this.state.permission}
-                  onChange={this.valueChange}
-                  name="permission"
-                  size="sm"
+              </InputGroup.Append>
+              <FormControl
+                name="temporary_graduationYearAndMonth"
+                value={temporary_graduationYearAndMonth}
+                aria-label="Small"
+                aria-describedby="inputGroup-sizing-sm"
+                disabled
+              />
+            </InputGroup>
+            <InputGroup size="sm" className="">
+              <InputGroup.Prepend>
+                <InputGroup.Text id="inputGroup-sizing-sm">
+                  来日年月
+                </InputGroup.Text>
+              </InputGroup.Prepend>
+              <InputGroup.Append>
+                <AntdDatePicker
+                  allowClear={false}
+                  suffixIcon={false}
+                  value={comeToJapanYearAndMonth ? moment(comeToJapanYearAndMonth) : ""}
+                  onChange={this.inactiveComeToJapanYearAndMonth}
+                  format="YYYY/MM"
+                  locale="ja"
+                  showMonthYearPicker
+                  id="datePicker-empInsert-left"
+                  className="form-control form-control-sm"
+                  autoComplete="off"
                 />
-              </InputGroup>
-              <InputGroup size="sm" >
-                <InputGroup.Prepend>
-                  <InputGroup.Text>入社年月</InputGroup.Text>
-                </InputGroup.Prepend>
-                <FormControl
-                  placeholder="入社年月"
-                  value={this.state.permission}
-                  onChange={this.valueChange}
-                  name="permission"
-                  size="sm"
+              </InputGroup.Append>
+              <FormControl
+                name="temporary_comeToJapanYearAndMonth"
+                value={temporary_comeToJapanYearAndMonth}
+                aria-label="Small"
+                aria-describedby="inputGroup-sizing-sm"
+                disabled
+              />
+            </InputGroup>
+            <InputGroup size="sm" className="required-mark">
+              <InputGroup.Prepend>
+                <InputGroup.Text id="inputGroup-sizing-sm">
+                  入社年月
+                </InputGroup.Text>
+              </InputGroup.Prepend>
+              <InputGroup.Append>
+                <AntdDatePicker
+                  allowClear={false}
+                  suffixIcon={false}
+                  value={intoCompanyYearAndMonth ? moment(intoCompanyYearAndMonth) : ""}
+                  onChange={this.inactiveintoCompanyYearAndMonth}
+                  format="YYYY/MM/DD"
+                  locale="ja"
+                  id="datePicker-empInsert-left"
+                  disabled={
+                    this.state.employeeStatus === "1" || this.state.employeeStatus === "4"
+                      ? true
+                      : false}
+                  bordered={false}
+                  style={{ padding: "0px" }}
                 />
-              </InputGroup>
-              <InputGroup size="sm" >
-                <InputGroup.Prepend>
-                  <InputGroup.Text>経験年数</InputGroup.Text>
-                </InputGroup.Prepend>
-                <FormControl
-                  placeholder="経験年数"
-                  value={this.state.permission}
-                  onChange={this.valueChange}
-                  name="permission"
-                  size="sm"
+              </InputGroup.Append>
+              <FormControl
+                name="temporary_intoCompanyYearAndMonth"
+                value={temporary_intoCompanyYearAndMonth}
+                aria-label="Small"
+                aria-describedby="inputGroup-sizing-sm"
+                disabled
+              />
+            </InputGroup>
+            <InputGroup size="sm" className="">
+              <InputGroup.Prepend>
+                <InputGroup.Text id="inputGroup-sizing-sm">
+                  経験年数
+                </InputGroup.Text>
+              </InputGroup.Prepend>
+              <InputGroup.Append>
+                <AntdDatePicker
+                  allowClear={false}
+                  suffixIcon={false}
+                  value={yearsOfExperience ? moment(yearsOfExperience) : ""}
+                  onChange={this.inactiveyearsOfExperience}
+                  format="YYYY/MM"
+                  locale="ja"
+                  showMonthYearPicker
+                  className="form-control form-control-sm"
+                  autoComplete="off"
+                  id="datePicker-empInsert-left"
                 />
-              </InputGroup>
+              </InputGroup.Append>
+              <FormControl
+                name="temporary_yearsOfExperience"
+                value={temporary_yearsOfExperience}
+                aria-label="Small"
+                aria-describedby="inputGroup-sizing-sm"
+                disabled
+              />
+            </InputGroup>
             </Col>
 
             <Col md={4}>
@@ -572,23 +807,10 @@ class EmployeeInsertNew extends React.Component {
                     onChange={this.socialInsuranceDateChange}
                     format="YYYY/MM/DD"
                     locale="ja"
-                    disabled={
-                      residenceTimeDisabled ||
-                      employeeStatus === "2" ||
-                      employeeStatus === "1" ||
-                      employeeStatus === "4"
-                        ? true
-                        : false
-                    }
-                    id={
-                      residenceTimeDisabled ||
-                      employeeStatus === "2" ||
-                      employeeStatus === "1" ||
-                      employeeStatus === "4"
-                        ? "datePickerReadonlyDefault-empInsert-right-socialInsuranceDate"
-                        : "datePicker-empInsert-right-socialInsuranceDate"
-                    }
-                    style={{ padding: "0px" }}
+                    showMonthYearPicker
+                    id="datePicker-empInsert-left"
+                    className="form-control form-control-sm"
+                    autoComplete="off"
                   />
                 </InputGroup.Append>
               </InputGroup>           
@@ -607,6 +829,7 @@ class EmployeeInsertNew extends React.Component {
                   onChange={this.valueChange}
                   name="permission"
                   size="sm"
+                  disabled
                 />
               </InputGroup>
             </Col>
@@ -634,6 +857,7 @@ class EmployeeInsertNew extends React.Component {
                   onChange={this.valueChange}
                   name="permission"
                   size="sm"
+                  disabled
                 />
               </InputGroup>
               <InputGroup size="sm" >
@@ -646,6 +870,7 @@ class EmployeeInsertNew extends React.Component {
                   onChange={this.valueChange}
                   name="permission"
                   size="sm"
+                  disabled
                 />
               </InputGroup>
             </Col>
