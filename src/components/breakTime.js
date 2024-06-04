@@ -104,7 +104,7 @@ class BreakTime extends Component {
     $("#breakTimeNightbreakTimeHour").val(breakTimeNightbreakTimeHour / 60);
     $("#breakTimeSumHour").val(
       Number($("#breakTimeDaybreakTimeHour").val()) +
-        Number($("#breakTimeNightbreakTimeHour").val())
+      Number($("#breakTimeNightbreakTimeHour").val())
     );
 
     this.setState({
@@ -232,28 +232,43 @@ class BreakTime extends Component {
   };
 
   changeToDutyRegistration = () => {
-    if (this.state.breakTimeFlag === "1") {
-      message.info("承認済みでした、修正できないです");
-      return;
-    } else if (this.state.breakTimeFlag === "0") {
-      message.info("休憩時間を登録してください。");
-    } else {
-      var path = {};
-      let breakTimeDateMonth = String(this.state.breakTimeDate.getMonth() + 1);
-      path = {
-        pathname: "/subMenuEmployee/dutyRegistration",
-        state: {
-          sendValue: this.state.sendValue,
-          year: this.state.breakTimeDate.getFullYear(),
-          month:
-            breakTimeDateMonth < 10
-              ? "0" + breakTimeDateMonth
-              : breakTimeDateMonth,
-          yearMonth: moment(this.state.breakTimeDate).toDate(),
-        },
-      };
-      return this.props.history.push(path);
-    }
+    var path = {};
+    let breakTimeDateMonth = String(this.state.breakTimeDate.getMonth() + 1);
+    path = {
+      pathname: "/subMenuEmployee/dutyRegistration",
+      state: {
+        sendValue: this.state.sendValue,
+        year: this.state.breakTimeDate.getFullYear(),
+        month:
+          breakTimeDateMonth < 10
+            ? "0" + breakTimeDateMonth
+            : breakTimeDateMonth,
+        yearMonth: moment(this.state.breakTimeDate).toDate(),
+      },
+    };
+    return this.props.history.push(path);
+    // if (this.state.breakTimeFlag === "1") {
+    //   message.info("承認済みでした、修正できないです");
+    //   return;
+    // } else if (this.state.breakTimeFlag === "0") {
+    //   message.info("休憩時間を登録してください。");
+    // } else {
+    //   var path = {};
+    //   let breakTimeDateMonth = String(this.state.breakTimeDate.getMonth() + 1);
+    //   path = {
+    //     pathname: "/subMenuEmployee/dutyRegistration",
+    //     state: {
+    //       sendValue: this.state.sendValue,
+    //       year: this.state.breakTimeDate.getFullYear(),
+    //       month:
+    //         breakTimeDateMonth < 10
+    //           ? "0" + breakTimeDateMonth
+    //           : breakTimeDateMonth,
+    //       yearMonth: moment(this.state.breakTimeDate).toDate(),
+    //     },
+    //   };
+    //   return this.props.history.push(path);
+    // }
   };
 
   setBreakTime = (date) => {
@@ -388,8 +403,8 @@ class BreakTime extends Component {
           resultMap.data.approvalStatus === "1"
             ? "1"
             : resultMap.data.breakTime === null
-            ? "0"
-            : "2",
+              ? "0"
+              : "2",
       });
     } catch (error) {
       console.error(error);
@@ -508,10 +523,11 @@ class BreakTime extends Component {
                     variant="info"
                     type="button"
                     onClick={this.changeToDutyRegistration}
-                    disabled={
-                      moment(this.state.breakTimeDate).format("YYYYMM") <
-                      this.state.minDate
-                    }
+                  // TODO:testをする為コメントアウト
+                  // disabled={
+                  //   moment(this.state.breakTimeDate).format("YYYYMM") <
+                  //   this.state.minDate
+                  // }
                   >
                     勤務時間入力
                   </Button>

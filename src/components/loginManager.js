@@ -30,6 +30,7 @@ class Login extends Component {
   }
 
   componentWillMount() {
+    console.log(this.state, 'this.state')
     $("#sendVerificationCode").attr("disabled", true);
     $("#login").attr("disabled", true);
     axios
@@ -43,6 +44,7 @@ class Login extends Component {
       .catch((error) => {
         console.error("Error - " + error);
       });
+
     axios.post(this.state.serverIP + "login/init").then((resultMap) => {
       if (resultMap.data) {
         this.props.history.push("/subMenuManager");
@@ -90,6 +92,7 @@ class Login extends Component {
     loginModel["employeeNo"] = $("#employeeNo").val();
     loginModel["password"] = $("#password").val();
     loginModel["verificationCode"] = $("#verificationCode").val();
+    console.log({ serverIP: this.state.serverIP, loginModel }, 'this.state.serverIP')
     axios
       .post(this.state.serverIP + "login/login", loginModel)
       .then((result) => {

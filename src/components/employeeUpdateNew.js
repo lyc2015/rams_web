@@ -258,7 +258,7 @@ class employeeUpdateNew extends React.Component {
       myNumber: publicUtils.nullToEmpty(this.state.myNumber), // マイナンバー
       passportNo: publicUtils.nullToEmpty(this.state.passportNo), // パスポート番号
       resumeName1: publicUtils.nullToEmpty(this.state.resumeName1), // 履歴書備考1
-      //resumeName2: publicUtils.nullToEmpty(this.state.resumeName2), // 履歴書備考1
+      resumeName2: publicUtils.nullToEmpty(this.state.resumeName2), // 履歴書備考2
       updateTime: publicUtils.nullToEmpty(this.state.updateTime),
       accountInfo: this.state.accountInfo, // 口座情報
       password: publicUtils.nullToEmpty(this.state.passwordSetInfo), // pw設定
@@ -300,6 +300,7 @@ class employeeUpdateNew extends React.Component {
         : this.state.resumeInfo1URL
     );
     formData.append("resumeInfo1Key", this.state.resumeInfo1URL);
+    formData.append("resumeInfo2Key", this.state.resumeInfo1URL);
     // formData.append(
     //   "resumeInfo2URL",
     //   publicUtils.nullToEmpty(this.state.resumeName2) === ""

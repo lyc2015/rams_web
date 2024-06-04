@@ -877,7 +877,7 @@ class employeeSearch extends React.Component {
   };
 
   checkEmpty = (values) => {
-    return values === "" ? "" : "\t" + values;
+    return values === "" ? "" : values;
   };
 
   getCustomerNo = (event, values) => {

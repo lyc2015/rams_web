@@ -15,7 +15,7 @@ class mainIn extends Component {
     return (
       <Router>
         <>
-          <Route exact path="/" component={LoginManager} />
+          <Route exact path="/" component={LoginManager} />{/*把mainin里面的LoginManager改成LoginEmployee就能进社员系统看了*/}
           <Route path="/loginManager" component={LoginManager} />
           <Route path="/loginEmployee" component={LoginEmployee} />
           <Route path="/subMenuManager" component={SubMenuManager} />

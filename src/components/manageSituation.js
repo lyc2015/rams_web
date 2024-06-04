@@ -1,4 +1,7 @@
 import React from "react";
+/*/!*import * as ExcelJs from 'exceljs';*!/
+import {saveAs} from "file-saver";
+import {Workbook} from "exceljs";*/
 import {
   Form,
   Button,
@@ -26,7 +29,7 @@ import {
   faBlender,
   faCopy,
 } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
+
 import TableSelect from "./TableSelect";
 import Clipboard from "clipboard";
 import Autocomplete from "@material-ui/lab/Autocomplete";
@@ -43,12 +46,12 @@ axios.defaults.withCredentials = true;
 const SIZE_PER_SIZE = 12;
 
 const getProjectPhase = (siteRoleCode) => {
-    if (siteRoleCode === "2") {
-      return "1";
-    } else if (siteRoleCode === "3") {
-      return "2";
-    }
-  };
+  if (siteRoleCode === "2") {
+    return "1";
+  } else if (siteRoleCode === "3") {
+    return "2";
+  }
+};
 
 /**
  * 営業状況画面
@@ -72,10 +75,10 @@ class manageSituation extends React.Component {
       new Date().getMonth() + 1 === 12
         ? new Date().getFullYear() + 1 + "/01"
         : new Date().getFullYear() +
-          "/" +
-          (new Date().getMonth() + 1 < 10
-            ? "0" + (new Date().getMonth() + 2)
-            : new Date().getMonth() + 2)
+        "/" +
+        (new Date().getMonth() + 1 < 10
+          ? "0" + (new Date().getMonth() + 2)
+          : new Date().getMonth() + 2)
     ).getTime(),
     interviewDate1Show: "", // 面接1日付
     interviewDate1: "", // 面接1日付
@@ -85,7 +88,7 @@ class manageSituation extends React.Component {
     stationCode2: "", // 面接2場所
     interviewCustomer1: "", // 面接1客様
     interviewCustomer2: "", // 面接2客様
-    hopeRemark:"", // 個人希望备注
+    hopeRemark: "", // 個人希望备注
     remark1: "", // 備考
     remark2: "", // 備考
     salesSituationLists: [], // 明細
@@ -151,6 +154,8 @@ class manageSituation extends React.Component {
     makeDirectoryFalg: true,
     loading: true,
     siteListShowFlag: false,
+    alphabetNameShow: true,
+    salesSituationCsvList: [],
   };
 
   componentWillUnmount() {
@@ -318,10 +323,11 @@ class manageSituation extends React.Component {
       .then((result) => {
         if (result.data != null) {
           /*					this.refs.table.setState({
-						selectedRowKeys: []
-					});*/
+                        selectedRowKeys: []
+                    });*/
           let empNoArray = new Array();
           let empNoNameArray = new Array();
+          let alphabetNameArray = new Array();
           let resumeInfo1Array = new Array();
           let resumeInfo2Array = new Array();
           let resumeInfoArray = new Array();
@@ -331,22 +337,28 @@ class manageSituation extends React.Component {
             empNoNameArray.push(
               result.data[i].employeeNo + "_" + result.data[i].employeeName
             );
+            /*  for (let i in result.data) {
+                empNoArray.push(result.data[i].employeeNo1);
+                alphabetNameArray.push(
+                    result.data[i].employeeNo + "_" + result.data[i].alphabetName
+              );*/
             resumeInfo1Array.push(result.data[i].resumeInfo1);
             resumeInfo2Array.push(result.data[i].resumeInfo2);
             resumeInfoArray.push(result.data[i].resumeInfo1);
             resumeInfoArray.push(result.data[i].resumeInfo2);
-            if(result.data[i].salesProgressCode === "0" || result.data[i].salesProgressCode === "1"){
-				completeCount++;
-			}
+            if (result.data[i].salesProgressCode === "0" || result.data[i].salesProgressCode === "1") {
+              completeCount++;
+            }
           }
           let completePercet = completeCount === 0 ? 0 : parseInt(completeCount) / parseInt(result.data.length);
-	      completePercet =
-	        (Math.round(completePercet * 10000) / 100).toFixed(1) + "%";
+          completePercet =
+            (Math.round(completePercet * 10000) / 100).toFixed(1) + "%";
 
           var totalPersons = result.data.length;
           this.setState({
             checkDisabledFlag: totalPersons === 0 ? true : false,
             completePercet: completePercet,
+            salesSituationCsvList: result.data,
           });
           var decidedPersons = 0;
           if (totalPersons !== 0) {
@@ -357,35 +369,36 @@ class manageSituation extends React.Component {
             }
           }
           /*					this.refs.table.store.selected = [];
-					this.refs.table.setState({
-						selectedRowKeys: []
-					});*/
+                    this.refs.table.setState({
+                        selectedRowKeys: []
+                    });*/
           this.setState(
             {
-              /*						selectetRowIds: [],
-               */ modeSelect: "radio",
+                  /*						selectetRowIds: [],
+                   */ modeSelect: "radio",
               /*						checkSelect: true,
-						onSelectFlag: true,
-						checkFlag: false,*/
+                        onSelectFlag: true,
+                        checkFlag: false,*/
               salesSituationLists: result.data,
-              /*						interviewDate1Show: '',　// 面接1日付
-						interviewDate1: '',　// 面接1日付
-						interviewDate2Show: '',　// 面接1日付
-						interviewDate2: '',　// 面接2日付
-						stationCode1: '',　// 面接1場所
-						stationCode2: '',　// 面接2場所
-						interviewCustomer1: '',　// 面接1客様
-						interviewCustomer2: '',　// 面接2客様
-						remark1: '',　// 備考
-						remark2: '',　// 備考
-						salesPriorityStatus: '',
-*/ style: {
+
+                  /*						interviewDate1Show: '',　// 面接1日付
+                            interviewDate1: '',　// 面接1日付
+                            interviewDate2Show: '',　// 面接1日付
+                            interviewDate2: '',　// 面接2日付
+                            stationCode1: '',　// 面接1場所
+                            stationCode2: '',　// 面接2場所
+                            interviewCustomer1: '',　// 面接1客様
+                            interviewCustomer2: '',　// 面接2客様
+                            remark1: '',　// 備考
+                            remark2: '',　// 備考
+                            salesPriorityStatus: '',
+    */ style: {
                 backgroundColor: "",
               },
               /*						readFlag: true,
-						updateBtnflag: false,
-						linkDisableFlag: true,// linkDisableFlag
-						sendLetterFalg:true,*/
+                        updateBtnflag: false,
+                        linkDisableFlag: true,// linkDisableFlag
+                        sendLetterFalg:true,*/
               totalPersons: totalPersons, // 合計人数
               decidedPersons: decidedPersons, // 確定人数
               errorsMessageShow: false,
@@ -426,7 +439,7 @@ class manageSituation extends React.Component {
       });
   };
 
-  
+
 
   // レコードのステータス
   formatType = (cell) => {
@@ -592,6 +605,8 @@ class manageSituation extends React.Component {
           setTimeout(() => this.setState({ myToastShow: false }), 3000);
 
           store.dispatch({ type: "UPDATE_STATE", dropName: "getEmployeeName" });
+
+
           store.dispatch({
             type: "UPDATE_STATE",
             dropName: "getEmployeeNameNoBP",
@@ -600,6 +615,14 @@ class manageSituation extends React.Component {
             type: "UPDATE_STATE",
             dropName: "getEmployeeNameByOccupationName",
           });
+
+          /*
+                        store.dispatch({ type1: "UPDATE_STATE", dropName1: "getAlphabetName" });
+                        store.dispatch({
+                          type1: "UPDATE_STATE",
+                          dropName1: "getAlphabetName",
+                        });*/
+
         }
       })
       .catch((error) => {
@@ -673,37 +696,37 @@ class manageSituation extends React.Component {
 
   showGreySiteRoleCodeAndJapanese(cell, row, enumObject, index) {
     if (row.salesProgressCode === "0" || row.salesProgressCode === "1") {
-		if ((row.siteRoleCode === "" || row.siteRoleCode === null) && (row.japaneaseLevelDesc === "" || row.japaneaseLevelDesc === null)) {
-			return <div></div>;
-		} else if (row.japaneaseLevelDesc === "" || row.japaneaseLevelDesc === null) {
-			return (
-		        <div>
-		          <font color="grey">{row.siteRoleCode}</font>
-		        </div>
-		      );
-		} else if (row.siteRoleCode === "" || row.siteRoleCode === null) {
-			return (
-		        <div>
-		          <font color="grey">{row.japaneaseLevelDesc}</font>
-		        </div>
-		      );
-		} else {
-			return (
-		        <div>
-		          <font color="grey">{row.siteRoleCode} · {row.japaneaseLevelDesc}</font>
-		        </div>
-		      );
-		}
+      if ((row.siteRoleCode === "" || row.siteRoleCode === null) && (row.japaneaseLevelDesc === "" || row.japaneaseLevelDesc === null)) {
+        return <div></div>;
+      } else if (row.japaneaseLevelDesc === "" || row.japaneaseLevelDesc === null) {
+        return (
+          <div>
+            <font color="grey">{row.siteRoleCode}</font>
+          </div>
+        );
+      } else if (row.siteRoleCode === "" || row.siteRoleCode === null) {
+        return (
+          <div>
+            <font color="grey">{row.japaneaseLevelDesc}</font>
+          </div>
+        );
+      } else {
+        return (
+          <div>
+            <font color="grey">{row.siteRoleCode} · {row.japaneaseLevelDesc}</font>
+          </div>
+        );
+      }
     } else {
-		if ((row.siteRoleCode === "" || row.siteRoleCode === null) && (row.japaneaseLevelDesc === "" || row.japaneaseLevelDesc === null)) {
-			return <div></div>;
-		} else if (row.japaneaseLevelDesc === "" || row.japaneaseLevelDesc === null) {
-			return <div>{row.siteRoleCode}</div>;
-		} else if (row.siteRoleCode === "" || row.siteRoleCode === null) {
-			return <div>{row.japaneaseLevelDesc}</div>;
-		} else {
-      		return <div>{row.siteRoleCode} · {row.japaneaseLevelDesc}</div>;
-		}
+      if ((row.siteRoleCode === "" || row.siteRoleCode === null) && (row.japaneaseLevelDesc === "" || row.japaneaseLevelDesc === null)) {
+        return <div></div>;
+      } else if (row.japaneaseLevelDesc === "" || row.japaneaseLevelDesc === null) {
+        return <div>{row.siteRoleCode}</div>;
+      } else if (row.siteRoleCode === "" || row.siteRoleCode === null) {
+        return <div>{row.japaneaseLevelDesc}</div>;
+      } else {
+        return <div>{row.siteRoleCode} · {row.japaneaseLevelDesc}</div>;
+      }
     }
   }
   showGreyYearsOfExperience(cell, row, enumObject, index) {
@@ -713,12 +736,12 @@ class manageSituation extends React.Component {
           <font color="grey">
             {row.yearsOfExperience === "" || row.yearsOfExperience === null
               ? publicUtils.getYear(
-                  publicUtils.converToLocalTime(
-                    row.intoCompanyYearAndMonth,
-                    false
-                  ),
-                  new Date()
-                )
+                publicUtils.converToLocalTime(
+                  row.intoCompanyYearAndMonth,
+                  false
+                ),
+                new Date()
+              )
               : row.yearsOfExperience}
           </font>
         </div>
@@ -728,12 +751,12 @@ class manageSituation extends React.Component {
         <div>
           {row.yearsOfExperience === "" || row.yearsOfExperience === null
             ? publicUtils.getYear(
-                publicUtils.converToLocalTime(
-                  row.intoCompanyYearAndMonth,
-                  false
-                ),
-                new Date()
-              )
+              publicUtils.converToLocalTime(
+                row.intoCompanyYearAndMonth,
+                false
+              ),
+              new Date()
+            )
             : row.yearsOfExperience}
         </div>
       );
@@ -764,8 +787,8 @@ class manageSituation extends React.Component {
   showGreyUnitPrice(cell, row, enumObject, index) {
     let unitPrice;
     /*if(row.employeeNo.indexOf("BP") != -1){
-			unitPrice = row.unitPrice;
-		}else{*/
+            unitPrice = row.unitPrice;
+        }else{*/
     let num = (cell?.replace(",", "") / 10000).toFixed(1).replace(".0", "");
     unitPrice = cell === "" ? "" : Number(num) === 0 ? cell : num;
     /*}*/
@@ -833,38 +856,38 @@ class manageSituation extends React.Component {
 
   // 更新ボタン
   changeState = () => {
-      this.state.employeeNo = String(this.refs.table.state.selectedRowKeys);
-      axios
-        .post(
-          this.state.serverIP + "salesSituation/updateSalesSituation",
-          this.state
-        )
-        .then((result) => {
-          if (result.data != null) {
-            if (result.data.errorsMessage != null) {
-              this.setState({
-                errorsMessageShow: true,
-                errorsMessageValue: result.data.errorsMessage,
-                style: {
-                  backgroundColor: "red",
-                },
-              });
-            } else {
-              this.getSalesSituation(this.state.salesYearAndMonth);
-              this.setState({
-                myToastShow: true,
-                errorsMessageShow: false,
-                errorsMessageValue: "",
-              });
-              setTimeout(() => this.setState({ myToastShow: false }), 3000);
-            }
+    this.state.employeeNo = String(this.refs.table.state.selectedRowKeys);
+    axios
+      .post(
+        this.state.serverIP + "salesSituation/updateSalesSituation",
+        this.state
+      )
+      .then((result) => {
+        if (result.data != null) {
+          if (result.data.errorsMessage != null) {
+            this.setState({
+              errorsMessageShow: true,
+              errorsMessageValue: result.data.errorsMessage,
+              style: {
+                backgroundColor: "red",
+              },
+            });
           } else {
-            alert("FAIL");
+            this.getSalesSituation(this.state.salesYearAndMonth);
+            this.setState({
+              myToastShow: true,
+              errorsMessageShow: false,
+              errorsMessageValue: "",
+            });
+            setTimeout(() => this.setState({ myToastShow: false }), 3000);
           }
-        })
-        .catch(function (error) {
-          alert("ERR");
-        });
+        } else {
+          alert("FAIL");
+        }
+      })
+      .catch(function (error) {
+        alert("ERR");
+      });
   };
 
   // onchange
@@ -1024,16 +1047,16 @@ class manageSituation extends React.Component {
                 row.interviewDate1 === null
                   ? ""
                   : new Date(
-                      publicUtils.strToTime(row.interviewDate1)
-                    ).getTime(),
+                    publicUtils.strToTime(row.interviewDate1)
+                  ).getTime(),
               interviewDate2:
                 row.interviewDate2 === null ? "" : row.interviewDate2,
               interviewDate2Show:
                 row.interviewDate2 === null
                   ? ""
                   : new Date(
-                      publicUtils.strToTime(row.interviewDate2)
-                    ).getTime(),
+                    publicUtils.strToTime(row.interviewDate2)
+                  ).getTime(),
               stationCode1: row.stationCode1 === null ? "" : row.stationCode1,
               stationCode2: row.stationCode2 === null ? "" : row.stationCode2,
               interviewCustomer1:
@@ -1051,10 +1074,10 @@ class manageSituation extends React.Component {
               editFlag:
                 row.salesProgressCode === "0" || row.salesProgressCode === "1"
                   ? {
-                      type: "select",
-                      readOnly: false,
-                      options: { values: this.state.allCustomer },
-                    }
+                    type: "select",
+                    readOnly: false,
+                    options: { values: this.state.allCustomer },
+                  }
                   : false,
               priceEditFlag:
                 row.salesProgressCode === "0" || row.salesProgressCode === "1"
@@ -1135,23 +1158,23 @@ class manageSituation extends React.Component {
                   row.interviewDate1 === null
                     ? ""
                     : new Date(
-                        publicUtils.strToTime(row.interviewDate1)
-                      ).getTime(),
+                      publicUtils.strToTime(row.interviewDate1)
+                    ).getTime(),
                 interviewDate2:
                   row.interviewDate2 === null ? "" : row.interviewDate2,
                 interviewDate2Show:
                   row.interviewDate2 === null
                     ? ""
                     : new Date(
-                        publicUtils.strToTime(row.interviewDate2)
-                      ).getTime(),
+                      publicUtils.strToTime(row.interviewDate2)
+                    ).getTime(),
                 stationCode1: row.stationCode1 === null ? "" : row.stationCode1,
                 stationCode2: row.stationCode2 === null ? "" : row.stationCode2,
                 interviewCustomer1:
                   row.interviewCustomer1 === null ? "" : row.interviewCustomer1,
                 interviewCustomer2:
                   row.interviewCustomer2 === null ? "" : row.interviewCustomer2,
-				hopeRemark:
+                hopeRemark:
                   row.hopeRemark === null ? "" : row.hopeRemark,
                 salesPriorityStatus:
                   row.salesPriorityStatus === null
@@ -1164,10 +1187,10 @@ class manageSituation extends React.Component {
                 editFlag:
                   row.salesProgressCode === "0" || row.salesProgressCode === "1"
                     ? {
-                        type: "select",
-                        readOnly: false,
-                        options: { values: this.state.allCustomer },
-                      }
+                      type: "select",
+                      readOnly: false,
+                      options: { values: this.state.allCustomer },
+                    }
                     : false,
                 priceEditFlag:
                   row.salesProgressCode === "0" || row.salesProgressCode === "1"
@@ -1177,7 +1200,7 @@ class manageSituation extends React.Component {
                 salesStaff: row.salesStaff === null ? "" : row.salesStaff,
                 readFlag:
                   row.employeeNo === this.state.employeeNo &&
-                  !this.state.readFlag
+                    !this.state.readFlag
                     ? false
                     : true,
                 linkDisableFlag:
@@ -1186,7 +1209,7 @@ class manageSituation extends React.Component {
                     : true,
                 sendLetterFalg:
                   !this.state.isSelectedAll &&
-                  this.refs.table.state.selectedRowKeys.length > 1
+                    this.refs.table.state.selectedRowKeys.length > 1
                     ? false
                     : true,
                 admissionStartDate:
@@ -1224,7 +1247,7 @@ class manageSituation extends React.Component {
                 stationCode2: "",
                 interviewCustomer1: "",
                 interviewCustomer2: "",
-                hopeRemark:"",
+                hopeRemark: "",
                 salesPriorityStatus: "",
                 admissionEndDate: "",
                 remark1: "",
@@ -1232,10 +1255,10 @@ class manageSituation extends React.Component {
                 editFlag:
                   row.salesProgressCode === "4"
                     ? {
-                        type: "select",
-                        readOnly: false,
-                        options: { values: this.state.allCustomer },
-                      }
+                      type: "select",
+                      readOnly: false,
+                      options: { values: this.state.allCustomer },
+                    }
                     : false,
                 updateBtnflag: isSelected,
                 readFlag: true,
@@ -1245,7 +1268,7 @@ class manageSituation extends React.Component {
                     : true,
                 sendLetterFalg:
                   !this.state.isSelectedAll &&
-                  this.refs.table.state.selectedRowKeys.length > 1
+                    this.refs.table.state.selectedRowKeys.length > 1
                     ? false
                     : true,
                 isSelectedAll: false,
@@ -1277,23 +1300,23 @@ class manageSituation extends React.Component {
                 row.interviewDate1 === null
                   ? ""
                   : new Date(
-                      publicUtils.strToTime(row.interviewDate1)
-                    ).getTime(),
+                    publicUtils.strToTime(row.interviewDate1)
+                  ).getTime(),
               interviewDate2:
                 row.interviewDate2 === null ? "" : row.interviewDate2,
               interviewDate2Show:
                 row.interviewDate2 === null
                   ? ""
                   : new Date(
-                      publicUtils.strToTime(row.interviewDate2)
-                    ).getTime(),
+                    publicUtils.strToTime(row.interviewDate2)
+                  ).getTime(),
               stationCode1: row.stationCode1 === null ? "" : row.stationCode1,
               stationCode2: row.stationCode2 === null ? "" : row.stationCode2,
               interviewCustomer1:
                 row.interviewCustomer1 === null ? "" : row.interviewCustomer1,
               interviewCustomer2:
                 row.interviewCustomer2 === null ? "" : row.interviewCustomer2,
-			  hopeRemark:
+              hopeRemark:
                 row.hopeRemark === null ? "" : row.hopeRemark,
               salesPriorityStatus:
                 row.salesPriorityStatus === null ? "" : row.salesPriorityStatus,
@@ -1304,10 +1327,10 @@ class manageSituation extends React.Component {
               editFlag:
                 row.salesProgressCode === "0" || row.salesProgressCode === "1"
                   ? {
-                      type: "select",
-                      readOnly: false,
-                      options: { values: this.state.allCustomer },
-                    }
+                    type: "select",
+                    readOnly: false,
+                    options: { values: this.state.allCustomer },
+                  }
                   : false,
               priceEditFlag:
                 row.salesProgressCode === "0" || row.salesProgressCode === "1"
@@ -1320,7 +1343,7 @@ class manageSituation extends React.Component {
                   ? false
                   : true,
               /*				linkDisableFlag: this.refs.table.state.selectedRowKeys.length === 0 ? false : true,
-						sendLetterFalg: this.refs.table.state.selectedRowKeys.length >= 0 ? false : true,*/
+                        sendLetterFalg: this.refs.table.state.selectedRowKeys.length >= 0 ? false : true,*/
               linkDisableFlag: false,
               sendLetterFalg: false,
               admissionStartDate:
@@ -1385,23 +1408,23 @@ class manageSituation extends React.Component {
                   row.interviewDate1 === null
                     ? ""
                     : new Date(
-                        publicUtils.strToTime(row.interviewDate1)
-                      ).getTime(),
+                      publicUtils.strToTime(row.interviewDate1)
+                    ).getTime(),
                 interviewDate2:
                   row.interviewDate2 === null ? "" : row.interviewDate2,
                 interviewDate2Show:
                   row.interviewDate2 === null
                     ? ""
                     : new Date(
-                        publicUtils.strToTime(row.interviewDate2)
-                      ).getTime(),
+                      publicUtils.strToTime(row.interviewDate2)
+                    ).getTime(),
                 stationCode1: row.stationCode1 === null ? "" : row.stationCode1,
                 stationCode2: row.stationCode2 === null ? "" : row.stationCode2,
                 interviewCustomer1:
                   row.interviewCustomer1 === null ? "" : row.interviewCustomer1,
                 interviewCustomer2:
                   row.interviewCustomer2 === null ? "" : row.interviewCustomer2,
-				hopeRemark:
+                hopeRemark:
                   row.hopeRemark === null ? "" : row.hopeRemark,
                 salesPriorityStatus:
                   row.salesPriorityStatus === null
@@ -1414,10 +1437,10 @@ class manageSituation extends React.Component {
                 editFlag:
                   row.salesProgressCode === "0" || row.salesProgressCode === "1"
                     ? {
-                        type: "select",
-                        readOnly: false,
-                        options: { values: this.state.allCustomer },
-                      }
+                      type: "select",
+                      readOnly: false,
+                      options: { values: this.state.allCustomer },
+                    }
                     : false,
                 priceEditFlag:
                   row.salesProgressCode === "0" || row.salesProgressCode === "1"
@@ -1427,7 +1450,7 @@ class manageSituation extends React.Component {
                 salesStaff: row.salesStaff === null ? "" : row.salesStaff,
                 readFlag:
                   row.employeeNo === this.state.employeeNo &&
-                  !this.state.readFlag
+                    !this.state.readFlag
                     ? false
                     : true,
                 linkDisableFlag:
@@ -1436,7 +1459,7 @@ class manageSituation extends React.Component {
                     : true,
                 sendLetterFalg:
                   !this.state.isSelectedAll &&
-                  this.refs.table.state.selectedRowKeys.length > 1
+                    this.refs.table.state.selectedRowKeys.length > 1
                     ? false
                     : true,
                 admissionStartDate:
@@ -1475,7 +1498,7 @@ class manageSituation extends React.Component {
                 stationCode2: "",
                 interviewCustomer1: "",
                 interviewCustomer2: "",
-                hopeRemark:"",
+                hopeRemark: "",
                 salesPriorityStatus: "",
                 admissionEndDate: "",
                 remark1: "",
@@ -1483,10 +1506,10 @@ class manageSituation extends React.Component {
                 editFlag:
                   row.salesProgressCode === "0"
                     ? {
-                        type: "select",
-                        readOnly: false,
-                        options: { values: this.state.allCustomer },
-                      }
+                      type: "select",
+                      readOnly: false,
+                      options: { values: this.state.allCustomer },
+                    }
                     : false,
                 updateBtnflag: isSelected,
                 readFlag: true,
@@ -1496,7 +1519,7 @@ class manageSituation extends React.Component {
                     : true,
                 sendLetterFalg:
                   !this.state.isSelectedAll &&
-                  this.refs.table.state.selectedRowKeys.length > 1
+                    this.refs.table.state.selectedRowKeys.length > 1
                     ? false
                     : true,
                 isSelectedAll: false,
@@ -1515,7 +1538,7 @@ class manageSituation extends React.Component {
       {
         selectedRowKeys:
           this.refs.table.state.selectedRowKeys.length !==
-          this.state.allEmpNo.length
+            this.state.allEmpNo.length
             ? this.state.allEmpNo
             : [],
       },
@@ -1590,16 +1613,16 @@ class manageSituation extends React.Component {
       finishListShowFlag: true,
     });
   };
-  
-  
+
+
   // サブ画面消す
   closeFinishList = () => {
     this.setState({
       finishListShowFlag: false,
     });
   };
-  
-    // 現場期限サブ画面表示
+
+  // 現場期限サブ画面表示
   openSiteList = () => {
     this.setState({
       employeeNo: String(this.refs.table.state.selectedRowKeys),
@@ -1626,6 +1649,12 @@ class manageSituation extends React.Component {
     });
   };
 
+  showAlphabetName = () => {
+    this.setState({
+      alphabetNameShow: !this.state.alphabetNameShow,
+    });
+
+  };
   getCopyText = async () => {
     let text = "";
     const { selectRow: row } = this.state;
@@ -1665,36 +1694,36 @@ class manageSituation extends React.Component {
         : row.admissionEndDate.substring(0, 6);
     let beginMonth =
       result.data[0].theMonthOfStartWork === null ||
-      result.data[0].theMonthOfStartWork === ""
+        result.data[0].theMonthOfStartWork === ""
         ? new Date(
-            this.getNextMonthTemp(
-              admissionEndDate === null || admissionEndDate === ""
-                ? new Date()
-                : publicUtils.converToLocalTime(admissionEndDate, false),
-              1
-            )
-          ).getTime()
+          this.getNextMonthTemp(
+            admissionEndDate === null || admissionEndDate === ""
+              ? new Date()
+              : publicUtils.converToLocalTime(admissionEndDate, false),
+            1
+          )
+        ).getTime()
         : new Date(result.data[0].theMonthOfStartWork).getTime();
     let salesProgressCode = row.salesProgressCode;
     let interviewDate =
       row.interviewDate1 !== "" &&
-      row.interviewDate1 !== null &&
-      row.interviewDate2 !== "" &&
-      row.interviewDate2 !== null
+        row.interviewDate1 !== null &&
+        row.interviewDate2 !== "" &&
+        row.interviewDate2 !== null
         ? row.interviewDate1 < row.interviewDate2
           ? row.interviewDate1
           : row.interviewDate2
         : row.interviewDate1 !== "" && row.interviewDate1 !== null
-        ? row.interviewDate1
-        : row.interviewDate2 !== "" && row.interviewDate2 !== null
-        ? row.interviewDate2
-        : "";
+          ? row.interviewDate1
+          : row.interviewDate2 !== "" && row.interviewDate2 !== null
+            ? row.interviewDate2
+            : "";
     let remark =
       result.data[0].remark === null ||
-      result.data[0].remark === "" ||
-      result.data[0].remark === undefined
+        result.data[0].remark === "" ||
+        result.data[0].remark === undefined
         ? (row.remark1 === null ? "" : row.remark1 + " ") +
-          (row.remark2 === null ? "" : row.remark2)
+        (row.remark2 === null ? "" : row.remark2)
         : result.data[0].remark;
     if (interviewDate !== "") {
       var myDate = new Date();
@@ -1731,6 +1760,9 @@ class manageSituation extends React.Component {
       "【名　　前】：" +
       result.data[0].employeeFullName +
       "　" +
+
+      result.data[0].alphabetName +
+      "　" +
       result.data[0].nationalityName +
       "　" +
       this.state.genders.find((v) => v.code === result.data[0].genderStatus)
@@ -1740,83 +1772,83 @@ class manageSituation extends React.Component {
       (employeeStatus === "子会社社員" ? "社員" : employeeStatus) +
       "\n" +
       (result.data[0].age === null ||
-      result.data[0].age === undefined ||
-      result.data[0].age === ""
+        result.data[0].age === undefined ||
+        result.data[0].age === ""
         ? ""
         : "【年　　齢】：" + result.data[0].age + "歳\n") +
       (result.data[0].nearestStation === "" ||
-      result.data[0].nearestStation === null ||
-      result.data[0].nearestStation === undefined
+        result.data[0].nearestStation === null ||
+        result.data[0].nearestStation === undefined
         ? ""
         : "【最寄り駅】：" +
-          this.state.getstations.find(
-            (v) => v.code === result.data[0].nearestStation
-          ).name +
-          "\n") +
+        this.state.getstations.find(
+          (v) => v.code === result.data[0].nearestStation
+        ).name +
+        "\n") +
       (result.data[0].japaneaseConversationLevel === "" ||
-      result.data[0].japaneaseConversationLevel === null ||
-      result.data[0].japaneaseConversationLevel === undefined
+        result.data[0].japaneaseConversationLevel === null ||
+        result.data[0].japaneaseConversationLevel === undefined
         ? ""
         : "【日本　語】：" +
-          this.state.japaneaseConversationLevels.find(
-            (v) => v.code === result.data[0].japaneaseConversationLevel
-          ).name +
-          "\n") +
+        this.state.japaneaseConversationLevels.find(
+          (v) => v.code === result.data[0].japaneaseConversationLevel
+        ).name +
+        "\n") +
       (result.data[0].englishConversationLevel === "" ||
-      result.data[0].englishConversationLevel === null ||
-      result.data[0].englishConversationLevel === undefined
+        result.data[0].englishConversationLevel === null ||
+        result.data[0].englishConversationLevel === undefined
         ? ""
         : "【英　　語】：" +
-          this.state.englishConversationLevels.find(
-            (v) => v.code === result.data[0].englishConversationLevel
-          ).name +
-          "\n") +
+        this.state.englishConversationLevels.find(
+          (v) => v.code === result.data[0].englishConversationLevel
+        ).name +
+        "\n") +
       (result.data[0].yearsOfExperience === null ||
-      result.data[0].yearsOfExperience === undefined ||
-      result.data[0].yearsOfExperience === ""
+        result.data[0].yearsOfExperience === undefined ||
+        result.data[0].yearsOfExperience === ""
         ? ""
         : "【経験年数】：" + result.data[0].yearsOfExperience + "年\n") +
-        (result.data[0].comeToJapanYearAndMonth === null ||
-      result.data[0].comeToJapanYearAndMonth === undefined ||
-      result.data[0].comeToJapanYearAndMonth === ""
+      (result.data[0].comeToJapanYearAndMonth === null ||
+        result.data[0].comeToJapanYearAndMonth === undefined ||
+        result.data[0].comeToJapanYearAndMonth === ""
         ? ""
         : "【来日年数】：" + result.data[0].comeToJapanYearAndMonth + "年\n") +
       (projectPhase !== 0 && !projectPhase
         ? ""
         : "【対応工程】：" +
-          this.state.projectPhases.find(
-            (v) => v.code === projectPhase
-          )?.name +
-          "から\n") +
+        this.state.projectPhases.find(
+          (v) => v.code === projectPhase
+        )?.name +
+        "から\n") +
       (developLanguage === null ||
-      developLanguage === undefined ||
-      developLanguage === ""
+        developLanguage === undefined ||
+        developLanguage === ""
         ? ""
         : "【得意言語】：" + developLanguage + "\n") +
       (unitPrice === null ||
-      unitPrice === undefined ||
-      unitPrice === ""
+        unitPrice === undefined ||
+        unitPrice === ""
         ? ""
         : "【単　　価】：" + unitPrice / 10000 + "万円\n") +
       "【稼働開始】：" +
       /** 修复12月 + 1 变成了13月的问题 */
       (Number(admissionEndDate) <
-      this.getNextMonth(new Date(), 0).replace("/", "")
+        this.getNextMonth(new Date(), 0).replace("/", "")
         ? "即日\n"
         : publicUtils
-            .formateDate(beginMonth, false)
-            .substring(0, 6)
-            .replace(/\b(0+)/gi, "")
-            .split("")
-            .toSpliced(4, 0, "/")
-            .join("") + "\n") +
+          .formateDate(beginMonth, false)
+          .substring(0, 6)
+          .replace(/\b(0+)/gi, "")
+          .split("")
+          .toSpliced(4, 0, "/")
+          .join("") + "\n") +
       ("【営業状況】：" +
-          ((salesProgressCode !== "" && salesProgressCode !== undefined && salesProgressCode !== null)
+        ((salesProgressCode !== "" && salesProgressCode !== undefined && salesProgressCode !== null)
           ? this.state.salesProgressCodes.find(
-              (v) => v.code === salesProgressCode
-            ).name + "\n"
+            (v) => v.code === salesProgressCode
+          ).name + "\n"
           : "並行営業\n"
-      )) +
+        )) +
       (remark === "" || remark === " " ? "" : "【備　　考】：" + remark + "\n");
     this.setState(
       {
@@ -1843,6 +1875,73 @@ class manageSituation extends React.Component {
   padZero = (value) => {
     return value.toString().padStart(2, '0');
   };
+  csvDownload = () => {
+    console.log(this.state.salesSituationCsvList)
+
+    let employeeNo = [];
+    for (let i in this.state.salesSituationCsvList) {
+      employeeNo.push(this.state.salesSituationCsvList[i].employeeNo);
+    }
+
+
+    axios
+      .post(this.state.serverIP + "salesSituation/csvDownload", employeeNo)
+      .then((response) => response.data)
+      .then((data) => {
+        this.downloadcsv(data);
+      });
+
+  };
+
+
+  downloadcsv = (salesSituationCsvList) => {
+
+    // 导出
+    var str =
+      "番号,社員名,経験,稼働,役割,日本語会話レベレ,開発言語," +
+      "最寄駅,単価,備考" +
+      "\n";
+
+    for (var i = 0; i < salesSituationCsvList.length; i++) {
+
+      str += (i + 1) + ",";
+
+      str += this.checkEmpty(salesSituationCsvList[i].employeeName) + ",";
+      str += this.checkZero(salesSituationCsvList[i].yearsOfExperience) + ",";
+      str += this.checkEmpty(salesSituationCsvList[i].theMonthOfStartWork) + ",";
+      str += this.checkNull(salesSituationCsvList[i].siteRoleName) + ",";
+      str += this.checkEmpty(salesSituationCsvList[i].japaneaseConversationLevel) + ",";
+      str += this.checklanguage(this.checkEmpty(salesSituationCsvList[i].developLanguage)) + ",";
+      str += this.checkNull(salesSituationCsvList[i].nearestStation) + ",";
+      str += this.checkNull(salesSituationCsvList[i].unitPrice) + ",";
+      str += this.checkEmpty(salesSituationCsvList[i].remark) + ",";
+      str += "\n";
+    }
+
+    var aaaa = "data:text/csv;charset=utf-8,\ufeff" + str;
+    var link = document.createElement("a");
+    link.setAttribute("href", aaaa);
+    var date = new Date();
+    var filename = "社員情報";
+    link.setAttribute("download", filename + ".csv");
+    link.click();
+
+  };
+  checkEmpty = (values) => {
+    return values === "" ? "" : "\t" + values;
+  };
+  checklanguage = (values) => {
+    return values.replaceAll("#", "sharp");
+  }
+
+  checkZero = (values) => {
+    return values === "" ? "" : "\t" + values + "年";
+  };
+  checkNull = (values) => {
+    return values === null ? "" : "\t" + values;
+  }
+
+
 
   downloadResume = (resumeInfo, no) => {
     let fileKey = "";
@@ -1976,54 +2075,54 @@ class manageSituation extends React.Component {
                   .join("、");
                 let admissionEndDate =
                   this.state.salesSituationLists[i].admissionEndDate === null ||
-                  this.state.salesSituationLists[i].admissionEndDate === ""
+                    this.state.salesSituationLists[i].admissionEndDate === ""
                     ? this.state.salesSituationLists[i].scheduledEndDate
                     : this.state.salesSituationLists[
-                        i
-                      ].admissionEndDate.substring(0, 6);
+                      i
+                    ].admissionEndDate.substring(0, 6);
                 let beginMonth =
                   result.data[0].theMonthOfStartWork === null ||
-                  result.data[0].theMonthOfStartWork === ""
+                    result.data[0].theMonthOfStartWork === ""
                     ? new Date(
-                        this.getNextMonthTemp(
-                          admissionEndDate === null || admissionEndDate === ""
-                            ? new Date()
-                            : publicUtils.converToLocalTime(
-                                admissionEndDate,
-                                false
-                              ),
-                          1
-                        )
-                      ).getTime()
+                      this.getNextMonthTemp(
+                        admissionEndDate === null || admissionEndDate === ""
+                          ? new Date()
+                          : publicUtils.converToLocalTime(
+                            admissionEndDate,
+                            false
+                          ),
+                        1
+                      )
+                    ).getTime()
                     : new Date(result.data[0].theMonthOfStartWork).getTime();
                 let salesProgressCode =
                   this.state.salesSituationLists[i].salesProgressCode;
                 let interviewDate =
                   this.state.salesSituationLists[i].interviewDate1 !== "" &&
-                  this.state.salesSituationLists[i].interviewDate1 !== null &&
-                  this.state.salesSituationLists[i].interviewDate2 !== "" &&
-                  this.state.salesSituationLists[i].interviewDate2 !== null
+                    this.state.salesSituationLists[i].interviewDate1 !== null &&
+                    this.state.salesSituationLists[i].interviewDate2 !== "" &&
+                    this.state.salesSituationLists[i].interviewDate2 !== null
                     ? this.state.salesSituationLists[i].interviewDate1 <
                       this.state.salesSituationLists[i].interviewDate2
                       ? this.state.salesSituationLists[i].interviewDate1
                       : this.state.salesSituationLists[i].interviewDate2
                     : this.state.salesSituationLists[i].interviewDate1 !== "" &&
                       this.state.salesSituationLists[i].interviewDate1 !== null
-                    ? this.state.salesSituationLists[i].interviewDate1
-                    : this.state.salesSituationLists[i].interviewDate2 !== "" &&
-                      this.state.salesSituationLists[i].interviewDate2 !== null
-                    ? this.state.salesSituationLists[i].interviewDate2
-                    : "";
+                      ? this.state.salesSituationLists[i].interviewDate1
+                      : this.state.salesSituationLists[i].interviewDate2 !== "" &&
+                        this.state.salesSituationLists[i].interviewDate2 !== null
+                        ? this.state.salesSituationLists[i].interviewDate2
+                        : "";
                 let remark =
                   result.data[0].remark === null ||
-                  result.data[0].remark === "" ||
-                  result.data[0].remark === undefined
+                    result.data[0].remark === "" ||
+                    result.data[0].remark === undefined
                     ? (this.state.salesSituationLists[i].remark1 === null
-                        ? ""
-                        : this.state.salesSituationLists[i].remark1 + " ") +
-                      (this.state.salesSituationLists[i].remark2 === null
-                        ? ""
-                        : this.state.salesSituationLists[i].remark2)
+                      ? ""
+                      : this.state.salesSituationLists[i].remark1 + " ") +
+                    (this.state.salesSituationLists[i].remark2 === null
+                      ? ""
+                      : this.state.salesSituationLists[i].remark2)
                     : result.data[0].remark;
                 if (interviewDate !== "") {
                   var myDate = new Date();
@@ -2047,104 +2146,105 @@ class manageSituation extends React.Component {
                 }
                 resolve(
                   this.toCircled(i + 1) +
-                    "\n" +
-                    "【名　　前】：" +
-                    result.data[0].employeeFullName +
-                    "　" +
-                    result.data[0].nationalityName +
-                    "　" +
-                    this.state.genders.find(
-                      (v) => v.code === result.data[0].genderStatus
-                    ).name +
-                    "\n" +
-                    "【所　　属】：" +
-                    (employeeStatus === "子会社社員"
-                      ? "社員"
-                      : employeeStatus) +
-                    "\n" +
-                    (result.data[0].age === null ||
+                  "\n" +
+                  "【名　　前】：" +
+                  result.data[0].employeeFullName +
+                  "　" +
+
+                  result.data[0].nationalityName +
+                  "　" +
+                  this.state.genders.find(
+                    (v) => v.code === result.data[0].genderStatus
+                  ).name +
+                  "\n" +
+                  "【所　　属】：" +
+                  (employeeStatus === "子会社社員"
+                    ? "社員"
+                    : employeeStatus) +
+                  "\n" +
+                  (result.data[0].age === null ||
                     result.data[0].age === undefined ||
                     result.data[0].age === ""
-                      ? ""
-                      : "【年　　齢】：" + result.data[0].age + "歳\n") +
-                    (result.data[0].nearestStation === "" ||
+                    ? ""
+                    : "【年　　齢】：" + result.data[0].age + "歳\n") +
+                  (result.data[0].nearestStation === "" ||
                     result.data[0].nearestStation === null ||
                     result.data[0].nearestStation === undefined
-                      ? ""
-                      : "【最寄り駅】：" +
-                        this.state.getstations.find(
-                          (v) => v.code === result.data[0].nearestStation
-                        ).name +
-                        "\n") +
-                    (result.data[0].japaneaseConversationLevel === "" ||
+                    ? ""
+                    : "【最寄り駅】：" +
+                    this.state.getstations.find(
+                      (v) => v.code === result.data[0].nearestStation
+                    ).name +
+                    "\n") +
+                  (result.data[0].japaneaseConversationLevel === "" ||
                     result.data[0].japaneaseConversationLevel === null ||
                     result.data[0].japaneaseConversationLevel === undefined
-                      ? ""
-                      : "【日本　語】：" +
-                        this.state.japaneaseConversationLevels.find(
-                          (v) =>
-                            v.code === result.data[0].japaneaseConversationLevel
-                        ).name +
-                        "\n") +
-                    (result.data[0].englishConversationLevel === "" ||
+                    ? ""
+                    : "【日本　語】：" +
+                    this.state.japaneaseConversationLevels.find(
+                      (v) =>
+                        v.code === result.data[0].japaneaseConversationLevel
+                    ).name +
+                    "\n") +
+                  (result.data[0].englishConversationLevel === "" ||
                     result.data[0].englishConversationLevel === null ||
                     result.data[0].englishConversationLevel === undefined
-                      ? ""
-                      : "【英　　語】：" +
-                        this.state.englishConversationLevels.find(
-                          (v) =>
-                            v.code === result.data[0].englishConversationLevel
-                        ).name +
-                        "\n") +
-                    (result.data[0].yearsOfExperience === null ||
+                    ? ""
+                    : "【英　　語】：" +
+                    this.state.englishConversationLevels.find(
+                      (v) =>
+                        v.code === result.data[0].englishConversationLevel
+                    ).name +
+                    "\n") +
+                  (result.data[0].yearsOfExperience === null ||
                     result.data[0].yearsOfExperience === undefined ||
                     result.data[0].yearsOfExperience === ""
-                      ? ""
-                      : "【業務年数】：" +
-                        result.data[0].yearsOfExperience +
-                        "年\n") +
-                    (result.data[0].projectPhase === "" ||
+                    ? ""
+                    : "【業務年数】：" +
+                    result.data[0].yearsOfExperience +
+                    "年\n") +
+                  (result.data[0].projectPhase === "" ||
                     result.data[0].projectPhase === null ||
                     result.data[0].projectPhase === undefined
-                      ? ""
-                      : "【対応工程】：" +
-                        this.state.projectPhases.find(
-                          (v) => v.code === result.data[0].projectPhase
-                        ).name +
-                        "から\n") +
-                    (developLanguage === null ||
+                    ? ""
+                    : "【対応工程】：" +
+                    this.state.projectPhases.find(
+                      (v) => v.code === result.data[0].projectPhase
+                    ).name +
+                    "から\n") +
+                  (developLanguage === null ||
                     developLanguage === undefined ||
                     developLanguage === ""
-                      ? ""
-                      : "【得意言語】：" + developLanguage + "\n") +
-                    (result.data[0].unitPrice === null ||
+                    ? ""
+                    : "【得意言語】：" + developLanguage + "\n") +
+                  (result.data[0].unitPrice === null ||
                     result.data[0].unitPrice === undefined ||
                     result.data[0].unitPrice === ""
-                      ? ""
-                      : "【単　　価】：" +
-                        result.data[0].unitPrice +
-                        "万円\n") +
-                    "【稼働開始】：" +
-                    (Number(admissionEndDate) + 1 <
+                    ? ""
+                    : "【単　　価】：" +
+                    result.data[0].unitPrice +
+                    "万円\n") +
+                  "【稼働開始】：" +
+                  (Number(admissionEndDate) + 1 <
                     this.getNextMonth(new Date(), 1).replace("/", "")
-                      ? "即日\n"
-                      : publicUtils
-                          .formateDate(beginMonth, false)
-                          .substring(4, 6)
-                          .replace(/\b(0+)/gi, "") + "月\n") +
-                    (salesProgressCode === "" ||
+                    ? "即日\n"
+                    : publicUtils
+                      .formateDate(beginMonth, false)
+                      .substring(4, 6)
+                      .replace(/\b(0+)/gi, "") + "月\n") +
+                  (salesProgressCode === "" ||
                     salesProgressCode === null ||
                     salesProgressCode === undefined
-                      ? ""
-                      : "【営業状況】：" +
-                        this.state.salesProgressCodes.find(
-                          (v) => v.code === salesProgressCode
-                        ).name +
-                        (salesProgressCode === "6" ? interviewDate : "") +
-                        "\n") +
-                    (remark === "" || remark === " "
-                      ? ""
-                      : "【備　　考】：" + remark + "\n")
+                    ? ""
+                    : "【営業状況】：" +
+                    this.state.salesProgressCodes.find(
+                      (v) => v.code === salesProgressCode
+                    ).name +
+                    (salesProgressCode === "6" ? interviewDate : "") +
+                    "\n") +
+                  (remark === "" || remark === " "
+                    ? ""
+                    : "【備　　考】：" + remark + "\n")
                 );
               });
           }, Math.random() * 3000);
@@ -2201,23 +2301,23 @@ class manageSituation extends React.Component {
     salesSituationLists[Number(this.state.rowNo) - 1].yearsOfExperience =
       yearsOfExperience;
     if (japaneaseConversationLevel === "" || japaneaseConversationLevel === null) {
-    	let japaneseLevelCode = salesSituationLists[Number(this.state.rowNo) - 1].japaneseLevelCode
-		salesSituationLists[Number(this.state.rowNo) - 1].japaneaseLevelDesc = this.state.japaneseLevels.find((v) => v.code === japaneseLevelCode).name;
-	} else {		
-		let temp = this.state.japaneaseConversationLevels.find((v) => v.code === japaneaseConversationLevel).name
-		if (temp.endsWith('業務確認')){
-			temp = temp.substring(0, temp.length - 5);
-		}
-    	salesSituationLists[Number(this.state.rowNo) - 1].japaneaseLevelDesc = temp;
-	}
+      let japaneseLevelCode = salesSituationLists[Number(this.state.rowNo) - 1].japaneseLevelCode
+      salesSituationLists[Number(this.state.rowNo) - 1].japaneaseLevelDesc = this.state.japaneseLevels.find((v) => v.code === japaneseLevelCode).name;
+    } else {
+      let temp = this.state.japaneaseConversationLevels.find((v) => v.code === japaneaseConversationLevel).name
+      if (temp.endsWith('業務確認')) {
+        temp = temp.substring(0, temp.length - 5);
+      }
+      salesSituationLists[Number(this.state.rowNo) - 1].japaneaseLevelDesc = temp;
+    }
 
-  salesSituationLists[Number(this.state.rowNo) - 1].nearestStation = this.state.getstations.find((v) => v.code === nearestStation).name;
-  let developLanguageArry = developLanguage.split("、");
-  if (developLanguageArry.length-1 > 3){
-	  developLanguage = developLanguageArry.slice(0,4).join();
-  }
+    salesSituationLists[Number(this.state.rowNo) - 1].nearestStation = this.state.getstations.find((v) => v.code === nearestStation).name;
+    let developLanguageArry = developLanguage.split("、");
+    if (developLanguageArry.length - 1 > 3) {
+      developLanguage = developLanguageArry.slice(0, 4).join();
+    }
 
-  salesSituationLists[Number(this.state.rowNo) - 1].developLanguage = developLanguage;
+    salesSituationLists[Number(this.state.rowNo) - 1].developLanguage = developLanguage;
     this.setState({
       salesSituationLists: salesSituationLists,
       unitPrice: unitPrice
@@ -2439,13 +2539,13 @@ class manageSituation extends React.Component {
                   this.state.remark2,
                 interviewDate:
                   this.state.interviewDate1 !== "" &&
-                  this.state.interviewDate2 !== ""
+                    this.state.interviewDate2 !== ""
                     ? this.state.interviewDate1 < this.state.interviewDate2
                       ? this.state.interviewDate1
                       : this.state.interviewDate2
                     : this.state.interviewDate1 !== ""
-                    ? this.state.interviewDate1
-                    : this.state.interviewDate2,
+                      ? this.state.interviewDate1
+                      : this.state.interviewDate2,
                 admissionEndDate: this.state.admissionEndDate,
               }}
             />
@@ -2624,7 +2724,7 @@ class manageSituation extends React.Component {
             </Col>
           </Row>
           <Row>
-          <Col sm={2}>
+            <Col sm={2}>
               <InputGroup size="sm" className="mb-3">
                 <InputGroup.Prepend>
                   <InputGroup.Text id="inputGroup-sizing-sm">
@@ -2666,12 +2766,12 @@ class manageSituation extends React.Component {
                   size="sm"
                   maxLength="100"
                   readOnly={
-                   false
+                    false
                   }
                 />
               </InputGroup>
             </Col>
-            
+
             <Col sm={2} hidden>
               <InputGroup
                 size="sm"
@@ -2925,24 +3025,57 @@ class manageSituation extends React.Component {
                 </Button>{" "}
                 {/*<Button onClick={this.folderDownload} size="sm" variant="info" name="clickButton" disabled={this.state.makeDirectoryFalg}><FontAwesomeIcon icon={faDownload} /> 営業フォルダ</Button>{' '}*/}
               </div>
-              </Col>
-              <Col sm={2}>
-	            <InputGroup size="sm">
-	              <InputGroup.Prepend>
-	                <InputGroup.Text
-	                  id="inputGroup-sizing-sm"
-	                  className="input-group-indiv"
-	                >
-	                  完成率
-	                </InputGroup.Text>
-	              </InputGroup.Prepend>
-	              <FormControl value={this.state.completePercet} disabled />
-	            </InputGroup>
-              </Col>
-              <Col sm={1}>
-              </Col>
-              <Col sm={6}>
+            </Col>
+            <Col sm={2}>
+              <InputGroup size="sm">
+                <InputGroup.Prepend>
+                  <InputGroup.Text
+                    id="inputGroup-sizing-sm"
+                    className="input-group-indiv"
+                  >
+                    完成率
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl value={this.state.completePercet} disabled />
+              </InputGroup>
+            </Col>
+            <Col sm={1}>
+            </Col>
+            <Col sm={6}>
               <div style={{ float: "right" }}>
+                <Button
+                  id="copyUrl"
+                  size="sm"
+                  variant="info"
+                  name="clickButton"
+                  onClick={() => {
+                    this.csvDownload();
+                  }}
+                >
+                  <FontAwesomeIcon icon={faDownload} /> CSV出力
+                </Button>{" "}
+                {/*  <Button
+                        size="sm"
+                        variant="info"
+                        name="clickButton"
+                        id="csvDownload"
+                        onClick={this.csvDownload.bind(this)}
+                        disabled={this.state.salesSituationCsvList.length > 0 ? false : true}
+                    >
+                      <FontAwesomeIcon icon={faDownload} /> CSV出力
+                    </Button>{" "}*/}
+
+                <Button
+                  id="copyUrl"
+                  size="sm"
+                  variant="info"
+                  name="clickButton"
+                  onClick={() => {
+                    this.showAlphabetName();
+                  }}
+                >
+                  <FontAwesomeIcon icon={faCopy} /> ローマ
+                </Button>{" "}
                 <Button
                   onClick={this.shuseiTo.bind(this, "detailUpdate")}
                   size="sm"
@@ -2988,19 +3121,19 @@ class manageSituation extends React.Component {
                   name="clickButton"
                   disabled={
                     this.state.linkDisableFlag ||
-                    this.state.resumeInfo1 === null ||
-                    this.state.resumeInfo1 === ""
+                      this.state.resumeInfo1 === null ||
+                      this.state.resumeInfo1 === ""
                       ? true
                       : false
                   }
                 >
                   <FontAwesomeIcon icon={faDownload} />
                   {this.state.linkDisableFlag ||
-                  this.state.resumeInfo1 === null ||
-                  this.state.resumeInfo1 === ""
+                    this.state.resumeInfo1 === null ||
+                    this.state.resumeInfo1 === ""
                     ? "履歴書1"
                     : this.state.resumeName1.split("_")[1]}
-                    {" " + this.state.resumeDate}
+                  {" " + this.state.resumeDate}
                 </Button>{" "}
                 {/* <Button
                   onClick={this.downloadResume.bind(
@@ -3066,6 +3199,8 @@ class manageSituation extends React.Component {
                   >
                     {<div onClick={this.selectAllLists}>番号</div>}
                   </TableHeaderColumn>
+
+                  {/*  alphabetNameShow最初のstatehはtrue,setStateの時はfalse*/}
                   <TableHeaderColumn
                     dataField="employeeNo"
                     editable={false}
@@ -3078,10 +3213,17 @@ class manageSituation extends React.Component {
                     width="10%"
                     dataField="employeeName"
                     dataFormat={this.showPriority}
-                    editable={false}
-                    // overflowX
+                    editable={false} hidden={!this.state.alphabetNameShow}
                   >
                     氏名
+                  </TableHeaderColumn>
+                  <TableHeaderColumn
+                    width="10%"
+                    dataField="alphabetName"
+                    editable={false}
+                    hidden={this.state.alphabetNameShow}
+                  >
+                    ローマ
                   </TableHeaderColumn>
                   <TableHeaderColumn dataField="interviewDate1" hidden={true}>
                     面接1日付
@@ -3140,7 +3282,7 @@ class manageSituation extends React.Component {
                   </TableHeaderColumn>
                   <TableHeaderColumn dataField="resumeName1" hidden={true}>
                     履歴書名前1
-                  </TableHeaderColumn>                  
+                  </TableHeaderColumn>
                   <TableHeaderColumn dataField="resumeName2" hidden={true}>
                     履歴書名前2
                   </TableHeaderColumn>
@@ -3200,8 +3342,8 @@ class manageSituation extends React.Component {
                     hidden
                     editable={
                       this.state.salesProgressCode === "" ||
-                      this.state.salesProgressCode === "0" ||
-                      this.state.salesProgressCode === "1"
+                        this.state.salesProgressCode === "0" ||
+                        this.state.salesProgressCode === "1"
                         ? false
                         : true
                     }
@@ -3215,7 +3357,7 @@ class manageSituation extends React.Component {
                     customEditor={{ getElement: tableSelect1 }}
                     editable={
                       this.state.salesProgressCode === "1" ||
-                      this.state.salesProgressCode === "2"
+                        this.state.salesProgressCode === "2"
                         ? true
                         : false
                     }
@@ -3227,7 +3369,7 @@ class manageSituation extends React.Component {
                     dataField="price"
                     editable={
                       this.state.salesProgressCode === "0" ||
-                      this.state.salesProgressCode === "1"
+                        this.state.salesProgressCode === "1"
                         ? true
                         : false
                     }

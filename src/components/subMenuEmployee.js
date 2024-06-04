@@ -315,7 +315,7 @@ class SubMenu extends Component {
                     data-effect="solid"
                     onMouseEnter={this.toggleHover.bind(this, "勤務登録")}
                     onMouseLeave={this.toggleHover.bind(this, "")}
-                    // data-event="click focus"
+                  // data-event="click focus"
                   >
                     <Accordion.Toggle
                       as={Button}
@@ -326,8 +326,8 @@ class SubMenu extends Component {
                       <font
                         className={
                           this.state.hover.search("勤務登録") !== -1 ||
-                          this.state.className.search("勤務登録") !== -1 ||
-                          this.props.location.pathname === "/subMenuEmployee"
+                            this.state.className.search("勤務登録") !== -1 ||
+                            this.props.location.pathname === "/subMenuEmployee"
                             ? "linkFont-click"
                             : "linkFont"
                         }
@@ -418,7 +418,7 @@ class SubMenu extends Component {
                                         pathname: "",
                                         state: { actionType: "insert" },
                                       }}
-                                      // disabled
+                                    // disabled
                                     >
                                       <FontAwesomeIcon
                                         className="fa-fw"
@@ -545,7 +545,7 @@ class SubMenu extends Component {
                       <font
                         className={
                           this.state.hover.search("ファイル管理") !== -1 ||
-                          this.state.className.search("ファイル管理") !== -1
+                            this.state.className.search("ファイル管理") !== -1
                             ? "linkFont-click"
                             : "linkFont"
                         }
@@ -686,7 +686,7 @@ class SubMenu extends Component {
                       <font
                         className={
                           this.state.hover.search("ほかの設定") !== -1 ||
-                          this.state.className.search("ほかの設定") !== -1
+                            this.state.className.search("ほかの設定") !== -1
                             ? "linkFont-click"
                             : "linkFont"
                         }

@@ -117,6 +117,7 @@ class DutyRegistration extends React.Component {
     };
     this.valueChange = this.valueChange.bind(this);
   }
+
   // onChange
   valueChange = (event) => {
     this.setState({
@@ -260,8 +261,8 @@ class DutyRegistration extends React.Component {
         publicUtils.timeDiff(
           startTime,
           lunchBreakStartTime.substring(0, 2) +
-            ":" +
-            lunchBreakStartTime.substring(2, 4)
+          ":" +
+          lunchBreakStartTime.substring(2, 4)
         )
       );
     else if (
@@ -282,8 +283,8 @@ class DutyRegistration extends React.Component {
           publicUtils.timeDiff(
             startTime,
             nightBreakStartTime.substring(0, 2) +
-              ":" +
-              nightBreakStartTime.substring(2, 4)
+            ":" +
+            nightBreakStartTime.substring(2, 4)
           )
         ) - lunchBreakTime;
     else if (
@@ -303,8 +304,8 @@ class DutyRegistration extends React.Component {
       workHour = publicUtils.nullToEmpty(
         publicUtils.timeDiff(
           lunchBreakFinshTime.substring(0, 2) +
-            ":" +
-            lunchBreakFinshTime.substring(2, 4),
+          ":" +
+          lunchBreakFinshTime.substring(2, 4),
           endTime
         )
       );
@@ -317,11 +318,11 @@ class DutyRegistration extends React.Component {
       workHour = publicUtils.nullToEmpty(
         publicUtils.timeDiff(
           lunchBreakFinshTime.substring(0, 2) +
-            ":" +
-            lunchBreakFinshTime.substring(2, 4),
+          ":" +
+          lunchBreakFinshTime.substring(2, 4),
           nightBreakStartTime.substring(0, 2) +
-            ":" +
-            nightBreakStartTime.substring(2, 4)
+          ":" +
+          nightBreakStartTime.substring(2, 4)
         )
       );
     else if (
@@ -333,8 +334,8 @@ class DutyRegistration extends React.Component {
         publicUtils.nullToEmpty(
           publicUtils.timeDiff(
             lunchBreakFinshTime.substring(0, 2) +
-              ":" +
-              lunchBreakFinshTime.substring(2, 4),
+            ":" +
+            lunchBreakFinshTime.substring(2, 4),
             endTime
           )
         ) - nightBreakTime;
@@ -348,8 +349,8 @@ class DutyRegistration extends React.Component {
         publicUtils.timeDiff(
           startTime,
           nightBreakStartTime.substring(0, 2) +
-            ":" +
-            nightBreakStartTime.substring(2, 4)
+          ":" +
+          nightBreakStartTime.substring(2, 4)
         )
       );
     else if (
@@ -368,8 +369,8 @@ class DutyRegistration extends React.Component {
       workHour = publicUtils.nullToEmpty(
         publicUtils.timeDiff(
           nightBreakfinshTime.substring(0, 2) +
-            ":" +
-            nightBreakfinshTime.substring(2, 4),
+          ":" +
+          nightBreakfinshTime.substring(2, 4),
           endTime
         )
       );
@@ -492,9 +493,9 @@ class DutyRegistration extends React.Component {
       dateData[i]["day"] = i + 1;
       dateData[i]["week"] =
         this.state.weekDay[
-          new Date(
-            this.state.year + "/" + this.state.month + "/" + (i + 1)
-          ).getDay()
+        new Date(
+          this.state.year + "/" + this.state.month + "/" + (i + 1)
+        ).getDay()
         ];
       dateData[i]["startTime"] = "";
       dateData[i]["startTimeHours"] = "";
@@ -790,13 +791,17 @@ class DutyRegistration extends React.Component {
         });
     }
   };
+
+
   beforeSubmit = (event) => {
+
     // let arrWorkContent = $("input[name=workContent]");
     // console.log(arrWorkContent[0].value);
     let errorMessage = "";
     let nowDay = new Date().getDate();
 
     let dateData = this.state.dateData;
+    console.log(dateData, 'debug:0601')
     for (let i = 0; i < dateData.length; i++) {
       dateData[i].errorFlag = "";
     }
@@ -805,6 +810,7 @@ class DutyRegistration extends React.Component {
         dateData: dateData,
       },
       () => {
+        debugger
         for (let i = 0; i < dateData.length; i++) {
           if (nowDay < dateData[i]["day"]) {
             break;
@@ -1874,7 +1880,6 @@ class DutyRegistration extends React.Component {
                     this.state.disabledFlag || this.state.isConfirmedPage
                   }
                   onClick={this.test}
-                  variant="info"
                 >
                   初期化
                 </Button>{" "}
@@ -1885,7 +1890,6 @@ class DutyRegistration extends React.Component {
                   title="月に一回のみ登録してください"
                   disabled={this.state.isConfirmedPage}
                   onClick={this.shuseiTo.bind(this, "breakTime")}
-                  variant="info"
                   id="employeeInfo"
                 >
                   休憩時間登録
@@ -1913,7 +1917,6 @@ class DutyRegistration extends React.Component {
                       this.state.disabledFlag ||
                       this.state.rowNo.length === 0
                     }
-                    variant="info"
                   >
                     解除
                   </Button>{" "}
