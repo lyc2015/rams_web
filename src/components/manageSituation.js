@@ -3090,23 +3090,6 @@ class manageSituation extends React.Component {
             <Col sm={6}>
               <div style={{ float: "right" }}>
                 <Button
-                  size="sm"
-                  variant="info"
-                  name="clickButton"
-                  id="csvDownload"
-                  onClick={this.csvDownload.bind(this)}
-                  disabled={this.state.salesSituationLists.length > 0 ? false : true}
-                >
-                  <FontAwesomeIcon icon={faDownload} /> CSV出力
-                </Button>{" "}
-                <Button
-                  onClick={this.showAlphabetName}
-                  size="sm"
-                  variant="info"
-                >
-                  {`ローマ字${this.state.showAlphabetNameFlg ? '非' : ''}表示`}
-                </Button>{" "}
-                <Button
                   onClick={this.shuseiTo.bind(this, "detailUpdate")}
                   size="sm"
                   variant="info"
@@ -3118,6 +3101,23 @@ class manageSituation extends React.Component {
                   }
                 >
                   <FontAwesomeIcon icon={faBuilding} /> 明細更新
+                </Button>{" "}
+                <Button
+                  size="sm"
+                  variant="info"
+                  name="clickButton"
+                  id="csvDownload"
+                  onClick={this.csvDownload.bind(this)}
+                  disabled={this.state.salesSituationLists.length > 0 ? false : true}
+                >
+                  <FontAwesomeIcon icon={faDownload} /> CSV
+                </Button>{" "}
+                <Button
+                  onClick={this.showAlphabetName}
+                  size="sm"
+                  variant="info"
+                >
+                  ローマ字
                 </Button>{" "}
                 <Button
                   id="copyUrl"
@@ -3163,7 +3163,7 @@ class manageSituation extends React.Component {
                     this.state.resumeInfo1 === ""
                     ? "履歴書1"
                     : this.state.resumeName1.split("_")[1]}
-                  {" " + this.state.resumeDate}
+                  {" " + this.state.resumeDate.slice(0, 10)}
                 </Button>{" "}
                 {/* <Button
                   onClick={this.downloadResume.bind(
