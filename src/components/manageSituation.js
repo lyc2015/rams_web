@@ -59,6 +59,7 @@ class manageSituation extends React.Component {
     this.state = this.initialState; // 初期化
     this.myRef = React.createRef();
     this.showPriority = this.showPriority.bind(this);
+    this.getSalesProgressCodeName = this.getSalesProgressCodeName.bind(this);
   }
 
   // 初期化
@@ -228,6 +229,138 @@ class manageSituation extends React.Component {
       });
     }
   }
+
+  getSalesProgressCodeName = (salesProgressCode) => {
+    return salesProgressCode !== "" && salesProgressCode !== undefined && salesProgressCode !== null ? this.state.salesProgressCodes.find(
+      (v) => v.code === salesProgressCode
+    )?.name ?? '' : '並行営業'
+  }
+
+
+  csvDownload = () => {
+    let employeeNo = [];
+    for (let i in this.state.salesSituationLists) {
+      employeeNo.push(this.state.salesSituationLists[i].employeeNo);
+    }
+
+    axios
+      .post(this.state.serverIP + "salesSituation/csvDownload", employeeNo)
+      .then((response) => response.data)
+      .then((data) => {
+        console.log(data, 'debug:0506')
+        this.downloadCsv(data);
+      });
+  };
+
+
+
+  checkEmptyCsv = (values) => {
+    return !values ? "" : "\t" + values;
+  };
+
+
+  downloadCsv = (employeeList) => {
+    // 导出
+    var str =
+      "番号,氏名,経験,稼動,役割,日本語,開発言語,寄り駅,単価,営業状況,備考," +
+      "\n";
+
+
+    for (var i = 0; i < employeeList.length; i++) {
+      // 開発言語
+      let developLanguageNames = [
+        this.fromCodeToNameLanguage(employeeList[i]?.developLanguageCode1),
+        this.fromCodeToNameLanguage(employeeList[i]?.developLanguageCode2),
+        this.fromCodeToNameLanguage(employeeList[i]?.developLanguageCode3),
+        this.fromCodeToNameLanguage(employeeList[i]?.developLanguageCode4),
+        this.fromCodeToNameLanguage(employeeList[i]?.developLanguageCode5),
+        this.fromCodeToNameLanguage(employeeList[i]?.developLanguageCode6),
+        this.fromCodeToNameLanguage(employeeList[i]?.developLanguageCode7),
+        this.fromCodeToNameLanguage(employeeList[i]?.developLanguageCode8),
+        this.fromCodeToNameLanguage(employeeList[i]?.developLanguageCode9),
+        this.fromCodeToNameLanguage(employeeList[i]?.developLanguageCode10),
+        this.fromCodeToNameLanguage(employeeList[i]?.developLanguageCode11),
+      ]
+        .filter(function (s) {
+          return s && s.trim();
+        })
+        .join("、");
+
+      // 営業状況
+      let salesProgressName =
+        this.getSalesProgressCodeName(employeeList[i]?.salesProgressCode ?? '')
+
+
+      // 日本語
+      const japaneaseConversationLevelsName = this.state.japaneaseConversationLevels.find(
+        (v) => v.code === employeeList[i]?.japaneaseConversationLevel
+      )?.name ?? ''
+
+
+      const selectedYearAndMonth = (publicUtils
+        .formateDate(this.state.yearMonth, true)
+        .substring(0, 6) ?? '')
+
+      const currentDate = (publicUtils
+        .formateDate(employeeList[i]?.theMonthOfStartWork, true)
+        .substring(0, 6) ?? '')
+      const nextMonth = this.getNextMonth(new Date(), 0)
+
+      // 稼働可能月
+      const theMonthOfStartWork = currentDate <
+        nextMonth
+        ? "即日"
+        : publicUtils
+          .formateDate(employeeList[i]?.theMonthOfStartWork, false)
+          .substring(0, 6)
+          .replace(/\b(0+)/gi, "")
+          .split("")
+          .toSpliced(4, 0, "/")
+          .join("")
+
+
+      const yearsOfExperience = employeeList[i]?.yearsOfExperience
+
+      str += this.checkEmptyCsv(employeeList[i]?.employeeNo) + ",";
+      str += this.checkEmptyCsv(employeeList[i]?.employeeName) + ",";
+      str += this.checkEmptyCsv(yearsOfExperience) + (yearsOfExperience ? "年" : '') + ",";
+      str += this.checkEmptyCsv(theMonthOfStartWork) + ",";
+      str += this.checkEmptyCsv(employeeList[i]?.siteRoleCode) + ",";
+      str += this.checkEmptyCsv(japaneaseConversationLevelsName) + ",";
+      str += this.checkEmptyCsv(developLanguageNames) + ",";
+      str += this.checkEmptyCsv(employeeList[i]?.stationName) + ",";
+      str += this.checkEmptyCsv(employeeList[i]?.unitPrice) + "万円,";
+      str += this.checkEmptyCsv(salesProgressName) + ",";
+      str += this.checkEmptyCsv(employeeList[i]?.remark) + ",";
+
+      str += "\n";
+      console.log(str, i, employeeList[i], 'debug:0606')
+
+    }
+
+    str += "\n";
+
+    // Use Blob to generate the file
+    var blob = new Blob([str], { type: "text/csv;charset=utf-8;" });
+    var link = document.createElement("a");
+    if (link.download !== undefined) { // feature detection
+      // Browsers that support HTML5 download attribute
+      var url = URL.createObjectURL(blob);
+      link.setAttribute("href", url);
+      var date = new Date();
+      var filename =
+        (publicUtils
+          .formateDate(this.state.yearMonth, true)
+          .substring(0, 6) ?? '') +
+        "営業情報";
+      link.setAttribute("download", filename + ".csv");
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  };
+
 
   showAlphabetName = () => {
     this.setState((prevState) => {
@@ -1828,11 +1961,7 @@ class manageSituation extends React.Component {
           .toSpliced(4, 0, "/")
           .join("") + "\n") +
       ("【営業状況】：" +
-        ((salesProgressCode !== "" && salesProgressCode !== undefined && salesProgressCode !== null)
-          ? this.state.salesProgressCodes.find(
-            (v) => v.code === salesProgressCode
-          ).name + "\n"
-          : "並行営業\n"
+        (this.getSalesProgressCodeName(salesProgressCode) + '\n'
         )) +
       (remark === "" || remark === " " ? "" : "【備　　考】：" + remark + "\n");
     this.setState(
@@ -2961,13 +3090,6 @@ class manageSituation extends React.Component {
             <Col sm={6}>
               <div style={{ float: "right" }}>
                 <Button
-                  onClick={this.showAlphabetName}
-                  size="sm"
-                  variant="info"
-                >
-                  {`ローマ字${this.state.showAlphabetNameFlg ? '非' : ''}表示`}
-                </Button>{" "}
-                <Button
                   onClick={this.shuseiTo.bind(this, "detailUpdate")}
                   size="sm"
                   variant="info"
@@ -2979,6 +3101,23 @@ class manageSituation extends React.Component {
                   }
                 >
                   <FontAwesomeIcon icon={faBuilding} /> 明細更新
+                </Button>{" "}
+                <Button
+                  size="sm"
+                  variant="info"
+                  name="clickButton"
+                  id="csvDownload"
+                  onClick={this.csvDownload.bind(this)}
+                  disabled={this.state.salesSituationLists.length > 0 ? false : true}
+                >
+                  <FontAwesomeIcon icon={faDownload} /> CSV
+                </Button>{" "}
+                <Button
+                  onClick={this.showAlphabetName}
+                  size="sm"
+                  variant="info"
+                >
+                  ローマ字
                 </Button>{" "}
                 <Button
                   id="copyUrl"
@@ -3024,7 +3163,7 @@ class manageSituation extends React.Component {
                     this.state.resumeInfo1 === ""
                     ? "履歴書1"
                     : this.state.resumeName1.split("_")[1]}
-                  {" " + this.state.resumeDate}
+                  {" " + this.state.resumeDate.slice(0, 10)}
                 </Button>{" "}
                 {/* <Button
                   onClick={this.downloadResume.bind(

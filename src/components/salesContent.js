@@ -224,66 +224,66 @@ class salesContent extends React.Component {
         ? ""
         : `
 【年　　齢】：` +
-          this.state.age +
-          `歳`) +
+        this.state.age +
+        `歳`) +
       (this.state.nearestStation === "" || this.state.nearestStation === null
         ? ""
         : `
 【最寄り駅】：` +
-          (this.state.nearestStation !== "" &&
+        (this.state.nearestStation !== "" &&
           this.state.nearestStation !== null
-            ? this.state.stations.find(
-                (v) => v.code === this.state.nearestStation
-              ).name
-            : "")) +
+          ? this.state.stations.find(
+            (v) => v.code === this.state.nearestStation
+          ).name
+          : "")) +
       (this.state.japaneaseConversationLevel === "" ||
-      this.state.japaneaseConversationLevel === null
+        this.state.japaneaseConversationLevel === null
         ? ""
         : `
 【日本　語】：` +
-          (this.state.japaneaseConversationLevel !== "" &&
+        (this.state.japaneaseConversationLevel !== "" &&
           this.state.japaneaseConversationLevel !== null
-            ? this.state.japaneaseConversationLevels.find(
-                (v) => v.code === this.state.japaneaseConversationLevel
-              ).name
-            : "")) +
+          ? this.state.japaneaseConversationLevels.find(
+            (v) => v.code === this.state.japaneaseConversationLevel
+          ).name
+          : "")) +
       (this.state.englishConversationLevel === "" ||
-      this.state.englishConversationLevel === null
+        this.state.englishConversationLevel === null
         ? ""
         : `
 【英　　語】：` +
-          (this.state.englishConversationLevel !== "" &&
+        (this.state.englishConversationLevel !== "" &&
           this.state.englishConversationLevel !== null
-            ? this.state.englishConversationLevels.find(
-                (v) => v.code === this.state.englishConversationLevel
-              ).name
-            : "")) +
+          ? this.state.englishConversationLevels.find(
+            (v) => v.code === this.state.englishConversationLevel
+          ).name
+          : "")) +
       (this.state.yearsOfExperience === ""
         ? ""
         : `
 【経験年数】：` +
-          this.state.yearsOfExperience +
-          `年`) +
+        this.state.yearsOfExperience +
+        `年`) +
       (this.state.comeToJapanYearAndMonth === ""
         ? ""
         : `
 【来日年数】：` +
-          this.state.comeToJapanYearAndMonth +
-          `年`) +
+        this.state.comeToJapanYearAndMonth +
+        `年`) +
       (this.state.projectPhase === "" ||
-      this.state.projectPhase === null ||
-      this.state.projectPhase === undefined
+        this.state.projectPhase === null ||
+        this.state.projectPhase === undefined
         ? ""
         : `
 【対応工程】：` +
-          (this.state.projectPhase !== "" &&
+        (this.state.projectPhase !== "" &&
           this.state.projectPhase !== null &&
           this.state.projectPhase !== undefined
-            ? this.state.projectPhases.find(
-                (v) => v.code === this.state.projectPhase
-              ).name
-            : "") +
-          `から`) +
+          ? this.state.projectPhases.find(
+            (v) => v.code === this.state.projectPhase
+          ).name
+          : "") +
+        `から`) +
       (this.state.developLanguage === ""
         ? ""
         : `
@@ -292,25 +292,25 @@ class salesContent extends React.Component {
         ? ""
         : `
 【単　　価】：` +
-          utils.enToManEn(utils.deleteComma(this.state.unitPriceShow))) +
+        utils.enToManEn(utils.deleteComma(this.state.unitPriceShow))) +
       `
 【稼働開始】：` /*(this.state.beginMonth !== "" && this.state.beginMonth !== null ? publicUtils.formateDate(this.state.beginMonth, false).substring(0,4) + "/" + */ +
       (Number(this.state.admissionEndDate) <
-      this.getNextMonth(new Date(), 0).replace("/", "")
+        this.getNextMonth(new Date(), 0).replace("/", "")
         ? "即日"
         : publicUtils
-            .formateDate(this.state.beginMonth, false)
-            .substring(0, 6)
-            .replace(/\b(0+)/gi, "")
-            .split("")
-            .toSpliced(4, 0, "/")
-            .join("")) +
+          .formateDate(this.state.beginMonth, false)
+          .substring(0, 6)
+          .replace(/\b(0+)/gi, "")
+          .split("")
+          .toSpliced(4, 0, "/")
+          .join("")) +
       `
 【営業状況】：` +
       (this.state.salesProgressCode + ""
         ? this.state.salesProgresss.find(
-            (v) => v.code === this.state.salesProgressCode
-          ).name
+          (v) => v.code === this.state.salesProgressCode
+        ).name
         : "並行営業") +
       //               (this.state.salesProgressCode === "" ||
       //               this.state.salesProgressCode === null
@@ -328,9 +328,9 @@ class salesContent extends React.Component {
         ? ""
         : `
 【備　　考】：` +
-          (this.state.remark !== " " && this.state.remark !== null
-            ? this.state.remark
-            : ""));
+        (this.state.remark !== " " && this.state.remark !== null
+          ? this.state.remark
+          : ""));
     return text;
   };
 
@@ -466,8 +466,8 @@ class salesContent extends React.Component {
         employeeName: data.employeeFullName,
         projectPhase:
           data.projectPhase === null ||
-          data.projectPhase === "" ||
-          data.projectPhase === undefined
+            data.projectPhase === "" ||
+            data.projectPhase === undefined
             ? this.getProjectPhase(data.siteRoleCode)
             : data.projectPhase,
         genderStatus: this.state.genders.find(
@@ -509,31 +509,31 @@ class salesContent extends React.Component {
           .join("、"),
         yearsOfExperience:
           data.yearsOfExperience === null ||
-          data.yearsOfExperience === undefined
+            data.yearsOfExperience === undefined
             ? ""
             : data.yearsOfExperience,
         comeToJapanYearAndMonth: data.comeToJapanYearAndMonth === null ||
           data.comeToJapanYearAndMonth === undefined
-            ? ""
-            : data.comeToJapanYearAndMonth,
+          ? ""
+          : data.comeToJapanYearAndMonth,
         japaneaseConversationLevel: data.japaneaseConversationLevel,
         englishConversationLevel: data.englishConversationLevel,
         beginMonth:
           data.theMonthOfStartWork === null || data.theMonthOfStartWork === ""
             ? !(
-                this.state.admissionEndDate === null ||
-                this.state.admissionEndDate === undefined ||
-                this.state.admissionEndDate === ""
-              )
+              this.state.admissionEndDate === null ||
+              this.state.admissionEndDate === undefined ||
+              this.state.admissionEndDate === ""
+            )
               ? new Date(
-                  this.getNextMonth(
-                    publicUtils.converToLocalTime(
-                      this.state.admissionEndDate,
-                      false
-                    ),
-                    1
-                  )
-                ).getTime()
+                this.getNextMonth(
+                  publicUtils.converToLocalTime(
+                    this.state.admissionEndDate,
+                    false
+                  ),
+                  1
+                )
+              ).getTime()
               : new Date(data.theMonthOfStartWork).getTime()
             : new Date(data.theMonthOfStartWork).getTime(),
         nearestStation: data.nearestStation,
@@ -545,33 +545,33 @@ class salesContent extends React.Component {
           ) === undefined
             ? ""
             : this.state.japaneseLevels.find(
-                (v) => v.code === data.japaneseLevelCode
-              ).name,
+              (v) => v.code === data.japaneseLevelCode
+            ).name,
         englishLevelCode:
           this.state.englishLevels.find(
             (v) => v.code === data.englishLevelCode
           ) === undefined
             ? ""
             : this.state.englishLevels.find(
-                (v) => v.code === data.englishLevelCode
-              ).name,
+              (v) => v.code === data.englishLevelCode
+            ).name,
         siteRoleCode: data.siteRoleCode,
         unitPrice:
           data.unitPrice === null ||
-          data.unitPrice === "" ||
-          data.unitPrice === undefined
+            data.unitPrice === "" ||
+            data.unitPrice === undefined
             ? this.state.unitPrice
             : data.unitPrice,
         unitPriceShow:
           data.unitPrice === null ||
-          data.unitPrice === "" ||
-          data.unitPrice === undefined
+            data.unitPrice === "" ||
+            data.unitPrice === undefined
             ? utils.addComma(this.state.unitPrice)
             : utils.addComma(data.unitPrice),
         remark:
           data.remark === null ||
-          data.remark === "" ||
-          data.remark === undefined
+            data.remark === "" ||
+            data.remark === undefined
             ? this.state.remark
             : data.remark,
         initAge: data.age,
@@ -907,15 +907,12 @@ class salesContent extends React.Component {
                   {(!this.state.admissionEndDate
                     ? 0
                     : this.state.admissionEndDate.substring(4, 6) === "12"
-                    ? Number(
+                      ? Number(
                         Number(this.state.admissionEndDate.substring(0, 4)) +
-                          1 +
-                          "01"
+                        1 +
+                        "01"
                       )
-                    : Number(this.state.admissionEndDate) + 1) <
-                  Number(this.getNextMonth(new Date(), 1).replace("/", "")) ? (
-                    "即日"
-                  ) : (
+                      : Number(this.state.admissionEndDate) + 1) <Number(this.getNextMonth(new Date(), 1).replace("/", "")) ? ("即日") : (
                     <DatePicker
                       selected={this.state.beginMonth}
                       onChange={this.setEndDate}
@@ -926,7 +923,7 @@ class salesContent extends React.Component {
                       className="form-control form-control-sm"
                       dateFormat="yyyy/MM"
                       id="datePicker"
-                      //disabled
+                    //disabled
                     />
                   )}
                 </div>
@@ -934,7 +931,7 @@ class salesContent extends React.Component {
             </span>
             <ListGroup.Item style={{ padding: ".3rem 1.25rem" }}>
               <span style={{ flexFlow: "nowrap" }}>
-                【営業状況】：
+                【営業状況】111111111111111：{this.state.salesProgressCode + "" || "5"}
                 <Form.Control
                   as="select"
                   disabled
@@ -978,16 +975,16 @@ class salesContent extends React.Component {
               onClick={this.updateSalesSentence.bind(this)}
               disabled={
                 this.state.age !== this.state.initAge ||
-                this.state.nearestStation !== this.state.initNearestStation ||
-                this.state.japaneaseConversationLevel !==
+                  this.state.nearestStation !== this.state.initNearestStation ||
+                  this.state.japaneaseConversationLevel !==
                   this.state.initJapaneaseConversationLevel ||
-                this.state.englishConversationLevel !==
+                  this.state.englishConversationLevel !==
                   this.state.initEnglishConversationLevel ||
-                this.state.yearsOfExperience !==
+                  this.state.yearsOfExperience !==
                   this.state.initYearsOfExperience ||
-                this.state.unitPrice !== this.state.initUnitPrice ||
-                this.state.remark !== this.state.initRemark ||
-                this.state.wellUseLanguagss.sort().toString() !==
+                  this.state.unitPrice !== this.state.initUnitPrice ||
+                  this.state.remark !== this.state.initRemark ||
+                  this.state.wellUseLanguagss.sort().toString() !==
                   this.state.initWellUseLanguagss.sort().toString()
                   ? false
                   : false
