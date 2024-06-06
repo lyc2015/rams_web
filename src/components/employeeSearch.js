@@ -289,16 +289,16 @@ class employeeSearch extends React.Component {
         this.props.location.state !== undefined
           ? this.state.customerNo
           : publicUtils.labelGetValue(
-              $("#customerNo").val(),
-              this.state.customerMaster
-            ),
+            $("#customerNo").val(),
+            this.state.customerMaster
+          ),
       intoCompanyCode:
         this.state.intoCompanyCode === ""
           ? undefined
           : this.state.intoCompanyCode,
       japaneseLevelCode:
         this.state.japaneseLevelCode === "" ||
-        this.state.japaneseLevelCode === "0"
+          this.state.japaneseLevelCode === "0"
           ? undefined
           : this.state.japaneseLevelCode,
       siteRoleCode:
@@ -308,8 +308,8 @@ class employeeSearch extends React.Component {
           ? this.state.developLanguage1
           : $("#developLanguage1").val() === "" ||
             $("#developLanguage1").val() === "0"
-          ? null
-          : publicUtils.labelGetValue(
+            ? null
+            : publicUtils.labelGetValue(
               $("#developLanguage1").val(),
               this.state.developLanguageMaster
             ),
@@ -318,29 +318,29 @@ class employeeSearch extends React.Component {
           ? this.state.developLanguage2
           : $("#developLanguage2").val() === "" ||
             $("#developLanguage2").val() === "0"
-          ? null
-          : publicUtils.labelGetValue(
+            ? null
+            : publicUtils.labelGetValue(
               $("#developLanguage2").val(),
               this.state.developLanguageMaster
             ),
       intoCompanyYearAndMonthFrom:
         this.state.intoCompanyYearAndMonthFrom === "" ||
-        this.state.intoCompanyYearAndMonthFrom === null ||
-        this.state.intoCompanyYearAndMonthFrom === undefined
+          this.state.intoCompanyYearAndMonthFrom === null ||
+          this.state.intoCompanyYearAndMonthFrom === undefined
           ? undefined
           : publicUtils.formateDate(
-              this.state.intoCompanyYearAndMonthFrom,
-              false
-            ),
+            this.state.intoCompanyYearAndMonthFrom,
+            false
+          ),
       intoCompanyYearAndMonthTo:
         this.state.intoCompanyYearAndMonthTo === "" ||
-        this.state.intoCompanyYearAndMonthTo === null ||
-        this.state.intoCompanyYearAndMonthTo === undefined
+          this.state.intoCompanyYearAndMonthTo === null ||
+          this.state.intoCompanyYearAndMonthTo === undefined
           ? undefined
           : publicUtils.formateDate(
-              this.state.intoCompanyYearAndMonthTo,
-              false
-            ),
+            this.state.intoCompanyYearAndMonthTo,
+            false
+          ),
       kadou: this.state.kadou === "" ? undefined : this.state.kadou,
       socialInsuranceStatus:
         this.state.socialInsurance === ""
@@ -348,8 +348,8 @@ class employeeSearch extends React.Component {
           : this.state.socialInsurance,
       socialInsuranceDate:
         this.state.socialInsuranceDate === "" ||
-        this.state.socialInsuranceDate === null ||
-        this.state.socialInsuranceDate === undefined
+          this.state.socialInsuranceDate === null ||
+          this.state.socialInsuranceDate === undefined
           ? undefined
           : publicUtils.formateDate(this.state.socialInsuranceDate, true),
       authorityCode:
@@ -589,10 +589,10 @@ class employeeSearch extends React.Component {
       publicUtils.converToLocalTime(birthday, true) === ""
         ? ""
         : Math.ceil(
-            (new Date().getTime() -
-              publicUtils.converToLocalTime(birthday, true).getTime()) /
-              31536000000
-          );
+          (new Date().getTime() -
+            publicUtils.converToLocalTime(birthday, true).getTime()) /
+          31536000000
+        );
     date =
       publicUtils.converToLocalTime(birthday, true) === ""
         ? ""
@@ -605,9 +605,9 @@ class employeeSearch extends React.Component {
       publicUtils.converToLocalTime(stayPeriod, false) === ""
         ? ""
         : publicUtils.getFullYearMonth(
-            new Date(),
-            publicUtils.converToLocalTime(stayPeriod, false)
-          );
+          new Date(),
+          publicUtils.converToLocalTime(stayPeriod, false)
+        );
     return value;
   }
 
@@ -767,8 +767,8 @@ class employeeSearch extends React.Component {
             ? this.state.resumeName1.split("_")[1]
             : this.state.resumeName1
           : this.state.resumeName2.split("_").length > 1
-          ? this.state.resumeName2.split("_")[1]
-          : this.state.resumeName2) +
+            ? this.state.resumeName2.split("_")[1]
+            : this.state.resumeName2) +
         "." +
         resumeInfo.split(".")[resumeInfo.split(".").length - 1]
       ).replaceAll("/", "//");
@@ -948,20 +948,20 @@ class employeeSearch extends React.Component {
       ),
       intoCompanyYearAndMonthFrom:
         this.state.intoCompanyYearAndMonthFrom === "" ||
-        this.state.intoCompanyYearAndMonthFrom === undefined
+          this.state.intoCompanyYearAndMonthFrom === undefined
           ? undefined
           : publicUtils.formateDate(
-              this.state.intoCompanyYearAndMonthFrom,
-              false
-            ),
+            this.state.intoCompanyYearAndMonthFrom,
+            false
+          ),
       intoCompanyYearAndMonthTo:
         this.state.intoCompanyYearAndMonthTo === "" ||
-        this.state.intoCompanyYearAndMonthTo === undefined
+          this.state.intoCompanyYearAndMonthTo === undefined
           ? undefined
           : publicUtils.formateDate(
-              this.state.intoCompanyYearAndMonthTo,
-              false
-            ),
+            this.state.intoCompanyYearAndMonthTo,
+            false
+          ),
       kadou: this.state.kadou === "" ? undefined : this.state.kadou,
       authorityCode: this.state.authorityCode,
       socialInsurance: this.state.socialInsurance,
@@ -1564,7 +1564,7 @@ class employeeSearch extends React.Component {
                   <InputGroup size="sm" className="mb-3">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
-                        稼働　　
+                        稼働
                       </InputGroup.Text>
                     </InputGroup.Prepend>
                     <Form.Control
@@ -1646,16 +1646,16 @@ class employeeSearch extends React.Component {
                   )}
                   disabled={
                     this.state.linkDisableFlag ||
-                    this.state.resumeInfo1 === null ||
-                    this.state.resumeInfo1 === ""
+                      this.state.resumeInfo1 === null ||
+                      this.state.resumeInfo1 === ""
                       ? true
                       : false
                   }
                 >
                   <FontAwesomeIcon icon={faDownload} />
                   {this.state.linkDisableFlag ||
-                  this.state.resumeInfo1 === null ||
-                  this.state.resumeInfo1 === ""
+                    this.state.resumeInfo1 === null ||
+                    this.state.resumeInfo1 === ""
                     ? "履歴書1"
                     : this.state.resumeName1}
                 </Button>{" "}
@@ -1671,16 +1671,16 @@ class employeeSearch extends React.Component {
                   )}
                   disabled={
                     this.state.linkDisableFlag ||
-                    this.state.resumeInfo2 === null ||
-                    this.state.resumeInfo2 === ""
+                      this.state.resumeInfo2 === null ||
+                      this.state.resumeInfo2 === ""
                       ? true
                       : false
                   }
                 >
                   <FontAwesomeIcon icon={faDownload} />
                   {this.state.linkDisableFlag ||
-                  this.state.resumeInfo2 === null ||
-                  this.state.resumeInfo2 === ""
+                    this.state.resumeInfo2 === null ||
+                    this.state.resumeInfo2 === ""
                     ? "履歴書2"
                     : this.state.resumeName2}
                 </Button>{" "}
@@ -1761,7 +1761,6 @@ class employeeSearch extends React.Component {
                   hidden={this.state.authorityCode === "4" ? false : true}
                   name="clickButton"
                   id="delete"
-                  variant="info"
                 >
                   <FontAwesomeIcon icon={faTrash} /> 削除
                 </Button>
