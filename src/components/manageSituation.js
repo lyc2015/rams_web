@@ -60,6 +60,7 @@ class manageSituation extends React.Component {
     this.myRef = React.createRef();
     this.showPriority = this.showPriority.bind(this);
     this.getSalesProgressCodeName = this.getSalesProgressCodeName.bind(this);
+    this.getNameByFlg = this.getNameByFlg.bind(this);
   }
 
   // 初期化
@@ -230,6 +231,18 @@ class manageSituation extends React.Component {
     }
   }
 
+  getNameByFlg({
+    employeeFristName, alphabetName, employeeName
+  }) {
+    const currentRowshowAlphabetNameFlg = this.state?.showAlphabetNameFlg
+    const [alphabetName1 = '', alphabetName2 = '', alphabetName3 = ''] = alphabetName.split(' ')
+    let newName =
+      currentRowshowAlphabetNameFlg ? `${employeeFristName} ${alphabetName2[0] ?? ''} ${alphabetName3[0] ?? ''}` : employeeName
+    console.log({ currentRowshowAlphabetNameFlg, employeeFristName, alphabetName2, alphabetName3 }, alphabetName3[0], 'debug:0604')
+
+    return newName
+  }
+
   getSalesProgressCodeName = (salesProgressCode) => {
     return salesProgressCode !== "" && salesProgressCode !== undefined && salesProgressCode !== null ? this.state.salesProgressCodes.find(
       (v) => v.code === salesProgressCode
@@ -320,9 +333,16 @@ class manageSituation extends React.Component {
       const unitPrice = employeeList[i]?.unitPrice ?? ''
       const unitPriceFormatted = unitPrice ? this.checkEmptyCsv((unitPrice.replace(",", "") / 10000).toFixed(1).replace(".0", "")) : '';
 
+      const nameByFlg = this.getNameByFlg(
+        {
+          employeeFristName: employeeList[i]?.employeeFristName ?? "",
+          alphabetName: employeeList[i]?.alphabetName ?? "",
+          employeeName: employeeList[i]?.employeeName ?? ""
+        })
+
       str += [
         this.checkEmptyCsv(i + 1),
-        this.checkEmptyCsv(employeeList[i]?.employeeName),
+        this.checkEmptyCsv(nameByFlg),
         this.checkEmptyCsv(yearsOfExperience ? yearsOfExperience + "年" : ''),
         this.checkEmptyCsv(theMonthOfStartWork),
         this.checkEmptyCsv(employeeList[i]?.siteRoleCode),
@@ -936,15 +956,11 @@ class manageSituation extends React.Component {
   // 優先度表示
   showPriority(cell, row, enumObject, index) {
     // ローマ名の表示非表示：
-    const currentRowshowAlphabetNameFlg = this.state?.showAlphabetNameFlg
     const { alphabetName = '', employeeName = '', employeeFristName = '' } = row
-    const [alphabetName1 = '', alphabetName2 = '', alphabetName3 = ''] = alphabetName.split(' ')
+    const nameByFlg = this.getNameByFlg({ employeeFristName, alphabetName, employeeName })
 
-    console.log({ currentRowshowAlphabetNameFlg, employeeFristName, alphabetName2, alphabetName3 }, alphabetName3[0], 'debug:0604')
 
-    let nameAndCompany =
-      (currentRowshowAlphabetNameFlg ? `${employeeFristName} ${alphabetName2[0] ?? ''} ${alphabetName3[0] ?? ''}` : employeeName) +
-      (row.customerAbbreviation ? `(${row.customerAbbreviation})` : "");
+    let nameAndCompany = nameByFlg + (row.customerAbbreviation ? `(${row.customerAbbreviation})` : "");
 
     if (row.salesProgressCode === "0" || row.salesProgressCode === "1") {
       return (
