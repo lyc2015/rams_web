@@ -255,7 +255,7 @@ class manageSituation extends React.Component {
 
 
   checkEmptyCsv = (values) => {
-    return !values ? "" : "\t" + values;
+    return !values ? "" : `\t${values}`;
   };
 
 
@@ -269,11 +269,11 @@ class manageSituation extends React.Component {
     for (var i = 0; i < employeeList.length; i++) {
       // 開発言語
       let developLanguageNames = [
-        this.fromCodeToNameLanguage(employeeList[i]?.developLanguageCode1),
-        this.fromCodeToNameLanguage(employeeList[i]?.developLanguageCode2),
-        this.fromCodeToNameLanguage(employeeList[i]?.developLanguageCode3),
-        this.fromCodeToNameLanguage(employeeList[i]?.developLanguageCode4),
-        this.fromCodeToNameLanguage(employeeList[i]?.developLanguageCode5),
+        // this.fromCodeToNameLanguage(employeeList[i]?.developLanguageCode1),
+        // this.fromCodeToNameLanguage(employeeList[i]?.developLanguageCode2),
+        // this.fromCodeToNameLanguage(employeeList[i]?.developLanguageCode3),
+        // this.fromCodeToNameLanguage(employeeList[i]?.developLanguageCode4),
+        // this.fromCodeToNameLanguage(employeeList[i]?.developLanguageCode5),
         this.fromCodeToNameLanguage(employeeList[i]?.developLanguageCode6),
         this.fromCodeToNameLanguage(employeeList[i]?.developLanguageCode7),
         this.fromCodeToNameLanguage(employeeList[i]?.developLanguageCode8),
@@ -296,11 +296,6 @@ class manageSituation extends React.Component {
         (v) => v.code === employeeList[i]?.japaneaseConversationLevel
       )?.name ?? ''
 
-
-      const selectedYearAndMonth = (publicUtils
-        .formateDate(this.state.yearMonth, true)
-        .substring(0, 6) ?? '')
-
       const currentDate = (publicUtils
         .formateDate(employeeList[i]?.theMonthOfStartWork, true)
         .substring(0, 6) ?? '')
@@ -321,46 +316,43 @@ class manageSituation extends React.Component {
 
       const yearsOfExperience = employeeList[i]?.yearsOfExperience
 
-      str += this.checkEmptyCsv(employeeList[i]?.employeeNo) + ",";
-      str += this.checkEmptyCsv(employeeList[i]?.employeeName) + ",";
-      str += this.checkEmptyCsv(yearsOfExperience) + (yearsOfExperience ? "年" : '') + ",";
-      str += this.checkEmptyCsv(theMonthOfStartWork) + ",";
-      str += this.checkEmptyCsv(employeeList[i]?.siteRoleCode) + ",";
-      str += this.checkEmptyCsv(japaneaseConversationLevelsName) + ",";
-      str += this.checkEmptyCsv(developLanguageNames) + ",";
-      str += this.checkEmptyCsv(employeeList[i]?.stationName) + ",";
-      str += this.checkEmptyCsv(employeeList[i]?.unitPrice) + "万円,";
-      str += this.checkEmptyCsv(salesProgressName) + ",";
-      str += this.checkEmptyCsv(employeeList[i]?.remark) + ",";
+      // 単価
+      const unitPrice = employeeList[i]?.unitPrice ?? ''
+      const unitPriceFormatted = unitPrice ? this.checkEmptyCsv((unitPrice.replace(",", "") / 10000).toFixed(1).replace(".0", "")) : '';
 
-      str += "\n";
-      console.log(str, i, employeeList[i], 'debug:0606')
-
+      str += [
+        this.checkEmptyCsv(i + 1),
+        this.checkEmptyCsv(employeeList[i]?.employeeName),
+        this.checkEmptyCsv(yearsOfExperience ? yearsOfExperience + "年" : ''),
+        this.checkEmptyCsv(theMonthOfStartWork),
+        this.checkEmptyCsv(employeeList[i]?.siteRoleCode),
+        this.checkEmptyCsv(japaneaseConversationLevelsName),
+        this.checkEmptyCsv(developLanguageNames),
+        this.checkEmptyCsv(employeeList[i]?.stationName),
+        this.checkEmptyCsv(unitPriceFormatted ? unitPriceFormatted + "万円" : ''),
+        this.checkEmptyCsv(salesProgressName),
+        this.checkEmptyCsv(employeeList[i]?.remark)
+      ].join(",") + "\n";
     }
 
     str += "\n";
 
-    // Use Blob to generate the file
-    var blob = new Blob([str], { type: "text/csv;charset=utf-8;" });
-    var link = document.createElement("a");
-    if (link.download !== undefined) { // feature detection
-      // Browsers that support HTML5 download attribute
-      var url = URL.createObjectURL(blob);
-      link.setAttribute("href", url);
-      var date = new Date();
-      var filename =
-        (publicUtils
-          .formateDate(this.state.yearMonth, true)
-          .substring(0, 6) ?? '') +
-        "営業情報";
-      link.setAttribute("download", filename + ".csv");
-      link.style.visibility = 'hidden';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
-  };
-
+    console.log(str, 'debug:0606-strResult');
+    const bom = "\uFEFF";
+    const csvData = "data:text/csv;charset=utf-8," + encodeURIComponent(bom + str);
+    const link = document.createElement("a");
+    link.setAttribute("href", csvData);
+    const filename =
+      (publicUtils
+        .formateDate(this.state.yearMonth, true)
+        .substring(0, 6) ?? '') +
+      "営業情報";
+    link.setAttribute("download", filename);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
 
   showAlphabetName = () => {
     this.setState((prevState) => {
