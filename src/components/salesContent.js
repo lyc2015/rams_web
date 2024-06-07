@@ -912,7 +912,7 @@ class salesContent extends React.Component {
                         1 +
                         "01"
                       )
-                      : Number(this.state.admissionEndDate) + 1) <Number(this.getNextMonth(new Date(), 1).replace("/", "")) ? ("即日") : (
+                      : Number(this.state.admissionEndDate) + 1) < Number(this.getNextMonth(new Date(), 1).replace("/", "")) ? ("即日") : (
                     <DatePicker
                       selected={this.state.beginMonth}
                       onChange={this.setEndDate}
@@ -931,7 +931,7 @@ class salesContent extends React.Component {
             </span>
             <ListGroup.Item style={{ padding: ".3rem 1.25rem" }}>
               <span style={{ flexFlow: "nowrap" }}>
-                【営業状況】111111111111111：{this.state.salesProgressCode + "" || "5"}
+                【営業状況】：
                 <Form.Control
                   as="select"
                   disabled
