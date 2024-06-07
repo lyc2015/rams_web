@@ -7,7 +7,11 @@ import "react-datepicker/dist/react-datepicker.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../asserts/css/style.css";
 import "../asserts/css/newCssInsert.css"
-import * as publicUtils from "./utils/publicUtils.js";
+import * as publicUtils from "../utils/publicUtils.js";
+
+import axios from "axios";
+import $ from "jquery";
+import store from "../redux/store.js";
 
 import { 
   Form, 
@@ -25,47 +29,189 @@ moment.locale("ja");
 class EmployeeInsertNew extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      furigana1: "",
-      furigana2: "",
-      alphabetName1: "",
-      alphabetName2: "",
-      alphabetName3: "",
-      genderStatus: "",
-      nationalityCode: "",
-      birthplace: "",
-      birthday: "",
-      image: "https://images.669pic.com/element_pic/54/25/82/94/d2825498dd97a2594c35d633e8454d19.jpg_w700wb",
-      temporary_age: "",
-      companyMail: "",
-      socialInsuranceNo: "",
-      socialInsuranceDate: null,
-      employeeFristName: "",
-      employeeLastName: "",      
-      employmentInsurance: "",
-      employmentInsuranceNo: "",
-      socialInsurance: "",      
-      employmentInsuranceStatus: [
-        { code: "0", name: "未加入" },
-        { code: "1", name: "加入済み" }
-      ],
-      socialInsuranceStatus: [
-        { code: "0", name: "未加入" },
-        { code: "1", name: "加入済み" }
-      ],
-      graduationYearAndMonth: null,
-      comeToJapanYearAndMonth: null,
-      intoCompanyYearAndMonth: null,
-      yearsOfExperience: null,
-      temporary_graduationYearAndMonth: "",
-      temporary_comeToJapanYearAndMonth: "",
-      temporary_intoCompanyYearAndMonth: "",
-      temporary_yearsOfExperience: "",
-      employeeStatus: "0",
-      postalCode: '',
-      firstHalfAddress: '',
-    };
+    this.state = this.initialState; // 初期化
+    this.insertEmployee = this.insertEmployee.bind(this); // 登録
   }
+
+  initialState = {
+    employeeFormCode: "",
+    employeeNo: "",
+    employeeFristName: "",
+    employeeLastName: "",
+    furigana1: "",
+    furigana2: "",
+    alphabetName1: "",
+    alphabetName2: "",
+    alphabetName3: "",
+    birthday: "",
+    genderStatus: "",
+    nationalityCode: "",
+    birthplace: "",
+    image: "https://images.669pic.com/element_pic/54/25/82/94/d2825498dd97a2594c35d633e8454d19.jpg_w700wb",
+    temporary_age: "",
+    companyMail: "",
+    socialInsuranceNo: "",
+    socialInsuranceDate: null,
+
+    employmentInsurance: "",
+    employmentInsuranceNo: "",
+    socialInsurance: "",      
+    employmentInsuranceStatus: [
+      { code: "0", name: "未加入" },
+      { code: "1", name: "加入済み" }
+    ],
+    socialInsuranceStatus: [
+      { code: "0", name: "未加入" },
+      { code: "1", name: "加入済み" }
+    ],
+    graduationYearAndMonth: null,
+    comeToJapanYearAndMonth: null,
+    intoCompanyYearAndMonth: null,
+    yearsOfExperience: null,
+    temporary_graduationYearAndMonth: "",
+    temporary_comeToJapanYearAndMonth: "",
+    temporary_intoCompanyYearAndMonth: "",
+    temporary_yearsOfExperience: "",
+    employeeStatus: "0",
+    postalCode: '',
+    firstHalfAddress: '',
+    // serverIP: store.getState().dropDown[store.getState().dropDown.length - 1],
+    serverIP: "http://127.0.0.1:8080/",
+    nationalityCodes: store.getState().dropDown[0],
+  }
+
+  /**
+   * 登録
+   */
+  insertEmployee = (event) => {
+    console.log('click login ----')
+    this.setState({ loading: false });
+    event.preventDefault();
+    const emp = {
+      //
+      employeeStatus: this.state.employeeStatus, // 社員区分
+      employeeNo: this.state.employeeNo, // 社員番号
+      employeeFirstName: publicUtils.trim(this.state.employeeFristName), // 社員氏
+      employeeLastName: publicUtils.trim(this.state.employeeLastName), // 社員名
+      furigana1: publicUtils.nullToEmpty(this.state.furigana1), // カタカナ
+      furigana2: publicUtils.nullToEmpty(this.state.furigana2), // カタカナ
+      alphabetName1: publicUtils.nullToEmpty(this.state.alphabetName1),
+      alphabetName2: publicUtils.nullToEmpty(this.state.alphabetName2),
+      alphabetName3: publicUtils.nullToEmpty(this.state.alphabetName3),
+      birthday: publicUtils.formateDate(this.state.birthday, true), // 年齢
+      genderStatus: publicUtils.nullToEmpty(this.state.genderStatus), // 性別
+      password: publicUtils.nullToEmpty(this.state.passwordSetInfo), // pw設定
+      authorityCode: this.state.authorityCode, // 権限
+      nationalityCode: publicUtils.nullToEmpty(this.state.nationalityCode), // 出身地
+      // 入社年月
+      intoCompanyYearAndMonth:
+        this.state.employeeStatus === "1" || this.state.employeeStatus === "4"
+          ? " "
+          : publicUtils.formateDate(this.state.intoCompanyYearAndMonth, true),
+      // 社員形式
+      employeeFormCode: publicUtils.nullToEmpty(this.state.employeeFormCode), 
+      // 退職区分      
+      retirementResonClassification: publicUtils.nullToEmpty(
+        this.state.retirementResonClassificationCode
+      ), 
+      // 退職年月
+      retirementYearAndMonth: publicUtils.formateDate(
+        this.state.retirementYearAndMonth,
+        true
+      ), 
+      // 来日年月
+      comeToJapanYearAndMonth: publicUtils.formateDate(
+        this.state.comeToJapanYearAndMonth,
+        false
+      ),
+      // 卒業学校
+      graduationUniversity: publicUtils.nullToEmpty(
+        this.state.graduationUniversity
+      ),
+      // 卒業年月
+      graduationYearAndMonth: publicUtils.formateDate(
+        this.state.graduationYearAndMonth,
+        false
+      ),
+      residenceCode: publicUtils.nullToEmpty(this.state.residenceCode), // 在留資格
+      // 社内メール
+      companyMail:
+        publicUtils.nullToEmpty(this.state.companyMail) === ""
+          ? ""
+          : this.state.companyMail + "@lyc.co.jp",
+      // 携帯電話
+      phoneNo:
+        publicUtils.nullToEmpty(this.state.phoneNo1) +
+        publicUtils.nullToEmpty(this.state.phoneNo2) +
+        publicUtils.nullToEmpty(this.state.phoneNo3), 
+      // 雇用保険加入
+      employmentInsuranceStatus: publicUtils.nullToEmpty(
+        this.state.employmentInsurance
+      ),
+      // 社会保険加入
+      socialInsuranceStatus: publicUtils.nullToEmpty(
+        this.state.socialInsurance
+      ),
+      // 経験年数
+      yearsOfExperience: publicUtils.formateDate(
+        this.state.yearsOfExperience,
+        false
+      ), 
+      departmentCode: publicUtils.nullToEmpty(this.state.departmentCode), // 部署
+      homesAgentCode: publicUtils.nullToEmpty(this.state.departmentCode), // 仲介区分
+    };
+    
+    axios
+      .post(this.state.serverIP + "employee/insertEmployee", emp, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then((result) => {
+        if (result.data.errorsMessage != null) {
+          this.setState({ loading: true });
+          this.setState({
+            errorsMessageShow: true,
+            errorsMessageValue: result.data.errorsMessage,
+          });
+          setTimeout(() => this.setState({ errorsMessageShow: false }), 3000);
+        } else {
+          this.setState({
+            myToastShow: true,
+            method: "post",
+            errorsMessageShow: false,
+          });
+          setTimeout(() => this.setState({ myToastShow: false }), 3000);
+          this.setState({
+            employeeFristName: publicUtils.trim(this.state.employeeFristName), // 社員氏
+            employeeLastName: publicUtils.trim(this.state.employeeLastName), // 社員名
+            disabledFalg: false,
+          });
+          //window.location.reload();
+          store.dispatch({ type: "UPDATE_STATE", dropName: "getEmployeeName" });
+          store.dispatch({
+            type: "UPDATE_STATE",
+            dropName: "getEmployeeNameNoBP",
+          });
+          store.dispatch({
+            type: "UPDATE_STATE",
+            dropName: "getEmployeeNameByOccupationName",
+          });
+          //this.getNO(this.state.empNoHead);// 採番番号
+          setTimeout(() => this.changePage(), 3000);
+        }
+      })
+      .catch((error) => {
+        this.setState({ loading: true });
+        console.error("Error - " + error);
+        this.setState({
+          errorsMessageShow: true,
+          errorsMessageValue: "ファイルアップデートエラー発生",
+        });
+        setTimeout(() => this.setState({ errorsMessageShow: false }), 3000);
+      });
+  };
+  
 
   valueChange = (event) => {
     this.setState({
@@ -222,8 +368,22 @@ class EmployeeInsertNew extends React.Component {
     });
   };
 
+  /**
+   * ファイルを処理
+   *
+   * @param {*}
+   *            event
+   * @param {*}
+   *            name
+   */
+    addFile = (event, name) => {
+      $("#" + name).click();
+    };
+
   render() {
     const {
+      nationalityCode,
+      employeeFormCode,
       companyMail,
       phoneNo1,
       phoneNo2,
@@ -239,9 +399,13 @@ class EmployeeInsertNew extends React.Component {
       temporary_graduationYearAndMonth,
       temporary_comeToJapanYearAndMonth,
       temporary_intoCompanyYearAndMonth,
-      temporary_yearsOfExperience,      
+      temporary_yearsOfExperience,
+      retirementYearAndMonth,
+      employmentInsuranceNo,
+      socialInsuranceNo,
+      temporary_retirementYearAndMonth,
+      authorityCode,
     } = this.state;
-    const residenceTimeDisabled = false; // 示例值，需根据实际情况设置
 
     // 
     return (  
@@ -262,22 +426,36 @@ class EmployeeInsertNew extends React.Component {
             <Col md={4}>
               <InputGroup size="sm" className="mb-3">
                 <InputGroup.Prepend>
-                  <InputGroup.Text>社員区分</InputGroup.Text>
+                  <InputGroup.Text>社員形式</InputGroup.Text>
                 </InputGroup.Prepend>
                 <Form.Control
                   as="select"
                   size="sm"
-                  name="employeeStatus"
-                  value={this.state.employeeStatus}
-                  onChange={this.valueChange}
+                  onChange={this.valueChangeEmployeeFormCode}
+                  name="employeeFormCode"
+                  value={employeeFormCode}
                   autoComplete="off"
+                  id="Autocompletestyle-employeeInsert-employeeFormCode"
+                  disabled={
+                    employeeStatus === "0" ||
+                    employeeStatus === "2" ||
+                    employeeStatus === "3"
+                      ? false
+                      : true
+                  }
                 >
+                  {/* {this.state.employeeFormCodes.map((date) => (nn
+                    <option key={date.code} value={date.code}>
+                      {date.name}
+                    </option>
+                  ))} */}
                   <option value="">選択してください</option>
                   <option value="0">在籍</option>
                   <option value="1">退職</option>
                   <option value="2">内定</option>
                 </Form.Control>
               </InputGroup>
+
               <InputGroup size="sm">
                 <InputGroup.Prepend>
                   <InputGroup.Text>社員名</InputGroup.Text>
@@ -397,14 +575,16 @@ class EmployeeInsertNew extends React.Component {
                 <Form.Control
                   as="select"
                   size="sm"
-                  name="nationalityCode"
-                  value={this.state.nationalityCode}
                   onChange={this.valueChange}
+                  name="nationalityCode"
+                  value={nationalityCode}
                   autoComplete="off"
                 >
-                  <option value="">選択してください</option>
-                  <option value="JP">日本</option>
-                  <option value="US">アメリカ</option>
+                  {this.state.nationalityCodes.map((date) => (
+                    <option key={date.code} value={date.code}>
+                      {date.name}
+                    </option>
+                  ))}
                 </Form.Control>
                 <FormControl
                   placeholder="県"
@@ -423,11 +603,12 @@ class EmployeeInsertNew extends React.Component {
                 </InputGroup.Prepend>
                 <FormControl
                   placeholder="社員番号"
-                  value={this.state.employeeNumber}
+                  value={this.state.employeeNo}
                   onChange={this.valueChange}
-                  name="employeeNumber"
+                  name="employeeNo"
                   size="sm"
-                  disabled
+                  // TEST
+                  // disabled
                 />
               </InputGroup>
               <InputGroup size="sm" className="required-mark">
@@ -464,7 +645,7 @@ class EmployeeInsertNew extends React.Component {
                   onChange={this.valueChange}
                   size="sm"
                   name="phoneNo1"
-                  maxlength="3"
+                  maxLength="3"
                 />
                 <InputGroup.Prepend>
                   <InputGroup.Text className="width-auto bdr0">
@@ -477,7 +658,7 @@ class EmployeeInsertNew extends React.Component {
                   onChange={this.valueChange}
                   size="sm"
                   name="phoneNo2"
-                  maxlength="4"
+                  maxLength="4"
                 />
                 <InputGroup.Prepend>
                   <InputGroup.Text className="width-auto bdr0">
@@ -490,7 +671,7 @@ class EmployeeInsertNew extends React.Component {
                   onChange={this.valueChange}
                   size="sm"
                   name="phoneNo3"
-                  maxlength="4"
+                  maxLength="4"
                 />
               </InputGroup>
               <InputGroup size="sm" >
@@ -505,7 +686,7 @@ class EmployeeInsertNew extends React.Component {
                   name="postalCode"
                   size="sm"
                   id="postcode"
-                  maxlength="7"
+                  maxLength="7"
                 />
               </InputGroup>
               <InputGroup size="sm" >
@@ -548,7 +729,14 @@ class EmployeeInsertNew extends React.Component {
             </Col>
 
             <Col md={4} className="text-center">
-              <Image src={this.state.image} rounded width="220" height="240" />
+              <Image 
+                src={this.state.image} 
+                id="imageId"
+                rounded
+                width="220" 
+                height="240"
+                onClick={(event) => this.addFile(event, "image")}
+              />
             </Col>
           </Row>
           
@@ -557,15 +745,13 @@ class EmployeeInsertNew extends React.Component {
               <Form.Label style={{ color: "#000000" }}>
                 基本情報補足
               </Form.Label>
-
-
               <InputGroup size="sm" >
                 <InputGroup.Prepend>
                   <InputGroup.Text>権限</InputGroup.Text>
                 </InputGroup.Prepend>
                 <FormControl
                   placeholder="権限"
-                  value={this.state.permission}
+                  value={authorityCode}
                   onChange={this.valueChange}
                   name="permission"
                   size="sm"
@@ -720,7 +906,7 @@ class EmployeeInsertNew extends React.Component {
                   placeholder="仲介区分"
                   value={this.state.residenceStatus}
                   onChange={this.valueChange}
-                  name="residenceStatus"
+                  name="homesAgentCode"
                   size="sm"
                 />
               </InputGroup>
@@ -825,7 +1011,7 @@ class EmployeeInsertNew extends React.Component {
                 </InputGroup.Prepend>
                 <FormControl
                   placeholder="退職年月日"
-                  value={this.state.permission}
+                  value={retirementYearAndMonth}
                   onChange={this.valueChange}
                   name="permission"
                   size="sm"
@@ -841,7 +1027,7 @@ class EmployeeInsertNew extends React.Component {
                 </InputGroup.Prepend>
                 <FormControl
                   placeholder="雇用保険番号"
-                  value={this.state.permission}
+                  value={employmentInsuranceNo}
                   onChange={this.valueChange}
                   name="permission"
                   size="sm"
@@ -853,7 +1039,7 @@ class EmployeeInsertNew extends React.Component {
                 </InputGroup.Prepend>
                 <FormControl
                   placeholder="社会保険番号"
-                  value={this.state.permission}
+                  value={socialInsuranceNo}
                   onChange={this.valueChange}
                   name="permission"
                   size="sm"
@@ -866,7 +1052,7 @@ class EmployeeInsertNew extends React.Component {
                 </InputGroup.Prepend>
                 <FormControl
                   placeholder="区分"
-                  value={this.state.permission}
+                  value={temporary_retirementYearAndMonth}
                   onChange={this.valueChange}
                   name="permission"
                   size="sm"
@@ -881,7 +1067,6 @@ class EmployeeInsertNew extends React.Component {
                 variant="info"
                 onClick={this.insertEmployee}
                 type="button"
-                on
               >
                 <FontAwesomeIcon icon={faSave} /> 登録
               </Button>
