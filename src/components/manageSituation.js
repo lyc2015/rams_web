@@ -280,6 +280,9 @@ class manageSituation extends React.Component {
 
 
     for (var i = 0; i < employeeList.length; i++) {
+      if (String(employeeList[i].salesProgressCode) === '1') {
+        continue;
+      }
       // 開発言語
       let developLanguageNames = [
         // this.fromCodeToNameLanguage(employeeList[i]?.developLanguageCode1),
