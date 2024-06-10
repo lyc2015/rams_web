@@ -703,22 +703,12 @@ class manageSituation extends React.Component {
   // レコードおきゃく表示
   formatStaff = (cell, row) => {
     var salesPersons = this.state.salesPersons;
-    for (var i in salesPersons) {
-      if (cell === salesPersons[i].code) {
-        if (row.salesProgressCode === "0" || row.salesProgressCode === "1") {
-          return (
-            <div>
-              <font color="grey">
-                {salesPersons[i].name.replace(/\(.*?\)/g, "")}
-              </font>
-            </div>
-          );
-        } else {
-          return <div>{salesPersons[i].name.replace(/\(.*?\)/g, "")}</div>;
-        }
-        //return {salesPersons[i].name.replace(/\(.*?\)/g, '' )}
-      }
-    }
+    const name = (salesPersons?.find((item) => item.code === cell)?.name ?? row.salesStaffName ?? '').replace(/\(.*?\)/g, "")
+    return <div>
+      <font color={row.salesProgressCode === "0" || row.salesProgressCode === "1" ? "grey" : ''}>
+        {name}
+      </font>
+    </div>;
   };
 
   // changeData レコードのステータス
