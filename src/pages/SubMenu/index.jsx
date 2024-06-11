@@ -2,10 +2,12 @@ import React, { Component } from "react";
 import { Row, Col, ListGroup, Accordion, Button, Navbar, Container } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretSquareLeft, faAddressBook, faHome, faUser, faUsers, faYenSign, faPaperPlane, faBuilding, faCalendar, faCalendarAlt, faThList, faCogs } from "@fortawesome/free-solid-svg-icons";
-import title from "../asserts/images/LYCmark.png";
+import title from "../../asserts/images/LYCmark.png";
 import { Link } from "react-router-dom";
 
-import "../asserts/css/subMenu.css";
+import "./index.css";
+import Routes from "../../components/SubMenuInfo/SubPageRouter";
+import { BrowserRouter as Router } from "react-router-dom";
 
 class SubMenu extends Component {
   constructor(props) {
@@ -249,9 +251,15 @@ class SubMenu extends Component {
             </Row>
           </Col>
           <Col sm={10}>
-            <div id="page" style={{ marginRight: 15 }}>
+            <div 
+              id = "page"
+              style = {{ marginRight: 15 }}
+            >
               <br />
               {/* Add your routes or components here */}
+              <Router>
+                <Routes match={this.props.match} />
+              </Router>
             </div>
           </Col>
         </Row>

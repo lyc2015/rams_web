@@ -1,0 +1,84 @@
+html,
+.root {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  background-image: -webkit-gradient(
+    linear,
+    left top,
+    left bottom,
+    color-stop(0, #ffffff),
+    color-stop(1, #00bfff)
+  ); /* Saf4+, Chrome */
+}
+.loginBody {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  background-image: -webkit-gradient(
+    linear,
+    left top,
+    left bottom,
+    color-stop(0, #ffffff),
+    color-stop(1, #00bfff)
+  ); /* Saf4+, Chrome */
+}
+.dateInput {
+  border: 0px;
+  background: url(../../asserts/images/date_icon.ico) no-repeat;
+  background-position: 3px;
+  width: 27px;
+  height: 20px;
+  line-height: 0;
+  font-size: 0;
+  overflow: hidden;
+}
+.mb-4 {
+  margin-bottom: 2rem !important;
+}
+.form-signin {
+  max-width: 330px;
+  margin: auto;
+}
+.passwordForm {
+  width: 100%;
+  max-width: 630px;
+  padding: -1px;
+  margin: auto;
+}
+.form-signin .form-control {
+  position: relative;
+  box-sizing: border-box;
+  height: auto;
+  padding: 10px;
+  font-size: 16px;
+}
+.form-signin input[type="text"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.form-signin input[type="password"] {
+  margin-bottom: -1px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+.row {
+  width: 99.9999%;
+  padding: 0px;
+  margin: 0px;
+}
+.loginMark {
+  font-family: "黑体", Sans-serif;
+  font-size: 44px;
+  color: rgb(0, 0, 0);
+  font-weight: normal;
+  margin-left: 20px;
+}
+.resetFont {
+  color: rgb(63, 4, 4);
+}

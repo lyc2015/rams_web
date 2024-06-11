@@ -230,7 +230,7 @@ body {
 #datePicker {
   background-repeat: no-repeat;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -241,7 +241,7 @@ body {
 #datePicker-invoicePDF {
   background-repeat: no-repeat;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -252,7 +252,7 @@ body {
 #datePicker-duty {
   background-repeat: no-repeat;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -263,7 +263,7 @@ body {
 #datePicker-invoice {
   background-repeat: no-repeat;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -275,7 +275,7 @@ body {
   border-color: red;
   background-repeat: no-repeat;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -286,7 +286,7 @@ body {
 #datePicker-certificatePrinting-birthday {
   background-repeat: no-repeat;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -297,7 +297,7 @@ body {
 #datePicker-certificatePrinting-intoCompanyYearAndMonth {
   background-repeat: no-repeat;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -308,7 +308,7 @@ body {
 #datePicker-interview {
   background-repeat: no-repeat;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -319,7 +319,7 @@ body {
 #datePickerReadonlyDefault {
   background-repeat: no-repeat;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -330,7 +330,7 @@ body {
 #datePickerReadonlyDefault-duty {
   background-repeat: no-repeat;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -341,7 +341,7 @@ body {
 #siteDatePickerReadonlyDefault {
   background-repeat: no-repeat;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -352,7 +352,7 @@ body {
 #datePickerReadonly {
   background-repeat: no-repeat;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -366,7 +366,7 @@ body {
 #datePicker2 {
   background-repeat: no-repeat;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -377,7 +377,7 @@ body {
 #scheduledEndDate-siteInfo {
   background-repeat: no-repeat;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -388,7 +388,7 @@ body {
 #scheduledEndDate-siteInfoReadOnly {
   background-repeat: no-repeat;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -399,7 +399,7 @@ body {
 #scheduledEndDate {
   background-repeat: no-repeat;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -410,7 +410,7 @@ body {
 #admissionStartDate {
   background-repeat: no-repeat;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -421,7 +421,7 @@ body {
 #admissionStartDateReadOnly {
   background-repeat: no-repeat;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -432,7 +432,7 @@ body {
 #admissionEndDate {
   background-repeat: no-repeat;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -444,7 +444,7 @@ body {
   background-repeat: no-repeat;
   width: 7.7rem;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -455,7 +455,7 @@ body {
   background-repeat: no-repeat;
   width: 12.3rem;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -466,7 +466,7 @@ body {
   background-repeat: no-repeat;
   width: 13.55rem;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -477,7 +477,7 @@ body {
   background-repeat: no-repeat;
   width: 15.1rem;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -488,7 +488,7 @@ body {
   background-repeat: no-repeat;
   width: 6.7rem;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -499,7 +499,7 @@ body {
   background-repeat: no-repeat;
   width: 8.4rem;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -510,7 +510,7 @@ body {
   background-repeat: no-repeat;
   width: 240px;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -521,7 +521,7 @@ body {
   background-repeat: no-repeat;
   width: 230px;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -532,7 +532,7 @@ body {
   background-repeat: no-repeat;
   /* width: 150px; */
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -543,7 +543,7 @@ body {
   background-repeat: no-repeat;
   /* width: 150px; */
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -551,7 +551,7 @@ body {
   background-repeat: no-repeat;
   /* width: 150px; */
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -562,7 +562,7 @@ body {
   background-repeat: no-repeat;
   /* width: 15rem; */
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -573,7 +573,7 @@ body {
   background-repeat: no-repeat;
   /* width: 14rem; */
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -584,7 +584,7 @@ body {
   background-repeat: no-repeat;
   /* width: 15rem; */
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -595,7 +595,7 @@ body {
   background-repeat: no-repeat;
   width: 15rem;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -606,7 +606,7 @@ body {
   background-repeat: no-repeat;
   /* width: 15rem; */
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -617,7 +617,7 @@ body {
   background-repeat: no-repeat;
   /* width: 115px; */
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -628,7 +628,7 @@ body {
   background-repeat: no-repeat;
   width: 160px;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -810,7 +810,7 @@ body {
   background-repeat: no-repeat;
   width: 10rem;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -821,7 +821,7 @@ body {
   background-repeat: no-repeat;
   background-position: 10px 7px;
   /* width: 10rem; */
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -832,7 +832,7 @@ body {
   background-repeat: no-repeat;
   background-position: 10px 7px;
   width: 7.3rem;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -843,7 +843,7 @@ body {
   background-repeat: no-repeat;
   background-position: 10px 7px;
   /* width: 7.6rem; */
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -854,7 +854,7 @@ body {
   background-repeat: no-repeat;
   background-position: 10px 7px;
   width: 7.3rem;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -865,7 +865,7 @@ body {
   background-repeat: no-repeat;
   background-position: 10px 7px;
   width: 7.3rem;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -876,7 +876,7 @@ body {
   background-repeat: no-repeat;
   background-position: 10px 7px;
   width: 7.3rem;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -887,7 +887,7 @@ body {
   background-repeat: no-repeat;
   background-position: 10px 7px;
   width: 10.47rem;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -897,7 +897,7 @@ body {
   background-repeat: no-repeat;
   background-position: 10px 7px;
   width: 10.47rem;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -908,7 +908,7 @@ body {
   background-repeat: no-repeat;
   background-position: 10px 7px;
   width: 10rem;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -919,7 +919,7 @@ body {
   background-repeat: no-repeat;
   background-position: 10px 7px;
   width: 7.3rem;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -930,7 +930,7 @@ body {
   background-repeat: no-repeat;
   background-position: 10px 7px;
   /* width: 9.6rem; */
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -941,7 +941,7 @@ body {
   background-repeat: no-repeat;
   background-position: 10px 7px;
   width: 7.3rem;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -952,7 +952,7 @@ body {
   background-repeat: no-repeat;
   background-position: 10px 7px;
   width: 7.3rem;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -963,7 +963,7 @@ body {
   background-repeat: no-repeat;
   background-position: 10px 7px;
   width: 7.3rem;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -1199,7 +1199,7 @@ body {
 .ageCss {
   background-repeat: no-repeat;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -1545,7 +1545,7 @@ body {
   background-repeat: no-repeat;
   /* width: 8rem; */
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -1556,7 +1556,7 @@ body {
   background-repeat: no-repeat;
   width: 8rem;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -1567,7 +1567,7 @@ body {
   background-repeat: no-repeat;
   width: 8rem;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -1630,7 +1630,7 @@ body {
 #siteAdmissionStartReadonlyDefault {
   background-repeat: no-repeat;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -1641,7 +1641,7 @@ body {
 #siteAdmissionStart {
   background-repeat: no-repeat;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -1787,7 +1787,7 @@ body {
 #datePickerReadonlyDefault-bpInfo {
   background-repeat: no-repeat;
   background-position: 15px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -1798,7 +1798,7 @@ body {
 #datePicker-bpInfo {
   background-repeat: no-repeat;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -1840,7 +1840,7 @@ body {
   background-repeat: no-repeat;
   /* width: 13.55rem; */
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -1851,7 +1851,7 @@ body {
   background-repeat: no-repeat;
   /* width: 15.1rem; */
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -1862,7 +1862,7 @@ body {
   background-repeat: no-repeat;
   width: 8.4rem;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+  background: url(../images/date_icon.ico) no-repeat scroll right
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
@@ -1894,7 +1894,7 @@ body {
     background-repeat: no-repeat;
     width: 10rem;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -1904,7 +1904,7 @@ body {
     background-repeat: no-repeat;
     width: 10rem;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -1913,7 +1913,7 @@ body {
   .ageccCss {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -1924,7 +1924,7 @@ body {
   .ageCss {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -1934,7 +1934,7 @@ body {
   #admissionStartDate {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -1944,7 +1944,7 @@ body {
   #admissionStartDateReadOnly {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -2102,7 +2102,7 @@ body {
     background-repeat: no-repeat;
     width: 8rem;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -2169,7 +2169,7 @@ body {
   #datePickerReadonly {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -2181,7 +2181,7 @@ body {
   #datePicker2 {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -2191,7 +2191,7 @@ body {
   #datePicker {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -2201,7 +2201,7 @@ body {
   #datePicker-invoicePDF {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -2212,7 +2212,7 @@ body {
   #datePicker-duty {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -2223,7 +2223,7 @@ body {
   #datePicker-certificatePrinting-birthday {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -2234,7 +2234,7 @@ body {
   #datePicker-certificatePrinting-intoCompanyYearAndMonth {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -2245,7 +2245,7 @@ body {
   #datePicker-interview {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -2263,7 +2263,7 @@ body {
     background-repeat: no-repeat;
     width: 6rem;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -2273,7 +2273,7 @@ body {
     background-repeat: no-repeat;
     /* width: 6rem; */
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -2283,7 +2283,7 @@ body {
     background-repeat: no-repeat;
     width: 6rem;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -2384,7 +2384,7 @@ body {
     background-repeat: no-repeat;
     width: 10rem;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -2394,7 +2394,7 @@ body {
     background-repeat: no-repeat;
     width: 10.3rem;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -2404,7 +2404,7 @@ body {
     background-repeat: no-repeat;
     width: 10.3rem;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -2413,7 +2413,7 @@ body {
   #siteDatePickerReadonlyDefault {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -2423,7 +2423,7 @@ body {
   #admissionEndDate {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -2433,7 +2433,7 @@ body {
   #siteAdmissionStartReadonlyDefault {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -2443,7 +2443,7 @@ body {
   #siteAdmissionStart {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -2461,7 +2461,7 @@ body {
     background-repeat: no-repeat;
     width: 10rem;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -2470,7 +2470,7 @@ body {
   .ageccCss {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -2480,7 +2480,7 @@ body {
   .ageCss {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -2490,7 +2490,7 @@ body {
   #scheduledEndDate-siteInfo {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -2500,7 +2500,7 @@ body {
   #scheduledEndDate-siteInfoReadOnly {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -2510,7 +2510,7 @@ body {
   #scheduledEndDate {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -2520,7 +2520,7 @@ body {
   #admissionStartDate {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -2530,7 +2530,7 @@ body {
   #admissionStartDateReadOnly {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -2751,7 +2751,7 @@ body {
     background-repeat: no-repeat;
     width: 8rem;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -2761,7 +2761,7 @@ body {
     background-repeat: no-repeat;
     width: 5.3rem;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -2771,7 +2771,7 @@ body {
     background-repeat: no-repeat;
     width: 9.2rem;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -2781,7 +2781,7 @@ body {
     background-repeat: no-repeat;
     width: 9.1rem;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -2791,7 +2791,7 @@ body {
     background-repeat: no-repeat;
     width: 10.35rem;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -2801,7 +2801,7 @@ body {
     background-repeat: no-repeat;
     width: 5.3rem;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -2828,7 +2828,7 @@ body {
   #datePickerReadonly {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -2840,7 +2840,7 @@ body {
   #datePicker2 {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -2850,7 +2850,7 @@ body {
   #datePicker {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -2861,7 +2861,7 @@ body {
   #datePicker-empInsert-right {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -2872,7 +2872,7 @@ body {
   #datePicker-empInsert-right-stayPeriod {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -2883,7 +2883,7 @@ body {
   #datePicker-empInsert-right-immigrationTime {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -2894,7 +2894,7 @@ body {
   #datePicker-empInsert-right-socialInsuranceDate {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -2905,7 +2905,7 @@ body {
   #datePicker-employeeSearch {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -2916,7 +2916,7 @@ body {
   #datePicker-empInsert-left {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -2943,7 +2943,7 @@ body {
     background-repeat: no-repeat;
     width: 8.5rem;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -2953,7 +2953,7 @@ body {
     background-repeat: no-repeat;
     /* width: 6rem; */
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -2963,7 +2963,7 @@ body {
     background-repeat: no-repeat;
     width: 6rem;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -3041,7 +3041,7 @@ body {
   #datePickerReadonlyDefault-bpInfo {
     background-repeat: no-repeat;
     background-position: 15px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -3053,7 +3053,7 @@ body {
     background-repeat: no-repeat;
     background-position: 10px 7px;
     width: 3.96rem;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -3064,7 +3064,7 @@ body {
     background-repeat: no-repeat;
     background-position: 10px 7px;
     /* width: 6.2rem; */
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -3075,7 +3075,7 @@ body {
     background-repeat: no-repeat;
     background-position: 10px 7px;
     width: 4.3rem;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -3086,7 +3086,7 @@ body {
     background-repeat: no-repeat;
     background-position: 10px 7px;
     width: 4.3rem;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -3097,7 +3097,7 @@ body {
     background-repeat: no-repeat;
     background-position: 10px 7px;
     width: 6.5rem;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -3108,7 +3108,7 @@ body {
     background-repeat: no-repeat;
     background-position: 10px 7px;
     width: 7.1rem !important;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -3117,7 +3117,7 @@ body {
   #datePicker-bpInfo {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -3137,7 +3137,7 @@ body {
     background-repeat: no-repeat;
     width: 9.1rem;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -3147,7 +3147,7 @@ body {
     background-repeat: no-repeat;
     /* width: 10.35rem; */
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -3157,7 +3157,7 @@ body {
     background-repeat: no-repeat;
     width: 8.5rem;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -3174,7 +3174,7 @@ body {
     background-repeat: no-repeat;
     /* width: 76px; */
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -3193,7 +3193,7 @@ body {
     background-repeat: no-repeat;
     width: 9.6rem;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -3235,7 +3235,7 @@ body {
   #datePicker {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -3246,7 +3246,7 @@ body {
   #datePicker-duty {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -3258,7 +3258,7 @@ body {
     border-color: red;
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -3269,7 +3269,7 @@ body {
   #datePickerReadonlyDefault {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
@@ -3280,7 +3280,7 @@ body {
   #datePickerReadonlyDefault-duty {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
+    background: url(../images/date_icon.ico) no-repeat scroll right
       center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);

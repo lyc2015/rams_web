@@ -1,0 +1,7 @@
+.employeeInsertNew .ant-picker.ant-picker-borderless{
+    width: 100%;
+}
+
+.employeeInsertNew .input-group-append{
+    flex: 2;
+}

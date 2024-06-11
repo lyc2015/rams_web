@@ -2,8 +2,12 @@ import defaultState from "./state";
 const $ = require("jquery");
 
 const methodNameList = [
-  "getNationality", // 国籍
-//   "getServerIP", // 最後, 如果有新增的配置必须在getServerIP之前
+  // "getServerIP",           // サーバーIP
+  "getNationality",           // 国籍
+  "getStation",               // 駅名
+  "getEmployeeForm",          // 社員形式
+  "getDepartment",            // 部署
+  "getHomesAgentCode",        // 仲介区分
 ];
 
 const serverIP = "http://127.0.0.1:8080/";
