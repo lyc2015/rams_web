@@ -5,8 +5,8 @@ import { faSave } from "@fortawesome/free-solid-svg-icons";
 
 import "react-datepicker/dist/react-datepicker.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "../../asserts/css/style.css";
-import "../../asserts/css/newCssInsert.css"
+import "../../assets/css/style.css";
+import "../../assets/css/newCssInsert.css"
 import * as publicUtils from "../../utils/publicUtils.js";
 
 import axios from "axios";
@@ -15,7 +15,7 @@ import store from "../../redux/store.js";
 
 import Autocomplete from "@material-ui/lab/Autocomplete";
 
-import default_avatar from '../../asserts/images/default_avatar.jpg';
+import default_avatar from '../../assets/images/default_avatar.jpg';
 import "./index.css";
 
 import { 
@@ -32,10 +32,12 @@ import moment from "moment";
 moment.locale("ja");
 
 class EmployeeInsertNew extends React.Component {
+
   constructor(props) {
     super(props);
     this.state = this.initialState; // 初期化
     this.insertEmployee = this.insertEmployee.bind(this); // 登録
+    console.log("in ---------- initialState");
   }
 
   initialState = {
