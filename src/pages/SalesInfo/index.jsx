@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSave } from "@fortawesome/free-solid-svg-icons";
 // import dateImg from '../../asserts/css/date_24px_533395_easyicon.net.ico'
-import dateImg from '../../asserts/images/date_icon.ico'
+import dateImg from '../../assets/images/date_icon.ico'
 
 import { DatePicker, message } from "antd";
 import FromCol from "../../components/SalesInfo/FromCol/index.jsx";
