@@ -1,0 +1,15 @@
+.fromCol .input-group-text{
+    width: 6rem;
+}
+
+/* 移除input number右边的加减按钮 */ 
+input[type="number"]::-webkit-inner-spin-button, 
+input[type="number"]::-webkit-outer-spin-button { 
+    -webkit-appearance: none; margin: 0; 
+} 
+input[type="number"] { 
+    -moz-appearance: textfield; 
+    /* Firefox中移除按钮 */ 
+}
+
+
