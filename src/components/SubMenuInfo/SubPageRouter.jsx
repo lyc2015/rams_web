@@ -4,6 +4,7 @@ import EmployeeSearch from '../../pages/EmployeeSearch'
 import EmployeeInsertNew from '../../pages/EmployeeInsertNew';
 
 const Routes = ({ match }) => {
+  console.log(match);
   return (
     <Switch>
       <Route
