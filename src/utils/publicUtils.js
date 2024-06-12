@@ -1,12 +1,12 @@
-import axios from "axios";
+import request from '../service/request';
 
 // 郵便番号
 export async function postcodeApi(value) {
   let result = "";
   if (value.length === 7) {
     try {
-      const response = await fetch(`https://zipcloud.ibsnet.co.jp/api/search?zipcode=${value}`);
-      const data = await response.json();
+      const response = await request.get(`https://zipcloud.ibsnet.co.jp/api/search?zipcode=${value}`);
+      const data = response;
       if (data.status === 200 && data.results) {
         const { address1, address2, address3 } = data.results[0];
           result = address1 + address2 + address3;
@@ -20,10 +20,11 @@ export async function postcodeApi(value) {
   return result;
 };
 
+// ひらがな
 export async function katakanaApi(value) {
   const apiKey = '36767e486ea387713ac17cff9c07ee840ce0781e7320010bd6ff661724a49c7a';
   try {
-    const response = await axios.post('https://labs.goo.ne.jp/api/hiragana', {
+    const response = await request.post('https://labs.goo.ne.jp/api/hiragana', {
       app_id: apiKey,
       sentence: value,
       output_type: 'katakana'
@@ -32,7 +33,7 @@ export async function katakanaApi(value) {
         'Content-Type': 'application/json'
       }
     });
-    return response.data.converted;
+    return response.converted;
   } catch (error) {
     console.error('Error converting to katakana:', error);
     return value;

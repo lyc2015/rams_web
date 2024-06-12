@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Form, Button, InputGroup, FormControl } from "react-bootstrap";
 
 import "./index.css";
-import title from "../../asserts/images/LYCmark.png";
+import title from "../../assets/images/LYCmark.png";
 
 /**
  * 管理者ログイン画面

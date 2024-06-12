@@ -11,11 +11,11 @@ import "react-app-polyfill/stable";
 import { ConfigProvider } from "antd";
 import locale from "antd/lib/locale/ja_JP";
 import "moment/locale/ja";
-import "./asserts/css/antdCssReset.css";
+import "./assets/css/antdCssReset.css";
 import "antd/dist/antd.css";
 
-import "./asserts/css/index.css";
-import "./asserts/css/tagClass.css";
+import "./assets/css/index.css";
+import "./assets/css/tagClass.css";
 
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
