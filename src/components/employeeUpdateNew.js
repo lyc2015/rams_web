@@ -45,6 +45,7 @@ class employeeUpdateNew extends React.Component {
   }
   // 初期化
   initialState = {
+    resume1Changed: false,// 履歴書1を修正したかどうか
     showBankInfoModalFlag: false, // 口座情報画面フラグ
     showpasswordSetModalFlag: false, // PW設定
     showBpInfoModalFlag: false, // bp情報
@@ -113,6 +114,7 @@ class employeeUpdateNew extends React.Component {
     let obj = document.getElementById("imageId");
     let imgSrc = obj.getAttribute("src");
     const emp = {
+      resume1Changed: this.state.resume1Changed,
       employeeStatus: this.state.employeeStatus, // 社員区分
       newEmployeeNo: this.state.employeeNo, // 社員番号
       employeeNo: this.state.oldEmployeeNo, // 社員番号
@@ -310,45 +312,45 @@ class employeeUpdateNew extends React.Component {
     formData.append("residentCardInfoURL", this.state.residentCardInfoURL);
     formData.append("passportInfoURL", this.state.passportInfoURL);
     /*		if(this.state.isBp && this.state.employeeNo.substring(0,2)!=="BP"){
-			axios.post(this.state.serverIP + "employee/insertEmployee", formData)
-			.then(result => {
-				this.setState({ loading: true, });
-				if (result.data.errorsMessage != null) {
-					this.setState({ "errorsMessageShow": true, errorsMessageValue: result.data.errorsMessage });
-					setTimeout(() => this.setState({ "errorsMessageShow": false }), 3000);
-				} else {
-					const emp = {
-							employeeNo: this.state.bpNo,
-						};
-					axios.post(this.state.serverIP + "employee/deleteEmployeeInfo", emp)
-					.then(result => {
-						this.setState({ "myToastShow": true, "method": "post", "errorsMessageShow": false,isBp:false });
-						setTimeout(() => this.setState({ "myToastShow": false }), 3000);
-						store.dispatch({type:"UPDATE_STATE",dropName:"getEmployeeName"});
-						store.dispatch({type:"UPDATE_STATE",dropName:"getEmployeeNameNoBP"});
-						store.dispatch({type:"UPDATE_STATE",dropName:"getEmployeeNameByOccupationName"});
-					})
-					.catch(function (error) {
-						alert("删除错误，请检查程序");
-					});
-				}
-			}).catch((error) => {
-				this.setState({ loading: true, });
-				console.error("Error - " + error);
-				this.setState({ "errorsMessageShow": true, errorsMessageValue: "アップデートするファイル大きすぎる。" });
-				setTimeout(() => this.setState({ "errorsMessageShow": false }), 3000);
-			});
-		}else{*/
+      axios.post(this.state.serverIP + "employee/insertEmployee", formData)
+      .then(result => {
+        this.setState({ loading: true, });
+        if (result.data.errorsMessage != null) {
+          this.setState({ "errorsMessageShow": true, errorsMessageValue: result.data.errorsMessage });
+          setTimeout(() => this.setState({ "errorsMessageShow": false }), 3000);
+        } else {
+          const emp = {
+              employeeNo: this.state.bpNo,
+            };
+          axios.post(this.state.serverIP + "employee/deleteEmployeeInfo", emp)
+          .then(result => {
+            this.setState({ "myToastShow": true, "method": "post", "errorsMessageShow": false,isBp:false });
+            setTimeout(() => this.setState({ "myToastShow": false }), 3000);
+            store.dispatch({type:"UPDATE_STATE",dropName:"getEmployeeName"});
+            store.dispatch({type:"UPDATE_STATE",dropName:"getEmployeeNameNoBP"});
+            store.dispatch({type:"UPDATE_STATE",dropName:"getEmployeeNameByOccupationName"});
+          })
+          .catch(function (error) {
+            alert("删除错误，请检查程序");
+          });
+        }
+      }).catch((error) => {
+        this.setState({ loading: true, });
+        console.error("Error - " + error);
+        this.setState({ "errorsMessageShow": true, errorsMessageValue: "アップデートするファイル大きすぎる。" });
+        setTimeout(() => this.setState({ "errorsMessageShow": false }), 3000);
+      });
+    }else{*/
     axios
       .post(this.state.serverIP + "employee/updateEmployee", formData)
       .then((response) => {
         this.setState({ loading: true });
         /*
-      	console.log("old 1=" + this.state.oldEmployeeNo + ", =" + this.state.employeeNo)
+        console.log("old 1=" + this.state.oldEmployeeNo + ", =" + this.state.employeeNo)
         this.setState({
           oldEmployeeNo: this.state.employeeNo,
         });
-      	console.log("old 2=" + this.state.oldEmployeeNo + ", =" + this.state.employeeNo)*/
+        console.log("old 2=" + this.state.oldEmployeeNo + ", =" + this.state.employeeNo)*/
         if (response.data.errorsMessage != null) {
           this.setState({
             errorsMessageShow: true,
@@ -390,6 +392,7 @@ class employeeUpdateNew extends React.Component {
           this.setState({ myToastShow: true, errorsMessageShow: false });
           setTimeout(() => this.setState({ myToastShow: false }), 3000);
           this.setState({
+            resume1Changed: false,
             employeeFristName: publicUtils.trim(this.state.employeeFristName), // 社員氏
             employeeLastName: publicUtils.trim(this.state.employeeLastName), // 社員名
           });
@@ -416,12 +419,17 @@ class employeeUpdateNew extends React.Component {
         });
         setTimeout(() => this.setState({ errorsMessageShow: false }), 3000);
         window.location.reload();
+      }).finally(() => {
+        this.setState({ resume1Changed: false });
       });
     /*}*/
   };
 
   // onchange
   valueChange = (event) => {
+    if (event.target.name === 'resumeName1') {
+      this.setState({ resume1Changed: true })
+    }
     this.setState({
       [event.target.name]: event.target.value,
     });
@@ -431,15 +439,15 @@ class employeeUpdateNew extends React.Component {
     this.setState({
       [event.target.name]: event.target.value,
     });
-	console.log("old=" + this.state.oldEmployeeNo + " target.value=" + event.target.value + " this.state.empNoHead=" + this.state.empNoHead)
+    console.log("old=" + this.state.oldEmployeeNo + " target.value=" + event.target.value + " this.state.empNoHead=" + this.state.empNoHead)
     if (event.target.value === "12") {
-		if(null != this.state.oldEmployeeNo && this.state.oldEmployeeNo.substring(0,4) === "LYCG"){
-			this.setState({
-			        employeeNo: this.state.oldEmployeeNo,
-			      });
-		} else {
-      		this.getNO(this.state.empNoHead + "G"); // 採番番号
-		}
+      if (null != this.state.oldEmployeeNo && this.state.oldEmployeeNo.substring(0, 4) === "LYCG") {
+        this.setState({
+          employeeNo: this.state.oldEmployeeNo,
+        });
+      } else {
+        this.getNO(this.state.empNoHead + "G"); // 採番番号
+      }
       this.setState({
         siteRoleCode: "",
         projectTypeCode: "",
@@ -449,13 +457,13 @@ class employeeUpdateNew extends React.Component {
         // resumeName2: "",
       });
     } else {
-		if(null != this.state.oldEmployeeNo && this.state.oldEmployeeNo.substring(0,3) === "LYC" && this.state.oldEmployeeNo.substring(0,4) !== "LYCG"){
-			this.setState({
-			        employeeNo: this.state.oldEmployeeNo,
-			      });
-		} else {
-			this.getNO(this.state.empNoHead); // 採番番号
-		}
+      if (null != this.state.oldEmployeeNo && this.state.oldEmployeeNo.substring(0, 3) === "LYC" && this.state.oldEmployeeNo.substring(0, 4) !== "LYCG") {
+        this.setState({
+          employeeNo: this.state.oldEmployeeNo,
+        });
+      } else {
+        this.getNO(this.state.empNoHead); // 採番番号
+      }
     }
   };
 
@@ -560,10 +568,10 @@ class employeeUpdateNew extends React.Component {
       const day = time.getDate();
       const hours = time.getHours();
       const minutes = time.getMinutes();
-  
+
       return `${year}/${padZero(month)}/${padZero(day)} ${padZero(hours)}:${padZero(minutes)}`;
     };
-  
+
     const padZero = (value) => {
       return value.toString().padStart(2, '0');
     };
@@ -689,16 +697,16 @@ class employeeUpdateNew extends React.Component {
             publicUtils.converToLocalTime(data.stayPeriod, false) === ""
               ? ""
               : publicUtils.getFullYearMonth(
-                  new Date(),
-                  publicUtils.converToLocalTime(data.stayPeriod, false)
-                ),
+                new Date(),
+                publicUtils.converToLocalTime(data.stayPeriod, false)
+              ),
           temporary_contractDeadline:
             publicUtils.converToLocalTime(data.contractDeadline, true) === ""
               ? ""
               : publicUtils.getFullYearMonth(
-                  new Date(),
-                  publicUtils.converToLocalTime(data.contractDeadline, true)
-                ),
+                new Date(),
+                publicUtils.converToLocalTime(data.contractDeadline, true)
+              ),
           employmentInsurance: data.employmentInsuranceStatus, // 雇用保険加入
           employmentInsuranceNo: data.employmentInsuranceNo, // 雇用保険番号
           socialInsurance: data.socialInsuranceStatus, // 社会保険加入
@@ -714,7 +722,7 @@ class employeeUpdateNew extends React.Component {
           resumeName1: data.resumeName1, // 履歴書備考1
           // resumeInfo2URL: publicUtils.nullToEmpty(data.resumeInfo2), // 履歴書2
           // resumeName2: data.resumeName2, // 履歴書備考1
-          updateTime: data.updateTime?formatDate(new Date(data.updateTime)) + (data.updateUser?' (' + data.updateUser.substring(0,1) + ')':''):'',//更新時間
+          updateTime: data.updateTime ? formatDate(new Date(data.updateTime)) + (data.updateUser ? ' (' + data.updateUser.substring(0, 1) + ')' : '') : '',//更新時間
           passportInfoURL: publicUtils.nullToEmpty(data.passportInfo), // パスポート
           yearsOfExperience: publicUtils.converToLocalTime(
             data.yearsOfExperience,
@@ -733,15 +741,15 @@ class employeeUpdateNew extends React.Component {
           introducer: data.introducer,
           employeeName:
             this.state.employeeInfo.find((v) => v.code === data.introducer) ===
-            undefined
+              undefined
               ? ""
               : this.state.employeeInfo.find((v) => v.code === data.introducer)
-                  .name,
+                .name,
         });
       });
   };
 
-  
+
   /**
    * 漢字をカタカナに変更する
    */
@@ -928,20 +936,20 @@ class employeeUpdateNew extends React.Component {
   employeeStatusChange = (event) => {
     const value = event.target.value;
     this.setState({ employeeStatus: value });
-	console.log("old=" + this.state.oldEmployeeNo + " target.value=" + event.target.value)
+    console.log("old=" + this.state.oldEmployeeNo + " target.value=" + event.target.value)
     if (value === "1" || value === "4") {
       if (value === "1") {
-		if(null != this.state.oldEmployeeNo && this.state.oldEmployeeNo.substring(0,3) !== "BPR" && this.state.oldEmployeeNo.substring(0,2) === "BP"){
-			this.setState({employeeNo: this.state.oldEmployeeNo,});
-		} else {
-    		this.getNO("BP");
-		}
+        if (null != this.state.oldEmployeeNo && this.state.oldEmployeeNo.substring(0, 3) !== "BPR" && this.state.oldEmployeeNo.substring(0, 2) === "BP") {
+          this.setState({ employeeNo: this.state.oldEmployeeNo, });
+        } else {
+          this.getNO("BP");
+        }
       } else {
-		if(null != this.state.oldEmployeeNo && this.state.oldEmployeeNo.substring(0,3) === "BPR"){
-			this.setState({employeeNo: this.state.oldEmployeeNo,});
-		} else {
-    		this.getNO("BPR");
-		}
+        if (null != this.state.oldEmployeeNo && this.state.oldEmployeeNo.substring(0, 3) === "BPR") {
+          this.setState({ employeeNo: this.state.oldEmployeeNo, });
+        } else {
+          this.getNO("BPR");
+        }
       }
       this.setState({
         contractDeadline: "",
@@ -976,11 +984,11 @@ class employeeUpdateNew extends React.Component {
         socialInsurance: "",
       });
     } else if (value === "0") {
-		if(null != this.state.oldEmployeeNo && this.state.oldEmployeeNo.substring(0,3) === "LYC"){
-			this.setState({employeeNo: this.state.oldEmployeeNo,});
-		} else {
-      		this.getNO(this.state.empNoHead);
-		}
+      if (null != this.state.oldEmployeeNo && this.state.oldEmployeeNo.substring(0, 3) === "LYC") {
+        this.setState({ employeeNo: this.state.oldEmployeeNo, });
+      } else {
+        this.getNO(this.state.empNoHead);
+      }
       this.setState({
         bpDisabled: false,
         residenceTimeDisabled: this.state.residenceCode === "5" ? true : false,
@@ -1006,7 +1014,7 @@ class employeeUpdateNew extends React.Component {
         employeeFormCodes: employeeFormCodes,
         employeeFormCode:
           this.state.employeeFormCode === "4" ||
-          this.state.employeeFormCode === "5"
+            this.state.employeeFormCode === "5"
             ? this.state.employeeFormCode
             : "",
         temporary_retirementYearAndMonth: "",
@@ -1018,22 +1026,22 @@ class employeeUpdateNew extends React.Component {
         socialInsuranceNo: "",
         socialInsurance: "0",
       });
-      
-		if(null != this.state.oldEmployeeNo && this.state.oldEmployeeNo.substring(0,2) === "SP"){
-			this.setState({employeeNo: this.state.oldEmployeeNo,});
-		} else {
-      		this.getNO("SP");
-		}
+
+      if (null != this.state.oldEmployeeNo && this.state.oldEmployeeNo.substring(0, 2) === "SP") {
+        this.setState({ employeeNo: this.state.oldEmployeeNo, });
+      } else {
+        this.getNO("SP");
+      }
     } else if (value === "3") {
       this.setState({
         authorityCode: "1",
         employeeFormCodes: this.state.employeeFormCodesAll,
       });
-		if(null != this.state.oldEmployeeNo && this.state.oldEmployeeNo.substring(0,2) === "SC"){
-			this.setState({employeeNo: this.state.oldEmployeeNo,});
-		} else {
-      		this.getNO("SC");
-		}
+      if (null != this.state.oldEmployeeNo && this.state.oldEmployeeNo.substring(0, 2) === "SC") {
+        this.setState({ employeeNo: this.state.oldEmployeeNo, });
+      } else {
+        this.getNO("SC");
+      }
     }
   };
 
@@ -1593,8 +1601,8 @@ class employeeUpdateNew extends React.Component {
             onClick={this.handleShowModal.bind(this, "bankInfo")}
             disabled={
               employeeStatus === "0" ||
-              employeeStatus === "2" ||
-              employeeStatus === "3"
+                employeeStatus === "2" ||
+                employeeStatus === "3"
                 ? false
                 : true
             }
@@ -1607,8 +1615,8 @@ class employeeUpdateNew extends React.Component {
             onClick={this.handleShowModal.bind(this, "passwordSet")}
             disabled={
               employeeStatus === "0" ||
-              employeeStatus === "2" ||
-              employeeStatus === "3"
+                employeeStatus === "2" ||
+                employeeStatus === "3"
                 ? false
                 : true
             }
@@ -1622,8 +1630,8 @@ class employeeUpdateNew extends React.Component {
             onClick={this.handleShowModal.bind(this, "bpInfoModel")}
             disabled={
               employeeStatus === "0" ||
-              employeeStatus === "2" ||
-              employeeStatus === "3"
+                employeeStatus === "2" ||
+                employeeStatus === "3"
                 ? true
                 : false
             }
@@ -1860,10 +1868,10 @@ class employeeUpdateNew extends React.Component {
                         {employeeStatus === "2"
                           ? "事業主番号"
                           : employeeStatus === "0" || employeeStatus === "3"
-                          ? "社員番号"
-                          : employeeStatus === "1" || employeeStatus === "4"
-                          ? "BP番号"
-                          : ""}
+                            ? "社員番号"
+                            : employeeStatus === "1" || employeeStatus === "4"
+                              ? "BP番号"
+                              : ""}
                       </InputGroup.Text>
                     </InputGroup.Prepend>
                     <FormControl
@@ -1891,8 +1899,8 @@ class employeeUpdateNew extends React.Component {
                       id="Autocompletestyle-employeeInsert-employeeFormCode"
                       disabled={
                         employeeStatus === "0" ||
-                        employeeStatus === "2" ||
-                        employeeStatus === "3"
+                          employeeStatus === "2" ||
+                          employeeStatus === "3"
                           ? false
                           : true
                       }
@@ -1943,8 +1951,8 @@ class employeeUpdateNew extends React.Component {
                       autoComplete="off"
                       disabled={
                         departmentCode === "0" ||
-                        employeeStatus === "1" ||
-                        this.state.occupationChangeFlag
+                          employeeStatus === "1" ||
+                          this.state.occupationChangeFlag
                           ? true
                           : false
                       }
@@ -1970,8 +1978,8 @@ class employeeUpdateNew extends React.Component {
                       autoComplete="off"
                       disabled={
                         employeeStatus === "0" ||
-                        employeeStatus === "2" ||
-                        employeeStatus === "3"
+                          employeeStatus === "2" ||
+                          employeeStatus === "3"
                           ? false
                           : true
                       }
@@ -2013,7 +2021,6 @@ class employeeUpdateNew extends React.Component {
                           <input
                             type="text"
                             {...params.inputProps}
-                            className="auto"
                             className="auto form-control Autocompletestyle-employeeInsertNew-employeeNo"
                           />
                         </div>
@@ -2034,8 +2041,8 @@ class employeeUpdateNew extends React.Component {
                       autoComplete="off"
                       disabled={
                         employeeStatus === "0" ||
-                        employeeStatus === "2" ||
-                        employeeStatus === "3"
+                          employeeStatus === "2" ||
+                          employeeStatus === "3"
                           ? false
                           : true
                       }
@@ -2117,8 +2124,10 @@ class employeeUpdateNew extends React.Component {
                       data-browse="添付"
                       value={this.state.resumeInfo1}
                       custom
-                      onChange={(event) =>
+                      onChange={(event) => {
+                        this.setState({ resume1Changed: true })
                         this.changeFile(event, "resumeInfo1")
+                      }
                       }
                     />
                     <Form.File
@@ -2383,15 +2392,15 @@ class employeeUpdateNew extends React.Component {
                         autoComplete="off"
                         id={
                           employeeStatus === "1" ||
-                          employeeStatus === "4" ||
-                          departmentCode === "0"
+                            employeeStatus === "4" ||
+                            departmentCode === "0"
                             ? "datePickerReadonlyDefault-empInsert-left"
                             : "datePicker-empInsert-left"
                         }
                         disabled={
                           employeeStatus === "1" ||
-                          employeeStatus === "4" ||
-                          departmentCode === "0"
+                            employeeStatus === "4" ||
+                            departmentCode === "0"
                             ? true
                             : false
                         }
@@ -2426,7 +2435,7 @@ class employeeUpdateNew extends React.Component {
                       size="sm"
                       style={
                         this.state.resumeInfo1URL !== "" ||
-                        this.state.resumeInfo1 !== undefined
+                          this.state.resumeInfo1 !== undefined
                           ? { backgroundColor: "#53A100", border: "none" }
                           : { backgroundColor: "", border: "none" }
                       }
@@ -2435,7 +2444,7 @@ class employeeUpdateNew extends React.Component {
                     >
                       <FontAwesomeIcon icon={faFile} />{" "}
                       {this.state.resumeInfo1URL !== "" ||
-                      this.state.resumeInfo1 !== undefined
+                        this.state.resumeInfo1 !== undefined
                         ? "済み"
                         : "添付"}
                     </Button>
@@ -2444,7 +2453,7 @@ class employeeUpdateNew extends React.Component {
                   <InputGroup size="sm" className="flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
-                      更新時間
+                        更新時間
                       </InputGroup.Text>
                     </InputGroup.Prepend>
                     <FormControl
@@ -2454,7 +2463,7 @@ class employeeUpdateNew extends React.Component {
                       onChange={this.valueChange}
                       size="sm"
                       name="employeeNo"
-                    />                   
+                    />
                     <font className="site-mark"></font>
                   </InputGroup>
                 </Col>
@@ -2847,8 +2856,8 @@ class employeeUpdateNew extends React.Component {
                       autoComplete="off"
                       disabled={
                         employeeStatus === "1" ||
-                        employeeStatus === "4" ||
-                        nationalityCode === "5"
+                          employeeStatus === "4" ||
+                          nationalityCode === "5"
                           ? true
                           : false
                       }
@@ -2876,9 +2885,9 @@ class employeeUpdateNew extends React.Component {
                       maxlength="12"
                       disabled={
                         this.state.residenceCode === "3" ||
-                        this.state.residenceCode === "6" ||
-                        employeeStatus === "1" ||
-                        employeeStatus === "4"
+                          this.state.residenceCode === "6" ||
+                          employeeStatus === "1" ||
+                          employeeStatus === "4"
                           ? true
                           : false
                       }
@@ -2903,19 +2912,19 @@ class employeeUpdateNew extends React.Component {
                       minDate={new Date()}
                       disabled={
                         residenceTimeDisabled ||
-                        this.state.residenceCode === "3" ||
-                        this.state.residenceCode === "6" ||
-                        employeeStatus === "1" ||
-                        employeeStatus === "4"
+                          this.state.residenceCode === "3" ||
+                          this.state.residenceCode === "6" ||
+                          employeeStatus === "1" ||
+                          employeeStatus === "4"
                           ? true
                           : false
                       }
                       id={
                         residenceTimeDisabled ||
-                        this.state.residenceCode === "3" ||
-                        this.state.residenceCode === "6" ||
-                        employeeStatus === "1" ||
-                        employeeStatus === "4"
+                          this.state.residenceCode === "3" ||
+                          this.state.residenceCode === "6" ||
+                          employeeStatus === "1" ||
+                          employeeStatus === "4"
                           ? "datePickerReadonlyDefault-empInsert-right-stayPeriod"
                           : "datePicker-empInsert-right-stayPeriod"
                       }
@@ -2924,19 +2933,19 @@ class employeeUpdateNew extends React.Component {
                       size="sm"
                       style={
                         this.state.residentCardInfoURL !== "" ||
-                        this.state.residentCardInfo !== undefined
+                          this.state.residentCardInfo !== undefined
                           ? {
-                              backgroundColor: "#53A100",
-                              border: "none",
-                              marginLeft: "3px",
-                            }
+                            backgroundColor: "#53A100",
+                            border: "none",
+                            marginLeft: "3px",
+                          }
                           : {
-                              backgroundColor: "",
-                              border: "none",
-                              marginLeft: "3px",
-                            }
+                            backgroundColor: "",
+                            border: "none",
+                            marginLeft: "3px",
+                          }
                       }
-                      onClick={(event) => this.addFile(event, "resumeInfo2")}
+                      // onClick={(event) => this.addFile(event, "resumeInfo2")}
                       className="uploadButtom"
                       onClick={(event) =>
                         this.addFile(event, "residentCardInfo")
@@ -2949,7 +2958,7 @@ class employeeUpdateNew extends React.Component {
                     >
                       <FontAwesomeIcon icon={faFile} />{" "}
                       {this.state.residentCardInfoURL !== "" ||
-                      this.state.residentCardInfo !== undefined
+                        this.state.residentCardInfo !== undefined
                         ? "済み"
                         : "添付"}
                     </Button>
@@ -2959,7 +2968,7 @@ class employeeUpdateNew extends React.Component {
                       style={{ marginLeft: "3px", border: "none" }}
                       disabled={
                         this.state.residentCardInfoURL !== "" ||
-                        this.state.residentCardInfo !== undefined
+                          this.state.residentCardInfo !== undefined
                           ? false
                           : true
                       }
@@ -3000,15 +3009,15 @@ class employeeUpdateNew extends React.Component {
                       minDate={new Date()}
                       disabled={
                         residenceTimeDisabled ||
-                        employeeStatus === "1" ||
-                        employeeStatus === "4"
+                          employeeStatus === "1" ||
+                          employeeStatus === "4"
                           ? true
                           : false
                       }
                       id={
                         residenceTimeDisabled ||
-                        employeeStatus === "1" ||
-                        employeeStatus === "4"
+                          employeeStatus === "1" ||
+                          employeeStatus === "4"
                           ? "datePickerReadonlyDefault-empInsert-right-stayPeriod"
                           : "datePicker-empInsert-right-stayPeriod"
                       }
@@ -3017,17 +3026,17 @@ class employeeUpdateNew extends React.Component {
                       size="sm"
                       style={
                         this.state.passportInfoURL !== "" ||
-                        this.state.passportInfo !== undefined
+                          this.state.passportInfo !== undefined
                           ? {
-                              backgroundColor: "#53A100",
-                              border: "none",
-                              marginLeft: "3px",
-                            }
+                            backgroundColor: "#53A100",
+                            border: "none",
+                            marginLeft: "3px",
+                          }
                           : {
-                              backgroundColor: "",
-                              border: "none",
-                              marginLeft: "3px",
-                            }
+                            backgroundColor: "",
+                            border: "none",
+                            marginLeft: "3px",
+                          }
                       }
                       className="uploadButtom"
                       onClick={(event) => this.addFile(event, "passportInfo")}
@@ -3039,7 +3048,7 @@ class employeeUpdateNew extends React.Component {
                     >
                       <FontAwesomeIcon icon={faFile} />{" "}
                       {this.state.passportInfoURL !== "" ||
-                      this.state.passportInfo !== undefined
+                        this.state.passportInfo !== undefined
                         ? "済み"
                         : "添付"}
                     </Button>
@@ -3049,7 +3058,7 @@ class employeeUpdateNew extends React.Component {
                       style={{ marginLeft: "3px", border: "none" }}
                       disabled={
                         this.state.passportInfoURL !== "" ||
-                        this.state.passportInfo !== undefined
+                          this.state.passportInfo !== undefined
                           ? false
                           : true
                       }
@@ -3127,8 +3136,8 @@ class employeeUpdateNew extends React.Component {
                       value={employmentInsurance}
                       disabled={
                         employeeStatus === "2" ||
-                        employeeStatus === "1" ||
-                        employeeStatus === "4"
+                          employeeStatus === "1" ||
+                          employeeStatus === "4"
                           ? true
                           : false
                       }
@@ -3185,17 +3194,17 @@ class employeeUpdateNew extends React.Component {
                         autoComplete="off"
                         disabled={
                           residenceTimeDisabled ||
-                          employeeStatus === "2" ||
-                          employeeStatus === "1" ||
-                          employeeStatus === "4"
+                            employeeStatus === "2" ||
+                            employeeStatus === "1" ||
+                            employeeStatus === "4"
                             ? true
                             : false
                         }
                         id={
                           residenceTimeDisabled ||
-                          employeeStatus === "2" ||
-                          employeeStatus === "1" ||
-                          employeeStatus === "4"
+                            employeeStatus === "2" ||
+                            employeeStatus === "1" ||
+                            employeeStatus === "4"
                             ? "datePickerReadonlyDefault-empInsert-right-socialInsuranceDate"
                             : "datePicker-empInsert-right-socialInsuranceDate"
                         }
@@ -3285,16 +3294,16 @@ class employeeUpdateNew extends React.Component {
                         className="form-control form-control-sm"
                         disabled={
                           !retirementYearAndMonthDisabled ||
-                          employeeStatus === "1" ||
-                          employeeStatus === "4"
+                            employeeStatus === "1" ||
+                            employeeStatus === "4"
                             ? true
                             : false
                         }
                         autoComplete="off"
                         id={
                           !retirementYearAndMonthDisabled ||
-                          employeeStatus === "1" ||
-                          employeeStatus === "4"
+                            employeeStatus === "1" ||
+                            employeeStatus === "4"
                             ? "datePickerReadonlyDefault-empInsert-right-immigrationTime"
                             : "datePicker-empInsert-right-immigrationTime"
                         }
@@ -3321,8 +3330,8 @@ class employeeUpdateNew extends React.Component {
                       autoComplete="off"
                       disabled={
                         !retirementYearAndMonthDisabled ||
-                        employeeStatus === "1" ||
-                        employeeStatus === "4"
+                          employeeStatus === "1" ||
+                          employeeStatus === "4"
                           ? true
                           : false
                       }
