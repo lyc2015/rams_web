@@ -21,7 +21,7 @@ import {
 
 import moment from "moment";
 moment.locale("ja");
-const dateIcon = <img src={dateImg} />
+const dateIcon = <img src={dateImg} alt="" />;
 
 
 

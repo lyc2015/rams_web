@@ -1,5 +1,5 @@
 import React , { Component }from "react";
-import { DatePicker,message } from "antd"
+import { message } from "antd"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSave } from "@fortawesome/free-solid-svg-icons";
 
@@ -16,13 +16,9 @@ import {
   Row, 
   InputGroup, 
   FormControl, 
-  Image 
 } from "react-bootstrap";
 
 import moment from "moment";
-import { type } from "jquery";
-import { Content } from "antd/lib/layout/layout.js";
-import context from "react-bootstrap/esm/AccordionContext.js";
 moment.locale("ja");
 
 
@@ -84,7 +80,7 @@ export default class ManagementCompanyRegister extends Component {
       checkErrorMsg :''
      });
 
-    const regMail_full = /^[A-Za-z0-9]+([_\.][A-Za-z0-9]+)*@([A-Za-z0-9\-]+\.)+[A-Za-z]{2,6}$/;
+     const regMail_full = /^[A-Za-z0-9]+([_.][A-Za-z0-9]+)*@([A-Za-z0-9-]+\.)+[A-Za-z]{2,6}$/;
     const reg_Tel = /^[0-9]+$/;
 
     if (this.state.managementCompanyName === '') {
