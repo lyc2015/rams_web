@@ -1,33 +1,5 @@
-.sales{
-text-align: center;
-padding: 20px;
-}
 
-.sales .ant-form-item-no-colon{
-    color: #fff;
-}
-.sales .ant-form-item {
-    margin-bottom: 0;
-    border: 1px #b3b3b3 solid;
-    border-radius: 3px;
 
-}
-.sales .ant-col{
-padding:0 !important;
-margin: 3px 0;
-}
-.sales .ant-col.ant-form-item-label,.ant-col.ant-form-item-control{
-    margin: 0;
-}
-.sales .ant-form-item-row{
-    border-radius: 5px;
-}
-.sales .required-mark::after{
-    position: absolute;
-    width: 0;
-    right: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: red;
-    content: "★";
+.salesInfo .ant-select{
+    padding: 0;
 }

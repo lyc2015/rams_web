@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSave } from "@fortawesome/free-solid-svg-icons";
 // import dateImg from '../../asserts/css/date_24px_533395_easyicon.net.ico'
 import dateImg from '../../assets/images/date_icon.ico'
 
-import { DatePicker, message } from "antd";
+import { DatePicker, message, Select as AntSelect } from "antd";
 import FromCol from "../../components/SalesInfo/FromCol/index.jsx";
 
 import http from '../../utils/Http.js';
@@ -15,9 +15,14 @@ import { postcodeApi } from "../../utils/publicUtils.js"
 import {
     Form,
     Button,
+    Row,
     Col,
-    Row
+    InputGroup,
+    FormControl
 } from "react-bootstrap";
+
+import './index.css'
+
 
 import moment from "moment";
 moment.locale("ja");
@@ -28,33 +33,93 @@ const dateIcon = <img src={dateImg} alt="" />;
 export default function SalesInfo() {
 
 
-
+    const [messageApi, contextHolder] = message.useMessage();
 
     const initValues = {
-        contractId:'',
-        customerNo:'',
-        contractDate:'',
-        realEstateName:'',
-        realEstatePostCode:'',
-        realEstateAddress:'',
-        rent:'',
-        realEstateManagementCompanyCode:'',
-        institutionId:'',
-        introducer:'',
-        introducerFee:'',
-        commissionAdCode:'',
-        bankSales:'',
-        asScheduledDate:'',
-        applicationAmount:'',
-        remark:'',
-        employeeNo:'',
-        contactInfo:'',
-        currentPostal:'',
-        currentAddress:'',
-        visa:'',
+        contractId: '',
+        customerNo: '',
+        contractDate: '',
+        realEstateName: '',
+        realEstatePostCode: '',
+        realEstateAddress: '',
+        rent: '',
+        realEstateManagementCompanyCode: '',
+        institutionId: '',
+        introducer: '',
+        introducerFee: '',
+        commissionAdCode: '',
+        bankSales: '',
+        asScheduledDate: '',
+        applicationAmount: '',
+        remark: '',
+        employeeNo: '',
+        contactInfo: '',
+        currentPostal: '',
+        currentAddress: '',
+        visa: '',
     }
     const [values, setValues] = useState(initValues)
 
+    const [employeeOption, setEmployeeOption] = useState([])
+    const [adCodeList, setAdCodeList] = useState([])
+    const [custList, setCustList] = useState([])
+    const [companyList, setCompanyList] = useState([])
+    const [phoneObj, setPhoneObj] = useState({
+        phoneNo1: '',
+        phoneNo2: '',
+        phoneNo3: ''
+    })
+    useEffect(() => {
+        const getOption = (item) => {
+            const obj = { value: item.id, label: `${item.firstName + item.lastName}(${item.id})` }
+            return obj
+        }
+        const fetchData = async () => {
+            const data = await http.get('/getEmployeeInfo');
+            const newList = data.employeeList.map(getOption)
+            setEmployeeOption(newList)
+            setAdCodeList(data.adCodeList)
+            const cList = data.customerList.map(getOption)
+            setCustList(cList)
+            setCompanyList(data.company)
+
+        };
+
+
+
+        fetchData();
+
+    }, [])
+    useEffect(() => {
+
+        const getNextId = async () => {
+            const data = await http.get('/sales/getSalesId');
+
+            setValues({
+                ...values,
+                contractId: data.nextId
+            })
+
+        };
+
+        getNextId();
+
+    }, [])
+
+    const dateChange = (name, e, value) => {
+        setValues({
+            ...values,
+            [name]: value
+        })
+
+
+    }
+
+
+    const getPostCode = async (valueInput, inputName) => {
+        const res = await postcodeApi(values[valueInput])
+        valueChange(inputName, res)
+    }
 
     const valueChange = (name, value) => {
         setValues({
@@ -62,11 +127,28 @@ export default function SalesInfo() {
             [name]: value
         })
     }
-
-    const getPostCode=async (valueInput,inputName) => {
-        const res = await postcodeApi(values[valueInput])
-        valueChange(inputName,res)
+    const selChange = (name, value) => {
+        console.log(name, value);
+        valueChange(name, value)
     }
+    const phoneChange = (e, name) => {
+        const value = e.target.value
+        setPhoneObj({
+            ...phoneObj,
+            [name]: value
+        })
+    }
+
+    useEffect(() => {
+        const phone = '' + phoneObj.phoneNo1 + phoneObj.phoneNo2 + phoneObj.phoneNo3
+        setValues({
+            ...values,
+            contactInfo: phone
+        })
+        console.log("values",values);
+
+    }, [phoneObj])
+
     // 第一行搜索项
     const topLabelobjs = [
         {
@@ -79,6 +161,18 @@ export default function SalesInfo() {
             label: '担当者',
             name: 'employeeNo',
             required: true,
+            children:
+                <AntSelect
+                    className="form-control form-control-sm"
+                    bordered={false}
+                    showArrow={false}
+                    filterOption={(input, option) =>
+                        (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                    }
+                    options={employeeOption}
+                    onChange={(e) => selChange("employeeNo", e)}
+                    value={values.employeeNo}
+                />
 
         }
     ]
@@ -88,7 +182,20 @@ export default function SalesInfo() {
         {
             label: '契約者',
             name: 'customerNo',
-            maxLength: 8
+            maxLength: 8,
+            children:
+                <AntSelect
+                    className="form-control form-control-sm"
+                    bordered={false}
+                    showArrow={false}
+                    filterOption={(input, option) =>
+                        (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                    }
+                    options={custList}
+                    onChange={(e) => selChange("customerNo", e)}
+                    value={values.customerNo}
+                />
+
 
         },
         {
@@ -96,13 +203,12 @@ export default function SalesInfo() {
             name: 'contractDate',
             required: true,
             children: <DatePicker
-                autoComplete="off"
                 locale="ja"
                 showMonthYearPicker
                 showFullMonthYearPicker
                 className="form-control form-control-sm"
-                dateFormat="yyyy/MM"
                 suffixIcon={dateIcon}
+                onChange={(e, value) => dateChange("contractDate", e, value)}
             />
         },
         {
@@ -119,6 +225,13 @@ export default function SalesInfo() {
         {
             label: '手数料(AD)',
             name: 'commissionAdCode',
+            children: <AntSelect
+                className="form-control form-control-sm"
+                bordered={false}
+                options={adCodeList}
+                onChange={(e) => selChange("commissionAdCode", e)}
+                value={values.commissionAdCode}
+            />
 
         },
         {
@@ -130,8 +243,8 @@ export default function SalesInfo() {
         {
             label: '物件郵便',
             name: 'realEstatePostCode',
-            onBlur:()=>{
-                getPostCode('realEstatePostCode','realEstateAddress')
+            onBlur: () => {
+                getPostCode('realEstatePostCode', 'realEstateAddress')
             }
         },
         {
@@ -143,6 +256,46 @@ export default function SalesInfo() {
         {
             label: '連絡先',
             name: 'contactInfo',
+            children:
+                <>
+                    <FormControl
+
+                        autoComplete="off"
+
+                        size="sm"
+                        name="phoneNo1"
+                        maxLength="3"
+                        value={phoneObj.phoneNo1}
+                        onChange={(e) => phoneChange(e, "phoneNo1")}
+                    />
+                    <InputGroup.Prepend>
+                        <InputGroup.Text className="width-auto bdr0">
+                            —
+                        </InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <FormControl
+                        autoComplete="off"
+                        size="sm"
+                        name="phoneNo2"
+                        maxLength="4"
+                        value={phoneObj.phoneNo2}
+                        onChange={(e) => phoneChange(e, "phoneNo2")}
+
+                    />
+                    <InputGroup.Prepend>
+                        <InputGroup.Text className="width-auto bdr0">
+                            —
+                        </InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <FormControl
+                        autoComplete="off"
+                        size="sm"
+                        name="phoneNo3"
+                        maxLength="4"
+                        value={phoneObj.phoneNo}
+                        onChange={(e) => phoneChange(e, "phoneNo3")}
+                    />
+                </>
         },
         {
             label: '部屋住所',
@@ -152,20 +305,19 @@ export default function SalesInfo() {
             label: 'AD予定日',
             name: 'asScheduledDate',
             children: <DatePicker
-                autoComplete="off"
                 locale="ja"
                 showMonthYearPicker
                 showFullMonthYearPicker
                 className="form-control form-control-sm"
-                dateFormat="yyyy/MM"
                 suffixIcon={dateIcon}
+
             />
         },
         {
             label: '現郵便',
             name: 'currentPostal',
-            onBlur:()=>{
-                getPostCode('currentPostal','currentAddr')
+            onBlur: () => {
+                getPostCode('currentPostal', 'currentAddress')
             }
 
         },
@@ -187,6 +339,18 @@ export default function SalesInfo() {
         {
             label: '管理会社',
             name: 'realEstateManagementCompanyCode',
+            children:
+                <AntSelect
+                    className="form-control form-control-sm"
+                    bordered={false}
+                    showArrow={false}
+                    filterOption={(input, option) =>
+                        (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                    }
+                    options={companyList}
+                    onChange={(e) => selChange("realEstateManagementCompanyCode", e)}
+                    value={values.realEstateManagementCompanyCode}
+                />
         },
         {
             label: '備考',
@@ -205,19 +369,13 @@ export default function SalesInfo() {
             </FromCol>)
     }
 
+
     const insertEmployee = async (e) => {
-        console.log(e);
-        try {
-            const res = await http.get('/sales/getSales')
-            console.log(res);
+        console.log('values', values);
 
-        } catch (err) {
-            console.log(err);
-
-        }
         const reqStrs = [
             {
-                name: 'contractID', value: '契約ID'
+                name: 'contractId', value: '契約ID'
             },
             {
                 name: 'employeeNo', value: '担当者'
@@ -237,16 +395,22 @@ export default function SalesInfo() {
             });
             return
         }
-        console.log('后续');
+        try {
+            const res = await http.post('/sales/insertSales', values)
+            console.log(res);
+
+        } catch (err) {
+            console.log(err);
+
+        }
+
 
 
     }
 
-    const [messageApi, contextHolder] = message.useMessage();
-
 
     return (
-        <div className="container">
+        <div className="container salesInfo">
             {contextHolder}
             <Row className="text-center mb-3">
                 <Col>
