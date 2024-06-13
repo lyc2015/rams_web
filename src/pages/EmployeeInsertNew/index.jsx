@@ -9,7 +9,6 @@ import "../../assets/css/style.css";
 import "../../assets/css/newCssInsert.css"
 import * as publicUtils from "../../utils/publicUtils.js";
 
-import axios from "axios";
 import $ from "jquery";
 import store from "../../redux/store.js";
 
@@ -17,6 +16,7 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 
 import default_avatar from '../../assets/images/default_avatar.jpg';
 import "./index.css";
+import request from '../../service/request';
 
 import { 
   Form, 
@@ -37,7 +37,6 @@ class EmployeeInsertNew extends React.Component {
     super(props);
     this.state = this.initialState; // 初期化
     this.insertEmployee = this.insertEmployee.bind(this); // 登録
-    console.log("in ---------- initialState");
   }
 
   initialState = {
@@ -82,9 +81,6 @@ class EmployeeInsertNew extends React.Component {
     employeeStatus: "0",
     postalCode: '',
     firstHalfAddress: '',
-    // serverIP
-    // serverIP: store.getState().dropDown[store.getState().dropDown.length - 1],
-    serverIP: "http://127.0.0.1:8080/",
     // dropDown
     nationalityCodes: store.getState().dropDown[0],
     station: store.getState().dropDown[1],
@@ -163,8 +159,8 @@ class EmployeeInsertNew extends React.Component {
       picInfo: imgSrc,                                                              // 画像
     };
     
-    axios
-      .post(this.state.serverIP + "employee/insertEmployee", emp, {
+    request
+      .post("employee/insertEmployee", emp, {
         headers: {
           'Content-Type': 'application/json'
         }

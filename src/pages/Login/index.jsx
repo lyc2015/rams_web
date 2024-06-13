@@ -3,6 +3,7 @@ import { Form, Button, InputGroup, FormControl } from "react-bootstrap";
 
 import "./index.css";
 import title from "../../assets/images/LYCmark.png";
+import request from "../../service/request";
 
 /**
  * 管理者ログイン画面
@@ -31,8 +32,33 @@ class Login extends Component {
     // 读取Cookie逻辑
   };
 
-  login = () => {
-    // 登录逻辑
+  /**
+   * ログイン処理
+   */
+  login = () => { 
+    var loginModel = {
+      employeeNo: document.getElementById("employeeNo").value,
+      password: document.getElementById("password").value,
+      verificationCode: document.getElementById("verificationCode").value,
+    };
+    request.post(this.state.serverIP + "login/login", loginModel)
+      .then((res) => {
+        if (res.data.code === 200) {
+          // 保存Cookie逻辑
+          window.location.href = "/submenu";
+        } else {
+          this.setState({
+            errorsMessageShow: true,
+            errorsMessageValue: res.data.message,
+          });
+        }
+      })
+      .catch((error) => {
+        this.setState({
+          errorsMessageShow: true,
+          errorsMessageValue: error.message,
+        });
+      });
   };
 
   handleChecked = () => {

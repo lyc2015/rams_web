@@ -25,14 +25,14 @@ export async function katakanaApi(value) {
   const apiKey = '36767e486ea387713ac17cff9c07ee840ce0781e7320010bd6ff661724a49c7a';
   try {
     const response = await request.post('https://labs.goo.ne.jp/api/hiragana', {
-      app_id: apiKey,
-      sentence: value,
-      output_type: 'katakana'
-    }, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
+        app_id: apiKey,
+        sentence: value,
+        output_type: 'katakana'
+      }, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
     return response.converted;
   } catch (error) {
     console.error('Error converting to katakana:', error);

@@ -1,7 +1,7 @@
 // src/service/config.js
 const config = {
-    baseURL: 'https://api.example.com', // 替换为实际的 API 地址
-    timeout: 10000, // 设置超时时间
+    baseURL: process.env.REACT_APP_API_BASE_URL,
+    timeout: 10000,
     headers: {
       'Content-Type': 'application/json',
     },

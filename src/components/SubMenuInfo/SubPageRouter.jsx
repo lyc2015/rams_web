@@ -4,18 +4,22 @@ import EmployeeSearch from '../../pages/EmployeeSearch'
 import EmployeeInsertNew from '../../pages/EmployeeInsertNew';
 
 const Routes = ({ match }) => {
-  console.log(match);
   return (
     <Switch>
       <Route
         exact
-        path={`${match.url}/`}
+        path={`${match.path}/`}
         component={EmployeeSearch}
       />
       <Route
         exact
-        path={`${match.url}/employeeInsertNew`}
+        path={`${match.path}/employeeInsertNew`}
         component={EmployeeInsertNew}
+      />
+      <Route
+        exact
+        path={`${match.path}/employeeSearch`}
+        component={EmployeeSearch}
       />
     </Switch>
   );
