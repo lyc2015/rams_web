@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Card, Button, Select, Table, message, List, Tooltip } from "antd";
 import { useQuery } from "react-query";
 import axios from "axios";
@@ -30,8 +30,8 @@ const ListItem = ({
       ? "listItem listItemNoBorder listItemClicked"
       : "listItem listItemNoBorder"
     : isClicked
-    ? "listItem listItemClicked"
-    : "listItem";
+      ? "listItem listItemClicked"
+      : "listItem";
 
   const clickHandler = () => {
     setIsClicked((prevState) => !prevState);
@@ -78,21 +78,19 @@ const getColumns = (setSelectedItemEmployeeId) => [
           dataSource={details.slice(0, 5)}
           grid={{ column: details.length }}
           renderItem={(value, index) => {
-            const content = `${value.employeeFirstName}${
-              value.employeeLastName
-            }(${value.customerAbbreviation}, ${
-              value.admissionEndDate
+            const content = `${value.employeeFirstName}${value.employeeLastName
+              }(${value.customerAbbreviation}, ${value.admissionEndDate
                 ? moment(value.admissionEndDate).format("YYYY/MM") + "終了"
                 : "稼働"
-            })`;
+              })`;
 
             return (
-                <ListItem
-                  isLastOne={index === details.length - 1}
-                  setSelectedItemEmployeeId={setSelectedItemEmployeeId}
-                  employeeNo={value.employeeNo}
-                  content={content}
-                />
+              <ListItem
+                isLastOne={index === details.length - 1}
+                setSelectedItemEmployeeId={setSelectedItemEmployeeId}
+                employeeNo={value.employeeNo}
+                content={content}
+              />
             );
           }}
         />
@@ -123,25 +121,27 @@ const useFetchAnnualSalesSituationConfirmList = ({ requestIP, year }) => {
 
           detailsMap.has(salesStaffCode)
             ? detailsMap.get(salesStaffCode).push({
+              salesYearAndMonth: v.salesYearAndMonth,
+              employeeFirstName: v.employeeFirstName,
+              employeeLastName: v.employeeLastName,
+              admissionEndDate: v.admissionEndDate,
+              customerAbbreviation: v.customerAbbreviation,
+              salesStaffFirstName: v.salesStaffFirstName,
+              salesStaffLastName: v.salesStaffLastName,
+              employeeNo: v.employeeNo,
+            })
+            : detailsMap.set(salesStaffCode, [
+              {
                 salesYearAndMonth: v.salesYearAndMonth,
                 employeeFirstName: v.employeeFirstName,
                 employeeLastName: v.employeeLastName,
                 admissionEndDate: v.admissionEndDate,
                 customerAbbreviation: v.customerAbbreviation,
                 salesStaffFirstName: v.salesStaffFirstName,
+                salesStaffLastName: v.salesStaffLastName,
                 employeeNo: v.employeeNo,
-              })
-            : detailsMap.set(salesStaffCode, [
-                {
-                  salesYearAndMonth: v.salesYearAndMonth,
-                  employeeFirstName: v.employeeFirstName,
-                  employeeLastName: v.employeeLastName,
-                  admissionEndDate: v.admissionEndDate,
-                  customerAbbreviation: v.customerAbbreviation,
-                  salesStaffFirstName: v.salesStaffFirstName,
-                  employeeNo: v.employeeNo,
-                },
-              ]);
+              },
+            ]);
 
           numsMap.has(salesStaffCode)
             ? numsMap.set(salesStaffCode, numsMap.get(salesStaffCode) + 1)
@@ -226,6 +226,28 @@ const AnnualSalesSituationConfirm = ({ serverIP, customerDrop }) => {
     displayedSalesStaff.length >= 2 && detailsMap.has(displayedSalesStaff[1]);
   const firstSalesStaff = displayedSalesStaff[0];
   const secondSalesStaff = displayedSalesStaff[1];
+
+  const getSalesStaffName = (salesStaff) => {
+    let name = ''
+    if (detailsMap?.get(salesStaff) && salesStaff) {
+      for (let index = 0; index < detailsMap.get(salesStaff).length; index++) {
+        const element = detailsMap.get(salesStaff)?.[index];
+
+        console.log(element.details?.[0], 'element')
+        if (element.details?.[0]?.salesStaffFirstName) {
+          name = (element.details?.[0]?.salesStaffFirstName ?? '') + (element.details?.[0]?.salesStaffLastName ?? "")
+          break;
+        }
+
+      }
+    }
+
+    return name
+  }
+
+  const firstSalesStaffName = useMemo(() => getSalesStaffName(firstSalesStaff), [detailsMap, firstSalesStaff])
+
+  const secondSalesStaffName = useMemo(() => getSalesStaffName(secondSalesStaff), [detailsMap, secondSalesStaff])
 
   const handleSelectYearChange = (value) => {
     setSelectedYear(value);
@@ -395,14 +417,13 @@ const AnnualSalesSituationConfirm = ({ serverIP, customerDrop }) => {
             title={
               isShowFirstSalesStaff
                 ? () => (
-                    <SalesTitle
-                      salesStaff={
-                        customerDrop?.find((v) => v.code === firstSalesStaff)
-                          ?.name
-                      }
-                      totalNums={numsMap.get(firstSalesStaff)}
-                    />
-                  )
+                  <SalesTitle
+                    salesStaff={
+                      firstSalesStaffName
+                    }
+                    totalNums={numsMap.get(firstSalesStaff)}
+                  />
+                )
                 : undefined
             }
             dataSource={
@@ -423,14 +444,13 @@ const AnnualSalesSituationConfirm = ({ serverIP, customerDrop }) => {
             title={
               isShowSecondSalesStaff
                 ? () => (
-                    <SalesTitle
-                      salesStaff={
-                        customerDrop?.find((v) => v.code === secondSalesStaff)
-                          ?.name
-                      }
-                      totalNums={numsMap.get(secondSalesStaff)}
-                    />
-                  )
+                  <SalesTitle
+                    salesStaff={
+                      secondSalesStaffName
+                    }
+                    totalNums={numsMap.get(secondSalesStaff)}
+                  />
+                )
                 : undefined
             }
             dataSource={
