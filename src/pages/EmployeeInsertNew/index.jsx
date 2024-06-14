@@ -18,6 +18,10 @@ import default_avatar from '../../assets/images/default_avatar.jpg';
 import "./index.css";
 import request from '../../service/request';
 
+import { DatePicker, message, Select as AntSelect } from "antd";
+
+import FromCol from "../../components/EmployeeInsertNewInfo/FromCol";
+
 import { 
   Form, 
   Button, 
@@ -82,12 +86,13 @@ class EmployeeInsertNew extends React.Component {
     postalCode: '',
     firstHalfAddress: '',
     // dropDown
-    nationalityCodes: store.getState().dropDown[0],
-    station: store.getState().dropDown[1],
-    employeeFormCodes: store.getState().dropDown[2],
-    departmentCodes: store.getState().dropDown[3],
-    homesAgentCodes: store.getState().dropDown[4],
-  }
+    // nationalityCodes: store.getState().dropDown[0],
+    nationalityCodes: [],
+    station: [],
+    employeeFormCodes: [],
+    departmentCodes: [],
+    homesAgentCodes: [],
+  };
 
   /**
    * 登録
@@ -374,28 +379,57 @@ class EmployeeInsertNew extends React.Component {
    * @param {*}
    *            name
    */
-    addFile = (event, name) => {
-      console.log('click file')
-      $("#" + name).click();
-    };
+  addFile = (event, name) => {
+    console.log('click file')
+    $("#" + name).click();
+  };
 
-    changeFile = (event, name) => {
-      if (name === "image") {
-        if (publicUtils.nullToEmpty($("#image").get(0).files[0]) === "") {
-          return;
-        }
-        var reader = new FileReader();
-        reader.readAsDataURL(
-          publicUtils.nullToEmpty($("#image").get(0).files[0])
-        );
-        reader.onload = function () {
-          document.getElementById("imageId").src = reader.result;
-        };
+  changeFile = (event, name) => {
+    if (name === "image") {
+      if (publicUtils.nullToEmpty($("#image").get(0).files[0]) === "") {
+        return;
       }
-    };
-  
+      var reader = new FileReader();
+      reader.readAsDataURL(
+        publicUtils.nullToEmpty($("#image").get(0).files[0])
+      );
+      reader.onload = function () {
+        document.getElementById("imageId").src = reader.result;
+      };
+    }
+  };
+
+
+
 
   render() {
+    // 第一行搜索项
+    const topLabelobjs = [
+      {
+          label: '契約ID',
+          name: 'contractId',
+          required: true,
+          maxLength: 6
+      },
+      {
+        label: '担当者',
+        name: 'employeeNo',
+        required: true,
+        children:
+            <AntSelect
+                className="form-control form-control-sm"
+                bordered={false}
+                showArrow={false}
+                filterOption={(input, option) =>
+                    (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                }
+                // options={employeeOption}
+                // onChange={(e) => selChange("employeeNo", e)}
+                // value={values.employeeNo}
+            />
+
+    }
+  ]
     const {
       nationalityCode,
       employeeFormCode,
@@ -441,6 +475,16 @@ class EmployeeInsertNew extends React.Component {
               </Row>
           <Row>
             <Col md={4}>
+            {topLabelobjs.map((item, idx) => (
+              <FromCol
+                key={idx}
+                {...item}
+                // value={values[item.name]}
+                // valueChange={valueChange}
+                required={item.required}
+              />
+            ))}
+
               <InputGroup size="sm" className="mb-3">
                 <InputGroup.Prepend>
                   <InputGroup.Text>社員形式</InputGroup.Text>
@@ -581,24 +625,22 @@ class EmployeeInsertNew extends React.Component {
                 />
                 <FormControl value="歳" size="sm" disabled />
               </InputGroup>
+
               <InputGroup size="sm" >
                 <InputGroup.Prepend>
                   <InputGroup.Text>国籍</InputGroup.Text>
                 </InputGroup.Prepend>
-                <Form.Control
-                  as="select"
-                  size="sm"
-                  onChange={this.valueChange}
-                  name="nationalityCode"
-                  value={nationalityCode}
-                  autoComplete="off"
-                >
-                  {this.state.nationalityCodes.map((date) => (
-                    <option key={date.code} value={date.code}>
-                      {date.name}
-                    </option>
-                  ))}
-                </Form.Control>
+                <AntSelect
+                    className="form-control form-control-sm"
+                    bordered={false}
+                    showArrow={false}
+                    filterOption={(input, option) =>
+                        (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                    }
+                    options={this.state.nationalityCodes}
+                    // onChange={(e) => selChange("employeeNo", e)}
+                    // value={values.employeeNo}
+                />
                 <FormControl
                   placeholder="県"
                   value={this.state.birthplace}

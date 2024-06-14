@@ -11,7 +11,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import "./index.css";
 
+import { AppstoreOutlined, MailOutlined, SettingOutlined } from '@ant-design/icons';
+
 class SubMenu extends Component {
+
+
   constructor(props) {
     super(props);
     this.state = {
@@ -55,18 +59,12 @@ class SubMenu extends Component {
             label: "従業員登録",
             icon: faSave,
             path: "/submenu/employeeInsertNew",
-            onMouseEnter: () => this.toggleHover("お客様-1"),
-            onMouseLeave: () => this.toggleHover("お客様"),
-            onClick: () => this.changePage("お客様情報登録")
           },
           {
             key: "従業員-2",
             label: "従業員検索",
             icon: faSave,
             path: "/submenu/employeeSearch",
-            onMouseEnter: () => this.toggleHover("お客様-1"),
-            onMouseLeave: () => this.toggleHover("お客様"),
-            onClick: () => this.changePage("お客様情報登録")
           },
         ]
       },
@@ -77,96 +75,72 @@ class SubMenu extends Component {
         subMenuItems: [
           {
             key: "お客様-1",
-            label: "お客様情報登録",
+            label: "お客様登録",
             icon: faSave,
             path: "/submenu/employeeInsertNew",
-            onMouseEnter: () => this.toggleHover("お客様-1"),
-            onMouseLeave: () => this.toggleHover("お客様"),
-            onClick: () => this.changePage("お客様情報登録")
           },
           {
             key: "お客様-2",
-            label: "お客様情報登録",
+            label: "お客様検索",
             icon: faSave,
             path: "/submenu/employeeSearch",
-            onMouseEnter: () => this.toggleHover("お客様-1"),
-            onMouseLeave: () => this.toggleHover("お客様"),
-            onClick: () => this.changePage("お客様情報登録")
           },
         ]
       },
       {
         icon: faUsers,
-        text: "売上情報（賃貸）",
+        text: "売上情報・賃貸",
         eventKey: "2",
         subMenuItems: [
           {
-            key: "お客様-1",
-            label: "お客様情報登録",
+            key: "売上情報・賃貸-1",
+            label: "売上情報登録(賃貸)",
             icon: faSave,
-            path: "/submenu/employeeInsertNew",
-            onMouseEnter: () => this.toggleHover("お客様-1"),
-            onMouseLeave: () => this.toggleHover("お客様"),
-            onClick: () => this.changePage("お客様情報登録")
+            path: "/submenu/salesInfo",
           },
           {
-            key: "お客様-2",
-            label: "お客様情報登録",
+            key: "売上情報・賃貸-2",
+            label: "売上情報検索(賃貸)",
             icon: faSave,
             path: "/submenu/employeeSearch",
-            onMouseEnter: () => this.toggleHover("お客様-1"),
-            onMouseLeave: () => this.toggleHover("お客様"),
-            onClick: () => this.changePage("お客様情報登録")
           },
         ]
       },
       {
         icon: faUsers,
-        text: "売上情報（販売）",
+        text: "売上情報・贩壳",
         eventKey: "2",
         subMenuItems: [
           {
-            key: "お客様-1",
-            label: "お客様情報登録",
+            key: "売上情報・贩壳-1",
+            label: "売上情報登録(贩壳)",
             icon: faSave,
             path: "/submenu/employeeInsertNew",
-            onMouseEnter: () => this.toggleHover("お客様-1"),
-            onMouseLeave: () => this.toggleHover("お客様"),
-            onClick: () => this.changePage("お客様情報登録")
           },
           {
-            key: "お客様-2",
-            label: "お客様情報登録",
+            key: "売上情報・贩壳-2",
+            label: "売上情報検索(贩壳)",
             icon: faSave,
             path: "/submenu/employeeSearch",
-            onMouseEnter: () => this.toggleHover("お客様-1"),
-            onMouseLeave: () => this.toggleHover("お客様"),
-            onClick: () => this.changePage("お客様情報登録")
           },
         ]
       },
       {
         icon: faUsers,
-        text: "管理会社情報",
+        text: "管理会社",
         eventKey: "2",
         subMenuItems: [
           {
-            key: "管理会社情報登録1",
-            label: "お客様情報登録",
+            key: "管理会社-1",
+            label: "管理会社登録",
             icon: faSave,
-            path: "/submenu/employeeInsertNew",
-            onMouseEnter: () => this.toggleHover("お客様-1"),
-            onMouseLeave: () => this.toggleHover("お客様"),
-            onClick: () => this.changePage("お客様情報登録")
+            path: "/submenu/managementCompanyRegister",
           },
           {
-            key: "お客様-2",
-            label: "お客様情報登録",
+            key: "管理会社-2",
+            label: "管理会社検索",
             icon: faSave,
             path: "/submenu/employeeSearch",
-            onMouseEnter: () => this.toggleHover("お客様-1"),
-            onMouseLeave: () => this.toggleHover("お客様"),
-            onClick: () => this.changePage("お客様情報登録")
           },
         ]
       },
