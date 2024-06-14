@@ -232,10 +232,10 @@ class manageSituation extends React.Component {
   }
 
   getNameByFlg({
-    employeeFristName, alphabetName, employeeName
+    employeeFristName = "", alphabetName = "", employeeName = ""
   }) {
     const currentRowshowAlphabetNameFlg = this.state?.showAlphabetNameFlg
-    const [alphabetName1 = '', alphabetName2 = '', alphabetName3 = ''] = alphabetName?.split(' ')
+    const [alphabetName1 = '', alphabetName2 = '', alphabetName3 = ''] = alphabetName?.split(' ') || []
     let newName =
       currentRowshowAlphabetNameFlg ? `${employeeFristName} ${alphabetName2[0] ?? ''} ${alphabetName3[0] ?? ''}` : employeeName
     console.log({ currentRowshowAlphabetNameFlg, employeeFristName, alphabetName2, alphabetName3 }, alphabetName3[0], 'debug:0604')
