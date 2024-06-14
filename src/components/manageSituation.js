@@ -169,7 +169,7 @@ class manageSituation extends React.Component {
     // let sysYearMonth = new Date();
     // let searchYearMonth = sysYearMonth.getFullYear() +
     // (sysYearMonth.getMonth() + 1 < 10 ? '0' + (sysYearMonth.getMonth() +
-    // 2) : (sysYearMonth.getMonth() + 2));
+    // 2) : (sysYearMonth.getMonth() + 2)); 
     if (
       this.props.location.state !== null &&
       this.props.location.state !== undefined &&
@@ -268,7 +268,7 @@ class manageSituation extends React.Component {
 
 
   checkEmptyCsv = (values) => {
-    return !values ? "" : `\t${values}`;
+    return !values ? "\t" : `\t${values}`;
   };
 
 
@@ -279,41 +279,38 @@ class manageSituation extends React.Component {
       "\n";
 
 
+    let no = 0
     for (var i = 0; i < employeeList.length; i++) {
-      if (String(employeeList[i].salesProgressCode) === '1') {
+      const item = employeeList[i]
+      if (String(item.salesProgressCode) === '1') {
         continue;
       }
+
       // 開発言語
       let developLanguageNames = [
-        // this.fromCodeToNameLanguage(employeeList[i]?.developLanguageCode1),
-        // this.fromCodeToNameLanguage(employeeList[i]?.developLanguageCode2),
-        // this.fromCodeToNameLanguage(employeeList[i]?.developLanguageCode3),
-        // this.fromCodeToNameLanguage(employeeList[i]?.developLanguageCode4),
-        // this.fromCodeToNameLanguage(employeeList[i]?.developLanguageCode5),
-        this.fromCodeToNameLanguage(employeeList[i]?.developLanguageCode6),
-        this.fromCodeToNameLanguage(employeeList[i]?.developLanguageCode7),
-        this.fromCodeToNameLanguage(employeeList[i]?.developLanguageCode8),
-        this.fromCodeToNameLanguage(employeeList[i]?.developLanguageCode9),
-        this.fromCodeToNameLanguage(employeeList[i]?.developLanguageCode10),
-        this.fromCodeToNameLanguage(employeeList[i]?.developLanguageCode11),
+        this.fromCodeToNameLanguage(item?.developLanguage1),
+        this.fromCodeToNameLanguage(item?.developLanguage2),
+        this.fromCodeToNameLanguage(item?.developLanguage3),
+        this.fromCodeToNameLanguage(item?.developLanguage4),
+        this.fromCodeToNameLanguage(item?.developLanguage5)
       ]
         .filter(function (s) {
           return s && s.trim();
         })
-        .join("、");
+        .join("、")
 
       // 営業状況
       let salesProgressName =
-        this.getSalesProgressCodeName(employeeList[i]?.salesProgressCode ?? '')
+        this.getSalesProgressCodeName(item?.salesProgressCode ?? '')
 
 
       // 日本語
       const japaneaseConversationLevelsName = this.state.japaneaseConversationLevels.find(
-        (v) => v.code === employeeList[i]?.japaneaseConversationLevel
+        (v) => v.code === item?.japaneaseConversationLevel
       )?.name ?? ''
 
       const currentDate = (publicUtils
-        .formateDate(employeeList[i]?.theMonthOfStartWork, true)
+        .formateDate(item?.theMonthOfStartWork, true)
         .substring(0, 6) ?? '')
       const nextMonth = this.getNextMonth(new Date(), 0)
 
@@ -322,7 +319,7 @@ class manageSituation extends React.Component {
         nextMonth
         ? "即日"
         : publicUtils
-          .formateDate(employeeList[i]?.theMonthOfStartWork, false)
+          .formateDate(item?.theMonthOfStartWork, false)
           .substring(0, 6)
           .replace(/\b(0+)/gi, "")
           .split("")
@@ -330,32 +327,35 @@ class manageSituation extends React.Component {
           .join("")
 
 
-      const yearsOfExperience = employeeList[i]?.yearsOfExperience
+      const yearsOfExperience = item?.yearsOfExperience
 
       // 単価
-      const unitPrice = employeeList[i]?.unitPrice ?? ''
+      const unitPrice = item?.unitPrice ?? ''
       const unitPriceFormatted = unitPrice ? this.checkEmptyCsv((unitPrice.replace(",", "") / 10000).toFixed(1).replace(".0", "")) : '';
 
       const nameByFlg = this.getNameByFlg(
         {
-          employeeFristName: employeeList[i]?.employeeFristName ?? "",
-          alphabetName: employeeList[i]?.alphabetName ?? "",
-          employeeName: employeeList[i]?.employeeName ?? ""
+          employeeFristName: item?.employeeFristName ?? "",
+          alphabetName: item?.alphabetName ?? "",
+          employeeName: item?.employeeName ?? ""
         })
 
-      str += [
-        this.checkEmptyCsv(i + 1),
+      const arr = [
+        this.checkEmptyCsv(no + 1),
         this.checkEmptyCsv(nameByFlg),
         this.checkEmptyCsv(yearsOfExperience ? yearsOfExperience + "年" : ''),
         this.checkEmptyCsv(theMonthOfStartWork),
-        this.checkEmptyCsv(employeeList[i]?.siteRoleCode),
+        this.checkEmptyCsv(item?.siteRoleCode),
         this.checkEmptyCsv(japaneaseConversationLevelsName),
         this.checkEmptyCsv(developLanguageNames),
-        this.checkEmptyCsv(employeeList[i]?.stationName),
+        this.checkEmptyCsv(item?.stationName),
         this.checkEmptyCsv(unitPriceFormatted ? unitPriceFormatted + "万円" : ''),
         this.checkEmptyCsv(salesProgressName),
-        this.checkEmptyCsv(employeeList[i]?.remark)
-      ].join(",") + "\n";
+        this.checkEmptyCsv(item?.remark)
+      ]
+      str += arr.join(",") + "\n";
+      no++
+
     }
 
     str += "\n";
