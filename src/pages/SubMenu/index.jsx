@@ -14,6 +14,7 @@ import "./index.css";
 class SubMenu extends Component {
   constructor(props) {
     super(props);
+    console.log('submenu',props);
     this.state = {
       nowDate: new Date().toLocaleDateString('ja-JP', {
         year: 'numeric',
@@ -23,6 +24,7 @@ class SubMenu extends Component {
       isMobileDevice: false,
       hover: "", 
       className: "", 
+      path:'/'
     };
   }
 
@@ -38,8 +40,10 @@ class SubMenu extends Component {
     });
   };
 
+
   changePage = (name) => {
     this.setClassName(name);
+
   };
 
   render() {
@@ -101,21 +105,21 @@ class SubMenu extends Component {
         eventKey: "2",
         subMenuItems: [
           {
-            key: "お客様-1",
+            key: "売上情報（賃貸)1",
             label: "お客様情報登録",
             icon: faSave,
-            path: "/submenu/employeeInsertNew",
+            path: "/submenu/SalesInfo",
             onMouseEnter: () => this.toggleHover("お客様-1"),
             onMouseLeave: () => this.toggleHover("お客様"),
             onClick: () => this.changePage("お客様情報登録")
           },
           {
-            key: "お客様-2",
+            key: "売上情報（賃貸)2",
             label: "お客様情報登録",
             icon: faSave,
-            path: "/submenu/employeeSearch",
-            onMouseEnter: () => this.toggleHover("お客様-1"),
-            onMouseLeave: () => this.toggleHover("お客様"),
+            path: "/submenu/SalesInfo",
+            onMouseEnter: () => this.toggleHover("売上情報（賃貸)2"),
+            onMouseLeave: () => this.toggleHover("売上情報（賃貸）"),
             onClick: () => this.changePage("お客様情報登録")
           },
         ]
@@ -216,7 +220,7 @@ class SubMenu extends Component {
             <Col sm={10}>
               <div id="page" style={{ marginRight: 15 }}>
                 <br />
-                  <Routes match={this.props.match} />
+                  <Routes match={this.state.path} />
               </div>
             </Col>
           </Row>
