@@ -1,16 +1,12 @@
 import React from 'react'
 
 import {
-    Col,
     InputGroup,
     FormControl,
 } from "react-bootstrap";
 
 import "react-datepicker/dist/react-datepicker.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-// import './index.css'
-
-
 
 export default function FromCol({ children, label, value, valueChange, required, name,maxLength ,type,disabled,...otherProps}) {
     const handleChange=(e)=>{
