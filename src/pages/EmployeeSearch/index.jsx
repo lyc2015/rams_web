@@ -1,16 +1,15 @@
-import React, { useState } from 'react';
-
+import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSave } from "@fortawesome/free-solid-svg-icons";
-
+import { faSave, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { Table, message, Form, Button, Col, Row, Input } from 'antd';
+import moment from "moment";
 import FromCol from '../../components/EmployeeSearch';
 
-import moment from "moment";
+import request from '../../service/request';
+
 moment.locale("ja");
 
 export default function EmployeeSearch() {
-
     const initValues = {
         contractID: '',
         manager: '',
@@ -33,7 +32,11 @@ export default function EmployeeSearch() {
         remark: '',
         visa: '',
     }
+
     const [values, setValues] = useState(initValues);
+    const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(false);
+
     const valueChange = (name, value) => {
         setValues({
             ...values,
@@ -78,8 +81,8 @@ export default function EmployeeSearch() {
         },
     ];
 
-    const getRows = () => {
-        return labelObjs.map((item, idx) => (
+    const getRows = (items) => {
+        return items.map((item, idx) => (
             <FromCol key={idx} {...item} value={values[item.name]} valueChange={valueChange} required={item.required}>
                 {item.children && item.children}
             </FromCol>
@@ -100,12 +103,6 @@ export default function EmployeeSearch() {
 
     const [messageApi, contextHolder] = message.useMessage();
 
-    const data = [
-        { key: 94, employeeId: 'BP015', name: '高橋 太郎', katakana: 'タカハシ タロウ', romaji: 'takabasi tarowu', dob: '1991/12/10', age: 32, phone: '080-0000-2211', station: '石岡', hireYear: '2021/06', joinYear: '2021/06' },
-        { key: 95, employeeId: 'BP017', name: '協力-斎藤 次郎', katakana: '協力・サイトウジロウ', romaji: 'saitojiro saitojiro', dob: '1987/11/05', age: 36, phone: '090-2233-3344', station: 'ひたち野うしく', hireYear: '2021/01', joinYear: '2021/01' },
-        //...（其他数据）
-    ];
-
     const columns = [
         { title: '番号', dataIndex: 'key', key: 'key' },
         { title: '社員番号', dataIndex: 'employeeId', key: 'employeeId' },
@@ -119,6 +116,36 @@ export default function EmployeeSearch() {
         { title: '来日年月', dataIndex: 'joinYear', key: 'joinYear' },
     ];
 
+    useEffect(() => {
+        const fetchEmployees = async () => {
+            setLoading(true);
+            try {
+                const response = await request.get('/employee/all');
+                console.log('Fetched employees:-----------------', response);
+                const transformedData = response.map((item, index) => ({
+                    key: index,
+                    employeeId: item.employeeNo,
+                    name: `${item.employeeFirstName} ${item.employeeLastName}`,
+                    katakana: '', // 假设没有相应的字段，需要手动添加
+                    romaji: '', // 假设没有相应的字段，需要手动添加
+                    dob: '', // 假设没有相应的字段，需要手动添加
+                    age: '', // 需要计算年龄
+                    phone: item.phoneNo,
+                    station: '', // 假设没有相应的字段，需要手动添加
+                    hireYear: item.intoCompanyYearAndMonth,
+                    joinYear: item.comeToJapanYearAndMonth,
+                }));
+                setData(transformedData);
+            } catch (error) {
+                console.error('Failed to fetch employees:', error);
+                message.error('Failed to fetch employees');
+            }
+            setLoading(false);
+        };
+
+        fetchEmployees();
+    }, []);
+
     return (
         <div className="container">
             {contextHolder}
@@ -130,24 +157,10 @@ export default function EmployeeSearch() {
 
             <Form>
                 <Row gutter={16}>
-                    {topLabelobjs.map((item, idx) => (
-                        <Col key={idx} span={12}>
-                            <Form.Item
-                                label={item.label}
-                                name={item.name}
-                                rules={[{ required: item.required, message: `${item.label}を入力してください` }]}
-                            >
-                                <Input
-                                    value={values[item.name]}
-                                    onChange={(e) => valueChange(item.name, e.target.value)}
-                                    maxLength={item.maxLength}
-                                />
-                            </Form.Item>
-                        </Col>
-                    ))}
+                    {getRows(topLabelobjs)}
                 </Row>
                 <Row gutter={16}>
-                    {getRows()}
+                    {getRows(labelObjs)}
                 </Row>
                 <div style={{ textAlign: "center" }}>
                     <Button
@@ -164,9 +177,27 @@ export default function EmployeeSearch() {
                         <FontAwesomeIcon icon={faSave} /> 追加
                     </Button>
                 </div>
+                <div style={{ height: "10px" }}></div>
+                <div>
+                    <Row>
+                        <Col>
+                        <div style={{ float: "right" }}>
+                            <Button
+                                size="sm"
+                                name="clickButton"
+                                id="update"
+                                variant="info"
+                            >
+                                <FontAwesomeIcon icon={faEdit} />
+                                修正
+                            </Button>{" "}
+                        </div>
+                        </Col>
+                    </Row>
+                </div>
                 <Row>
                     <Col span={24}>
-                        <Table dataSource={data} columns={columns} pagination={{ pageSize: 10 }} />
+                        <Table dataSource={data} columns={columns} pagination={{ pageSize: 10 }} loading={loading} />
                     </Col>
                 </Row>
             </Form>
