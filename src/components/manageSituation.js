@@ -232,12 +232,16 @@ class manageSituation extends React.Component {
   }
 
   getNameByFlg({
-    employeeFristName = "", alphabetName = "", employeeName = ""
+    employeeFristName = "", alphabetName = "", employeeName = "", employeeNo = "", neewBP = false
   }) {
     const currentRowshowAlphabetNameFlg = this.state?.showAlphabetNameFlg
     const [alphabetName1 = '', alphabetName2 = '', alphabetName3 = ''] = alphabetName?.split(' ') || []
-    let newName =
-      currentRowshowAlphabetNameFlg ? `${employeeFristName} ${alphabetName2[0] ?? ''} ${alphabetName3[0] ?? ''}` : employeeName
+
+    const isBP = employeeNo.startsWith('BP') ? '(BP)' : '';
+    const newName = (currentRowshowAlphabetNameFlg ? `${employeeFristName} ${alphabetName2[0] ?? ''} ${alphabetName3[0] ?? ''}` : employeeName) + (neewBP ? isBP : '')
+
+
+
     console.log({ currentRowshowAlphabetNameFlg, employeeFristName, alphabetName2, alphabetName3 }, alphabetName3[0], 'debug:0604')
 
     return newName
@@ -332,12 +336,13 @@ class manageSituation extends React.Component {
       // 単価
       const unitPrice = item?.unitPrice ?? ''
       const unitPriceFormatted = unitPrice ? this.checkEmptyCsv((unitPrice.replace(",", "") / 10000).toFixed(1).replace(".0", "")) : '';
-
       const nameByFlg = this.getNameByFlg(
         {
           employeeFristName: item?.employeeFristName ?? "",
           alphabetName: item?.alphabetName ?? "",
-          employeeName: item?.employeeName ?? ""
+          employeeNo: item?.employeeNo ?? "",
+          employeeName: item?.employeeName ?? "",
+          neewBP: true,
         })
 
       const arr = [
@@ -484,6 +489,7 @@ class manageSituation extends React.Component {
           let resumeInfo2Array = new Array();
           let resumeInfoArray = new Array();
           let completeCount = 0;
+          let completePercet = ''
           for (let i in result.data) {
             empNoArray.push(result.data[i].employeeNo);
             empNoNameArray.push(
@@ -496,10 +502,17 @@ class manageSituation extends React.Component {
             if (result.data[i].salesProgressCode === "0" || result.data[i].salesProgressCode === "1") {
               completeCount++;
             }
+
+            if (!completePercet && result.data[i].completePercet) {
+              completePercet = result.data[i].completePercet + "%"
+            }
           }
-          let completePercet = completeCount === 0 ? 0 : parseInt(completeCount) / parseInt(result.data.length);
-          completePercet =
-            (Math.round(completePercet * 10000) / 100).toFixed(1) + "%";
+
+          if (!completePercet) {
+            completePercet = completeCount === 0 ? 0 : parseInt(completeCount) / parseInt(result.data.length);
+            completePercet =
+              (Math.round(completePercet * 10000) / 100).toFixed(1) + "%";
+          }
 
           var totalPersons = result.data.length;
           this.setState({
@@ -949,8 +962,8 @@ class manageSituation extends React.Component {
   // 優先度表示
   showPriority(cell, row, enumObject, index) {
     // ローマ名の表示非表示：
-    const { alphabetName = '', employeeName = '', employeeFristName = '' } = row
-    const nameByFlg = this.getNameByFlg({ employeeFristName, alphabetName, employeeName })
+    const { alphabetName = '', employeeName = '', employeeFristName = '', employeeNo = "" } = row
+    const nameByFlg = this.getNameByFlg({ employeeFristName, alphabetName, employeeName, employeeNo, neewBP: false })
 
 
     let nameAndCompany = nameByFlg + (row.customerAbbreviation ? `(${row.customerAbbreviation})` : "");
