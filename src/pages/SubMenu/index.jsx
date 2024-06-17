@@ -26,7 +26,6 @@ class SubMenu extends Component {
       isMobileDevice: false,
       hover: "", 
       className: "", 
-      path:'/'
     };
   }
 
@@ -192,7 +191,7 @@ class SubMenu extends Component {
             <Col sm={10}>
               <div id="page" style={{ marginRight: 15 }}>
                 <br />
-                  <Routes match={this.state.path} />
+                  <Routes match={this.props.match} />
               </div>
             </Col>
           </Row>
