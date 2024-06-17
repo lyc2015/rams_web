@@ -8,7 +8,7 @@ import dateImg from '../../assets/images/date_icon.ico'
 import { DatePicker, message, Select as AntSelect } from "antd";
 import FromCol from "../../components/SalesInfo/FromCol/index.jsx";
 
-import http from '../../utils/Http.js';
+import request from "../../service/request";
 
 import { postcodeApi } from "../../utils/publicUtils.js"
 
@@ -75,7 +75,7 @@ export default function SalesInfo() {
             return obj
         }
         const fetchData = async () => {
-            const data = await http.get('/getEmployeeInfo');
+            const data = await request.get('/getEmployeeInfo');
             const newList = data.employeeList.map(getOption)
             setEmployeeOption(newList)
             setAdCodeList(data.adCodeList)
@@ -93,7 +93,7 @@ export default function SalesInfo() {
     useEffect(() => {
 
         const getNextId = async () => {
-            const data = await http.get('/sales/getSalesId');
+            const data = await request.get('/sales/getSalesId');
 
             setValues({
                 ...values,
@@ -396,7 +396,7 @@ export default function SalesInfo() {
             return
         }
         try {
-            const res = await http.post('/sales/insertSales', values)
+            const res = await request.post('/sales/insertSales', values)
             console.log(res);
 
         } catch (err) {

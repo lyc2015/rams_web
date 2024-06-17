@@ -2,16 +2,14 @@
 import React, { Component } from "react";
 import { Row, Col, ListGroup, Accordion, Container } from "react-bootstrap";
 import { BrowserRouter as Router } from "react-router-dom";
-import MenuItem from "../../components/SubMenuInfo/MenuItem";
+import MenuItem from "../../components/SubMenu/MenuItem";
 import Header from "../../components/Header";
-import Routes from "../../components/SubMenuInfo/SubPageRouter";
+import Routes from "../../components/SubMenu/SubPageRouter";
 import {
   faUsers,
   faSave,
 } from "@fortawesome/free-solid-svg-icons";
 import "./index.css";
-
-import { AppstoreOutlined, MailOutlined, SettingOutlined } from '@ant-design/icons';
 
 class SubMenu extends Component {
 
@@ -140,7 +138,7 @@ class SubMenu extends Component {
             key: "管理会社-2",
             label: "管理会社検索",
             icon: faSave,
-            path: "/submenu/employeeSearch",
+            path: "/submenu/managementCompanySearch",
           },
         ]
       },

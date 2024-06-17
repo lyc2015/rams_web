@@ -20,7 +20,7 @@ import request from '../../service/request';
 
 import { DatePicker, message, Select as AntSelect } from "antd";
 
-import FromCol from "../../components/EmployeeInsertNewInfo/FromCol";
+import FromCol from "../../components/EmployeeInsert/FromCol/index.jsx";
 
 import { 
   Form, 
@@ -35,7 +35,7 @@ import {
 import moment from "moment";
 moment.locale("ja");
 
-class EmployeeInsertNew extends React.Component {
+class EmployeeInsert extends React.Component {
 
   constructor(props) {
     super(props);
@@ -1159,4 +1159,4 @@ class EmployeeInsertNew extends React.Component {
   }
 }
 
-export default EmployeeInsertNew;
+export default EmployeeInsert;

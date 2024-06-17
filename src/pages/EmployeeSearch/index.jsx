@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSave } from "@fortawesome/free-solid-svg-icons";
 
 import { Table, message, Form, Button, Col, Row, Input } from 'antd';
-import FromCol from '../../components/EmployeeSearchInfo';
+import FromCol from '../../components/EmployeeSearch';
 
 import moment from "moment";
 moment.locale("ja");
