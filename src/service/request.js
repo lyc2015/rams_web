@@ -43,18 +43,18 @@ instance.interceptors.response.use(
           break;
         case 403:
           // 无权限
-          alert('您没有权限进行此操作');
+          console.log('您没有权限进行此操作');
           break;
         case 500:
           // 服务器错误
-          alert('服务器错误，请稍后再试');
+          console.log('服务器错误，请稍后再试');
           break;
         default:
-          alert(error.response.data.message || '请求失败');
+          console.log(error.response.data.message || '请求失败');
       }
     } else {
       // 网络错误或请求超时
-      alert('网络错误或请求超时，请检查您的网络连接');
+      console.log('网络错误或请求超时，请检查您的网络连接');
     }
     return Promise.reject(error);
   }
