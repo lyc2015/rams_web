@@ -9,7 +9,7 @@ import { DatePicker, message, Select as AntSelect } from "antd";
 import FromCol from "../../components/SalesInfo/FromCol/index.jsx";
 import SalesTable from '../../components/SalesInfo/SalesTable/index.jsx';
 
-import http from "../../service/request";
+import request from "../../service/request.js";
 
 import { postcodeApi } from "../../utils/publicUtils.js"
 
