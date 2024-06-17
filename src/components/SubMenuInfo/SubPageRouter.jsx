@@ -1,7 +1,9 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import EmployeeSearch from '../../pages/EmployeeSearch'
+import EmployeeSearch from '../../pages/EmployeeSearch';
 import EmployeeInsertNew from '../../pages/EmployeeInsertNew';
+import SalesInfo from '../../pages/SalesInfo'
+import ManagementCompanyRegister from '../../pages/ManagementCompanyRegister'
 
 import SalesInfo from '../../pages/SalesInfo';
 const Routes = ({ match }) => {
@@ -10,7 +12,7 @@ const Routes = ({ match }) => {
       <Route
         exact
         path={`${match.path}/`}
-        component={EmployeeSearch}
+        component={EmployeeInsertNew}
       />
       <Route
         exact
@@ -24,8 +26,13 @@ const Routes = ({ match }) => {
       />
       <Route
         exact
-        path={`${match.path}`}
+        path={`${match.path}/salesInfo`}
         component={SalesInfo}
+      />
+      <Route
+        exact
+        path={`${match.path}/managementCompanyRegister`}
+        component={ManagementCompanyRegister}
       />
     </Switch>
   );

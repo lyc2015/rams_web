@@ -91,19 +91,12 @@ h2 {
 	animation: light 0.5s ease infinite alternate;
 } */
 
-#社員・BP,
-#現場,
+#従業員,
 #お客様,
-#給料・売上,
-#営業送信,
-#営業管理,
-#勤務,
-#期限確認,
-#マスター,
-#設定・共有,
-#ほかの設定,
-#勤務登録,
-#ファイル管理 {
+#売上情報・賃貸,
+#売上情報・贩壳,
+#管理会社
+{
   padding: 0px;
   margin: 0px;
 }
@@ -189,6 +182,7 @@ h2 {
   padding: 0.5rem 1.25rem;
   background-color: #fff;
   border: none;
+  padding-left: 9px;
 }
 
 @media screen and (max-width: 1620px) {

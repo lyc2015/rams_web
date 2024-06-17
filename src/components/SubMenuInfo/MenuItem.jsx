@@ -1,4 +1,3 @@
-// MenuItem.js
 import React from "react";
 import { ListGroup, Button, Accordion } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -13,6 +12,12 @@ const MenuItem = ({ icon, text, eventKey, isHover, onMouseEnter, onMouseLeave, o
   const menuStyleHover = {
     borderBottom: "0.1px solid #167887",
     backgroundColor: "#188596",
+  };
+  const subMenuStyle = {
+    backgroundColor: "#ffffff",
+  };
+  const subMenuStyleHover = {
+    backgroundColor: "#d3d3d3",
   };
 
   return (
@@ -40,10 +45,7 @@ const MenuItem = ({ icon, text, eventKey, isHover, onMouseEnter, onMouseLeave, o
                 {subMenuItems.map((item, index) => (
                   <ListGroup.Item
                     key={index}
-                    style={isHover === item.key ? menuStyleHover : menuStyle}
-                    onMouseEnter={item.onMouseEnter}
-                    onMouseLeave={item.onMouseLeave}
-                    onClick={item.onClick}
+                    style={isHover === item.key ? subMenuStyleHover : subMenuStyle}
                   >
                     <div>
                       <Link className={isHover === item.key ? "my-tabcolor-font-hover" : "my-tabcolor-font"} to={item.path}>
