@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSave } from "@fortawesome/free-solid-svg-icons";
@@ -9,7 +9,7 @@ import { DatePicker, message, Select as AntSelect } from "antd";
 import FromCol from "../../components/SalesInfo/FromCol/index.jsx";
 import SalesTable from '../../components/SalesInfo/SalesTable/index.jsx';
 
-import http from '../../utils/Http.js';
+import http from '../../service/request.js';
 
 import { postcodeApi } from "../../utils/publicUtils.js"
 
@@ -26,10 +26,9 @@ import './index.css'
 
 
 import moment from "moment";
-moment.locale("ja");
 const dateIcon = <img src={dateImg} alt="" />;
 
-
+console.log('moment', moment().format("YYYY-MM-DD"));
 
 export default function SalesInfo() {
 
@@ -70,6 +69,8 @@ export default function SalesInfo() {
         phoneNo2: '',
         phoneNo3: ''
     })
+    const [institutionInfo, setInstitutionInfo] = useState([])
+    const [visaList, setVisaList] = useState([])
 
 
     useEffect(() => {
@@ -86,6 +87,8 @@ export default function SalesInfo() {
             const cList = data.customerList.map(getOption)
             setCustList(cList)
             setCompanyList(data.company)
+            setInstitutionInfo(data.institutionInfo)
+            setVisaList(data.visaList)
 
         };
 
@@ -121,6 +124,10 @@ export default function SalesInfo() {
 
     }
 
+    useEffect(() => {
+        console.log('useEffect');
+    }, [])
+
 
     const getPostCode = async (valueInput, inputName) => {
         const res = await postcodeApi(values[valueInput])
@@ -155,8 +162,8 @@ export default function SalesInfo() {
 
     }, [phoneObj])
 
-    const textchange=(e)=>{
-        console.log('textarea',e.target.value);
+    const textchange = (e) => {
+        console.log('textarea', e.target.value);
 
     }
     // 第一行搜索项
@@ -214,18 +221,30 @@ export default function SalesInfo() {
             name: 'contractDate',
             required: true,
             children: <DatePicker
-                locale="ja"
-                showMonthYearPicker
-                showFullMonthYearPicker
+                allowClear={false}
+                format="YYYY-MM-DD"
                 className="form-control form-control-sm"
                 suffixIcon={dateIcon}
                 onChange={(e, value) => dateChange("contractDate", e, value)}
+                locale={'ja'}
             />
         },
         {
             label: '紹介人(機構)',
             name: 'introducer',
-            maxLength: 8
+            maxLength: 8,
+            children:
+                <AntSelect
+                    className="form-control form-control-sm"
+                    bordered={false}
+                    showArrow={false}
+                    filterOption={(input, option) =>
+                        (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                    }
+                    options={institutionInfo}
+                    onChange={(e) => selChange("introducer", e)}
+                    value={values.introducer}
+                />
 
         },
         {
@@ -367,11 +386,17 @@ export default function SalesInfo() {
             label: '備考',
             name: 'remark',
             children:
-                <textarea className="form-control form-control-sm remark" rows={5} placeholder="備考" cols={3} maxLength={50} wrap='auto' value={values.remark} onChange={(e)=>valueChange('remark',e.target.value)}/>
+                <textarea className="form-control form-control-sm remark" rows={5} placeholder="備考" cols={3} maxLength={50} wrap='auto' value={values.remark} onChange={(e) => valueChange('remark', e.target.value)} />
         },
         {
             label: 'ビザ',
             name: 'visa',
+            children: <AntSelect
+                className="form-control form-control-sm"
+                bordered={false}
+                options={visaList}
+                onChange={(e) => selChange("visa", e)}
+                value={values.visa} />
         }
     ]
 
@@ -471,7 +496,7 @@ export default function SalesInfo() {
                     </Button>
                 </div>
             </Form>
-        <SalesTable/>
+            <SalesTable />
 
         </div>
     )
