@@ -18,6 +18,7 @@ class SubMenu extends Component {
 
   constructor(props) {
     super(props);
+    console.log('submenu',props);
     this.state = {
       nowDate: new Date().toLocaleDateString('ja-JP', {
         year: 'numeric',
@@ -27,6 +28,7 @@ class SubMenu extends Component {
       isMobileDevice: false,
       hover: "", 
       className: "", 
+      path:'/'
     };
   }
 
@@ -42,8 +44,10 @@ class SubMenu extends Component {
     });
   };
 
+
   changePage = (name) => {
     this.setClassName(name);
+
   };
 
   render() {
@@ -190,7 +194,7 @@ class SubMenu extends Component {
             <Col sm={10}>
               <div id="page" style={{ marginRight: 15 }}>
                 <br />
-                  <Routes match={this.props.match} />
+                  <Routes match={this.state.path} />
               </div>
             </Col>
           </Row>

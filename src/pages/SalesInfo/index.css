@@ -3,3 +3,7 @@
 .salesInfo .ant-select{
     padding: 0;
 }
+
+.salesInfo .remark{
+    height: 30px;
+}

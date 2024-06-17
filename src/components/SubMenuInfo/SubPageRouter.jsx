@@ -5,6 +5,7 @@ import EmployeeInsertNew from '../../pages/EmployeeInsertNew';
 import SalesInfo from '../../pages/SalesInfo'
 import ManagementCompanyRegister from '../../pages/ManagementCompanyRegister'
 
+import SalesInfo from '../../pages/SalesInfo';
 const Routes = ({ match }) => {
   return (
     <Switch>
