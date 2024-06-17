@@ -5,7 +5,7 @@ import EmployeeInsert from '../../pages/EmployeeInsert';
 import SalesInfo from '../../pages/SalesInfo'
 import ManagementCompanyRegister from '../../pages/ManagementCompanyRegister'
 import ManagementCompanySearch from '../../pages/ManagementCompanySearch'
-
+import SalesInfo from '../../pages/SalesInfo';
 
 const Routes = ({ match }) => {
   return (

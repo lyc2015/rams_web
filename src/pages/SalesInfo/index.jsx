@@ -7,6 +7,7 @@ import dateImg from '../../assets/images/date_icon.ico'
 
 import { DatePicker, message, Select as AntSelect } from "antd";
 import FromCol from "../../components/SalesInfo/FromCol/index.jsx";
+import SalesTable from '../../components/SalesInfo/SalesTable/index.jsx';
 
 import request from "../../service/request";
 
@@ -47,7 +48,7 @@ export default function SalesInfo() {
         institutionId: '',
         introducer: '',
         introducerFee: '',
-        commissionAdCode: '',
+        commissionAdCode: null,
         bankSales: '',
         asScheduledDate: '',
         applicationAmount: '',
@@ -69,7 +70,10 @@ export default function SalesInfo() {
         phoneNo2: '',
         phoneNo3: ''
     })
+
+
     useEffect(() => {
+
         const getOption = (item) => {
             const obj = { value: item.id, label: `${item.firstName + item.lastName}(${item.id})` }
             return obj
@@ -90,6 +94,8 @@ export default function SalesInfo() {
         fetchData();
 
     }, [])
+    const [refreshFlag, setRefreshFlag] = useState(false)
+
     useEffect(() => {
 
         const getNextId = async () => {
@@ -104,7 +110,7 @@ export default function SalesInfo() {
 
         getNextId();
 
-    }, [])
+    }, [refreshFlag])
 
     const dateChange = (name, e, value) => {
         setValues({
@@ -145,17 +151,22 @@ export default function SalesInfo() {
             ...values,
             contactInfo: phone
         })
-        console.log("values",values);
+        console.log("values", values);
 
     }, [phoneObj])
 
+    const textchange=(e)=>{
+        console.log('textarea',e.target.value);
+
+    }
     // 第一行搜索项
     const topLabelobjs = [
         {
             label: '契約ID',
             name: 'contractId',
             required: true,
-            maxLength: 6
+            maxLength: 6,
+            disabled: true,
         },
         {
             label: '担当者',
@@ -355,6 +366,8 @@ export default function SalesInfo() {
         {
             label: '備考',
             name: 'remark',
+            children:
+                <textarea className="form-control form-control-sm remark" rows={5} placeholder="備考" cols={3} maxLength={50} wrap='auto' value={values.remark} onChange={(e)=>valueChange('remark',e.target.value)}/>
         },
         {
             label: 'ビザ',
@@ -398,11 +411,30 @@ export default function SalesInfo() {
         try {
             const res = await request.post('/sales/insertSales', values)
             console.log(res);
+            if (!res.result) {
+                messageApi.open({
+                    type: 'error',
+                    content: `登録失敗しました`,
+                });
+                return
+
+            }
+            messageApi.open({
+                type: 'success',
+                content: `登録成功しました`,
+            });
+
+            setValues({
+                ...initValues
+            })
+
+            setRefreshFlag(!refreshFlag)
 
         } catch (err) {
             console.log(err);
 
         }
+
 
 
 
@@ -439,6 +471,8 @@ export default function SalesInfo() {
                     </Button>
                 </div>
             </Form>
+        <SalesTable/>
+
         </div>
     )
 }

@@ -1,14 +1,6 @@
-import React , { useState, createContext, useContext, useRef, useEffect }from "react";
-import { DatePicker as AntdDatePicker, message, Dropdown, Space, Cascader, Select, AutoComplete, Input, Table } from "antd";
+import React , { useState, useEffect }from "react";
+import { message, Select, AutoComplete, Input, Table } from "antd";
 import axios from 'axios';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSave } from "@fortawesome/free-solid-svg-icons";
-
-import "react-datepicker/dist/react-datepicker.css";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "../asserts/css/style.css";
-import "../asserts/css/newCssInsert.css"
-import * as publicUtils from "./utils/publicUtils.js";
 
 import { 
   Form, 
@@ -27,14 +19,14 @@ export default function TestManagementCompanySearch() {
     const[searchCompanyByID,setSearchCompanyByID] = useState('');
 
     //grid中の項目
-    const[managementCompanyID,setManagementCompanyID] = useState('');
-    const[managementCompanyName,setManagementCompanyName] = useState('');
-    const[managementCompanyMail,setManagementCompanyMail] = useState('');
-    const[managementCompanyPhoneNo,setManagementCompanyPhoneNo] = useState('');
-    const[managementCompanyURL,setManagementCompanyURL] = useState('');
-    const[managementCompanyPostCode,setManagementCompanyPostCode] = useState('');
-    const[managementCompanyAddress,setManagementCompanyAddress] = useState('');
-    const[managementCompanyRemark,setManagementCompanyRemark] = useState('');
+    // const[managementCompanyID,setManagementCompanyID] = useState('');
+    // const[managementCompanyName,setManagementCompanyName] = useState('');
+    // const[managementCompanyMail,setManagementCompanyMail] = useState('');
+    // const[managementCompanyPhoneNo,setManagementCompanyPhoneNo] = useState('');
+    // const[managementCompanyURL,setManagementCompanyURL] = useState('');
+    // const[managementCompanyPostCode,setManagementCompanyPostCode] = useState('');
+    // const[managementCompanyAddress,setManagementCompanyAddress] = useState('');
+    // const[managementCompanyRemark,setManagementCompanyRemark] = useState('');
 
     //取得した会社情報
     const [options, setOptions] = useState('');

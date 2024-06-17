@@ -9,6 +9,8 @@ import "../../assets/css/style.css";
 import "../../assets/css/newCssInsert.css"
 import * as publicUtils from "../../utils/publicUtils.js";
 
+import request from "../../service/request"
+
 import { 
   Form, 
   Button, 
@@ -179,7 +181,7 @@ export default class ManagementCompanyRegister extends Component {
 
 async fetchMaxNo() {
   try {
-    const response = await fetch('http://localhost:8080/employee/searchManagementCompanyID',
+    const response = await request('/employee/searchManagementCompanyID',
       { method: 'POST', // 请求方法
         headers: {
           'Content-Type': 'application/json', // 请求头
@@ -187,15 +189,11 @@ async fetchMaxNo() {
         body: '', // 请求体
       }
     );
-
-    if (!response.ok) {
+    if (response.status !== 200) {
       message.error('管理会社ID取得失敗')
     }
-    
-    const data = await response.json();
-    console.log("maxID--------",data.maxID)
     //取得した最大管理会社IDを反映する
-    this.setState({ managementCompanyID: data.maxID });
+    this.setState({ managementCompanyID: response.maxID });
 
   } catch (error) {
      message.error('管理会社ID取得失敗')
@@ -242,7 +240,7 @@ async fetchMaxNo() {
     // 这里进行异步数据获取
     try {
 
-      const response = await fetch('http://localhost:8080/employee/registerManagementCompany',
+      const response = await request('/employee/registerManagementCompany',
         { method: 'POST', // 请求方法
           headers: {
             'Content-Type': 'application/json', // 请求头

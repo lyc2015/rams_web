@@ -5,6 +5,8 @@ import "./index.css";
 import title from "../../assets/images/LYCmark.png";
 import request from "../../service/request";
 
+import { message } from "antd"
+
 /**
  * 管理者ログイン画面
  */ 
@@ -12,12 +14,9 @@ class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      serverIP: "", // 设置你的服务器IP
       buttonText: "SMSを発信する",
       btnDisable: false,
       time: 60,
-      errorsMessageShow: false,
-      errorsMessageValue: "",
       pic: title,
       remberPassWord: false,
       companyName: "LYC"
@@ -41,23 +40,18 @@ class Login extends Component {
       password: document.getElementById("password").value,
       verificationCode: document.getElementById("verificationCode").value,
     };
-    request.post(this.state.serverIP + "login/login", loginModel)
+    request.post("login/login", loginModel)
       .then((res) => {
         if (res.data.code === 200) {
+          message.success("success")
           // 保存Cookie逻辑
           window.location.href = "/submenu";
         } else {
-          this.setState({
-            errorsMessageShow: true,
-            errorsMessageValue: res.data.message,
-          });
+          message.error("fail")
         }
       })
       .catch((error) => {
-        this.setState({
-          errorsMessageShow: true,
-          errorsMessageValue: error.message,
-        });
+        message.error("fail")
       });
   };
 
@@ -68,8 +62,6 @@ class Login extends Component {
   };
 
   render() {
-    const { errorsMessageValue } = this.state;
-
     const sendCode = () => {
       // 发送验证码逻辑
     };
@@ -77,9 +69,6 @@ class Login extends Component {
     return (
       <div className="loginBody">
         <div style={{ marginTop: "10%" }}>
-          <div style={{ display: this.state.errorsMessageShow ? "block" : "none" }}>
-            <div className="error-message">{errorsMessageValue}</div>
-          </div>
           <div style={{ textAlign: "center" }}>
             <img className="mb-4" alt="title" src={this.state.pic} style={{ width: "65px" }} />
             {"   "}

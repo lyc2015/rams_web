@@ -6,6 +6,7 @@ import EmployeeInsert from "../pages/EmployeeInsert";
 import EmployeeSearch from "../pages/EmployeeSearch";
 import SalesInfo from "../pages/SalesInfo";
 import ManagementCompanyRegister from "../pages/ManagementCompanyRegister";
+import SubMenuNew from "../pages/SubmenuNew";
 
 export default function Router() {
   return (
@@ -14,7 +15,8 @@ export default function Router() {
       <Route exact path="/submenu" component={SubMenu} />
       <Route exact path="/insert" component={EmployeeInsert} />
       <Route exact path="/subMenuManager/employeeSearch" component={EmployeeSearch} />
-      <Route exact path="/salesInfo" component={SalesInfo} />
+      <Route exact path="/submenu/salesInfo" component={SalesInfo} />
+      <Route exact path="/submenuNew" component={SubMenuNew} />
       <Route exact path="/managementCompanyRegister" component={ManagementCompanyRegister} />
 
     </Switch>
