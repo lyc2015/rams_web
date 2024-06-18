@@ -1891,6 +1891,11 @@ class manageSituation extends React.Component {
       unitPrice = this.state.unitPrice;
     }
 
+    const _beginMonth = new Date(beginMonth).getMonth() + 1;
+    const formattedMonth = _beginMonth.toString().replace(/^0/, "");
+
+    console.log(formattedMonth, 'formattedMonth'); // 输出去除前导零后的月份
+
     text =
       "【名　　前】：" +
       result.data[0].employeeFullName +
@@ -1967,13 +1972,7 @@ class manageSituation extends React.Component {
       (Number(admissionEndDate) <
         this.getNextMonth(new Date(), 0).replace("/", "")
         ? "即日\n"
-        : publicUtils
-          .formateDate(beginMonth, false)
-          .substring(0, 6)
-          .replace(/\b(0+)/gi, "")
-          .split("")
-          .toSpliced(4, 0, "/")
-          .join("") + "\n") +
+        : (formattedMonth + '月') + "\n") +
       ("【営業状況】：" +
         (this.getSalesProgressCodeName(salesProgressCode) + '\n'
         )) +

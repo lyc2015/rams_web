@@ -207,6 +207,10 @@ class salesContent extends React.Component {
   };
 
   getText = () => {
+    const beginMonth = new Date(this.state.beginMonth).getMonth() + 1;
+    const formattedMonth = beginMonth.toString().replace(/^0/, "");
+
+    console.log(formattedMonth, 'formattedMonth'); // 输出去除前导零后的月份
     let employeeStatusName =
       this.state.employees.find((v) => v.code === this.state.employeeStatus)
         .name || "";
@@ -298,13 +302,7 @@ class salesContent extends React.Component {
       (Number(this.state.admissionEndDate) <
         this.getNextMonth(new Date(), 0).replace("/", "")
         ? "即日"
-        : publicUtils
-          .formateDate(this.state.beginMonth, false)
-          .substring(0, 6)
-          .replace(/\b(0+)/gi, "")
-          .split("")
-          .toSpliced(4, 0, "/")
-          .join("")) +
+        : (formattedMonth + '月')) +
       `
 【営業状況】：` +
       (this.state.salesProgressCode + ""
