@@ -16,7 +16,6 @@ class SubMenu extends Component {
 
   constructor(props) {
     super(props);
-    console.log('submenu',props);
     this.state = {
       nowDate: new Date().toLocaleDateString('ja-JP', {
         year: 'numeric',

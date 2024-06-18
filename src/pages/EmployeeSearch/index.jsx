@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSave, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { Table, message, Form, Button, Col, Row, Input } from 'antd';
@@ -35,7 +36,10 @@ export default function EmployeeSearch() {
 
     const [values, setValues] = useState(initValues);
     const [data, setData] = useState([]);
+    const [allData, setallData] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+    const history = useHistory();
 
     const valueChange = (name, value) => {
         setValues({
@@ -121,7 +125,9 @@ export default function EmployeeSearch() {
             setLoading(true);
             try {
                 const response = await request.get('/employee/all');
-                console.log('Fetched employees:-----------------', response);
+                setallData(response);
+                console.log('Fetched employees:', typeof(response));
+                console.log('Fetched employees:-----------------', response.data);
                 const transformedData = response.map((item, index) => ({
                     key: index,
                     employeeId: item.employeeNo,
@@ -145,6 +151,26 @@ export default function EmployeeSearch() {
 
         fetchEmployees();
     }, []);
+
+    const onSelectChange = (selectedRowKeys) => {
+        setSelectedRowKeys(selectedRowKeys);
+    };
+
+    const rowSelection = {
+        selectedRowKeys,
+        onChange: onSelectChange,
+    };
+
+    const handleEditClick = () => {
+        if (selectedRowKeys.length !== 1) {
+            message.error('Please select exactly one row to edit.');
+            return;
+        }
+        const selectedEmployeeId = selectedRowKeys[0];
+        console.log("data", data);
+        console.log("data", data[selectedEmployeeId]);
+        history.push(`/submenu/employeeInsertNew`, { employee: data[selectedEmployeeId] });
+    };
 
     return (
         <div className="container">
@@ -187,6 +213,7 @@ export default function EmployeeSearch() {
                                 name="clickButton"
                                 id="update"
                                 variant="info"
+                                onClick={handleEditClick}
                             >
                                 <FontAwesomeIcon icon={faEdit} />
                                 修正
@@ -197,7 +224,18 @@ export default function EmployeeSearch() {
                 </div>
                 <Row>
                     <Col span={24}>
-                        <Table dataSource={data} columns={columns} pagination={{ pageSize: 10 }} loading={loading} />
+                        <Table
+                            rowSelection={rowSelection}
+                            dataSource={data}
+                            columns={columns}
+                            pagination={{ pageSize: 10 }}
+                            loading={loading}
+                            onRow={(record) => ({
+                                onClick: () => {
+                                    setSelectedRowKeys([record.key]);
+                                },
+                            })}
+                        />
                     </Col>
                 </Row>
             </Form>

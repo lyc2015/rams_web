@@ -16,11 +16,13 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 
 import default_avatar from '../../assets/images/default_avatar.jpg';
 import "./index.css";
-import request from '../../service/request';
+import request from '../../service/request.js';
 
 import { DatePicker, message, Select as AntSelect } from "antd";
 
-import FromCol from "../../components/EmployeeInsert/FromCol/index.jsx";
+// import FromCol from "../../components/EmployeeInsert/FromCol/index.jsx";
+
+import { useLocation } from 'react-router-dom';
 
 import { 
   Form, 
@@ -39,60 +41,64 @@ class EmployeeInsert extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = this.initialState; // 初期化
     this.insertEmployee = this.insertEmployee.bind(this); // 登録
+
+    // const { employee } = this.props.location.state || {};
+    const employee = this.props.location.state ? this.props.location.state.employee : {};
+    console.log("employee----", employee.name);
+
+    this.state = { // 初期化
+      employeeFormCode: "",
+      employeeNo: "",
+      employeeFirstName: employee.name || "xxx",
+      employeeLastName: "",
+      furigana1: "",
+      furigana2: "",
+      alphabetName1: "",
+      alphabetName2: "",
+      alphabetName3: "",
+      birthday: "",
+      genderStatus: "",
+      nationalityCode: "",
+      birthplace: "",
+      image: default_avatar,
+      temporary_age: "",
+      companyMail: "",
+      socialInsuranceNo: "",
+      socialInsuranceDate: null,
+  
+      employmentInsurance: "",
+      employmentInsuranceNo: "",
+      socialInsurance: "",      
+      employmentInsuranceStatus: [
+        { code: "0", name: "未加入" },
+        { code: "1", name: "加入済み" }
+      ],
+      socialInsuranceStatus: [
+        { code: "0", name: "未加入" },
+        { code: "1", name: "加入済み" }
+      ],
+      graduationYearAndMonth: null,
+      comeToJapanYearAndMonth: null,
+      intoCompanyYearAndMonth: null,
+      yearsOfExperience: null,
+      temporary_graduationYearAndMonth: "",
+      temporary_comeToJapanYearAndMonth: "",
+      temporary_intoCompanyYearAndMonth: "",
+      temporary_yearsOfExperience: "",
+      employeeStatus: "0",
+      postalCode: '',
+      firstHalfAddress: '',
+      // dropDown
+      // nationalityCodes: store.getState().dropDown[0],
+      nationalityCodes: [],
+      station: [],
+      employeeFormCodes: [],
+      departmentCodes: [],
+      homesAgentCodes: [],
+    }
   }
-
-  initialState = {
-    employeeFormCode: "",
-    employeeNo: "",
-    employeeFristName: "",
-    employeeLastName: "",
-    furigana1: "",
-    furigana2: "",
-    alphabetName1: "",
-    alphabetName2: "",
-    alphabetName3: "",
-    birthday: "",
-    genderStatus: "",
-    nationalityCode: "",
-    birthplace: "",
-    image: default_avatar,
-    temporary_age: "",
-    companyMail: "",
-    socialInsuranceNo: "",
-    socialInsuranceDate: null,
-
-    employmentInsurance: "",
-    employmentInsuranceNo: "",
-    socialInsurance: "",      
-    employmentInsuranceStatus: [
-      { code: "0", name: "未加入" },
-      { code: "1", name: "加入済み" }
-    ],
-    socialInsuranceStatus: [
-      { code: "0", name: "未加入" },
-      { code: "1", name: "加入済み" }
-    ],
-    graduationYearAndMonth: null,
-    comeToJapanYearAndMonth: null,
-    intoCompanyYearAndMonth: null,
-    yearsOfExperience: null,
-    temporary_graduationYearAndMonth: "",
-    temporary_comeToJapanYearAndMonth: "",
-    temporary_intoCompanyYearAndMonth: "",
-    temporary_yearsOfExperience: "",
-    employeeStatus: "0",
-    postalCode: '',
-    firstHalfAddress: '',
-    // dropDown
-    // nationalityCodes: store.getState().dropDown[0],
-    nationalityCodes: [],
-    station: [],
-    employeeFormCodes: [],
-    departmentCodes: [],
-    homesAgentCodes: [],
-  };
+  
 
   /**
    * 登録
@@ -105,7 +111,7 @@ class EmployeeInsert extends React.Component {
     const emp = {
       employeeStatus: this.state.employeeStatus,                                    // 社員区分
       employeeNo: this.state.employeeNo,                                            // 社員番号
-      employeeFirstName: publicUtils.trim(this.state.employeeFristName),            // 社員氏
+      employeeFirstName: publicUtils.trim(this.state.employeeFirstName),            // 社員氏
       employeeLastName: publicUtils.trim(this.state.employeeLastName),              // 社員名
       furigana1: publicUtils.nullToEmpty(this.state.furigana1),                     // カタカナ
       furigana2: publicUtils.nullToEmpty(this.state.furigana2),                     // カタカナ
@@ -186,7 +192,7 @@ class EmployeeInsert extends React.Component {
           });
           setTimeout(() => this.setState({ myToastShow: false }), 3000);
           this.setState({
-            employeeFristName: publicUtils.trim(this.state.employeeFristName), // 社員氏
+            employeeFirstName: publicUtils.trim(this.state.employeeFirstName), // 社員氏
             employeeLastName: publicUtils.trim(this.state.employeeLastName), // 社員名
             disabledFalg: false,
           });
@@ -354,10 +360,10 @@ class EmployeeInsert extends React.Component {
     let promise = Promise.resolve(publicUtils.katakanaApi(value));
     promise.then((date) => {
       switch (name) {
-        case "employeeFristName":
+        case "employeeFirstName":
           this.setState({
             furigana1: date,
-            employeeFristName: value,
+            employeeFirstName: value,
           });
           break;
         case "employeeLastName":
@@ -403,6 +409,14 @@ class EmployeeInsert extends React.Component {
 
 
   render() {
+    const { employee } = this.props.location.state || {};
+    // this.setState({ employeeId });
+    // const { employee } = this.state;
+    console.log("employee", employee);
+    // const location = useLocation();
+    // const { employeeId } = location.state || {};
+    // console.log("employeeId", employeeId);
+
     // 第一行搜索项
     const topLabelobjs = [
       {
@@ -431,6 +445,7 @@ class EmployeeInsert extends React.Component {
     }
   ]
     const {
+      employeeFirstName,
       nationalityCode,
       employeeFormCode,
       companyMail,
@@ -475,7 +490,7 @@ class EmployeeInsert extends React.Component {
               </Row>
           <Row>
             <Col md={4}>
-            {topLabelobjs.map((item, idx) => (
+            {/* {topLabelobjs.map((item, idx) => (
               <FromCol
                 key={idx}
                 {...item}
@@ -483,7 +498,7 @@ class EmployeeInsert extends React.Component {
                 // valueChange={valueChange}
                 required={item.required}
               />
-            ))}
+            ))} */}
 
               <InputGroup size="sm" className="mb-3">
                 <InputGroup.Prepend>
@@ -519,10 +534,10 @@ class EmployeeInsert extends React.Component {
                 </InputGroup.Prepend>
                 <FormControl
                   placeholder="社員氏"
-                  value={this.state.employeeFristName}
+                  value={this.state.employeeFirstName}
                   onChange={this.valueChange}
                   onBlur={this.katakanaApiChange.bind(this)}
-                  name="employeeFristName"
+                  name="employeeFirstName"
                   size="sm"
                 />
                 <FormControl

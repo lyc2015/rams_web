@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import EmployeeSearch from '../../pages/EmployeeSearch';
-import EmployeeInsert from '../../pages/EmployeeInsert';
+import EmployeeInsert from '../../pages/EmployeeInfo';
 import SalesInfo from '../../pages/SalesInfo'
 import ManagementCompanyRegister from '../../pages/ManagementCompanyRegister'
 import ManagementCompanySearch from '../../pages/ManagementCompanySearch'
