@@ -27,7 +27,9 @@ import './index.css'
 
 import moment from "moment";
 const dateIcon = <img src={dateImg} alt="" />;
-
+// const data=(value1,value2)=>{
+//     const val=value1.
+// }
 console.log('moment', moment().format("YYYY-MM-DD"));
 
 export default function SalesInfo() {
@@ -80,7 +82,7 @@ export default function SalesInfo() {
             return obj
         }
         const fetchData = async () => {
-            const data = await request.get('/getEmployeeInfo');
+            const data = await request.get('/getSalesBaseInfo');
             const newList = data.employeeList.map(getOption)
             setEmployeeOption(newList)
             setAdCodeList(data.adCodeList)
@@ -125,8 +127,18 @@ export default function SalesInfo() {
     }
 
     useEffect(() => {
-        console.log('useEffect');
-    }, [])
+
+       const nowAd= adCodeList.find(item=>item.value===values.commissionAdCode)
+       if(nowAd&&values.rent){
+        const adNum =parseInt(nowAd.label)/100
+        const introducerFee=adNum
+
+
+       }
+        
+        
+        
+    }, [values.commissionAdCode,values.rent])
 
 
     const getPostCode = async (valueInput, inputName) => {
