@@ -504,14 +504,15 @@ class manageSituation extends React.Component {
             }
 
             if (!completePercet && result.data[i].completePercet) {
-              completePercet = result.data[i].completePercet + "%"
+              completePercet = result.data[i].completePercet === '100.0' ? '100' : result.data[i].completePercet + "%"
             }
           }
 
           if (!completePercet) {
             completePercet = completeCount === 0 ? 0 : parseInt(completeCount) / parseInt(result.data.length);
             completePercet =
-              (Math.round(completePercet * 10000) / 100).toFixed(1) + "%";
+              (Math.round(completePercet * 10000) / 100).toFixed(1)
+            completePercet = (completePercet === '100.0' ? '100' : completePercet) + "%";
           }
 
           var totalPersons = result.data.length;

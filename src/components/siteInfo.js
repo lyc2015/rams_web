@@ -287,7 +287,7 @@ class siteInfo extends Component {
               this.state.admissionEndDate.getMonth() + 1,
               0
             ).getDate() -
-              this.state.admissionEndDate.getDate() >
+            this.state.admissionEndDate.getDate() >
             2
           ) {
             this.setState({
@@ -316,7 +316,7 @@ class siteInfo extends Component {
             this.state.admissionEndDate.getMonth() + 1,
             0
           ).getDate() -
-            this.state.admissionEndDate.getDate() >
+          this.state.admissionEndDate.getDate() >
           2
         ) {
           this.setState({
@@ -336,14 +336,14 @@ class siteInfo extends Component {
   };
   // 退場年月
   admissionEndDate = (date, dateString) => {
-	date = date?.toDate();
+    date = date?.toDate();
     this.setState({
       admissionEndDate: date,
     });
     if (date !== null) {
       if (
         new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate() -
-          date.getDate() >
+        date.getDate() >
         2
       ) {
         this.setState({
@@ -578,13 +578,13 @@ class siteInfo extends Component {
                       placement: "topLeft",
                     });
                     //BP社員かつ情報なしの場合は非活性化に設定する
-                    if(this.state.employeeName!=null && this.state.employeeName!=""){
-                        let mark = this.state.employeeName.substring(0,2);
-                        if(mark=="BP"){
-                            this.setState({
-                              pageDisabledFlag: true,
-                            });
-                        }
+                    if (this.state.employeeName != null && this.state.employeeName != "") {
+                      let mark = this.state.employeeName.substring(0, 2);
+                      if (mark == "BP") {
+                        this.setState({
+                          pageDisabledFlag: true,
+                        });
+                      }
                     }
 
                   } else message.error(response.data.errorsMessage);
@@ -735,8 +735,8 @@ class siteInfo extends Component {
         row.admissionStartDate === null
           ? ""
           : new Date(
-              publicUtils.converToLocalTime(row.admissionStartDate, true)
-            ),
+            publicUtils.converToLocalTime(row.admissionStartDate, true)
+          ),
       time: publicUtils.getFullYearMonth(
         new Date(publicUtils.converToLocalTime(row.admissionStartDate, true)),
         new Date()
@@ -778,15 +778,15 @@ class siteInfo extends Component {
         row.relatedEmployees === null
           ? ""
           : publicUtils.textGetValue(
-              row.relatedEmployees.split(",")[0],
-              this.state.employeeInfoAll
-            ),
+            row.relatedEmployees.split(",")[0],
+            this.state.employeeInfoAll
+          ),
       related2Employees:
         row.relatedEmployees === null
           ? ""
           : row.relatedEmployees.split(",")[1] === undefined
-          ? ""
-          : publicUtils.textGetValue(
+            ? ""
+            : publicUtils.textGetValue(
               row.relatedEmployees.split(",")[1],
               this.state.employeeInfoAll
             ),
@@ -794,8 +794,8 @@ class siteInfo extends Component {
         row.relatedEmployees === null
           ? ""
           : row.relatedEmployees.split(",")[2] === undefined
-          ? ""
-          : publicUtils.textGetValue(
+            ? ""
+            : publicUtils.textGetValue(
               row.relatedEmployees.split(",")[2],
               this.state.employeeInfoAll
             ),
@@ -803,8 +803,8 @@ class siteInfo extends Component {
         row.relatedEmployees === null
           ? ""
           : row.relatedEmployees.split(",")[3] === undefined
-          ? ""
-          : publicUtils.textGetValue(
+            ? ""
+            : publicUtils.textGetValue(
               row.relatedEmployees.split(",")[3],
               this.state.employeeInfoAll
             ),
@@ -813,8 +813,8 @@ class siteInfo extends Component {
         row.siteRoleCode === "0"
           ? true
           : row.siteRoleCode === "1"
-          ? true
-          : false,
+            ? true
+            : false,
       workDate: row.workDate,
     });
     if (
@@ -834,10 +834,10 @@ class siteInfo extends Component {
             .converToLocalTime(row.admissionEndDate, true)
             .getFullYear(),
           publicUtils.converToLocalTime(row.admissionEndDate, true).getMonth() +
-            1,
+          1,
           0
         ).getDate() -
-          publicUtils.converToLocalTime(row.admissionEndDate, true).getDate() >
+        publicUtils.converToLocalTime(row.admissionEndDate, true).getDate() >
         2
       ) {
         this.setState({
@@ -887,8 +887,8 @@ class siteInfo extends Component {
           row.admissionStartDate === null
             ? ""
             : new Date(
-                publicUtils.converToLocalTime(row.admissionStartDate, true)
-              ),
+              publicUtils.converToLocalTime(row.admissionStartDate, true)
+            ),
         time: publicUtils.getFullYearMonth(
           new Date(publicUtils.converToLocalTime(row.admissionStartDate, true)),
           new Date()
@@ -897,8 +897,8 @@ class siteInfo extends Component {
           row.admissionEndDate === null
             ? ""
             : new Date(
-                publicUtils.converToLocalTime(row.admissionEndDate, true)
-              ),
+              publicUtils.converToLocalTime(row.admissionEndDate, true)
+            ),
         workState: row.workState === null ? "" : row.workState,
         dailyCalculationStatus:
           row.dailyCalculationStatus === "0" ? true : false,
@@ -933,15 +933,15 @@ class siteInfo extends Component {
           row.relatedEmployees === null
             ? ""
             : publicUtils.textGetValue(
-                row.relatedEmployees.split(",")[0],
-                this.state.employeeInfoAll
-              ),
+              row.relatedEmployees.split(",")[0],
+              this.state.employeeInfoAll
+            ),
         related2Employees:
           row.relatedEmployees === null
             ? ""
             : row.relatedEmployees.split(",")[1] === undefined
-            ? ""
-            : publicUtils.textGetValue(
+              ? ""
+              : publicUtils.textGetValue(
                 row.relatedEmployees.split(",")[1],
                 this.state.employeeInfoAll
               ),
@@ -949,8 +949,8 @@ class siteInfo extends Component {
           row.relatedEmployees === null
             ? ""
             : row.relatedEmployees.split(",")[2] === undefined
-            ? ""
-            : publicUtils.textGetValue(
+              ? ""
+              : publicUtils.textGetValue(
                 row.relatedEmployees.split(",")[2],
                 this.state.employeeInfoAll
               ),
@@ -958,8 +958,8 @@ class siteInfo extends Component {
           row.relatedEmployees === null
             ? ""
             : row.relatedEmployees.split(",")[3] === undefined
-            ? ""
-            : publicUtils.textGetValue(
+              ? ""
+              : publicUtils.textGetValue(
                 row.relatedEmployees.split(",")[3],
                 this.state.employeeInfoAll
               ),
@@ -968,8 +968,8 @@ class siteInfo extends Component {
           row.siteRoleCode === "0"
             ? true
             : row.siteRoleCode === "1"
-            ? true
-            : false,
+              ? true
+              : false,
         workDate: row.workDate,
       });
       if (
@@ -994,9 +994,9 @@ class siteInfo extends Component {
               .getMonth() + 1,
             0
           ).getDate() -
-            publicUtils
-              .converToLocalTime(row.admissionEndDate, true)
-              .getDate() >
+          publicUtils
+            .converToLocalTime(row.admissionEndDate, true)
+            .getDate() >
           2
         ) {
           this.setState({
@@ -1171,7 +1171,7 @@ class siteInfo extends Component {
     const prevWorkState = this.state.siteData[this.state.siteData.length - 1]["workState"];
     const prevAdmissionEndDate = this.state.siteData[this.state.siteData.length - 1]["admissionEndDate"]?.slice(0, 6);
     const prevScheduledEndDate = this.state.siteData[this.state.siteData.length - 1]["scheduledEndDate"]?.slice(0, 6);
-  
+
     if (this.state.siteData.length > 1) {
       siteModel["checkDate"] =
         this.state.siteData[this.state.siteData.length - 2].admissionEndDate;
@@ -1712,8 +1712,8 @@ class siteInfo extends Component {
                           this.state.dailyCalculationStatusFlag === true
                             ? true
                             : pageDisabledFlag
-                            ? true
-                            : false
+                              ? true
+                              : false
                         }
                       />
                     </InputGroup.Prepend>
@@ -1725,17 +1725,17 @@ class siteInfo extends Component {
                     className={
                       "mb-3 flexWrapNoWrap " +
                       (this.state.workState === "0" ||
-                      this.state.workState === "3"
+                        this.state.workState === "3"
                         ? ""
                         : "required-mark")
                     }
                   >
                     <InputGroup.Prepend>
                       <InputGroup.Text id="fiveKanji">
-                       退場年月日
+                        退場年月日
                       </InputGroup.Text>
                     </InputGroup.Prepend>
-                    <InputGroup.Prepend style={{width:'100%'}}>
+                    <InputGroup.Prepend style={{ width: '100%' }}>
                       <AntdDatePicker
                         allowClear={false}
                         suffixIcon={false}
@@ -1750,23 +1750,23 @@ class siteInfo extends Component {
                         locale="ja"
                         id={
                           this.state.workState !== "0" &&
-                          this.state.workState !== "3"
-                          ? pageDisabledFlag
-                            ? "siteDatePickerReadonlyDefault"
-                            : "admissionEndDate"
-                          : "siteDatePickerReadonlyDefault"
+                            this.state.workState !== "3"
+                            ? pageDisabledFlag
+                              ? "siteDatePickerReadonlyDefault"
+                              : "admissionEndDate"
+                            : "siteDatePickerReadonlyDefault"
                         }
                         disabled={
-                         this.state.employeeName === ""
-                          ? true
-                          : this.state.workState === "0" ||
-                            this.state.workState === "3"
-                          ? true
-                          : pageDisabledFlag
-                          ? true
-                          : false
+                          this.state.employeeName === ""
+                            ? true
+                            : this.state.workState === "0" ||
+                              this.state.workState === "3"
+                              ? true
+                              : pageDisabledFlag
+                                ? true
+                                : false
                         }
-                       style={{padding:"0px",width: '100%'}}
+                        style={{ padding: "0px", width: '100%' }}
                       />
                     </InputGroup.Prepend>
 
@@ -2066,8 +2066,8 @@ class siteInfo extends Component {
                         payOffRange1 === "0"
                           ? true
                           : pageDisabledFlag
-                          ? true
-                          : false
+                            ? true
+                            : false
                       }
                     >
                       {this.state.payOffRangeStatus.map((data) => (
@@ -2325,23 +2325,23 @@ class siteInfo extends Component {
                       showFullMonthYearPicker
                       showDisabledMonthNavigation
                       className="form-control form-control-sm w100p"
-                      id="scheduledEndDate-siteInfo"
+                      // id="scheduledEndDate-siteInfo"
                       locale="ja"
                       autoComplete="off"
-                      disabled={pageDisabledFlag}
+                      // disabled={pageDisabledFlag}
                       id={
                         pageDisabledFlag
                           ? "scheduledEndDate-siteInfoReadOnly"
                           : this.state.workState === "1"
-                          ? "scheduledEndDate-siteInfoReadOnly"
-                          : "scheduledEndDate-siteInfo"
+                            ? "scheduledEndDate-siteInfoReadOnly"
+                            : "scheduledEndDate-siteInfo"
                       }
                       disabled={
                         pageDisabledFlag
                           ? true
                           : this.state.workState === "1"
-                          ? true
-                          : false
+                            ? true
+                            : false
                       }
                     />
                   </InputGroup>
@@ -2419,7 +2419,7 @@ class siteInfo extends Component {
                 variant="info"
                 name="clickButton"
                 onClick={this.handleShowModal.bind(this, "bpInfoModel")}
-                disabled={!this.state.employeeName?.includes("BP")}
+                disabled={!(this.state.employeeName?.includes("BP") || this.state.siteData?.[0]?.bpInfoNum)}
               >
                 BP情報
               </Button>
