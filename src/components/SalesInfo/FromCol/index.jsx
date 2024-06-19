@@ -12,7 +12,7 @@ import './index.css'
 
 
 
-export default function FromCol({ children, label, value, valueChange, required, name,maxLength ,type,disabled,...otherProps}) {
+export default function FromCol({ children, label, value, valueChange, required, name,maxLength ,type,disabled,md=4,...otherProps}) {
     const handleChange=(e)=>{
         let value=e.target.value
         if(type==="number"){
@@ -24,7 +24,7 @@ export default function FromCol({ children, label, value, valueChange, required,
         valueChange(name,value)
     }
     return (
-        <Col md={4} className='fromCol'>
+        <Col md={md} className='fromCol'>
             <InputGroup size="sm" className={`mb-3  ${required && 'required-mark'}`}>
                 <InputGroup.Prepend>
                     <InputGroup.Text>{label}</InputGroup.Text>

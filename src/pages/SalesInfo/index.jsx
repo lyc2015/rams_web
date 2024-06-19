@@ -46,7 +46,7 @@ export default function SalesInfo() {
         rent: '',
         realEstateManagementCompanyCode: '',
         institutionId: '',
-        introducer: '',
+        // introducer: '',
         introducerFee: '',
         commissionAdCode: null,
         bankSales: '',
@@ -242,7 +242,7 @@ export default function SalesInfo() {
         },
         {
             label: '紹介人(機構)',
-            name: 'introducer',
+            name: 'institutionId',
             maxLength: 8,
             children:
                 <AntSelect
@@ -253,8 +253,8 @@ export default function SalesInfo() {
                         (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                     }
                     options={institutionInfo}
-                    onChange={(e) => selChange("introducer", e)}
-                    value={values.introducer}
+                    onChange={(e) => selChange("institutionId", e)}
+                    value={values.institutionId}
                 />
 
         },
@@ -507,7 +507,6 @@ export default function SalesInfo() {
                     </Button>
                 </div>
             </Form>
-            <SalesTable />
 
         </div>
     )
