@@ -14,20 +14,20 @@ export async function fetchDropDown(state = defaultState) {
   try {
     let par = JSON.stringify(methodNameList);
     const response = await request.post('/initializationPage', par);
-    
-    const outArray = response.data.map(list => {
-      const array = [{ code: "", name: "" }];
-      for (const item of list) {
-        array.push(item);
-      }
-      return array;
-    });
+    console.log('response', response);
+    // const outArray = response.data.map(list => {
+    //   const array = [{ code: "", name: "" }];
+    //   for (const item of list) {
+    //     array.push(item);
+    //   }
+    //   return array;
+    // });
 
-    if (outArray.length > 0) {
-      outArray.push(outArray[outArray.length - 1].slice(1)[0].name);
-    }
+    // if (outArray.length > 0) {
+    //   outArray.push(outArray[outArray.length - 1].slice(1)[0].name);
+    // }
 
-    return outArray;
+    // return outArray;
   } catch (error) {
     console.error('Error fetching dropdown data:', error);
     throw error;

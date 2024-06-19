@@ -35,8 +35,8 @@ export default function EmployeeSearch() {
     }
 
     const [values, setValues] = useState(initValues);
-    const [data, setData] = useState([]);
-    const [allData, setallData] = useState([]);
+    const [tableData, setTableData] = useState([]);
+    const [transformedData, setTransformedData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [selectedRowKeys, setSelectedRowKeys] = useState([]);
     const history = useHistory();
@@ -110,12 +110,12 @@ export default function EmployeeSearch() {
     const columns = [
         { title: '番号', dataIndex: 'key', key: 'key' },
         { title: '社員番号', dataIndex: 'employeeId', key: 'employeeId' },
-        { title: '社員名', dataIndex: 'name', key: 'name' },
-        { title: '社員形式', dataIndex: 'katakana', key: 'katakana' },
-        { title: '仲介区分', dataIndex: 'romaji', key: 'romaji' },
-        { title: '電話番号', dataIndex: 'age', key: 'age', render: (text, record) => `${record.dob} (${record.age})` },
-        { title: '最寄駅', dataIndex: 'phone', key: 'phone' },
-        { title: '経験年数', dataIndex: 'station', key: 'station' },
+        { title: '社員名', dataIndex: 'employeeName', key: 'employeeName' },
+        { title: '社員形式', dataIndex: 'employeeFormCode', key: 'employeeFormCode' },
+        { title: '仲介区分', dataIndex: 'homesAgentCode', key: 'homesAgentCode' },
+        { title: '電話番号', dataIndex: 'phoneNo', key: 'phoneNo', },
+        { title: '最寄駅', dataIndex: 'stationCode', key: 'stationCode' },
+        { title: '経験年数', dataIndex: 'yearsOfExperience', key: 'yearsOfExperience' },
         { title: '入社年月', dataIndex: 'hireYear', key: 'hireYear' },
         { title: '来日年月', dataIndex: 'joinYear', key: 'joinYear' },
     ];
@@ -125,25 +125,28 @@ export default function EmployeeSearch() {
             setLoading(true);
             try {
                 const response = await request.get('/employee/all');
-                setallData(response);
-                console.log('Fetched employees:', typeof(response));
-                console.log('Fetched employees:-----------------', response.data);
-                const transformedData = response.map((item, index) => ({
+                const tableData = response.map((item, index) => ({
                     key: index,
                     employeeId: item.employeeNo,
-                    name: `${item.employeeFirstName} ${item.employeeLastName}`,
-                    katakana: '', // 假设没有相应的字段，需要手动添加
-                    romaji: '', // 假设没有相应的字段，需要手动添加
-                    dob: '', // 假设没有相应的字段，需要手动添加
-                    age: '', // 需要计算年龄
-                    phone: item.phoneNo,
-                    station: '', // 假设没有相应的字段，需要手动添加
+                    employeeName: `${item.employeeFirstName} ${item.employeeLastName}`,
+                    employeeFormCode: item.employeeFormCode,
+                    homesAgentCode: item.homesAgentCode,
+                    phoneNo: item.phoneNo,
+                    stationCode: item.stationCode,
+                    yearsOfExperience: item.yearsOfExperience,
                     hireYear: item.intoCompanyYearAndMonth,
                     joinYear: item.comeToJapanYearAndMonth,
                 }));
-                setData(transformedData);
+                setTableData(tableData);
+                const tData = response.map((item, index) => ({
+                    key: index,
+                    ...Object.entries(item).reduce((acc, [key, value]) => {
+                        acc[key] = value;
+                        return acc;
+                    }, {})
+                }));
+                setTransformedData(tData);
             } catch (error) {
-                console.error('Failed to fetch employees:', error);
                 message.error('Failed to fetch employees');
             }
             setLoading(false);
@@ -167,9 +170,7 @@ export default function EmployeeSearch() {
             return;
         }
         const selectedEmployeeId = selectedRowKeys[0];
-        console.log("data", data);
-        console.log("data", data[selectedEmployeeId]);
-        history.push(`/submenu/employeeInsertNew`, { employee: data[selectedEmployeeId] });
+        history.push(`/submenu/employeeInsertNew`, { employee: transformedData[selectedEmployeeId] });
     };
 
     return (
@@ -188,7 +189,7 @@ export default function EmployeeSearch() {
                 <Row gutter={16}>
                     {getRows(labelObjs)}
                 </Row>
-                <div style={{ textAlign: "center" }}>
+                {/* <div style={{ textAlign: "center" }}>
                     <Button
                         type="primary"
                         onClick={insertEmployee}
@@ -202,7 +203,17 @@ export default function EmployeeSearch() {
                     >
                         <FontAwesomeIcon icon={faSave} /> 追加
                     </Button>
-                </div>
+                </div> */}
+      <div style={{ textAlign: "center" }}>
+            <Button size="sm" variant="info" onClick={insertEmployee}>
+               検索
+            </Button>
+
+            <Button size="sm" variant="info" style={{marginLeft:'20px'}}>
+              追加
+            </Button>
+
+        </div><br/>   
                 <div style={{ height: "10px" }}></div>
                 <div>
                     <Row>
@@ -226,7 +237,7 @@ export default function EmployeeSearch() {
                     <Col span={24}>
                         <Table
                             rowSelection={rowSelection}
-                            dataSource={data}
+                            dataSource={tableData}
                             columns={columns}
                             pagination={{ pageSize: 10 }}
                             loading={loading}

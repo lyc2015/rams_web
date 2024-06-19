@@ -1,10 +1,10 @@
 import React from "react";
-import { DatePicker as AntdDatePicker } from "antd";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSave } from "@fortawesome/free-solid-svg-icons";
 
-import "react-datepicker/dist/react-datepicker.css";
-import "bootstrap/dist/css/bootstrap.min.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSave, faEdit } from "@fortawesome/free-solid-svg-icons";
+
+// import "react-datepicker/dist/react-datepicker.css";
+// import "bootstrap/dist/css/bootstrap.min.css";
 import "../../assets/css/style.css";
 import "../../assets/css/newCssInsert.css"
 import * as publicUtils from "../../utils/publicUtils.js";
@@ -18,11 +18,13 @@ import default_avatar from '../../assets/images/default_avatar.jpg';
 import "./index.css";
 import request from '../../service/request.js';
 
-import { DatePicker, message, Select as AntSelect } from "antd";
+import { 
+  message as AntMessage,
+  AutoComplete as AntAutoComplete,
+  DatePicker as AntdDatePicker, 
+  Select as AntSelect,
+} from "antd";
 
-// import FromCol from "../../components/EmployeeInsert/FromCol/index.jsx";
-
-import { useLocation } from 'react-router-dom';
 
 import { 
   Form, 
@@ -37,27 +39,26 @@ import {
 import moment from "moment";
 moment.locale("ja");
 
-class EmployeeInsert extends React.Component {
+class EmployeeInfo extends React.Component {
 
   constructor(props) {
     super(props);
     this.insertEmployee = this.insertEmployee.bind(this); // 登録
 
-    // const { employee } = this.props.location.state || {};
     const employee = this.props.location.state ? this.props.location.state.employee : {};
-    console.log("employee----", employee.name);
-
+    console.log('employee------', employee);
     this.state = { // 初期化
-      employeeFormCode: "",
-      employeeNo: "",
-      employeeFirstName: employee.name || "xxx",
-      employeeLastName: "",
-      furigana1: "",
-      furigana2: "",
+      employee: employee,
+      employeeFormCode: employee.employeeFormCode || "",
+      employeeNo: employee.employeeNo || "",
+      employeeFirstName: employee.employeeFirstName || "",
+      employeeLastName: employee.employeeLastName || "",
+      furigana1: employee.furigana || "",
+      furigana2: employee.furigana || "",
       alphabetName1: "",
       alphabetName2: "",
       alphabetName3: "",
-      birthday: "",
+      birthday: employee.birthday ? moment(employee.birthday) : null,
       genderStatus: "",
       nationalityCode: "",
       birthplace: "",
@@ -89,6 +90,7 @@ class EmployeeInsert extends React.Component {
       employeeStatus: "0",
       postalCode: '',
       firstHalfAddress: '',
+
       // dropDown
       // nationalityCodes: store.getState().dropDown[0],
       nationalityCodes: [],
@@ -101,11 +103,10 @@ class EmployeeInsert extends React.Component {
   
 
   /**
-   * 登録
+   * 处理员工信息提交
    */
-  insertEmployee = (event) => {
-    this.setState({ loading: false });
-    event.preventDefault();
+  handleEmployeeSubmit = (url, successMessage, errorMessage) => {
+
     let obj = document.getElementById("imageId");
     let imgSrc = obj.getAttribute("src");
     const emp = {
@@ -123,6 +124,7 @@ class EmployeeInsert extends React.Component {
       password: publicUtils.nullToEmpty(this.state.passwordSetInfo),                // pw設定
       authorityCode: this.state.authorityCode,                                      // 権限
       nationalityCode: publicUtils.nullToEmpty(this.state.nationalityCode),         // 出身地
+      stationCode: publicUtils.nullToEmpty(this.state.stationCodeValue),            // 最寄駅
       intoCompanyYearAndMonth:                                                      // 入社年月
         this.state.employeeStatus === "1" || this.state.employeeStatus === "4"
           ? " "
@@ -171,26 +173,16 @@ class EmployeeInsert extends React.Component {
     };
     
     request
-      .post("employee/insertEmployee", emp, {
+      .post(url, emp, {
         headers: {
           'Content-Type': 'application/json'
         }
       })
       .then((result) => {
         if (result.data.errorsMessage != null) {
-          this.setState({ loading: true });
-          this.setState({
-            errorsMessageShow: true,
-            errorsMessageValue: result.data.errorsMessage,
-          });
-          setTimeout(() => this.setState({ errorsMessageShow: false }), 3000);
+          AntMessage.success(successMessage);
         } else {
-          this.setState({
-            myToastShow: true,
-            method: "post",
-            errorsMessageShow: false,
-          });
-          setTimeout(() => this.setState({ myToastShow: false }), 3000);
+          AntMessage.error(errorMessage);
           this.setState({
             employeeFirstName: publicUtils.trim(this.state.employeeFirstName), // 社員氏
             employeeLastName: publicUtils.trim(this.state.employeeLastName), // 社員名
@@ -211,16 +203,34 @@ class EmployeeInsert extends React.Component {
         }
       })
       .catch((error) => {
-        this.setState({ loading: true });
-        console.error("Error - " + error);
-        this.setState({
-          errorsMessageShow: true,
-          errorsMessageValue: "ファイルアップデートエラー発生",
-        });
-        setTimeout(() => this.setState({ errorsMessageShow: false }), 3000);
+        AntMessage.error("登録失敗")
       });
   };
   
+  /**
+   * 登録
+   */
+  insertEmployee = (event) => {
+    event.preventDefault();
+    this.handleEmployeeSubmit(
+      "employee/insertEmployee",
+      "登録しました",
+      "登録失敗"
+    );
+  };
+
+  /**
+   * 更新
+   */
+  updateEmployee = (event) => {
+    event.preventDefault();
+    this.handleEmployeeSubmit(
+      "employee/updateEmployee",
+      "更新しました",
+      "更新失敗"
+    );
+  };
+
 
   valueChange = (event) => {
     this.setState({
@@ -409,42 +419,8 @@ class EmployeeInsert extends React.Component {
 
 
   render() {
-    const { employee } = this.props.location.state || {};
-    // this.setState({ employeeId });
-    // const { employee } = this.state;
-    console.log("employee", employee);
-    // const location = useLocation();
-    // const { employeeId } = location.state || {};
-    // console.log("employeeId", employeeId);
-
-    // 第一行搜索项
-    const topLabelobjs = [
-      {
-          label: '契約ID',
-          name: 'contractId',
-          required: true,
-          maxLength: 6
-      },
-      {
-        label: '担当者',
-        name: 'employeeNo',
-        required: true,
-        children:
-            <AntSelect
-                className="form-control form-control-sm"
-                bordered={false}
-                showArrow={false}
-                filterOption={(input, option) =>
-                    (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-                }
-                // options={employeeOption}
-                // onChange={(e) => selChange("employeeNo", e)}
-                // value={values.employeeNo}
-            />
-
-    }
-  ]
     const {
+      employee,
       employeeFirstName,
       nationalityCode,
       employeeFormCode,
@@ -473,6 +449,20 @@ class EmployeeInsert extends React.Component {
       homesAgentCode,
     } = this.state;
 
+    const hasEmployeeData = Object.keys(employee).length > 0;
+
+    const options = [
+      {
+        value: 'Burns Bay Road',
+      },
+      {
+        value: 'Downing Street',
+      },
+      {
+        value: 'Wall Street',
+      },
+    ];
+
     // 
     return (  
       <div className="container employeeInsertNew">
@@ -490,16 +480,6 @@ class EmployeeInsert extends React.Component {
               </Row>
           <Row>
             <Col md={4}>
-            {/* {topLabelobjs.map((item, idx) => (
-              <FromCol
-                key={idx}
-                {...item}
-                // value={values[item.name]}
-                // valueChange={valueChange}
-                required={item.required}
-              />
-            ))} */}
-
               <InputGroup size="sm" className="mb-3">
                 <InputGroup.Prepend>
                   <InputGroup.Text>社員形式</InputGroup.Text>
@@ -528,7 +508,7 @@ class EmployeeInsert extends React.Component {
                 </Form.Control>
               </InputGroup>
 
-              <InputGroup size="sm">
+              <InputGroup size="sm" className="required-mark">
                 <InputGroup.Prepend>
                   <InputGroup.Text>社員名</InputGroup.Text>
                 </InputGroup.Prepend>
@@ -645,16 +625,26 @@ class EmployeeInsert extends React.Component {
                 <InputGroup.Prepend>
                   <InputGroup.Text>国籍</InputGroup.Text>
                 </InputGroup.Prepend>
-                <AntSelect
-                    className="form-control form-control-sm"
-                    bordered={false}
-                    showArrow={false}
-                    filterOption={(input, option) =>
-                        (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-                    }
-                    options={this.state.nationalityCodes}
-                    // onChange={(e) => selChange("employeeNo", e)}
-                    // value={values.employeeNo}
+                {/* <AntSelect
+                  className="form-control form-control-sm"
+                  bordered={false}
+                  showArrow={false}
+                  filterOption={(input, option) =>
+                      (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                  }
+                  options={this.state.nationalityCodes}
+                  // onChange={(e) => selChange("employeeNo", e)}
+                  // value={values.employeeNo}
+                /> */}
+                <AntAutoComplete
+                  className="form-control form-control-sm"
+                  bordered={false}
+                  showArrow={false}                  
+                  options={options}
+                  placeholder="try to type `b`"
+                  filterOption={(inputValue, option) =>
+                    option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                  }
                 />
                 <FormControl
                   placeholder="県"
@@ -667,7 +657,7 @@ class EmployeeInsert extends React.Component {
             </Col>
 
             <Col md={4}>
-              <InputGroup size="sm" className="mb-3">
+              <InputGroup size="sm" className="mb-3 required-mark">
                 <InputGroup.Prepend>
                   <InputGroup.Text>社員番号</InputGroup.Text>
                 </InputGroup.Prepend>
@@ -681,7 +671,7 @@ class EmployeeInsert extends React.Component {
                   // disabled
                 />
               </InputGroup>
-              <InputGroup size="sm" className="required-mark">
+              <InputGroup size="sm">
                 <InputGroup.Prepend>
                   <InputGroup.Text>
                     社内メール
@@ -949,7 +939,6 @@ class EmployeeInsert extends React.Component {
                       ? true
                       : false}
                   bordered={false}
-                  // style={{ padding: "0px" }}
                 />
               </InputGroup.Append>
               <FormControl
@@ -1158,14 +1147,14 @@ class EmployeeInsert extends React.Component {
               </InputGroup>
             </Col>
           </Row>
-          <div style={{ textAlign: "center" }}>
+            <div style={{ textAlign: "center" }}>
               <Button
                 size="sm"
-                variant="info"
-                onClick={this.insertEmployee}
+                variant={hasEmployeeData ? "warning" : "info"}
+                onClick={hasEmployeeData ? this.updateEmployee : this.insertEmployee}
                 type="button"
               >
-                <FontAwesomeIcon icon={faSave} /> 登録
+                <FontAwesomeIcon icon={hasEmployeeData ? faEdit : faSave} /> {hasEmployeeData ? "更新" : "登録"}
               </Button>
             </div>
         </Form>
@@ -1174,4 +1163,4 @@ class EmployeeInsert extends React.Component {
   }
 }
 
-export default EmployeeInsert;
+export default EmployeeInfo;
