@@ -59,30 +59,18 @@ class EmployeeInfo extends React.Component {
       alphabetName2: "",
       alphabetName3: "",
       birthday: employee.birthday ? moment(employee.birthday) : null,
-      genderStatus: "",
-      nationalityCode: "",
-      birthplace: "",
+      genderStatus: employee.genderStatus || "",
+      nationalityCode: employee.nationalityCode || "",
+      birthplace: employee.birthplace || "",
       image: default_avatar,
-      temporary_age: "",
-      companyMail: "",
-      socialInsuranceNo: "",
-      socialInsuranceDate: null,
+      temporary_age: employee.temporary_age || "",
+      companyMail: employee.companyMail || "",
+      socialInsuranceNo: employee.socialInsuranceNo || "",
   
-      employmentInsurance: "",
-      employmentInsuranceNo: "",
-      socialInsurance: "",      
-      employmentInsuranceStatus: [
-        { code: "0", name: "未加入" },
-        { code: "1", name: "加入済み" }
-      ],
-      socialInsuranceStatus: [
-        { code: "0", name: "未加入" },
-        { code: "1", name: "加入済み" }
-      ],
-      graduationYearAndMonth: null,
-      comeToJapanYearAndMonth: null,
-      intoCompanyYearAndMonth: null,
-      yearsOfExperience: null,
+      employmentInsurance: employee.employmentInsurance || "",
+      employmentInsuranceNo: employee.employmentInsuranceNo ||"",
+      socialInsurance: employee.socialInsurance || "",
+
       temporary_graduationYearAndMonth: "",
       temporary_comeToJapanYearAndMonth: "",
       temporary_intoCompanyYearAndMonth: "",
@@ -91,6 +79,21 @@ class EmployeeInfo extends React.Component {
       postalCode: '',
       firstHalfAddress: '',
 
+      socialInsuranceDate: null,
+      graduationYearAndMonth: null,
+      comeToJapanYearAndMonth: null,
+      intoCompanyYearAndMonth: null,
+      yearsOfExperience: null,
+
+
+      employmentInsuranceStatus: [
+        { code: "0", name: "未加入" },
+        { code: "1", name: "加入済み" }
+      ],
+      socialInsuranceStatus: [
+        { code: "0", name: "未加入" },
+        { code: "1", name: "加入済み" }
+      ],
       // dropDown
       // nationalityCodes: store.getState().dropDown[0],
       nationalityCodes: [],
@@ -179,7 +182,8 @@ class EmployeeInfo extends React.Component {
         }
       })
       .then((result) => {
-        if (result.data.errorsMessage != null) {
+        console.log('result', result);
+        if (result) {
           AntMessage.success(successMessage);
         } else {
           AntMessage.error(errorMessage);
@@ -415,7 +419,28 @@ class EmployeeInfo extends React.Component {
     }
   };
 
+  /**
+   * maxID
+   */
 
+  componentDidMount() {
+    this.fetchMaxEmployeeNo();
+  }
+
+  fetchMaxEmployeeNo = async () => {
+    if (this.state.employeeNo !== "") {
+      return;
+    }
+    try {
+      const response = await request.get('/employee/getMaxEmployeeNo');
+      const maxID = response.maxID;
+      this.setState({
+        employeeNo: maxID,
+      });
+    } catch (error) {
+      AntMessage.error('Error fetching the max employee number');
+    }
+  };
 
 
   render() {
@@ -463,6 +488,7 @@ class EmployeeInfo extends React.Component {
       },
     ];
 
+    
     // 
     return (  
       <div className="container employeeInsertNew">
@@ -667,8 +693,7 @@ class EmployeeInfo extends React.Component {
                   onChange={this.valueChange}
                   name="employeeNo"
                   size="sm"
-                  // TEST
-                  // disabled
+                  disabled
                 />
               </InputGroup>
               <InputGroup size="sm">
