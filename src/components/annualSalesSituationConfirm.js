@@ -465,7 +465,6 @@ const AnnualSalesSituationConfirm = ({ serverIP, customerDrop }) => {
 
 export default connect((state) => ({
   serverIP: state.dropDown[state.dropDown.length - 1],
-  customerDrop: state.dropDown[56]
-    ?.slice(1)
+  customerDrop: state.dropDown[56]?.slice(1)
     .filter((item) => /^LYC.*/.test(item.code)),
 }))(AnnualSalesSituationConfirm);

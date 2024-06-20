@@ -118,6 +118,7 @@ export function fetchDropDown(state = defaultState) {
     },
   });
   outArray.push(outArray[outArray.length - 1]?.slice(1)[0].name);
+  console.log(outArray, 'outArray')
   return outArray;
 }
 /**

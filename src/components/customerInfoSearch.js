@@ -61,7 +61,7 @@ class CustomerInfoSearch extends Component {
     basicContractStatus: store.getState().dropDown[72],
     responseStatus: store.getState().dropDown[72].slice(1),
     listedCompanyFlag: store.getState().dropDown[17],
-    salesStaffDrop: store.getState().dropDown[56].slice(1),
+    salesStaffDrop: store.getState().dropDown[56]?.filter((item) => item.employeeFormCode !== '4')?.slice(1),
     searchFlag: false, //検索ボタン押下フラグ
     contactDateFlag: false,
     sendValue: {},
@@ -992,7 +992,7 @@ class CustomerInfoSearch extends Component {
                   onChange={this.businessStartDateChange}
                   dateFormat={"yyyy/MM"}
                   autoComplete="off"
-                  locale="pt-BR"
+                  // locale="pt-BR"
                   showYearDropdown
                   yearDropdownItemNumber={15}
                   scrollableYearDropdown

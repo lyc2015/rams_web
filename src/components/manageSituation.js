@@ -112,7 +112,7 @@ class manageSituation extends React.Component {
     regexp: /^[0-9\b]+$/, // 数字正則式
     salesStaff: "", // 営業担当
     salesPriorityStatuss: store.getState().dropDown[41], // 全部ステータス
-    salesPersons: store.getState().dropDown[56], // 全部営業
+    salesPersons: store.getState().dropDown[56]?.filter((item) => item.employeeFormCode !== '4'), // 全部営業
     customers: store.getState().dropDown[15], // 全部お客様 画面入力用
     getstations: store.getState().dropDown[14], // 全部場所
     genders: store.getState().dropDown[0],

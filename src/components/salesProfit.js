@@ -76,7 +76,7 @@ class salesProfit extends React.Component {
     specialPointStatus: store.getState().dropDown[26].slice(1),
     serverIP: store.getState().dropDown[store.getState().dropDown.length - 1], // 劉林涛
     // テスト
-    customerDrop: store.getState().dropDown[56].slice(1),
+    customerDrop: store.getState().dropDown[56]?.filter((item) => item.employeeFormCode !== '4')?.slice(1),
   };
 
   // 页面加载
@@ -491,7 +491,7 @@ class salesProfit extends React.Component {
       </LightTooltip>
     );
   };
-  
+
   render() {
     // 表格样式设定
     this.options = {
@@ -750,13 +750,12 @@ class salesProfit extends React.Component {
                     <div style={{ float: "right" }}>
                       <Button
                         size="sm"
-                        className="individualSalesButtom"
                         name="clickButton"
                         variant="info"
                         id="syounin"
                         onClick={this.shuseiTo.bind(this, "salesPoint")}
                         disabled={this.state.customerNo === null ? true : false}
-                        className="btn btn-primary btn-sm"
+                        className="individualSalesButtom btn btn-primary btn-sm"
                       >
                         営業ポイント明細
                       </Button>

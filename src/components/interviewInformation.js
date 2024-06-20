@@ -57,7 +57,7 @@ class interviewInformation extends React.Component {
     customers: store.getState().dropDown[15], // 全部お客様 画面入力用
     interviewClassification: store.getState().dropDown[76].slice(1), // 全部お客様 画面入力用
     serverIP: store.getState().dropDown[store.getState().dropDown.length - 1],
-    customerDrop: store.getState().dropDown[56].slice(1),
+    customerDrop: store.getState().dropDown[56]?.filter((item) => item.employeeFormCode !== '4')?.slice(1),
     successRate: "",
     successRateDrop: store
       .getState()
@@ -140,7 +140,7 @@ class interviewInformation extends React.Component {
       && !!interviewModel["interviewResultAwaiting2"]) {
       alert("【結果待ち】2件以上は追加できません。");
       return;
-    } 
+    }
 
     if (!!this.state.interviewResultAwaiting) {
       const interviewCustomer = this.state.customers.find(v => v.code === this.state.interviewCustomer)?.name ?? "";
@@ -204,7 +204,7 @@ class interviewInformation extends React.Component {
       interviewModel["interviewInfo2"] = this.state.interviewInfo;
       interviewModel["successRate2"] = this.state.successRate;
       interviewModel["salesStaff2"] = this.state.salesStaff;
-    } 
+    }
 
     axios
       .post(
@@ -278,7 +278,7 @@ class interviewInformation extends React.Component {
             : this.state.row.successRate2;
         interviewModel["salesStaff2"] =
           this.state.row.salesStaff2 === null ? "" : this.state.row.salesStaff2;
-        
+
         interviewModel["interviewResultAwaiting1"] =
           this.state.row.interviewResultAwaiting1 ?? ""
         interviewModel["interviewResultAwaiting2"] =
@@ -432,7 +432,7 @@ class interviewInformation extends React.Component {
           employeeNo: row.employeeNo,
           interviewClassificationCode:
             row.interviewClassificationCode1 === null ||
-            row.interviewClassificationCode1 === ""
+              row.interviewClassificationCode1 === ""
               ? "0"
               : row.interviewClassificationCode1,
           interviewDateShow:
@@ -455,7 +455,7 @@ class interviewInformation extends React.Component {
           employeeNo: row.employeeNo,
           interviewClassificationCode:
             row.interviewClassificationCode2 === null ||
-            row.interviewClassificationCode2 === ""
+              row.interviewClassificationCode2 === ""
               ? "0"
               : row.interviewClassificationCode2,
           interviewDateShow:
@@ -571,7 +571,7 @@ class interviewInformation extends React.Component {
     const targetCustomer = this.state.customerDrop.find((v) => v.code === cell);
     return targetCustomer?.name;
   };
-  
+
   // 結果待ち
   formatInterviewResultAwaiting = (cell) => {
     if (!cell) {
@@ -590,10 +590,10 @@ class interviewInformation extends React.Component {
         overlay={tooltip}
         trigger={"hover"}
       >
-          <div>{cell}</div>
-        </OverlayTrigger>
+        <div>{cell}</div>
+      </OverlayTrigger>
     );
-  } 
+  }
 
   /**
    * 社員名連想
@@ -968,7 +968,7 @@ class interviewInformation extends React.Component {
                       }
                       value={{ name: this.state.interviewResultAwaiting }}
                       onChange={(_event, values) => {
-                        this.setState({ interviewResultAwaiting: values?.name  ?? ""});
+                        this.setState({ interviewResultAwaiting: values?.name ?? "" });
                       }}
                       renderInput={(params) => (
                         <div ref={params.InputProps.ref}>
@@ -1005,8 +1005,8 @@ class interviewInformation extends React.Component {
                     onClick={this.update}
                     disabled={
                       this.state.employeeNo === "" ||
-                      this.state.interviewInfoNum === "3" ||
-                      this.state.interviewInfoNum === "4"
+                        this.state.interviewInfoNum === "3" ||
+                        this.state.interviewInfoNum === "4"
                         ? true
                         : false
                     }

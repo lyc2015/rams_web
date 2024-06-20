@@ -99,7 +99,7 @@ class projectInfo extends Component {
     ageClassificationDrop: store.getState().dropDown[49],
     workStartPeriodDrop: store.getState().dropDown[59],
     admissionMonthDrop: store.getState().dropDown[62],
-    salesStaffDrop: store.getState().dropDown[56].slice(1),
+    salesStaffDrop: store.getState().dropDown[56]?.filter((item) => item.employeeFormCode !== '4')?.slice(1),
     experienceYearDrop: [],
   };
   //onchange
@@ -632,7 +632,7 @@ class projectInfo extends Component {
         joinWith: undefined,
         values: [
           utils.addLeftSlash(admissionPeriod) +
-            (admissionMonthName ? `(${admissionMonthName})～` : ""),
+          (admissionMonthName ? `(${admissionMonthName})～` : ""),
         ],
       },
       {
@@ -921,20 +921,20 @@ class projectInfo extends Component {
                       selected={admissionPeriod}
                       onChange={this.admissionPeriodChange}
                       autoComplete="off"
-                      locale="pt-BR"
+                      // locale="pt-BR"
                       showMonthYearPicker
                       showFullMonthYearPicker
                       minDate={
                         new Date(
                           "" +
-                            (new Date().getMonth() === 0
-                              ? new Date().getFullYear() - 1
-                              : new Date().getFullYear()) +
-                            " " +
-                            (new Date().getMonth() === 0
-                              ? 11
-                              : new Date().getMonth() + 1) +
-                            ""
+                          (new Date().getMonth() === 0
+                            ? new Date().getFullYear() - 1
+                            : new Date().getFullYear()) +
+                          " " +
+                          (new Date().getMonth() === 0
+                            ? 11
+                            : new Date().getMonth() + 1) +
+                          ""
                         )
                       }
                       showDisabledMonthNavigation
@@ -1488,10 +1488,10 @@ class projectInfo extends Component {
                               actionType === "detail"
                                 ? true
                                 : workStartPeriodForDate === ""
-                                ? false
-                                : workStartPeriodForDate === null
-                                ? false
-                                : true
+                                  ? false
+                                  : workStartPeriodForDate === null
+                                    ? false
+                                    : true
                             }
                           >
                             {workStartPeriodDrop.map((date) => (
@@ -1504,7 +1504,7 @@ class projectInfo extends Component {
                             selected={workStartPeriodForDate}
                             onChange={this.workStartPeriodChange}
                             autoComplete="off"
-                            locale="pt-BR"
+                            // locale="pt-BR"
                             showMonthYearPicker
                             showFullMonthYearPicker
                             minDate={new Date()}

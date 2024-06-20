@@ -41,7 +41,7 @@ class salesPoint extends React.Component {
     currentPage: 1, // 今のページ
     insertNo: "",
     serverIP: store.getState().dropDown[store.getState().dropDown.length - 1],
-    customerDrop: store.getState().dropDown[56].slice(1),
+    customerDrop: store.getState().dropDown[56]?.filter((item) => item.employeeFormCode !== '4')?.slice(1),
     specialPointStatus: store.getState().dropDown[26],
   };
 

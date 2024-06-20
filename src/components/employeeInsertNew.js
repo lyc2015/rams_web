@@ -36,7 +36,6 @@ import ErrorsMessageToast from "./errorsMessageToast";
 import store from "./redux/store";
 import {
   DatePicker as AntdDatePicker,
-  ConfigProvider,
 } from "antd";
 import moment from "moment";
 moment.locale("ja");
@@ -423,8 +422,8 @@ class employeeInsertNew extends React.Component {
         });
     }
     this.setState({
-      actionType: location.state.actionType,
-      backPage: location.state.backPage,
+      actionType: location.state?.actionType,
+      backPage: location.state?.backPage,
       employeeInfo: employeeInfo,
     });
     axios
@@ -502,7 +501,7 @@ class employeeInsertNew extends React.Component {
    * 年齢と和暦
    */
   inactiveBirthday = (date) => {
-	date = date?.toDate();
+    date = date?.toDate();
     if (date !== undefined && date !== null && date !== "") {
       const promise = Promise.resolve(publicUtils.calApi(date));
       promise.then((data) => {
@@ -566,7 +565,7 @@ class employeeInsertNew extends React.Component {
    * 入社年月
    */
   inactiveintoCompanyYearAndMonth = (date) => {
-	date = date?.toDate();
+    date = date?.toDate();
     this.setState({
       intoCompanyYearAndMonth: date,
       temporary_intoCompanyYearAndMonth: publicUtils.getFullYearMonth(
@@ -616,7 +615,7 @@ class employeeInsertNew extends React.Component {
    * 在留期間
    */
   inactiveStayPeriod = (date) => {
-	date = date?.toDate();
+    date = date?.toDate();
     this.setState({
       stayPeriod: date,
       temporary_stayPeriod: publicUtils.getFullYearMonth(new Date(), date),
@@ -624,14 +623,14 @@ class employeeInsertNew extends React.Component {
   };
 
   passportStayPeriodChange = (date) => {
-	date = date?.toDate();
+    date = date?.toDate();
     this.setState({
       passportStayPeriod: date,
     });
   };
 
   socialInsuranceDateChange = (date) => {
-	date = date?.toDate();
+    date = date?.toDate();
     this.setState({
       socialInsuranceDate: date,
     });
@@ -663,7 +662,7 @@ class employeeInsertNew extends React.Component {
    * 契約期限
    */
   inactiveContractDeadline = (date) => {
-	date = date?.toDate();
+    date = date?.toDate();
     this.setState({
       contractDeadline: date,
       temporary_contractDeadline: publicUtils.getFullYearMonth(
@@ -743,7 +742,7 @@ class employeeInsertNew extends React.Component {
         employeeFormCodes: employeeFormCodes,
         employeeFormCode:
           this.state.employeeFormCode === "4" ||
-          this.state.employeeFormCode === "5"
+            this.state.employeeFormCode === "5"
             ? this.state.employeeFormCode
             : "",
         temporary_retirementYearAndMonth: "",
@@ -1164,7 +1163,7 @@ class employeeInsertNew extends React.Component {
           <Modal.Body>
             <BankInfo
               accountInfo={accountInfo}
-              actionType={this.state.actionType}
+              actionType={this.state?.actionType}
               employeeNo={this.state.employeeNo}
               accountTokuro={this.accountInfoGet}
               employeeFristName={this.state.employeeFristName}
@@ -1189,7 +1188,7 @@ class employeeInsertNew extends React.Component {
           <Modal.Body>
             <PasswordSet
               passwordSetInfo={passwordSetInfo}
-              actionType={this.state.actionType}
+              actionType={this.state?.actionType}
               employeeNo={this.state.employeeNo}
               employeeFristName={this.state.employeeFristName}
               employeeLastName={this.state.employeeLastName}
@@ -1211,7 +1210,7 @@ class employeeInsertNew extends React.Component {
             <BpInfoModel
               bpInfoModel={bpInfoModel}
               customer={this.state.customer}
-              actionType={this.state.actionType}
+              actionType={this.state?.actionType}
               employeeNo={this.state.employeeNo}
               employeeFristName={this.state.employeeFristName}
               employeeLastName={this.state.employeeLastName}
@@ -1231,8 +1230,8 @@ class employeeInsertNew extends React.Component {
                 : employeeStatus === "0" ||
                   employeeStatus === "2" ||
                   employeeStatus === "3"
-                ? false
-                : true
+                  ? false
+                  : true
             }
           >
             口座情報
@@ -1247,8 +1246,8 @@ class employeeInsertNew extends React.Component {
                 : employeeStatus === "0" ||
                   employeeStatus === "2" ||
                   employeeStatus === "3"
-                ? false
-                : true
+                  ? false
+                  : true
             }
           >
             PW設定
@@ -1260,8 +1259,8 @@ class employeeInsertNew extends React.Component {
             onClick={this.handleShowModal.bind(this, "bpInfoModel")}
             disabled={
               employeeStatus === "0" ||
-              employeeStatus === "2" ||
-              employeeStatus === "3"
+                employeeStatus === "2" ||
+                employeeStatus === "3"
                 ? true
                 : false
             }
@@ -1420,16 +1419,16 @@ class employeeInsertNew extends React.Component {
                       <AntdDatePicker
                         allowClear={false}
                         suffixIcon={false}
-                        value={this.state.birthday?moment(this.state.birthday):""}
+                        value={this.state.birthday ? moment(this.state.birthday) : ""}
                         onChange={this.inactiveBirthday}
                         format="YYYY/MM/DD"
                         locale="ja"
                         id={"datePicker"}
-                        disabledDate={(current)=>{
+                        disabledDate={(current) => {
                           return current >= Date.now();
                         }}
-                       bordered={false}
-                       style={{padding:"0px"}}
+                        bordered={false}
+                        style={{ padding: "0px" }}
                       />
                     </InputGroup.Prepend>
                     {/*<InputGroup.Append>
@@ -1499,10 +1498,10 @@ class employeeInsertNew extends React.Component {
                         {employeeStatus === "2"
                           ? "事業主番号"
                           : employeeStatus === "0" || employeeStatus === "3"
-                          ? "社員番号"
-                          : employeeStatus === "1" || employeeStatus === "4"
-                          ? "BP番号"
-                          : ""}
+                            ? "社員番号"
+                            : employeeStatus === "1" || employeeStatus === "4"
+                              ? "BP番号"
+                              : ""}
                       </InputGroup.Text>
                     </InputGroup.Prepend>
                     <FormControl
@@ -1529,8 +1528,8 @@ class employeeInsertNew extends React.Component {
                       id="Autocompletestyle-employeeInsert-employeeFormCode"
                       disabled={
                         employeeStatus === "0" ||
-                        employeeStatus === "2" ||
-                        employeeStatus === "3"
+                          employeeStatus === "2" ||
+                          employeeStatus === "3"
                           ? false
                           : true
                       }
@@ -1582,13 +1581,13 @@ class employeeInsertNew extends React.Component {
                        */
                       disabled={
                         departmentCode === "0" ||
-                        employeeStatus === "2" ||
-                        this.state.occupationChangeFlag
+                          employeeStatus === "2" ||
+                          this.state.occupationChangeFlag
                           ? true
                           : false
                       }
                     >
-                      autoComplete="off" >
+                      {/* autoComplete="off" > */}
                       {this.state.occupationCodes.map((date) => (
                         <option key={date.code} value={date.code}>
                           {date.name}
@@ -1669,8 +1668,8 @@ class employeeInsertNew extends React.Component {
                       autoComplete="off"
                       disabled={
                         employeeStatus === "0" ||
-                        employeeStatus === "2" ||
-                        employeeStatus === "3"
+                          employeeStatus === "2" ||
+                          employeeStatus === "3"
                           ? false
                           : true
                       }
@@ -1941,13 +1940,13 @@ class employeeInsertNew extends React.Component {
                             : "datePicker-empInsert-left"
                         }
                         disabled={
-                            employeeStatus === "1" || employeeStatus === "4"
+                          employeeStatus === "1" || employeeStatus === "4"
                             ? true
                             : false}
-                            
-                       bordered={false}
-                       style={{padding:"0px"}}
-                       
+
+                        bordered={false}
+                        style={{ padding: "0px" }}
+
                       />
                     </InputGroup.Prepend>
                     {/*<InputGroup.Append>
@@ -2061,20 +2060,20 @@ class employeeInsertNew extends React.Component {
                         locale="ja"
                         id={
                           departmentCode === "0" ||
-                          employeeStatus === "1" ||
-                          employeeStatus === "4"
+                            employeeStatus === "1" ||
+                            employeeStatus === "4"
                             ? "datePickerReadonlyDefault-empInsert-left"
                             : "datePicker-empInsert-left"
                         }
                         disabled={
                           departmentCode === "0" ||
-                          employeeStatus === "1" ||
-                          employeeStatus === "4"
+                            employeeStatus === "1" ||
+                            employeeStatus === "4"
                             ? true
                             : false
                         }
-                       bordered={false}
-                       style={{padding:"0px"}}
+                        bordered={false}
+                        style={{ padding: "0px" }}
                       />
                     </InputGroup.Prepend>
                     {/*<InputGroup.Append>
@@ -2263,7 +2262,7 @@ class employeeInsertNew extends React.Component {
                       value={certification2}
                       autoComplete="off"
                     >
-                      {this.state.qualification.map((date) => (
+                      {this.state?.qualification.map((date) => (
                         <option key={date.code} value={date.code}>
                           {date.name}
                         </option>
@@ -2520,8 +2519,8 @@ class employeeInsertNew extends React.Component {
                       size="sm"
                       disabled={
                         nationalityCode === "5" ||
-                        employeeStatus === "1" ||
-                        employeeStatus === "4"
+                          employeeStatus === "1" ||
+                          employeeStatus === "4"
                           ? true
                           : false
                       }
@@ -2553,9 +2552,9 @@ class employeeInsertNew extends React.Component {
                       maxlength="12"
                       disabled={
                         this.state.residenceCode === "3" ||
-                        this.state.residenceCode === "6" ||
-                        employeeStatus === "1" ||
-                        employeeStatus === "4"
+                          this.state.residenceCode === "6" ||
+                          employeeStatus === "1" ||
+                          employeeStatus === "4"
                           ? true
                           : false
                       }
@@ -2568,41 +2567,41 @@ class employeeInsertNew extends React.Component {
                       </InputGroup.Text>
                     </InputGroup.Prepend>
                     <AntdDatePicker
-                        allowClear={false}
-                        suffixIcon={false}
-                        value={
-                          this.state.stayPeriod
-                            ? moment(this.state.stayPeriod)
-                            : ""
-                        }
-                        onChange={this.inactiveStayPeriod}
-                        format="YYYY/MM/DD"
-                        name="admissionStartDate"
-                        locale="ja"
-                        id={
+                      allowClear={false}
+                      suffixIcon={false}
+                      value={
+                        this.state.stayPeriod
+                          ? moment(this.state.stayPeriod)
+                          : ""
+                      }
+                      onChange={this.inactiveStayPeriod}
+                      format="YYYY/MM/DD"
+                      name="admissionStartDate"
+                      locale="ja"
+                      id={
                         residenceTimeDisabled ||
-                        this.state.residenceCode === "3" ||
-                        this.state.residenceCode === "6" ||
-                        employeeStatus === "1" ||
-                        employeeStatus === "4"
+                          this.state.residenceCode === "3" ||
+                          this.state.residenceCode === "6" ||
+                          employeeStatus === "1" ||
+                          employeeStatus === "4"
                           ? "datePickerReadonlyDefault-empInsert-right-stayPeriod"
                           : "datePicker-empInsert-right-stayPeriod"
-                       }
-                       disabled={
+                      }
+                      disabled={
                         residenceTimeDisabled ||
-                        this.state.residenceCode === "3" ||
-                        this.state.residenceCode === "6" ||
-                        employeeStatus === "1" ||
-                        employeeStatus === "4"
+                          this.state.residenceCode === "3" ||
+                          this.state.residenceCode === "6" ||
+                          employeeStatus === "1" ||
+                          employeeStatus === "4"
                           ? true
                           : false
                       }
-                      disabledDate={(current)=>{
-                          return current <= new Date(new Date().getTime() - 24*60*60*1000);
+                      disabledDate={(current) => {
+                        return current <= new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
                       }}
                       bordered={false}
-                      style={{padding:"0px",width: '100%'}}
-                      />
+                      style={{ padding: "0px", width: '100%' }}
+                    />
                     {/*<DatePicker
                       selected={this.state.stayPeriod}
                       onChange={this.inactiveStayPeriod}
@@ -2638,15 +2637,15 @@ class employeeInsertNew extends React.Component {
                       style={
                         this.state.residentCardInfo !== undefined
                           ? {
-                              backgroundColor: "#53A100",
-                              border: "none",
-                              marginLeft: "3px",
-                            }
+                            backgroundColor: "#53A100",
+                            border: "none",
+                            marginLeft: "3px",
+                          }
                           : {
-                              backgroundColor: "",
-                              border: "none",
-                              marginLeft: "3px",
-                            }
+                            backgroundColor: "",
+                            border: "none",
+                            marginLeft: "3px",
+                          }
                       }
                       disabled={
                         employeeStatus === "1" || employeeStatus === "4"
@@ -2695,7 +2694,7 @@ class employeeInsertNew extends React.Component {
                       </InputGroup.Text>
                     </InputGroup.Prepend>
                     <>
-                    <AntdDatePicker
+                      <AntdDatePicker
                         allowClear={false}
                         suffixIcon={false}
                         value={
@@ -2708,23 +2707,23 @@ class employeeInsertNew extends React.Component {
                         locale="ja"
                         disabled={
                           residenceTimeDisabled ||
-                          employeeStatus === "1" ||
-                          employeeStatus === "4"
+                            employeeStatus === "1" ||
+                            employeeStatus === "4"
                             ? true
                             : false
                         }
                         id={
                           residenceTimeDisabled ||
-                          employeeStatus === "1" ||
-                          employeeStatus === "4"
+                            employeeStatus === "1" ||
+                            employeeStatus === "4"
                             ? "datePickerReadonlyDefault-empInsert-right-stayPeriod"
                             : "datePicker-empInsert-right-stayPeriod"
                         }
-                       disabledDate={(current)=>{
-                          return current <= new Date(new Date().getTime() - 24*60*60*1000);
-                      }}
-                      bordered={true}
-                      style={{padding:"0px",width: '100%'}}
+                        disabledDate={(current) => {
+                          return current <= new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
+                        }}
+                        bordered={true}
+                        style={{ padding: "0px", width: '100%' }}
                       />
                       {/*<DatePicker
                         selected={this.state.passportStayPeriod}
@@ -2757,15 +2756,15 @@ class employeeInsertNew extends React.Component {
                         style={
                           this.state.passportInfo !== undefined
                             ? {
-                                backgroundColor: "#53A100",
-                                border: "none",
-                                marginLeft: "3px",
-                              }
+                              backgroundColor: "#53A100",
+                              border: "none",
+                              marginLeft: "3px",
+                            }
                             : {
-                                backgroundColor: "",
-                                border: "none",
-                                marginLeft: "3px",
-                              }
+                              backgroundColor: "",
+                              border: "none",
+                              marginLeft: "3px",
+                            }
                         }
                         disabled={
                           employeeStatus === "1" || employeeStatus === "4"
@@ -2862,8 +2861,8 @@ class employeeInsertNew extends React.Component {
                       value={employmentInsurance}
                       disabled={
                         employeeStatus === "2" ||
-                        employeeStatus === "1" ||
-                        employeeStatus === "4"
+                          employeeStatus === "1" ||
+                          employeeStatus === "4"
                           ? true
                           : false
                       }
@@ -2924,21 +2923,21 @@ class employeeInsertNew extends React.Component {
                         locale="ja"
                         disabled={
                           residenceTimeDisabled ||
-                          employeeStatus === "2" ||
-                          employeeStatus === "1" ||
-                          employeeStatus === "4"
+                            employeeStatus === "2" ||
+                            employeeStatus === "1" ||
+                            employeeStatus === "4"
                             ? true
                             : false
                         }
                         id={
                           residenceTimeDisabled ||
-                          employeeStatus === "2" ||
-                          employeeStatus === "1" ||
-                          employeeStatus === "4"
+                            employeeStatus === "2" ||
+                            employeeStatus === "1" ||
+                            employeeStatus === "4"
                             ? "datePickerReadonlyDefault-empInsert-right-socialInsuranceDate"
                             : "datePicker-empInsert-right-socialInsuranceDate"
                         }
-                        style={{padding:"0px"}}
+                        style={{ padding: "0px" }}
                       />
                       {/*<DatePicker
                         selected={this.state.socialInsuranceDate}
@@ -3084,16 +3083,16 @@ class employeeInsertNew extends React.Component {
                         className="form-control form-control-sm"
                         disabled={
                           !retirementYearAndMonthDisabled ||
-                          employeeStatus === "1" ||
-                          employeeStatus === "4"
+                            employeeStatus === "1" ||
+                            employeeStatus === "4"
                             ? true
                             : false
                         }
                         autoComplete="off"
                         id={
                           !retirementYearAndMonthDisabled ||
-                          employeeStatus === "1" ||
-                          employeeStatus === "4"
+                            employeeStatus === "1" ||
+                            employeeStatus === "4"
                             ? "datePickerReadonlyDefault-empInsert-right-immigrationTime"
                             : "datePicker-empInsert-right-immigrationTime"
                         }
@@ -3121,8 +3120,8 @@ class employeeInsertNew extends React.Component {
                       autoComplete="off"
                       disabled={
                         !retirementYearAndMonthDisabled ||
-                        employeeStatus === "1" ||
-                        employeeStatus === "4"
+                          employeeStatus === "1" ||
+                          employeeStatus === "4"
                           ? true
                           : false
                       }

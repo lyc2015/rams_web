@@ -81,7 +81,7 @@ class CustomerInfo extends Component {
     developLanguageDrop: store.getState().dropDown[8].slice(1),
     basicContractStatus: store.getState().dropDown[72],
     responseStatus: store.getState().dropDown[72].slice(1),
-    salesStaffDrop: store.getState().dropDown[56].slice(1),
+    salesStaffDrop: store.getState().dropDown[56]?.filter((item) => item.employeeFormCode !== '4')?.slice(1),
     proposeClassification: store.getState().dropDown[75].slice(1),
     currentPage: 1, //今のページ
     serverIP: store.getState().dropDown[store.getState().dropDown.length - 1], //劉林涛　テスト
@@ -1143,7 +1143,7 @@ class CustomerInfo extends Component {
                   />
                 </InputGroup>
               </Col>
-              
+
             </Row>
             <Row>
               <Col sm={3}>
@@ -1220,7 +1220,7 @@ class CustomerInfo extends Component {
                     onChange={this.establishmentDateChange}
                     dateFormat="yyyy/MM"
                     autoComplete="off"
-                    locale="pt-BR"
+                    // locale="pt-BR"
                     id={
                       actionType === "detail"
                         ? "customerInfoDatePickerReadOnly-establishmentDate"
@@ -1561,7 +1561,7 @@ class CustomerInfo extends Component {
                     onChange={this.businessStartDateChange}
                     dateFormat="yyyy/MM"
                     autoComplete="off"
-                    locale="pt-BR"
+                    // locale="pt-BR"
                     id={
                       actionType === "detail" || !this.state.responseFlag
                         ? "customerInfoDatePickerReadOnly"
@@ -1593,11 +1593,11 @@ class CustomerInfo extends Component {
                     onChange={this.contactDateChange}
                     dateFormat="yyyy/MM/dd"
                     autoComplete="off"
-                    locale="pt-BR"
+                    // locale="pt-BR"
                     id={
                       actionType === "detail" ||
-                      this.state.responseFlag ||
-                      this.state.contactDateFlag
+                        this.state.responseFlag ||
+                        this.state.contactDateFlag
                         ? "customerInfoDatePickerReadOnly"
                         : "customerInfoDatePicker"
                     }
@@ -1606,8 +1606,8 @@ class CustomerInfo extends Component {
                     locale="ja"
                     disabled={
                       actionType === "detail" ||
-                      this.state.responseFlag ||
-                      this.state.contactDateFlag
+                        this.state.responseFlag ||
+                        this.state.contactDateFlag
                         ? true
                         : false
                     }
@@ -1675,8 +1675,8 @@ class CustomerInfo extends Component {
                 size="sm"
                 hidden={
                   backPage !== "customerInfoSearch" &&
-                  backPage !== "salesSendLetter" &&
-                  backPage !== "sendInvoice"
+                    backPage !== "salesSendLetter" &&
+                    backPage !== "sendInvoice"
                     ? true
                     : false
                 }
