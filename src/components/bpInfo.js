@@ -111,19 +111,19 @@ class bpInfo extends React.Component {
     this.setEmployeeName();
     this.getbpInfoList();
     /*		if (this.props.actionType !== "insert") {
-			this.getbpInfoList();
-		}
-		var bpInfoModel = this.props.bpInfoModel;// 父画面のパラメータ（画面既存口座情報）
-		if (!$.isEmptyObject(bpInfoModel)) {
-			this.setState({
-				bpBelongCustomerCode: bpInfoModel["bpBelongCustomerCode"],
-				bpUnitPrice: bpInfoModel["bpUnitPrice"],
-				bpSalesProgressCode: bpInfoModel["bpSalesProgressCode"],
-				bpOtherCompanyAdmissionEndDate: utils.converToLocalTime(bpInfoModel["bpOtherCompanyAdmissionEndDate"], false),
-				bpRemark: bpInfoModel["bpRemark"],
-			});
+      this.getbpInfoList();
+    }
+    var bpInfoModel = this.props.bpInfoModel;// 父画面のパラメータ（画面既存口座情報）
+    if (!$.isEmptyObject(bpInfoModel)) {
+      this.setState({
+        bpBelongCustomerCode: bpInfoModel["bpBelongCustomerCode"],
+        bpUnitPrice: bpInfoModel["bpUnitPrice"],
+        bpSalesProgressCode: bpInfoModel["bpSalesProgressCode"],
+        bpOtherCompanyAdmissionEndDate: utils.converToLocalTime(bpInfoModel["bpOtherCompanyAdmissionEndDate"], false),
+        bpRemark: bpInfoModel["bpRemark"],
+      });
 
-		}*/
+    }*/
   }
 
   getbpInfoList = () => {
@@ -138,14 +138,14 @@ class bpInfo extends React.Component {
           bpBelongCustomerCode:
             data.model === null ? "" : data.model.bpBelongCustomerCode, // 選択中のBP所属
           bpSalesProgressCode:
-            data.model === null ? "4" : data.model.bpSalesProgressCode, // 選択中の営業状況
+            data.model === null ? "1" : data.model.bpSalesProgressCode, // 選択中の営業状況
           bpOtherCompanyAdmissionEndDate:
             data.model === null
               ? ""
               : utils.converToLocalTime(
-                  data.model.bpOtherCompanyAdmissionEndDate,
-                  false
-                ),
+                data.model.bpOtherCompanyAdmissionEndDate,
+                false
+              ),
         });
         if (data.bpInfoList.length > 0) {
           this.setState({
@@ -179,20 +179,20 @@ class bpInfo extends React.Component {
         oldUnitPriceStartMonth: row.unitPriceStartMonth,
         unitPriceStartMonth:
           row.unitPriceStartMonth === null ||
-          row.unitPriceStartMonth === undefined ||
-          row.unitPriceStartMonth === ""
+            row.unitPriceStartMonth === undefined ||
+            row.unitPriceStartMonth === ""
             ? ""
             : utils.converToLocalTime(row.unitPriceStartMonth, false),
         bpUnitPrice:
           row.bpUnitPrice === null ||
-          row.bpUnitPrice === undefined ||
-          row.bpUnitPrice === ""
+            row.bpUnitPrice === undefined ||
+            row.bpUnitPrice === ""
             ? ""
             : row.bpUnitPrice,
         bpRemark:
           row.bpRemark === null ||
-          row.bpRemark === undefined ||
-          row.bpRemark === ""
+            row.bpRemark === undefined ||
+            row.bpRemark === ""
             ? ""
             : row.bpRemark,
       });
@@ -405,7 +405,7 @@ class bpInfo extends React.Component {
                     className="form-control form-control-sm"
                     id={
                       this.props.actionType === "detail" ||
-                      bpSalesProgressCode === "4"
+                        bpSalesProgressCode === "4"
                         ? "datePickerReadonlyDefault-bpInfo"
                         : "datePicker-bpInfo"
                     }
@@ -413,7 +413,7 @@ class bpInfo extends React.Component {
                     locale="ja"
                     disabled={
                       this.props.actionType === "detail" ||
-                      bpSalesProgressCode === "4"
+                        bpSalesProgressCode === "4"
                         ? true
                         : false
                     }
@@ -465,7 +465,7 @@ class bpInfo extends React.Component {
                     className="form-control form-control-sm"
                     id={
                       this.props.actionType === "detail" ||
-                      bpSalesProgressCode === "4"
+                        bpSalesProgressCode === "4"
                         ? "datePickerReadonlyDefault-bpInfo"
                         : "datePicker-bpInfo"
                     }
@@ -473,7 +473,7 @@ class bpInfo extends React.Component {
                     locale="ja"
                     disabled={
                       this.props.actionType === "detail" ||
-                      bpSalesProgressCode === "4"
+                        bpSalesProgressCode === "4"
                         ? true
                         : false
                     }
