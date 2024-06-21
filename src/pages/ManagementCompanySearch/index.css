@@ -1,0 +1,32 @@
+/* 行被选中时的样式 */
+.selected-row {
+  background-color: #e6f7ff !important; /* 选中时的背景颜色 */
+  /* cursor: pointer; 添加指针光标，提升交互感 */
+}
+
+
+/* styles.css */
+.ant-table-thead > tr > th {
+  white-space: nowrap; /* 禁止自动换行 */
+  background-color: #f0f0f0;  /*更改背景颜色 */
+  font-weight: 500;        /* 更改文字粗细 */
+  padding: 12px; 
+  text-align: left;       /* 更改文字对齐方式 */
+  border: 1px solid #d9d9d9;  /* 指定边框颜色，确保边框可见 */
+}
+
+.ant-table-tbody > tr > td {
+  width: 100;
+   /* white-space: nowrap; 禁止自动换行 */
+  text-align: left;
+  padding: 10px;       /* 更改文字对齐方式 */
+  font-weight: 500;
+  overflow: hidden;       /* 隐藏溢出内容 */
+  text-overflow: ellipsis; /* 用省略号表示溢出内容 */
+  
+  /* 你可以在这里添加更多自定义样式 */
+}
+
+.ant-table-tbody > tr.ant-table-row:hover > td, .ant-table-tbody > tr > td.ant-table-cell-row-hover {
+  background: none !important;
+}

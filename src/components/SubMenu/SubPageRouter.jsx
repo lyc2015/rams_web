@@ -5,6 +5,7 @@ import EmployeeInfo from '../../pages/EmployeeInfo';
 import SalesInfo from '../../pages/SalesInfo'
 import ManagementCompanyRegister from '../../pages/ManagementCompanyRegister'
 import ManagementCompanySearch from '../../pages/ManagementCompanySearch'
+import SalesInfoSearch from '../../pages/SalesInfoSearch';
 
 const Routes = ({ match }) => {
   return (
@@ -39,9 +40,11 @@ const Routes = ({ match }) => {
         path={`${match.path}/managementCompanySearch`}
         component={ManagementCompanySearch}
       />
-      <Route path="/submenu/employeeInfo" component={EmployeeInfo} />
-      <Route path="/submenu/employeeSearch" component={EmployeeSearch} />
-      <Route path="/submenu/salesInfo" component={SalesInfo} />
+      <Route
+        exact
+        path={`${match.path}/salesInfoSearch`}
+        component={SalesInfoSearch}
+      />
     </Switch>
   );
 };
