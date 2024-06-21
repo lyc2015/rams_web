@@ -108,7 +108,7 @@ export default function ManagementCompanySearch() {
     {
       title: '番号',
       dataIndex: '番号',
-      width: "4%",
+      width: "5%",
       ellipsis: true,
     },
     {
@@ -280,7 +280,7 @@ export default function ManagementCompanySearch() {
             dataSource={dataSource}
             //columns={mergedColumns}
             columns={columns}
-            pagination={{ pageSize: 7 }}
+            pagination={{ pageSize: 6 }}
             className="custom-table"
             rowClassName={rowClassName}
 
