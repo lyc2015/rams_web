@@ -42,13 +42,9 @@ class Login extends Component {
     };
     request.post("login/login", loginModel)
       .then((res) => {
-        if (res.data.code === 200) {
-          message.success("success")
-          // 保存Cookie逻辑
-          window.location.href = "/submenu";
-        } else {
-          message.error("fail")
-        }
+        console.log("res---", res);
+        message.success("success")
+        window.location.href = "/submenu";
       })
       .catch((error) => {
         message.error("fail")

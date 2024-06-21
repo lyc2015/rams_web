@@ -891,7 +891,7 @@ body {
     center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
-  background-color: white;
+  /* background-color: white; */
 }
 #datePickerReadonlyDefault-empInsert-left {
   background-repeat: no-repeat;
