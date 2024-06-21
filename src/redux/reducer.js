@@ -1,7 +1,6 @@
 import defaultState from "./state";
 import { updateDropDown, fetchDropDown } from "./dropDown";
 
-
 export default (state = defaultState, action) => {
   if (!state) {
     return {

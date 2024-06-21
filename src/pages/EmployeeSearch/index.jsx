@@ -52,13 +52,11 @@ export default function EmployeeSearch() {
         {
             label: '社員形式',
             name: 'contractID',
-            required: true,
             maxLength: 6
         },
         {
             label: '社員名',
             name: 'manager',
-            required: true,
         }
     ];
 
@@ -71,7 +69,6 @@ export default function EmployeeSearch() {
         {
             label: '部署',
             name: 'contractDate',
-            required: true,
         },
         {
             label: '性別',
@@ -189,31 +186,16 @@ export default function EmployeeSearch() {
                 <Row gutter={16}>
                     {getRows(labelObjs)}
                 </Row>
-                {/* <div style={{ textAlign: "center" }}>
-                    <Button
-                        type="primary"
-                        onClick={insertEmployee}
-                    >
-                        <FontAwesomeIcon icon={faSave} /> 検索
+                <div style={{ textAlign: "center" }}>
+                    <Button size="sm" variant="info" onClick={insertEmployee}>
+                    検索
                     </Button>
-                    <Button
-                        type="primary"
-                        onClick={insertEmployee}
-                        style={{ marginLeft: 8 }}
-                    >
-                        <FontAwesomeIcon icon={faSave} /> 追加
+
+                    <Button size="sm" variant="info" style={{marginLeft:'20px'}}>
+                    追加
                     </Button>
-                </div> */}
-      <div style={{ textAlign: "center" }}>
-            <Button size="sm" variant="info" onClick={insertEmployee}>
-               検索
-            </Button>
 
-            <Button size="sm" variant="info" style={{marginLeft:'20px'}}>
-              追加
-            </Button>
-
-        </div><br/>   
+                </div><br/>   
                 <div style={{ height: "10px" }}></div>
                 <div>
                     <Row>

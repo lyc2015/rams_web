@@ -1,5 +1,5 @@
 import defaultState from "./state";
-import request from "../service/request";
+const $ = require("jquery");
 
 // dropdownのメソッド名
 const methodNameList = [
@@ -8,30 +8,34 @@ const methodNameList = [
   "getEmployeeForm",          // 社員形式
   "getDepartment",            // 部署
   "getHomesAgentCode",        // 仲介区分
+  "getAuthority",             // 権限
 ];
 
-export async function fetchDropDown(state = defaultState) {
-  try {
-    let par = JSON.stringify(methodNameList);
-    const response = await request.post('/initializationPage', par);
-    console.log('response', response);
-    // const outArray = response.data.map(list => {
-    //   const array = [{ code: "", name: "" }];
-    //   for (const item of list) {
-    //     array.push(item);
-    //   }
-    //   return array;
-    // });
+const serverIP = "http://127.0.0.1:8080/";
 
-    // if (outArray.length > 0) {
-    //   outArray.push(outArray[outArray.length - 1].slice(1)[0].name);
-    // }
+export function fetchDropDown(state = defaultState) {
+  var outArray = [];
 
-    // return outArray;
-  } catch (error) {
-    console.error('Error fetching dropdown data:', error);
-    throw error;
-  }
+  var par = JSON.stringify(methodNameList);
+  $.ajax({
+    type: "POST",
+    url: serverIP + "initializationPage",
+    data: par,
+    async: false,
+    contentType: "application/json",
+    success: function (resultList) {
+      for (let j = 0; j < resultList.length; j++) {
+        var array = [{ code: "", name: "" }];
+        var list = resultList[j];
+        for (var i in list) {
+          array.push(list[i]);
+        }
+        outArray.push(array);
+      }
+    },
+  });
+  outArray.push(outArray[outArray.length - 1]?.slice(1)[0].name);
+  return outArray;
 }
 /**
  * reduxの更新
@@ -41,33 +45,28 @@ export async function fetchDropDown(state = defaultState) {
  * @param {*}
  *            dropName 更新の部分
  */
-export async function updateDropDown(state = defaultState, dropName) {
-  try {
-    const methodList = [dropName];
-    const par = JSON.stringify(methodList);
-    const response = await request.post('/initializationPage', par);
-    const resultList = response.data;
-
-    const array = [{ code: "", name: "" }];
-    for (const item of resultList[0]) {
-      array.push(item);
-    }
-
-    let index = -1;
-    for (let i = 0; i < methodNameList.length; i++) {
-      if (dropName === methodNameList[i]) {
-        index = i;
-        break;
+export function updateDropDown(state = defaultState, dropName) {
+  var methodList = [dropName];
+  var par = JSON.stringify(methodList);
+  $.ajax({
+    type: "POST",
+    url: serverIP + "initializationPage",
+    data: par,
+    async: false,
+    contentType: "application/json",
+    success: function (resultList) {
+      var array = [{ code: "", name: "" }];
+      for (var i in resultList[0]) {
+        array.push(resultList[0][i]);
       }
-    }
-
-    if (index !== -1) {
+      var index = -1;
+      for (var n in methodNameList) {
+        if (dropName === methodNameList[n]) {
+          index = n;
+        }
+      }
       state.dropDown[index] = array;
-    }
-
-    return state;
-  } catch (error) {
-    console.error('Error updating dropdown data:', error);
-    throw error;
-  }
+    },
+  });
+  return state;
 }

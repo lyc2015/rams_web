@@ -95,12 +95,12 @@ class EmployeeInfo extends React.Component {
         { code: "1", name: "加入済み" }
       ],
       // dropDown
-      // nationalityCodes: store.getState().dropDown[0],
-      nationalityCodes: [],
-      station: [],
-      employeeFormCodes: [],
-      departmentCodes: [],
-      homesAgentCodes: [],
+      nationalityCodes: store.getState().dropDown[0] || [],
+      stations: store.getState().dropDown[1] || [],
+      employeeFormCodes: store.getState().dropDown[2] || [],
+      departmentCodes: store.getState().dropDown[3] || [],
+      homesAgentCodes: store.getState().dropDown[4] || [],
+      authoritys: store.getState().dropDown[5] || [],
     }
   }
   
@@ -192,18 +192,18 @@ class EmployeeInfo extends React.Component {
             employeeLastName: publicUtils.trim(this.state.employeeLastName), // 社員名
             disabledFalg: false,
           });
-          //window.location.reload();
-          store.dispatch({ type: "UPDATE_STATE", dropName: "getEmployeeName" });
-          store.dispatch({
-            type: "UPDATE_STATE",
-            dropName: "getEmployeeNameNoBP",
-          });
-          store.dispatch({
-            type: "UPDATE_STATE",
-            dropName: "getEmployeeNameByOccupationName",
-          });
-          //this.getNO(this.state.empNoHead);// 採番番号
-          setTimeout(() => this.changePage(), 3000);
+          // //window.location.reload();
+          // store.dispatch({ type: "UPDATE_STATE", dropName: "getEmployeeName" });
+          // store.dispatch({
+          //   type: "UPDATE_STATE",
+          //   dropName: "getEmployeeNameNoBP",
+          // });
+          // store.dispatch({
+          //   type: "UPDATE_STATE",
+          //   dropName: "getEmployeeNameByOccupationName",
+          // });
+          // //this.getNO(this.state.empNoHead);// 採番番号
+          // setTimeout(() => this.changePage(), 3000);
         }
       })
       .catch((error) => {
@@ -301,6 +301,11 @@ class EmployeeInfo extends React.Component {
     return `${years}年${months}ヶ月`;
   };
 
+  /**
+   * 卒業年月
+   * 
+   * @param {*} date 
+   */
   inactiveGraduationYearAndMonth = (date) => {
     const yearsDiff = moment().diff(date, 'years');
     const monthsDiff = moment().diff(date, 'months') % 12;
@@ -420,7 +425,7 @@ class EmployeeInfo extends React.Component {
   };
 
   /**
-   * maxID
+   * get maxID
    */
 
   componentDidMount() {
@@ -443,9 +448,27 @@ class EmployeeInfo extends React.Component {
   };
 
 
+  /**
+   * 駅名を取得
+   * 
+   * @param {*} event 
+   * @param {*} values 
+   */
+  getStation = (event, values) => {
+    console.log(event.target.value);
+    let station = this.state.station.find((v) => v.name === event.target.value);
+    if (station !== null && station !== undefined) {
+      console.log('code---', station.code)
+      this.setState({
+        stationCode: station.code,
+      });
+    }
+  };
+
   render() {
     const {
       employee,
+      nationalityCodes,
       employeeFirstName,
       nationalityCode,
       employeeFormCode,
@@ -470,25 +493,15 @@ class EmployeeInfo extends React.Component {
       temporary_retirementYearAndMonth,
       authorityCode,
       stationCodeValue,
-      departmentCode,
-      homesAgentCode,
+      departmentCodes,
+      homesAgentCodes,
+      employeeFormCodes,
+      stations,
+      authoritys,
     } = this.state;
 
     const hasEmployeeData = Object.keys(employee).length > 0;
 
-    const options = [
-      {
-        value: 'Burns Bay Road',
-      },
-      {
-        value: 'Downing Street',
-      },
-      {
-        value: 'Wall Street',
-      },
-    ];
-
-    
     // 
     return (  
       <div className="container employeeInsertNew">
@@ -510,28 +523,31 @@ class EmployeeInfo extends React.Component {
                 <InputGroup.Prepend>
                   <InputGroup.Text>社員形式</InputGroup.Text>
                 </InputGroup.Prepend>
-                <Form.Control
-                  as="select"
-                  size="sm"
-                  onChange={this.valueChangeEmployeeFormCode}
-                  name="employeeFormCode"
-                  value={employeeFormCode}
-                  autoComplete="off"
-                  id="Autocompletestyle-employeeInsert-employeeFormCode"
-                  disabled={
-                    employeeStatus === "0" ||
-                    employeeStatus === "2" ||
-                    employeeStatus === "3"
-                      ? false
-                      : true
-                  }
-                >
-                  {this.state.employeeFormCodes.map((date) => (
-                    <option key={date.code} value={date.code}>
-                      {date.name}
-                    </option>
-                  ))}
-                </Form.Control>
+                <Autocomplete
+                  className="input-group-right-item"
+                  id="stationCode"
+                  name="stationCode"
+                  value={this.state.employeeFormCode}
+                  options={employeeFormCodes || []}
+                  getOptionLabel={(option) => option.name || ""}
+                  onInput={this.getStation}
+                  onChange={(event, values) => {
+                    console.log('values', values)
+                    this.setState({
+                      employeeFormCode: values.code,
+                    });
+                  }}
+                  renderInput={(params) => (
+                    <div ref={params.InputProps.ref}>
+                      <input
+                        placeholder=""
+                        type="text"
+                        {...params.inputProps}
+                        className="auto form-control Autocompletestyle-emp-station"
+                      />
+                    </div>
+                  )}
+                />
               </InputGroup>
 
               <InputGroup size="sm" className="required-mark">
@@ -540,7 +556,7 @@ class EmployeeInfo extends React.Component {
                 </InputGroup.Prepend>
                 <FormControl
                   placeholder="社員氏"
-                  value={this.state.employeeFirstName}
+                  value={employeeFirstName}
                   onChange={this.valueChange}
                   onBlur={this.katakanaApiChange.bind(this)}
                   name="employeeFirstName"
@@ -622,7 +638,7 @@ class EmployeeInfo extends React.Component {
                   <InputGroup.Text id="inputGroup-sizing-sm">年齢</InputGroup.Text>
                 </InputGroup.Prepend>
                 <InputGroup.Prepend>
-                  <AntdDatePicker
+                  {/* <AntdDatePicker
                     allowClear={false}
                     suffixIcon={false}
                     value={this.state.birthday ? moment(this.state.birthday) : ""}
@@ -633,7 +649,19 @@ class EmployeeInfo extends React.Component {
                     disabledDate={(current) => current >= moment()}
                     bordered={false}
                     className="antd-date-picker"
-                  />
+                  /> */}
+                <AntdDatePicker
+                  allowClear={false}
+                  suffixIcon={false}
+                  value={this.state.birthday ? moment(this.state.birthday) : ""}
+                  onChange={this.inactiveBirthday}
+                  format="YYYY/MM/DD"
+                  locale="ja"
+                  showMonthYearPicker
+                  className="form-control form-control-sm"
+                  autoComplete="off"
+                  id="datePicker-empInsert-left"
+                />
                 </InputGroup.Prepend>
                 <FormControl
                   id="temporary_age"
@@ -651,26 +679,30 @@ class EmployeeInfo extends React.Component {
                 <InputGroup.Prepend>
                   <InputGroup.Text>国籍</InputGroup.Text>
                 </InputGroup.Prepend>
-                {/* <AntSelect
-                  className="form-control form-control-sm"
-                  bordered={false}
-                  showArrow={false}
-                  filterOption={(input, option) =>
-                      (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-                  }
-                  options={this.state.nationalityCodes}
-                  // onChange={(e) => selChange("employeeNo", e)}
-                  // value={values.employeeNo}
-                /> */}
-                <AntAutoComplete
-                  className="form-control form-control-sm"
-                  bordered={false}
-                  showArrow={false}                  
-                  options={options}
-                  placeholder="try to type `b`"
-                  filterOption={(inputValue, option) =>
-                    option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-                  }
+                <Autocomplete
+                  className="input-group-right-item"
+                  id="stationCode"
+                  name="stationCode"
+                  value={stationCodeValue}
+                  options={nationalityCodes || []}
+                  getOptionLabel={(option) => option.name || ""}
+                  onInput={this.getStation}
+                  onChange={(event, values) => {
+                    console.log('values', values)
+                    this.setState({
+                      employeeFormCode: values.code,
+                    });
+                  }}
+                  renderInput={(params) => (
+                    <div ref={params.InputProps.ref}>
+                      <input
+                        placeholder=""
+                        type="text"
+                        {...params.inputProps}
+                        className="auto form-control Autocompletestyle-emp-station"
+                      />
+                    </div>
+                  )}
                 />
                 <FormControl
                   placeholder="県"
@@ -685,7 +717,9 @@ class EmployeeInfo extends React.Component {
             <Col md={4}>
               <InputGroup size="sm" className="mb-3 required-mark">
                 <InputGroup.Prepend>
-                  <InputGroup.Text>社員番号</InputGroup.Text>
+                  <InputGroup.Text id="fiveKanji">
+                    社員番号
+                  </InputGroup.Text>
                 </InputGroup.Prepend>
                 <FormControl
                   placeholder="社員番号"
@@ -698,7 +732,7 @@ class EmployeeInfo extends React.Component {
               </InputGroup>
               <InputGroup size="sm">
                 <InputGroup.Prepend>
-                  <InputGroup.Text>
+                  <InputGroup.Text id="fiveKanji">
                     社内メール
                   </InputGroup.Text>
                 </InputGroup.Prepend>
@@ -722,7 +756,9 @@ class EmployeeInfo extends React.Component {
               </InputGroup>
               <InputGroup size="sm" className="">
                 <InputGroup.Prepend>
-                  <InputGroup.Text>携帯電話</InputGroup.Text>
+                  <InputGroup.Text id="fiveKanji">
+                    携帯電話
+                  </InputGroup.Text>
                 </InputGroup.Prepend>
                 <FormControl
                   value={phoneNo1}
@@ -761,7 +797,9 @@ class EmployeeInfo extends React.Component {
               </InputGroup>
               <InputGroup size="sm" >
                 <InputGroup.Prepend>
-                  <InputGroup.Text>郵便番号</InputGroup.Text>
+                  <InputGroup.Text id="fiveKanji">
+                    郵便番号
+                  </InputGroup.Text>
                 </InputGroup.Prepend>
                 <FormControl
                   placeholder="郵便番号"
@@ -776,7 +814,9 @@ class EmployeeInfo extends React.Component {
               </InputGroup>
               <InputGroup size="sm" >
                 <InputGroup.Prepend>
-                  <InputGroup.Text>都道府県</InputGroup.Text>
+                  <InputGroup.Text id="fiveKanji">
+                    都道府県
+                  </InputGroup.Text>
                 </InputGroup.Prepend>
                 <FormControl
                   placeholder="都道府県"
@@ -789,7 +829,9 @@ class EmployeeInfo extends React.Component {
               </InputGroup>
               <InputGroup size="sm" >
                 <InputGroup.Prepend>
-                  <InputGroup.Text>以降住所</InputGroup.Text>
+                  <InputGroup.Text id="fiveKanji">
+                    以降住所
+                  </InputGroup.Text>
                 </InputGroup.Prepend>
                 <FormControl
                   placeholder="以降住所"
@@ -801,14 +843,16 @@ class EmployeeInfo extends React.Component {
               </InputGroup>
               <InputGroup size="sm" >
                 <InputGroup.Prepend>
-                  <InputGroup.Text>最寄駅</InputGroup.Text>
+                  <InputGroup.Text id="fiveKanji">
+                    最寄駅
+                  </InputGroup.Text>
                 </InputGroup.Prepend>
                 <Autocomplete
                   className="input-group-right-item"
                   id="stationCode"
                   name="stationCode"
                   value={stationCodeValue}
-                  options={this.state.station}
+                  options={stations || []}
                   getOptionLabel={(option) => option.name || ""}
                   onInput={this.getStation}
                   renderInput={(params) => (
@@ -854,18 +898,30 @@ class EmployeeInfo extends React.Component {
           <Row>
             <Col md={4}>
               <Form.Label style={{ color: "#000000" }}>
-                基本情報補足
+                {/* 基本情報補足 */}
               </Form.Label>
-              <InputGroup size="sm" >
+              <InputGroup size="sm" className="required-mark">
                 <InputGroup.Prepend>
                   <InputGroup.Text>権限</InputGroup.Text>
                 </InputGroup.Prepend>
-                <FormControl
-                  placeholder="権限"
-                  value={authorityCode}
-                  onChange={this.valueChange}
-                  name="permission"
-                  size="sm"
+                <Autocomplete
+                  className="input-group-right-item"
+                  id="stationCode"
+                  name="stationCode"
+                  value={stationCodeValue}
+                  options={authoritys || []}
+                  getOptionLabel={(option) => option.name || ""}
+                  onInput={this.getStation}
+                  renderInput={(params) => (
+                    <div ref={params.InputProps.ref}>
+                      <input
+                        placeholder=""
+                        type="text"
+                        {...params.inputProps}
+                        className="auto form-control Autocompletestyle-emp-station"
+                      />
+                    </div>
+                  )}
                 />
               </InputGroup>
               <InputGroup size="sm" >
@@ -944,14 +1000,14 @@ class EmployeeInfo extends React.Component {
                 disabled
               />
             </InputGroup>
-            <InputGroup size="sm" className="required-mark">
+            <InputGroup size="sm">
               <InputGroup.Prepend>
                 <InputGroup.Text id="inputGroup-sizing-sm">
                   入社年月
                 </InputGroup.Text>
               </InputGroup.Prepend>
               <InputGroup.Append>
-                <AntdDatePicker
+                {/* <AntdDatePicker
                   allowClear={false}
                   suffixIcon={false}
                   value={intoCompanyYearAndMonth ? moment(intoCompanyYearAndMonth) : ""}
@@ -964,6 +1020,18 @@ class EmployeeInfo extends React.Component {
                       ? true
                       : false}
                   bordered={false}
+                /> */}
+                <AntdDatePicker
+                  allowClear={false}
+                  suffixIcon={false}
+                  value={intoCompanyYearAndMonth ? moment(intoCompanyYearAndMonth) : ""}
+                  onChange={this.inactiveintoCompanyYearAndMonth}
+                  format="YYYY/MM/DD"
+                  locale="ja"
+                  showMonthYearPicker
+                  className="form-control form-control-sm"
+                  autoComplete="off"
+                  id="datePicker-empInsert-left"
                 />
               </InputGroup.Append>
               <FormControl
@@ -1010,49 +1078,61 @@ class EmployeeInfo extends React.Component {
               </Form.Label>
               <InputGroup size="sm" >
                 <InputGroup.Prepend>
-                  <InputGroup.Text>仲介区分</InputGroup.Text>
+                  <InputGroup.Text id="fiveKanji">
+                    仲介区分
+                  </InputGroup.Text>
                 </InputGroup.Prepend>
-                <Form.Control
-                  as="select"
-                  size="sm"
-                  name="homesAgentCode"
-                  value={homesAgentCode}
-                  autoComplete="off"
-                >
-                  {this.state.homesAgentCodes.map((date) => (
-                    <option key={date.code} value={date.code}>
-                      {date.name}
-                    </option>
-                  ))}
-                </Form.Control>
+                <Autocomplete
+                  className="input-group-right-item"
+                  id="stationCode"
+                  name="stationCode"
+                  value={stationCodeValue}
+                  options={homesAgentCodes || []}
+                  getOptionLabel={(option) => option.name || ""}
+                  onInput={this.getStation}
+                  renderInput={(params) => (
+                    <div ref={params.InputProps.ref}>
+                      <input
+                        placeholder=""
+                        type="text"
+                        {...params.inputProps}
+                        className="auto form-control Autocompletestyle-emp-station"
+                      />
+                    </div>
+                  )}
+                />
               </InputGroup>
               <InputGroup size="sm" className="">
                 <InputGroup.Prepend>
-                  <InputGroup.Text>部署</InputGroup.Text>
+                  <InputGroup.Text id="fiveKanji">
+                    部署
+                  </InputGroup.Text>
                 </InputGroup.Prepend>
-                <Form.Control
-                  as="select"
-                  size="sm"
-                  onChange={this.departmentCodeChange}
-                  name="departmentCode"
-                  value={departmentCode}
-                  autoComplete="off"
-                  disabled={
-                    employeeStatus === "0" || employeeStatus === "3"
-                      ? false
-                      : true
-                  }
-                >
-                  {this.state.departmentCodes.map((date) => (
-                    <option key={date.code} value={date.code}>
-                      {date.name}
-                    </option>
-                  ))}
-                </Form.Control>
+                <Autocomplete
+                  className="input-group-right-item"
+                  id="stationCode"
+                  name="stationCode"
+                  value={stationCodeValue}
+                  options={departmentCodes || []}
+                  getOptionLabel={(option) => option.name || ""}
+                  onInput={this.getStation}
+                  renderInput={(params) => (
+                    <div ref={params.InputProps.ref}>
+                      <input
+                        placeholder="例：秋葉原駅"
+                        type="text"
+                        {...params.inputProps}
+                        className="auto form-control Autocompletestyle-emp-station"
+                      />
+                    </div>
+                  )}
+                />
               </InputGroup>
               <InputGroup size="sm" >
                 <InputGroup.Prepend>
-                  <InputGroup.Text>在留資格</InputGroup.Text>
+                  <InputGroup.Text id="fiveKanji">
+                    在留資格
+                  </InputGroup.Text>
                 </InputGroup.Prepend>
                 <FormControl
                   placeholder="在留資格"
