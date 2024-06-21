@@ -102,7 +102,7 @@ class SubMenu extends Component {
             key: "売上情報・賃貸-2",
             label: "売上情報検索(賃貸)",
             icon: faSave,
-            path: "/submenu/employeeSearch",
+            path: "/submenu/salesInfoSearch",
           },
         ]
       },

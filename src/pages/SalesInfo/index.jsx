@@ -1,15 +1,14 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, {  useEffect, useState } from 'react'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSave } from "@fortawesome/free-solid-svg-icons";
-// import dateImg from '../../asserts/css/date_24px_533395_easyicon.net.ico'
 import dateImg from '../../assets/images/date_icon.ico'
 
 import { DatePicker, message, Select as AntSelect } from "antd";
 import FromCol from "../../components/SalesInfo/FromCol/index.jsx";
 import SalesTable from '../../components/SalesInfo/SalesTable/index.jsx';
 
-import request from "../../service/request";
+import request from "../../service/request.js";
 
 import { postcodeApi } from "../../utils/publicUtils.js"
 
@@ -27,7 +26,9 @@ import './index.css'
 
 import moment from "moment";
 const dateIcon = <img src={dateImg} alt="" />;
-
+// const data=(value1,value2)=>{
+//     const val=value1.
+// }
 console.log('moment', moment().format("YYYY-MM-DD"));
 
 export default function SalesInfo() {
@@ -45,7 +46,7 @@ export default function SalesInfo() {
         rent: '',
         realEstateManagementCompanyCode: '',
         institutionId: '',
-        introducer: '',
+        // introducer: '',
         introducerFee: '',
         commissionAdCode: null,
         bankSales: '',
@@ -80,7 +81,7 @@ export default function SalesInfo() {
             return obj
         }
         const fetchData = async () => {
-            const data = await request.get('/getEmployeeInfo');
+            const data = await request.get('/getSalesBaseInfo');
             const newList = data.employeeList.map(getOption)
             setEmployeeOption(newList)
             setAdCodeList(data.adCodeList)
@@ -125,8 +126,18 @@ export default function SalesInfo() {
     }
 
     useEffect(() => {
-        console.log('useEffect');
-    }, [])
+
+       const nowAd= adCodeList.find(item=>item.value===values.commissionAdCode)
+       if(nowAd&&values.rent){
+        const adNum =parseInt(nowAd.label)/100
+        const introducerFee=adNum
+
+
+       }
+        
+        
+        
+    }, [values.commissionAdCode,values.rent])
 
 
     const getPostCode = async (valueInput, inputName) => {
@@ -231,7 +242,7 @@ export default function SalesInfo() {
         },
         {
             label: '紹介人(機構)',
-            name: 'introducer',
+            name: 'institutionId',
             maxLength: 8,
             children:
                 <AntSelect
@@ -242,8 +253,8 @@ export default function SalesInfo() {
                         (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                     }
                     options={institutionInfo}
-                    onChange={(e) => selChange("introducer", e)}
-                    value={values.introducer}
+                    onChange={(e) => selChange("institutionId", e)}
+                    value={values.institutionId}
                 />
 
         },
@@ -496,7 +507,6 @@ export default function SalesInfo() {
                     </Button>
                 </div>
             </Form>
-            <SalesTable />
 
         </div>
     )
