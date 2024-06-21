@@ -606,7 +606,7 @@ class employeeUpdateNew extends React.Component {
           retirementYearAndMonthDisabled:
             data.employeeFormCode === "4" ? true : false,
           residenceTimeDisabled:
-            data.residenceCode === "5" || data.employeeStatus !== "0"
+            data.residenceCode === "5" || (data.employeeStatus !== "0" && data.employeeStatus !== "2")
               ? true
               : false,
           bpDisabled: data.employeeStatus === "0" ? false : true,
@@ -2914,8 +2914,8 @@ class employeeUpdateNew extends React.Component {
                         residenceTimeDisabled ||
                           this.state.residenceCode === "3" ||
                           this.state.residenceCode === "6" ||
-                          employeeStatus === "1" ||
-                          employeeStatus === "4"
+                          employeeStatus === "1"||
+                           employeeStatus === "4"
                           ? true
                           : false
                       }
@@ -3009,7 +3009,7 @@ class employeeUpdateNew extends React.Component {
                       minDate={new Date()}
                       disabled={
                         residenceTimeDisabled ||
-                          employeeStatus === "1" ||
+                          employeeStatus === "1" || 
                           employeeStatus === "4"
                           ? true
                           : false
