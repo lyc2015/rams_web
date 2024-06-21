@@ -8,11 +8,11 @@
 /* styles.css */
 .ant-table-thead > tr > th {
   white-space: nowrap; /* 禁止自动换行 */
-  /* background-color: #f0f0f0; 更改背景颜色 */
+  background-color: #f0f0f0;  /*更改背景颜色 */
   font-weight: 500;        /* 更改文字粗细 */
   padding: 12px; 
   text-align: left;       /* 更改文字对齐方式 */
-  
+  border: 1px solid #d9d9d9;  /* 指定边框颜色，确保边框可见 */
 }
 
 .ant-table-tbody > tr > td {
