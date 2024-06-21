@@ -16,7 +16,7 @@ const Routes = ({ match }) => {
       />
       <Route
         exact
-        path={`${match.path}/employeeInsertNew`}
+        path={`${match.path}/employeeInfo`}
         component={EmployeeInfo}
       />
       <Route
@@ -39,6 +39,9 @@ const Routes = ({ match }) => {
         path={`${match.path}/managementCompanySearch`}
         component={ManagementCompanySearch}
       />
+      <Route path="/submenu/employeeInfo" component={EmployeeInfo} />
+      <Route path="/submenu/employeeSearch" component={EmployeeSearch} />
+      <Route path="/submenu/salesInfo" component={SalesInfo} />
     </Switch>
   );
 };

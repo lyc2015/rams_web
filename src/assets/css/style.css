@@ -1306,7 +1306,7 @@ body {
   color: "#495057";
 }
 
-.Autocompletestyle-employeeInsertNew-employeeNo {
+.Autocompletestyle-employeeInfo-employeeNo {
   width: 8rem;
   height: 31px;
   border-color: "#ced4da";
@@ -2353,7 +2353,7 @@ body {
     font-size: ".875rem";
     color: "#495057";
   }
-  .Autocompletestyle-employeeInsertNew-employeeNo {
+  .Autocompletestyle-employeeInfo-employeeNo {
     width: 5.8rem;
     height: 31px;
     border-color: "#ced4da";

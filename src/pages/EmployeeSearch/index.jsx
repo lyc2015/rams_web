@@ -41,22 +41,42 @@ export default function EmployeeSearch() {
     const [selectedRowKeys, setSelectedRowKeys] = useState([]);
     const history = useHistory();
 
+    // Search
+    const [filteredData, setFilteredData] = useState([]);
+    const [searchValues, setSearchValues] = useState({
+        employeeId: '',
+        employeeName: ''
+    });
     const valueChange = (name, value) => {
         setValues({
             ...values,
             [name]: value
         });
     }
+    const handleSearchChange = (e) => {
+        const { name, value } = e.target;
+        setSearchValues({
+            ...searchValues,
+            [name]: value
+        });
+    };
+    const handleSearch = () => {
+        const { employeeId, employeeName } = searchValues;
+        const filteredData = tableData.filter(item =>
+            (employeeId ? item.employeeId.includes(employeeId) : true) &&
+            (employeeName ? item.employeeName.includes(employeeName) : true)
+        );
+        setFilteredData(filteredData);
+    };
 
     const topLabelobjs = [
         {
             label: '社員形式',
-            name: 'contractID',
-            maxLength: 6
+            name: 'employeeFormCode',
         },
         {
             label: '社員名',
-            name: 'manager',
+            name: 'employeeName',
         }
     ];
 
@@ -84,7 +104,13 @@ export default function EmployeeSearch() {
 
     const getRows = (items) => {
         return items.map((item, idx) => (
-            <FromCol key={idx} {...item} value={values[item.name]} valueChange={valueChange} required={item.required}>
+            <FromCol 
+                key={idx} 
+                {...item} 
+                value={values[item.name]} 
+                valueChange={valueChange} 
+                required={item.required}
+            >
                 {item.children && item.children}
             </FromCol>
         ));
@@ -135,6 +161,8 @@ export default function EmployeeSearch() {
                     joinYear: item.comeToJapanYearAndMonth,
                 }));
                 setTableData(tableData);
+                setFilteredData(tableData);
+
                 const tData = response.map((item, index) => ({
                     key: index,
                     ...Object.entries(item).reduce((acc, [key, value]) => {
@@ -167,8 +195,10 @@ export default function EmployeeSearch() {
             return;
         }
         const selectedEmployeeId = selectedRowKeys[0];
-        history.push(`/submenu/employeeInsertNew`, { employee: transformedData[selectedEmployeeId] });
+        history.push(`/submenu/employeeInfo`, { employee: transformedData[selectedEmployeeId] });
     };
+
+    
 
     return (
         <div className="container">
@@ -187,12 +217,12 @@ export default function EmployeeSearch() {
                     {getRows(labelObjs)}
                 </Row>
                 <div style={{ textAlign: "center" }}>
-                    <Button size="sm" variant="info" onClick={insertEmployee}>
-                    検索
+                    <Button size="sm" variant="info" onClick={handleSearch}>
+                        検索
                     </Button>
 
-                    <Button size="sm" variant="info" style={{marginLeft:'20px'}}>
-                    追加
+                    <Button size="sm" variant="info" >
+                        追加
                     </Button>
 
                 </div><br/>   
@@ -219,7 +249,7 @@ export default function EmployeeSearch() {
                     <Col span={24}>
                         <Table
                             rowSelection={rowSelection}
-                            dataSource={tableData}
+                            dataSource={filteredData}
                             columns={columns}
                             pagination={{ pageSize: 10 }}
                             loading={loading}

@@ -13,12 +13,7 @@ export default function Router() {
     <Switch>
       <Route exact path="/" component={Login} />
       <Route exact path="/submenu" component={SubMenu} />
-      <Route exact path="/insert" component={EmployeeInfo} />
-      <Route exact path="/employeeSearch" component={EmployeeSearch} />
-      <Route exact path="/submenu/salesInfo" component={SalesInfo} />
       <Route exact path="/submenuNew" component={SubMenuNew} />
-      <Route exact path="/managementCompanyRegister" component={ManagementCompanyRegister} />
-
     </Switch>
   );
 }
