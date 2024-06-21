@@ -731,7 +731,7 @@ class interviewInformation extends React.Component {
     };
 
     return (
-      <div>
+      <div className="interviewInformation">
         <div style={{ display: this.state.myToastShow ? "block" : "none" }}>
           <MyToast
             myToastShow={this.state.myToastShow}
@@ -985,73 +985,40 @@ class interviewInformation extends React.Component {
                 </Col>
               </Row>
             </Col>
-            <Col sm={1}>
-              <Row>
-                <InputGroup.Prepend>
-                  <Button
-                    size="sm"
-                    variant="info"
-                    style={{
-                      width: "90px",
-                      height: "40px",
-                      marginLeft: "-20px",
-                      marginTop: "0px",
-                      fontSize: "16px",
-                      display: "flex",
-                      justifyContent: "space-around",
-                      alignItems: "center",
-                    }}
-                    name="clickButton"
-                    onClick={this.update}
-                    disabled={
-                      this.state.employeeNo === "" ||
-                        this.state.interviewInfoNum === "3" ||
-                        this.state.interviewInfoNum === "4"
-                        ? true
-                        : false
-                    }
-                  >
-                    <div>
-                      <FontAwesomeIcon icon={faSave} />
-                    </div>
-                    <div>更新</div>
-                  </Button>
-                </InputGroup.Prepend>
-              </Row>
-              <Row>
-                <InputGroup.Prepend>
-                  <Button
-                    size="sm"
-                    variant="info"
-                    style={{
-                      width: "90px",
-                      height: "40px",
-                      marginLeft: "-20px",
-                      marginTop: "5px",
-                      fontSize: "16px",
-                      display: "flex",
-                      justifyContent: "space-around",
-                      alignItems: "center",
-                    }}
-                    name="clickButton"
-                    onClick={this.clear}
-                    disabled={this.state.employeeNo === "" ? true : false}
-                  >
-                    <div>
-                      <FontAwesomeIcon icon={faTrash} />
-                    </div>
-                    <div>削除</div>
-                  </Button>
-                </InputGroup.Prepend>
-              </Row>
-            </Col>
           </Row>
         </Container>
 
-        <div>
+        <div className="df justify-between">
           <p className="warningInfo">
             ※面接の予定が3日を超えると、自動的に削除されます
           </p>
+          <div >
+            <Button
+              size="sm"
+              variant="info"
+              name="clickButton"
+              onClick={this.update}
+              disabled={
+                this.state.employeeNo === "" ||
+                  this.state.interviewInfoNum === "3" ||
+                  this.state.interviewInfoNum === "4"
+                  ? true
+                  : false
+              }
+            >
+              <FontAwesomeIcon icon={faSave} />更新
+            </Button>{" "}
+            <Button
+              size="sm"
+              variant="info"
+              name="clickButton"
+              onClick={this.clear}
+              disabled={this.state.employeeNo === "" ? true : false}
+              style={{ marginRight: 30 }}
+            >
+              <FontAwesomeIcon icon={faTrash} />削除
+            </Button>
+          </div>
         </div>
 
         <Form onSubmit={this.savealesSituation}>
@@ -1085,7 +1052,7 @@ class interviewInformation extends React.Component {
                     {<div style={{ textAlign: "center" }}>面談情報1</div>}
                   </TableHeaderColumn>
                   <TableHeaderColumn
-                    width="6%"
+                    width="5%"
                     row="1"
                     dataField="interviewClassificationCode1"
                     dataFormat={this.formatInterviewClassificationCode}
@@ -1094,7 +1061,7 @@ class interviewInformation extends React.Component {
                     回数
                   </TableHeaderColumn>
                   <TableHeaderColumn
-                    width="10%"
+                    width="12%"
                     row="1"
                     dataField="interviewDate1"
                     dataFormat={this.formatInterviewDate}
@@ -1103,7 +1070,7 @@ class interviewInformation extends React.Component {
                     日付
                   </TableHeaderColumn>
                   <TableHeaderColumn
-                    width="16%"
+                    width="15%"
                     row="1"
                     dataField="interviewCustomer1"
                     dataFormat={this.formatInterviewCustomer}
@@ -1121,7 +1088,7 @@ class interviewInformation extends React.Component {
                     場所
                   </TableHeaderColumn>
                   <TableHeaderColumn
-                    width="6%"
+                    width="5%"
                     row="1"
                     dataField="salesStaff1"
                     dataFormat={this.formatSalesStaff}
@@ -1133,7 +1100,7 @@ class interviewInformation extends React.Component {
                     {<div style={{ textAlign: "center" }}>面談情報2</div>}
                   </TableHeaderColumn>
                   <TableHeaderColumn
-                    width="6%"
+                    width="5%"
                     row="1"
                     dataField="interviewClassificationCode2"
                     dataFormat={this.formatInterviewClassificationCode}
@@ -1142,7 +1109,7 @@ class interviewInformation extends React.Component {
                     回数
                   </TableHeaderColumn>
                   <TableHeaderColumn
-                    width="10%"
+                    width="12%"
                     row="1"
                     dataField="interviewDate2"
                     dataFormat={this.formatInterviewDate}
@@ -1151,7 +1118,7 @@ class interviewInformation extends React.Component {
                     日付
                   </TableHeaderColumn>
                   <TableHeaderColumn
-                    width="16%"
+                    width="15%"
                     row="1"
                     dataField="interviewCustomer2"
                     dataFormat={this.formatInterviewCustomer}
@@ -1169,7 +1136,7 @@ class interviewInformation extends React.Component {
                     場所
                   </TableHeaderColumn>
                   <TableHeaderColumn
-                    width="6%"
+                    width="5%"
                     row="1"
                     dataField="salesStaff2"
                     dataFormat={this.formatSalesStaff}

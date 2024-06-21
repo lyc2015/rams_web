@@ -16,9 +16,14 @@
 }
 
 .warningInfo {
-  margin-top: 15px;
-  margin-bottom: 2px;
   padding-left: 32px;
   font-size: 14px;
   color: red;
+}
+
+
+
+.interviewInformation .table td,
+.interviewInformation .table th {
+  padding: 0.4rem;
 }
