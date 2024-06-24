@@ -35,6 +35,8 @@ class projectInfo extends Component {
   constructor(props) {
     super(props);
     this.state = this.initialState; //初期化
+    this.toroku = this.toroku.bind(this);
+    this.initPage = this.initPage.bind(this);
   }
 
   initialState = {
@@ -378,6 +380,11 @@ class projectInfo extends Component {
   }
 
   componentDidMount() {
+    this.initPage()
+  }
+
+
+  initPage = async () => {
     this.initCopy();
     for (let i = 0; i < 11; i++) {
       let experienceYearDrop = this.state.experienceYearDrop;
@@ -502,6 +509,32 @@ class projectInfo extends Component {
           } else {
             $("#toroku").attr("disabled", false);
           }
+
+
+          // 更新後リフレッシュ
+          this.setState({
+            actionType: "update",
+            projectNo: this.state.projectNo,
+          }, async () => {
+            console.log(this.state.projectNo, 'debug:0624-toroku')
+            this.props.history.push({
+              pathname: "/subMenuManager/projectInfo",
+              state: {
+                actionType: "update",
+                projectNo: this.state.projectNo,
+                // backPage: "projectInfoSearch",
+                // sendValue: sendValue,
+                // searchFlag: this.state.searchFlag,
+              },
+            });
+            await this.initPage()
+            $("#toroku").attr("disabled", false);
+          })
+
+
+
+
+
         } else {
           message.error(result.data.errorsMessage);
 
@@ -539,6 +572,8 @@ class projectInfo extends Component {
       });
     }
   };
+
+  // 
   /**
    * 戻るボタン
    */
@@ -693,6 +728,7 @@ class projectInfo extends Component {
   };
 
   render() {
+    console.log(this.state.projectNo, 'debug:0624-render')
     const {
       projectNo,
       projectName,
