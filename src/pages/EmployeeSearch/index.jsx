@@ -1,13 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSave, faEdit } from "@fortawesome/free-solid-svg-icons";
-import { Table, message, Form, Button, Col, Row, Input } from 'antd';
-import moment from "moment";
-import FromCol from '../../components/EmployeeSearch';
+import {  faEdit } from "@fortawesome/free-solid-svg-icons";
+import { Table, message } from 'antd';
 
+import FromCol from '../../components/EmployeeSearch';
 import request from '../../service/request';
 
+import {
+  Form,
+  Button,
+  Col,
+  Row,
+} from "react-bootstrap";
+
+// moment
+import moment from "moment";
 moment.locale("ja");
 
 export default function EmployeeSearch() {
@@ -68,6 +76,7 @@ export default function EmployeeSearch() {
         );
         setFilteredData(filteredData);
     };
+
 
     const topLabelobjs = [
         {
@@ -189,6 +198,7 @@ export default function EmployeeSearch() {
         onChange: onSelectChange,
     };
 
+    // Edit button click
     const handleEditClick = () => {
         if (selectedRowKeys.length !== 1) {
             message.error('Please select exactly one row to edit.');
@@ -201,8 +211,8 @@ export default function EmployeeSearch() {
     
 
     return (
-        <div className="container">
-            {contextHolder}
+        <div className="">
+            {/* {contextHolder} */}
             <Row className="text-center mb-3">
                 <Col>
                     <h2>社員情報検索</h2>
@@ -221,7 +231,7 @@ export default function EmployeeSearch() {
                         検索
                     </Button>
 
-                    <Button size="sm" variant="info" >
+                    <Button size="sm" variant="info" style={{ marginLeft: '20px' }}>
                         追加
                     </Button>
 
@@ -251,7 +261,7 @@ export default function EmployeeSearch() {
                             rowSelection={rowSelection}
                             dataSource={filteredData}
                             columns={columns}
-                            pagination={{ pageSize: 10 }}
+                            pagination={{ pageSize: 10   }}
                             loading={loading}
                             onRow={(record) => ({
                                 onClick: () => {
