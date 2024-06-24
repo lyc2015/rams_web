@@ -76,7 +76,7 @@ class salesProfit extends React.Component {
     specialPointStatus: store.getState().dropDown[26].slice(1),
     serverIP: store.getState().dropDown[store.getState().dropDown.length - 1], // 劉林涛
     // テスト
-    customerDrop: store.getState().dropDown[56]?.filter((item) => item.employeeFormCode !== '4')?.slice(1),
+    customerDrop: store.getState().dropDown[56].slice(1),
   };
 
   // 页面加载
@@ -794,7 +794,7 @@ class salesProfit extends React.Component {
                       <TableHeaderColumn
                         dataField="employeeName"
                         tdStyle={{ padding: ".45em" }}
-                        width="120"
+                        width="160"
                         dataFormat={this.employeeNameFormat}
                       >
                         氏名
@@ -884,7 +884,7 @@ class salesProfit extends React.Component {
                       </TableHeaderColumn>
                       <TableHeaderColumn
                         dataField="remarks"
-                        width="280"
+                        width="240"
                         dataFormat={this.grayRow}
                         tdStyle={{ padding: ".45em" }}
                       >

@@ -735,9 +735,9 @@ class ProjectInfoSearch extends Component {
         joinWith: undefined,
         values: [
           utils.addLeftSlash(selectedProjectInfo.admissionPeriod) +
-            (selectedProjectInfo.admissionMonthName
-              ? `(${selectedProjectInfo.admissionMonthName})～`
-              : "～"),
+          (selectedProjectInfo.admissionMonthName
+            ? `(${selectedProjectInfo.admissionMonthName})～`
+            : "～"),
         ],
       },
       {
@@ -914,7 +914,7 @@ class ProjectInfoSearch extends Component {
                       selected={admissionPeriod}
                       onChange={this.admissionPeriodChange}
                       autoComplete="off"
-                      locale="pt-BR"
+                      // locale="pt-BR"
                       showMonthYearPicker
                       showFullMonthYearPicker
                       minDate={new Date()}
@@ -1305,7 +1305,6 @@ class ProjectInfoSearch extends Component {
                   variant="info"
                   name="clickButton"
                   id="selectCustomer"
-                  variant="info"
                   onClick={this.shuseiTo.bind(this, "customer")}
                 >
                   <FontAwesomeIcon icon={faEnvelope} /> お客様選択
@@ -1354,7 +1353,6 @@ class ProjectInfoSearch extends Component {
                     variant="info"
                     name="clickButton"
                     id="delete"
-                    variant="info"
                     onClick={this.delete}
                   >
                     <FontAwesomeIcon icon={faTrash} /> 削除
@@ -1364,7 +1362,6 @@ class ProjectInfoSearch extends Component {
                     variant="info"
                     name="clickButton"
                     id="projectContent"
-                    variant="info"
                     onClick={this.handleShowModal.bind(this)}
                   >
                     <FontAwesomeIcon icon={faBook} /> 案件文章

@@ -36,10 +36,22 @@ import {
   Modal as AntdModal,
   notification,
 } from "antd";
+import Tooltip from "@material-ui/core/Tooltip";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
+import { withStyles, makeStyles } from "@material-ui/core/styles";
 axios.defaults.withCredentials = true;
 registerLocale("ja", ja);
 moment.locale("ja");
+
+const LightTooltip = withStyles((theme) => ({
+  tooltip: {
+    backgroundColor: theme.palette.common.white,
+    color: "rgba(0, 0, 0, 0.87)",
+    boxShadow: theme.shadows[1],
+    fontSize: 11,
+  },
+}))(Tooltip);
+
 
 /*
  * 現場情報
@@ -1454,6 +1466,22 @@ class siteInfo extends Component {
     return cell || "技術支援";
   };
 
+  dataFormat = (cell, row, cb) => {
+    const style = {
+      fontSize: "15px",
+      textOverflow: "ellipsis",
+      overflow: "hidden",
+    };
+    return (
+      <LightTooltip
+        title={cell ?? ''}
+      >
+        <div style={style}>{cell}</div>
+      </LightTooltip>
+    );
+  };
+
+
   render() {
     console.log(
       { state: this.state, propsState: this.props.location.state },
@@ -2456,7 +2484,7 @@ class siteInfo extends Component {
                 <TableHeaderColumn
                   dataField="workDate"
                   width="210"
-                  tdStyle={{ padding: ".45em" }}
+                  tdStyle={{ padding: ".4em" }}
                   dataFormat={this.workDateFormat}
                   isKey
                 >
@@ -2466,28 +2494,28 @@ class siteInfo extends Component {
                   dataField="systemName"
                   dataFormat={this.systemNameFormat.bind(this)}
                   width="220"
-                  tdStyle={{ padding: ".45em" }}
+                  tdStyle={{ padding: ".4em" }}
                 >
                   システム
                 </TableHeaderColumn>
                 <TableHeaderColumn
                   dataField="location"
                   width="90"
-                  tdStyle={{ padding: ".45em" }}
+                  tdStyle={{ padding: ".4em" }}
                 >
                   場所
                 </TableHeaderColumn>
                 <TableHeaderColumn
                   dataField="customerName"
-                  width="150"
-                  tdStyle={{ padding: ".45em" }}
+                  width="135"
+                  tdStyle={{ padding: ".4em" }}
                 >
                   お客様
                 </TableHeaderColumn>
                 {/* <TableHeaderColumn
                   dataField="siteManager"
                   width="60"
-                  tdStyle={{ padding: ".45em" }}
+                  tdStyle={{ padding: ".4em" }}
                 >
                   責任者
                 </TableHeaderColumn> */}
@@ -2495,28 +2523,28 @@ class siteInfo extends Component {
                   dataField="unitPrice"
                   width="60"
                   dataFormat={this.addCommaUnitPrice}
-                  tdStyle={{ padding: ".45em" }}
+                  tdStyle={{ padding: ".4em" }}
                 >
                   単価
                 </TableHeaderColumn>
                 <TableHeaderColumn
                   dataField="developLanguageName"
                   width="110"
-                  tdStyle={{ padding: ".45em" }}
+                  tdStyle={{ padding: ".4em" }}
                 >
                   言語
                 </TableHeaderColumn>
                 <TableHeaderColumn
                   dataField="siteRoleName"
                   width="50"
-                  tdStyle={{ padding: ".45em" }}
+                  tdStyle={{ padding: ".4em" }}
                 >
                   役割
                 </TableHeaderColumn>
                 <TableHeaderColumn
                   dataField="levelName"
                   width="50"
-                  tdStyle={{ padding: ".45em" }}
+                  tdStyle={{ padding: ".4em" }}
                 >
                   評価
                 </TableHeaderColumn>
@@ -2570,8 +2598,9 @@ class siteInfo extends Component {
                 ></TableHeaderColumn>
                 <TableHeaderColumn
                   dataField="remark"
-                  width="90"
-                  tdStyle={{ padding: ".45em" }}
+                  width="120"
+                  tdStyle={{ padding: ".3em" }}
+                  dataFormat={this.dataFormat}
                 >
                   備考
                 </TableHeaderColumn>
