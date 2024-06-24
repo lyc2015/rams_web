@@ -130,13 +130,21 @@ class employeeInformation extends Component {
   }
 
   passportStayPeriodChange(cell, row) {
-    return (
-      <div>
-        <font>
-          {row.passportStayPeriodDate === 0 ? "" : row.passportStayPeriodDate}
-        </font>
-      </div>
-    );
+    if (row.passportStayPeriodDate <= 90 && row.dealDistinctioCode !== "2") {
+      return (
+        <div>
+          <font color="red">
+            {row.passportStayPeriodDate === 0 ? "" : row.passportStayPeriodDate}
+          </font>
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <font>{row.passportStayPeriodDate === 0 ? "" : row.passportStayPeriodDate}</font>
+        </div>
+      );
+    }
   }
 
   // レコードのステータス
