@@ -94,7 +94,7 @@ class salesMoneySet extends React.Component {
     resumeName2: "",
     residentCardInfo: "",
     passportInfo: "",
-    tableRowStyle: {color: "#a0a3a1"},
+    tableRowStyle: { color: "#a0a3a1" },
     genderStatuss: store.getState().dropDown[0],
     intoCompanyCodes: store.getState().dropDown[1],
     employeeFormCodes: store.getState().dropDown[2],
@@ -106,12 +106,13 @@ class salesMoneySet extends React.Component {
     developLanguageMaster: store.getState().dropDown[8].slice(1),
     employeeInfoAll: store.getState().dropDown[9].slice(1),
     employeeInfo: store.getState().dropDown[9].slice(1),
+    salesStaffDrop: store.getState().dropDown[56]?.slice(1).filter((item) => /^LYC.*/.test(item.code)), // 営業担当
     serverIP: store.getState().dropDown[store.getState().dropDown.length - 1],
     customerMaster: store.getState().dropDown[15].slice(1),
     socialInsuranceStatus: store.getState().dropDown[68],
-    additionMoneyMap:store.getState().dropDown[83],
-    additionMoneyResonCodeMap:store.getState().dropDown[84],
-    additionCountOfNumberMap:store.getState().dropDown[85],
+    additionMoneyMap: store.getState().dropDown[83],
+    additionMoneyResonCodeMap: store.getState().dropDown[84],
+    additionCountOfNumberMap: store.getState().dropDown[85],
     searchFlag: false,
     employeeName: "",
     id: "",
@@ -123,10 +124,10 @@ class salesMoneySet extends React.Component {
       new Date().getMonth() + 1 === 12
         ? new Date().getFullYear() + 1 + "/01"
         : new Date().getFullYear() +
-          "/" +
-          (new Date().getMonth() + 1 < 10
-            ? "0" + (new Date().getMonth() + 2)
-            : new Date().getMonth() + 2)
+        "/" +
+        (new Date().getMonth() + 1 < 10
+          ? "0" + (new Date().getMonth() + 2)
+          : new Date().getMonth() + 2)
     ).getTime(),
     message: "",
     type: "",
@@ -142,10 +143,12 @@ class salesMoneySet extends React.Component {
     authorityCode: "",
     linkDisableFlag: true, // linkDisableFlag
     changeFlag: true, // 協力を検索する場合、入社年月->所属
+    salesStaff: '', // 営業担当
   };
   // リセット reset
   resetStates = {
     id: "",
+    salesStaff: '',
     employeeName: "",
     employeeNo: "",
     employeeFormCode: "",
@@ -174,10 +177,10 @@ class salesMoneySet extends React.Component {
       new Date().getMonth() + 1 === 12
         ? new Date().getFullYear() + 1 + "/01"
         : new Date().getFullYear() +
-          "/" +
-          (new Date().getMonth() + 1 < 10
-            ? "0" + (new Date().getMonth() + 2)
-            : new Date().getMonth() + 2)
+        "/" +
+        (new Date().getMonth() + 1 < 10
+          ? "0" + (new Date().getMonth() + 2)
+          : new Date().getMonth() + 2)
     ).getTime(),
   };
 
@@ -269,8 +272,8 @@ class salesMoneySet extends React.Component {
     this.setState({
       employeeStatuss: temp,
     });
-    
-   
+
+
   }
 
   // 初期化の時、disabledをセットします
@@ -321,16 +324,16 @@ class salesMoneySet extends React.Component {
         this.props.location.state !== undefined
           ? this.state.customerNo
           : publicUtils.labelGetValue(
-              $("#customerNo").val(),
-              this.state.customerMaster
-            ),
+            $("#customerNo").val(),
+            this.state.customerMaster
+          ),
       intoCompanyCode:
         this.state.intoCompanyCode === ""
           ? undefined
           : this.state.intoCompanyCode,
       japaneseLevelCode:
         this.state.japaneseLevelCode === "" ||
-        this.state.japaneseLevelCode === "0"
+          this.state.japaneseLevelCode === "0"
           ? undefined
           : this.state.japaneseLevelCode,
       siteRoleCode:
@@ -340,8 +343,8 @@ class salesMoneySet extends React.Component {
           ? this.state.developLanguage1
           : $("#developLanguage1").val() === "" ||
             $("#developLanguage1").val() === "0"
-          ? null
-          : publicUtils.labelGetValue(
+            ? null
+            : publicUtils.labelGetValue(
               $("#developLanguage1").val(),
               this.state.developLanguageMaster
             ),
@@ -350,29 +353,29 @@ class salesMoneySet extends React.Component {
           ? this.state.developLanguage2
           : $("#developLanguage2").val() === "" ||
             $("#developLanguage2").val() === "0"
-          ? null
-          : publicUtils.labelGetValue(
+            ? null
+            : publicUtils.labelGetValue(
               $("#developLanguage2").val(),
               this.state.developLanguageMaster
             ),
       intoCompanyYearAndMonthFrom:
         this.state.intoCompanyYearAndMonthFrom === "" ||
-        this.state.intoCompanyYearAndMonthFrom === null ||
-        this.state.intoCompanyYearAndMonthFrom === undefined
+          this.state.intoCompanyYearAndMonthFrom === null ||
+          this.state.intoCompanyYearAndMonthFrom === undefined
           ? undefined
           : publicUtils.formateDate(
-              this.state.intoCompanyYearAndMonthFrom,
-              false
-            ),
+            this.state.intoCompanyYearAndMonthFrom,
+            false
+          ),
       intoCompanyYearAndMonthTo:
         this.state.intoCompanyYearAndMonthTo === "" ||
-        this.state.intoCompanyYearAndMonthTo === null ||
-        this.state.intoCompanyYearAndMonthTo === undefined
+          this.state.intoCompanyYearAndMonthTo === null ||
+          this.state.intoCompanyYearAndMonthTo === undefined
           ? undefined
           : publicUtils.formateDate(
-              this.state.intoCompanyYearAndMonthTo,
-              false
-            ),
+            this.state.intoCompanyYearAndMonthTo,
+            false
+          ),
       kadou: this.state.kadou === "" ? undefined : this.state.kadou,
       socialInsuranceStatus:
         this.state.socialInsurance === ""
@@ -380,8 +383,8 @@ class salesMoneySet extends React.Component {
           : this.state.socialInsurance,
       socialInsuranceDate:
         this.state.socialInsuranceDate === "" ||
-        this.state.socialInsuranceDate === null ||
-        this.state.socialInsuranceDate === undefined
+          this.state.socialInsuranceDate === null ||
+          this.state.socialInsuranceDate === undefined
           ? undefined
           : publicUtils.formateDate(this.state.socialInsuranceDate, true),
       authorityCode:
@@ -468,7 +471,7 @@ class salesMoneySet extends React.Component {
     intoCompanyYearAndMonthTo: new Date(),
   };
 
-  
+
   // 削除前のデフォルトお知らせの削除
   customConfirm(next, dropRowKeys) {
     const dropRowKeysStr = dropRowKeys.join(",");
@@ -477,10 +480,10 @@ class salesMoneySet extends React.Component {
 
   // 行Selectファンクション
   handleRowSelect = (row, isSelected, e) => {
-      console.log("handleRowSelect isSelected=" + isSelected)
+    console.log("handleRowSelect isSelected=" + isSelected)
     if (isSelected) {
       this.setState({
-		isUpdateFlag: true,
+        isUpdateFlag: true,
         rowSelectEmployeeNoForPageChange: row.employeeNo,
         rowSelectEmployeeNo: row.employeeNo,
         rowSelectEmployeeName: row.employeeName.replaceAll(" ", ""),
@@ -490,7 +493,7 @@ class salesMoneySet extends React.Component {
         employeeNo: row.employeeNo,
         resumeName1: row.resumeName1,
         resumeInfo2: row.resumeInfo2,
-        startYearAndMonth: new Date(row.startYearAndMonth.substring(0,4), row.startYearAndMonth.substring(5,6), 0),
+        startYearAndMonth: new Date(row.startYearAndMonth.substring(0, 4), row.startYearAndMonth.substring(5, 6), 0),
         linkDisableFlag: false, // linkDisableFlag
         currPage: this.refs.siteSearchTable.state.currPage,
       });
@@ -502,49 +505,51 @@ class salesMoneySet extends React.Component {
       this.state.additionMoneyResonCode = row.additionMoneyResonCode
       this.state.startYearAndMonth = row.startYearAndMonth
       this.state.additionNumberOfTimesStatus = row.additionNumberOfTimesStatus
-      
+      this.state.salesStaff = row.salesStaff
+
       console.log("handleRowSelect isSelected=" + row.employeeNo + ", " + row.employeeName + ", row.startYearAndMonth=" + row.startYearAndMonth)
       if (row.additionNumberOfTimesStatus == 1) {
-      	console.log("handleRowSelect startYearAndMonthFix=" + $("#startYearAndMonthFix").val() + ", " + utils.converToYYYYMM($("#startYearAndMonthFix").val()))
-      	if (utils.converToYYYYMM($("#startYearAndMonthFix").val()) != row.startYearAndMonth) {
-		//	$("#startYearAndMonthFix").prop("value", utils.converToYYYY_MM(row.startYearAndMonth));
-      		  this.setState({
-        		startYearAndMonth: ""
-			  })
-      		console.log("handleRowSelect isSelected=" + this.state.startYearAndMonth)
-		}
-      		$("#startYearAndMonthFix").prop("value", utils.converToYYYY_MM(row.startYearAndMonth));
-	  }
-      if(row.employeeNo.substring(0, 3) == "BPR") {
-      	$("#employeeStatus").prop("value", 4);
-      	this.state.employeeStatus = 4
-      	
-	  }else if(row.employeeNo.substring(0, 2) == "BP") {
-      	$("#employeeStatus").prop("value", 1);
-      	this.state.employeeStatus = 1
-      	
-	  } else if(row.employeeNo.substring(0, 2) == "SP") {
-      	$("#employeeStatus").prop("value", 2);
-      	this.state.employeeStatus = 2
-      	
-	  } else if(row.employeeNo.substring(0, 2) == "SC") {
-      	$("#employeeStatus").prop("value", 3);
-      	this.state.employeeStatus = 3
-		  
-	  } else {
-      	$("#employeeStatus").prop("value", 0);
-      	this.state.employeeStatus = 0
-	  }
-	  
-	  this.employeeStatusValueChange(this.state.employeeStatus)
+        console.log("handleRowSelect startYearAndMonthFix=" + $("#startYearAndMonthFix").val() + ", " + utils.converToYYYYMM($("#startYearAndMonthFix").val()))
+        if (utils.converToYYYYMM($("#startYearAndMonthFix").val()) != row.startYearAndMonth) {
+          //	$("#startYearAndMonthFix").prop("value", utils.converToYYYY_MM(row.startYearAndMonth));
+          this.setState({
+            startYearAndMonth: ""
+          })
+          console.log("handleRowSelect isSelected=" + this.state.startYearAndMonth)
+        }
+        $("#startYearAndMonthFix").prop("value", utils.converToYYYY_MM(row.startYearAndMonth));
+      }
+      if (row.employeeNo.substring(0, 3) == "BPR") {
+        $("#employeeStatus").prop("value", 4);
+        this.state.employeeStatus = 4
+
+      } else if (row.employeeNo.substring(0, 2) == "BP") {
+        $("#employeeStatus").prop("value", 1);
+        this.state.employeeStatus = 1
+
+      } else if (row.employeeNo.substring(0, 2) == "SP") {
+        $("#employeeStatus").prop("value", 2);
+        this.state.employeeStatus = 2
+
+      } else if (row.employeeNo.substring(0, 2) == "SC") {
+        $("#employeeStatus").prop("value", 3);
+        this.state.employeeStatus = 3
+
+      } else {
+        $("#employeeStatus").prop("value", 0);
+        this.state.employeeStatus = 0
+      }
+
+      this.employeeStatusValueChange(this.state.employeeStatus)
       $("#additionMoneyCode").prop("value", row.additionMoneyCode);
       $("#additionMoneyResonCode").prop("value", row.additionMoneyResonCode);
+      $("#salesStaff").prop("value", row.salesStaff);
       $("#additionNumberOfTimesStatus").prop("value", row.additionNumberOfTimesStatus);
-      if(row.isFinalSiteFinish == true) {
-      	$("#addOrUpdate").attr("disabled", true);
-	  } else {
-      	$("#addOrUpdate").attr("disabled", false);
-	  }
+      if (row.isFinalSiteFinish == true) {
+        $("#addOrUpdate").attr("disabled", true);
+      } else {
+        $("#addOrUpdate").attr("disabled", false);
+      }
       $("#residentCardInfo").prop("disabled", false);
       $("#passportInfo").prop("disabled", false);
       $("#delete").attr("disabled", false);
@@ -554,18 +559,18 @@ class salesMoneySet extends React.Component {
       $("#workRepot").attr("disabled", false);
       $("#siteInfo").attr("disabled", false);
     } else {
-	
+
       this.state.id = ""
       this.state.isFinalSiteFinish = false
       this.state.employeeNo = ""
       this.state.employeeName = ""
-  	  this.state.employeeStatus = ""
+      this.state.employeeStatus = ""
       console.log("handleRowSelect isNotSelected=" + row.employeeNo)
-      
+
       $("#employeeStatus").prop("value", "");
-      
+
       this.setState(() => this.resetStates);
-      	$("#addOrUpdate").attr("disabled", false);
+      $("#addOrUpdate").attr("disabled", false);
       $("#residentCardInfo").prop("disabled", true);
       $("#passportInfo").prop("disabled", true);
       $("#delete").attr("disabled", true);
@@ -616,79 +621,79 @@ class salesMoneySet extends React.Component {
       }
     );
   };
-  
+
   onAdditionMoneyChange = (event) => {
-	  console.log("onAdditionMoneyChange=" + event.target.value)
-      this.setState({
-        additionMoneyCode: event.target.value,
-      });
+    console.log("onAdditionMoneyChange=" + event.target.value)
+    this.setState({
+      additionMoneyCode: event.target.value,
+    });
   };
-  
+
   onAdditionMoneyReasonChange = (event) => {
-	  console.log("onAdditionMoneyReasonChange=" + event.target.value)
-      this.setState({
-        additionMoneyResonCode: event.target.value,
-      });
+    console.log("onAdditionMoneyReasonChange=" + event.target.value)
+    this.setState({
+      additionMoneyResonCode: event.target.value,
+    });
   };
-  
-  getAdditionNumberOfTimesList () {
-      var today = new Date();
-      var year = today.getFullYear()
-      var month = today.getMonth()
-      month += 1
-	  console.log("year=" + year + "， month=" + month)
-	  if (month <= 6) {
-	  	return [year + "/06", year + "/11"]
-	  } 
-	  if (month <= 11) {
-	  	return [year + "/11", (year+1) + "/06"]
-	  }
-	  if (month > 11) {
-	  	return [(year+1) + "/06", (year+1) + "/11"]
-	  }
-	  return ""
+
+  getAdditionNumberOfTimesList() {
+    var today = new Date();
+    var year = today.getFullYear()
+    var month = today.getMonth()
+    month += 1
+    console.log("year=" + year + "， month=" + month)
+    if (month <= 6) {
+      return [year + "/06", year + "/11"]
+    }
+    if (month <= 11) {
+      return [year + "/11", (year + 1) + "/06"]
+    }
+    if (month > 11) {
+      return [(year + 1) + "/06", (year + 1) + "/11"]
+    }
+    return ""
   };
-  
+
   onAdditionNumberOfTimesChange = (event) => {
-	  console.log("onAdditionNumberOfTimesChange=" + event.target.value)
-      this.setState({
-        additionNumberOfTimesStatus: event.target.value,
-      });
-      
-      if(event.target.value == 1) {
-	      console.log("startYearAndMonthFix=" + utils.convertDate($("#startYearAndMonthFix").val()))
-		  this.state.startYearAndMonth = utils.convertDate($("#startYearAndMonthFix").val())
-	  } else {
-	 	  console.log("startYearAndMonthFix=" + $("#startYearAndMonth").val())
-		  this.state.startYearAndMonth = new Date(
-		      new Date().getMonth() + 1 === 12
-		        ? new Date().getFullYear() + 1 + "/01"
-		        : new Date().getFullYear() +
-		          "/" +
-		          (new Date().getMonth() + 1 < 10
-		            ? "0" + (new Date().getMonth() + 2)
-		            : new Date().getMonth() + 2)
-		    ).getTime()
-	  }
-      /*$("#startYearAndMonthFix").attr("value", "");*/
+    console.log("onAdditionNumberOfTimesChange=" + event.target.value)
+    this.setState({
+      additionNumberOfTimesStatus: event.target.value,
+    });
+
+    if (event.target.value == 1) {
+      console.log("startYearAndMonthFix=" + utils.convertDate($("#startYearAndMonthFix").val()))
+      this.state.startYearAndMonth = utils.convertDate($("#startYearAndMonthFix").val())
+    } else {
+      console.log("startYearAndMonthFix=" + $("#startYearAndMonth").val())
+      this.state.startYearAndMonth = new Date(
+        new Date().getMonth() + 1 === 12
+          ? new Date().getFullYear() + 1 + "/01"
+          : new Date().getFullYear() +
+          "/" +
+          (new Date().getMonth() + 1 < 10
+            ? "0" + (new Date().getMonth() + 2)
+            : new Date().getMonth() + 2)
+      ).getTime()
+    }
+    /*$("#startYearAndMonthFix").attr("value", "");*/
   };
-  
+
   onAdditionNumberOfTimesChangeFix = (event) => {
-	  console.log("onAdditionNumberOfTimesChangeFix=" + event.target.value +"," + utils.convertDate(event.target.value))
-	    if (event.target.value !== null) {
-	      this.setState({
-	        startYearAndMonth: utils.convertDate(event.target.value)
-	      });
-	    } else {
-	      this.setState({
-	        startYearAndMonth: "",
-	      });
-	    }
+    console.log("onAdditionNumberOfTimesChangeFix=" + event.target.value + "," + utils.convertDate(event.target.value))
+    if (event.target.value !== null) {
+      this.setState({
+        startYearAndMonth: utils.convertDate(event.target.value)
+      });
+    } else {
+      this.setState({
+        startYearAndMonth: "",
+      });
+    }
   };
-  
-  
+
+
   onStartYearAndMonthChange = (date) => {
-	  console.log("onStartYearAndMonthChange=" + date)
+    console.log("onStartYearAndMonthChange=" + date)
     if (date !== null) {
       this.setState({
         startYearAndMonth: date
@@ -699,7 +704,7 @@ class salesMoneySet extends React.Component {
       });
     }
   };
-  
+
   /**
    * タイプが違う時に、色々な操作をします。
    */
@@ -786,19 +791,20 @@ class salesMoneySet extends React.Component {
   checkEmpty = (values) => {
     return values === "" ? "" : "\t" + values;
   };
-  
+
   addMoneySet = () => {
     var requestModel = {};
     requestModel["employeeNo"] = this.state.employeeNo;
     requestModel["employeeName"] = this.state.employeeName;
     requestModel["additionMoneyCode"] = this.state.additionMoneyCode;
     requestModel["additionMoneyResonCode"] = this.state.additionMoneyResonCode;
+    requestModel["salesStaff"] = this.state.salesStaff;
     requestModel["additionNumberOfTimesStatus"] = this.state.additionNumberOfTimesStatus;
     requestModel["startYearAndMonth"] = utils.formateDate(
       this.state.startYearAndMonth,
       false
     );
-    
+
     axios
       .post(this.state.serverIP + "salesMoneySet/insertMoneySet", requestModel)
       .then((result) => {
@@ -817,14 +823,14 @@ class salesMoneySet extends React.Component {
             employeeStatus: "",
             employeeNo: "",
             employeeName: "",
-            
+
           });
           setTimeout(() => this.setState({ myMessageShow: false }), 3000);
 
-   		  $("#employeeStatus").val("");
-   		  $("#employeeName").val("");
-   		 	
-    	  this.setState(() => this.resetStates);
+          $("#employeeStatus").val("");
+          $("#employeeName").val("");
+
+          this.setState(() => this.resetStates);
           this.searchEmployee(this.state.authorityCode);
         } else {
           this.setState({
@@ -842,7 +848,7 @@ class salesMoneySet extends React.Component {
         });
       });
   };
-  
+
   updateMoneySet = () => {
     var requestModel = {};
     requestModel["id"] = this.state.id;
@@ -850,12 +856,13 @@ class salesMoneySet extends React.Component {
     requestModel["employeeName"] = this.state.employeeName;
     requestModel["additionMoneyCode"] = this.state.additionMoneyCode;
     requestModel["additionMoneyResonCode"] = this.state.additionMoneyResonCode;
+    requestModel["salesStaff"] = this.state.salesStaff;
     requestModel["additionNumberOfTimesStatus"] = this.state.additionNumberOfTimesStatus;
     requestModel["startYearAndMonth"] = utils.formateDate(
       this.state.startYearAndMonth,
       false
     );
-   
+
     axios
       .post(this.state.serverIP + "salesMoneySet/updateMoneySet", requestModel)
       .then((result) => {
@@ -870,10 +877,10 @@ class salesMoneySet extends React.Component {
             myUpdateShow: false,
             myDeleteShow: false,
             message: "更新成功",
-            
+
           });
           setTimeout(() => this.setState({ myMessageShow: false }), 3000);
-   		 	
+
           this.searchEmployee(this.state.authorityCode);
         } else {
           this.setState({
@@ -891,21 +898,21 @@ class salesMoneySet extends React.Component {
         });
       });
   };
-  
- deleteMoneySet = () => {
-	 if (this.state.isFinalSiteFinish == true) {
-	    var confirmDelete = window.confirm("現場終了しました");
-	        console.log("deleteMoneySet isFinalSiteFinish=" + confirmDelete);
-	    if (confirmDelete != true) {
-			return
-		}
-	 } else {
-	    var confirmDelete = window.confirm("削除してもよろしいでしょうか？");
-	        console.log("deleteMoneySet=" + confirmDelete);
-	    if (confirmDelete != true) {
-			return
-		}
-	}
+
+  deleteMoneySet = () => {
+    if (this.state.isFinalSiteFinish == true) {
+      var confirmDelete = window.confirm("現場終了しました");
+      console.log("deleteMoneySet isFinalSiteFinish=" + confirmDelete);
+      if (confirmDelete != true) {
+        return
+      }
+    } else {
+      var confirmDelete = window.confirm("削除してもよろしいでしょうか？");
+      console.log("deleteMoneySet=" + confirmDelete);
+      if (confirmDelete != true) {
+        return
+      }
+    }
     var requestModel = {};
     requestModel["id"] = this.state.id;
     axios
@@ -928,16 +935,17 @@ class salesMoneySet extends React.Component {
             employeeName: "",
             additionMoneyCode: "",
             additionMoneyResonCode: "",
+            salesStaff: "",
             additionNumberOfTimesStatus: "0",
             startYearAndMonth: "",
-            
+
           });
           setTimeout(() => this.setState({ myMessageShow: false }), 3000);
-   		 	
-   		  $("#employeeStatus").val("");
-   		  $("#employeeName").val("");
-   		 	
-    	  this.setState(() => this.resetStates);
+
+          $("#employeeStatus").val("");
+          $("#employeeName").val("");
+
+          this.setState(() => this.resetStates);
           this.searchEmployee(this.state.authorityCode);
         } else {
           this.setState({
@@ -955,7 +963,7 @@ class salesMoneySet extends React.Component {
         });
       });
   };
-  
+
   test = (event) => {
     if (event.keyCode === 13) {
       this.searchEmployee(this.state.authorityCode);
@@ -966,16 +974,16 @@ class salesMoneySet extends React.Component {
   startYearAndMonthFormat = (cell, row, formatExtraData, index) => {
     if (cell === "") {
       return "";
-    } 
-	if (row.additionNumberOfTimesStatus === "1") {
-	  return utils.dateFormate(cell) + " (1回)";
-	} else {
-        console.log("cell ");
-	  return utils.dateFormate(cell);
-	}
+    }
+    if (row.additionNumberOfTimesStatus === "1") {
+      return utils.dateFormate(cell) + " (1回)";
+    } else {
+      console.log("cell ");
+      return utils.dateFormate(cell);
+    }
   };
-  
-  
+
+
   rowNoFormat = (cell) => {
     if (cell === "") {
       return "";
@@ -983,7 +991,7 @@ class salesMoneySet extends React.Component {
       return cell;
     }
   };
-  
+
   employeeNameFormat = (cell, row) => {
     if (cell === "") {
       return "";
@@ -991,7 +999,7 @@ class salesMoneySet extends React.Component {
       return cell + row.employeeNameTitle;
     }
   };
-  
+
   additionMoneyCodeFormat = (cell) => {
     var additionMoneyMap = this.state.additionMoneyMap;
     if (cell === "") {
@@ -1004,7 +1012,7 @@ class salesMoneySet extends React.Component {
       }
     }
   };
-  
+
   additionMoneyResonCodeFormat = (cell) => {
     var additionMoneyResonCodeMap = this.state.additionMoneyResonCodeMap;
     if (cell === "") {
@@ -1017,39 +1025,45 @@ class salesMoneySet extends React.Component {
       }
     }
   };
-  
+
   salesStaffFormat = (cell) => {
-	if (cell === "") {
-     return "";
-	}
-	return cell;
+    const { salesStaffDrop } = this.state
+    if (cell === "") {
+      return "";
+    } else {
+      for (var i in salesStaffDrop) {
+        if (cell === salesStaffDrop[i].code) {
+          return salesStaffDrop[i].name || '';
+        }
+      }
+    }
   }
-  
+
   getTableRowStyle(cell, row) {
-	 var chooseDate = utils.formateDate(new Date())
-	 	 console.log("getTableRowStyle=" + row.startYearAndMonth + ", " + chooseDate)
-	 if (null != chooseDate && undefined != chooseDate && null != row.startYearAndMonth && undefined != row.startYearAndMonth) {
-		 var rowYear = row.startYearAndMonth.substring(0,4);
-		 var rowMonth = row.startYearAndMonth.substring(4,6);
-		 var selectYear = chooseDate.substring(0,4);
-		 var selectMonth = chooseDate.substring(4,6);
-	 	 console.log("getTableRowStyle=" + rowYear + "," + rowMonth + "---" + selectYear + "," +  selectMonth)
-		 if (selectYear > rowYear) {
-			// 置灰
-	 		return { color: "#a0a3a1"}
-		 }
-		 if (selectYear == rowYear && selectMonth> rowMonth) {
-			// 置灰
-	 		return {color: "#a0a3a1"}
-		 }
-		 if (row.isFinalSiteFinish == true) {
-			// 置灰
-	 		return {color: "#a0a3a1"}
-		 }
-	 }
-	return { color: "#000000"}
+    var chooseDate = utils.formateDate(new Date())
+    console.log("getTableRowStyle=" + row.startYearAndMonth + ", " + chooseDate)
+    if (null != chooseDate && undefined != chooseDate && null != row.startYearAndMonth && undefined != row.startYearAndMonth) {
+      var rowYear = row.startYearAndMonth.substring(0, 4);
+      var rowMonth = row.startYearAndMonth.substring(4, 6);
+      var selectYear = chooseDate.substring(0, 4);
+      var selectMonth = chooseDate.substring(4, 6);
+      console.log("getTableRowStyle=" + rowYear + "," + rowMonth + "---" + selectYear + "," + selectMonth)
+      if (selectYear > rowYear) {
+        // 置灰
+        return { color: "#a0a3a1" }
+      }
+      if (selectYear == rowYear && selectMonth > rowMonth) {
+        // 置灰
+        return { color: "#a0a3a1" }
+      }
+      if (row.isFinalSiteFinish == true) {
+        // 置灰
+        return { color: "#a0a3a1" }
+      }
+    }
+    return { color: "#000000" }
   }
-  
+
   shuseiTo = (actionType) => {
     var path = {};
     const sendValue = {
@@ -1072,8 +1086,9 @@ class salesMoneySet extends React.Component {
     }
     this.props.history.push(path);
   };
-  
+
   render() {
+    console.log(this.state.salesStaff, 'salesStaff')
     const {
       employeeFormCode,
       genderStatus,
@@ -1129,7 +1144,7 @@ class salesMoneySet extends React.Component {
           name="rowSelectEmployeeNo"
           hidden
         />
-        
+
         <div style={{ display: this.state.myMessageShow ? "block" : "none" }}>
           <MyToast
             myToastShow={this.state.myMessageShow}
@@ -1224,7 +1239,47 @@ class salesMoneySet extends React.Component {
                     />
                   </InputGroup>
                 </Col>
-                
+                <Col sm={3}>
+                  <InputGroup size="sm" className="mb-3">
+                    <InputGroup.Prepend>
+                      <InputGroup.Text id="inputGroup-sizing-sm">
+                        営業担当
+                      </InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <Autocomplete
+                      className="fx1"
+                      id="salesStaff"
+                      name="salesStaff"
+                      value={
+                        this.state.salesStaffDrop.find(
+                          (v) => v.code === this.state.salesStaff
+                        ) || {}
+                      }
+                      options={this.state.salesStaffDrop}
+                      getOptionLabel={(option) => option.name || ""}
+                      onChange={(event, values) => {
+                        this.setState({ salesStaff: values.code })
+                      }
+                      }
+                      renderOption={(option) => {
+                        return (
+                          <React.Fragment>{option.name || ""}</React.Fragment>
+                        );
+                      }}
+                      renderInput={(params) => (
+                        <div ref={params.InputProps.ref}>
+                          <input
+                            type="text"
+                            {...params.inputProps}
+                            className="auto form-control Autocompletestyle-siteInfoSearch-employeeNo w100p"
+                          />
+                        </div>
+                      )}
+                    />
+                  </InputGroup>
+                </Col>
+
+
               </Row>
               <Row>
                 <Col sm={3}>
@@ -1252,30 +1307,30 @@ class salesMoneySet extends React.Component {
                   </InputGroup>
                 </Col>
                 <Col sm={3}>
-	              <InputGroup size="sm" className="mb-3 flexWrapNoWrap" hidden ={this.state.additionNumberOfTimesStatus == 1}>
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap" hidden={this.state.additionNumberOfTimesStatus == 1}>
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
-						開始年月
+                        開始年月
                       </InputGroup.Text>
                     </InputGroup.Prepend>
-	                <DatePicker
-	                  selected={this.state.startYearAndMonth}
-	                  onChange={this.onStartYearAndMonthChange}
-	                  dateFormat={"yyyy/MM"}
-	                  autoComplete="off"
+                    <DatePicker
+                      selected={this.state.startYearAndMonth}
+                      onChange={this.onStartYearAndMonthChange}
+                      dateFormat={"yyyy/MM"}
+                      autoComplete="off"
                       locale="ja"
-	                  showYearDropdown
-	                  yearDropdownItemNumber={15}
-	                  scrollableYearDropdown
-	                  showMonthYearPicker
-	                  showFullMonthYearPicker
-	                  showDisabledMonthNavigation
-	                  className="form-control form-control-sm"
+                      showYearDropdown
+                      yearDropdownItemNumber={15}
+                      scrollableYearDropdown
+                      showMonthYearPicker
+                      showFullMonthYearPicker
+                      showDisabledMonthNavigation
+                      className="form-control form-control-sm"
                       id="startYearAndMonth"
                       name="startYearAndMonth"
-	                />
-	              </InputGroup>
-	              <InputGroup size="sm" className="mb-3" hidden ={this.state.additionNumberOfTimesStatus != 1}>
+                    />
+                  </InputGroup>
+                  <InputGroup size="sm" className="mb-3" hidden={this.state.additionNumberOfTimesStatus != 1}>
                     <InputGroup.Prepend>
                       <InputGroup.Text id="inputGroup-sizing-sm">
                         加算年月
@@ -1290,15 +1345,15 @@ class salesMoneySet extends React.Component {
                       autoComplete="off"
                     >
                       {this.getAdditionNumberOfTimesList().map((data) => (
-                       <option key={data} value={data}>
+                        <option key={data} value={data}>
                           {data}
-                        </option> 
+                        </option>
                       ))}
                     </Form.Control>
                   </InputGroup>
-	             
-	            </Col>
-	            
+
+                </Col>
+
                 <Col sm={3}>
                   <InputGroup size="sm" className="mb-3">
                     <InputGroup.Prepend>
@@ -1352,37 +1407,37 @@ class salesMoneySet extends React.Component {
           </div>
         </Form>
         <div style={{ textAlign: "left" }}>
-       		<Col sm={3}>
-              <div style={{ float: "left" }}>
-                <Button
-                  onClick={this.shuseiTo.bind(this, "siteInfo")}
-                  size="sm"
-                  variant="info"
-                  name="clickButton"
-                  disabled={this.state.isUpdateFlag != true}
-                >
-                  <FontAwesomeIcon icon={faBuilding} /> 現場情報
-                </Button>{" "}
-                </div>
-            </Col>
+          <Col sm={3}>
+            <div style={{ float: "left" }}>
+              <Button
+                onClick={this.shuseiTo.bind(this, "siteInfo")}
+                size="sm"
+                variant="info"
+                name="clickButton"
+                disabled={this.state.isUpdateFlag != true}
+              >
+                <FontAwesomeIcon icon={faBuilding} /> 現場情報
+              </Button>{" "}
+            </div>
+          </Col>
         </div>
         <div style={{ textAlign: "center" }}>
           <Button
             size="sm"
             onClick={this.state.isUpdateFlag === true ? this.updateMoneySet : this.addMoneySet}
-	          id="addOrUpdate"
+            id="addOrUpdate"
             variant="info"
           >
             <FontAwesomeIcon icon={faSave} /> {this.state.isUpdateFlag === true ? "更新" : "登録"}
           </Button>{" "}
-	      <Button
-	          size="sm"
-	          onClick={this.deleteMoneySet}
-	          id="delete"
-	          variant="info"
-	      >
-	         <FontAwesomeIcon icon={faTrash} /> 削除
-	      </Button>
+          <Button
+            size="sm"
+            onClick={this.deleteMoneySet}
+            id="delete"
+            variant="info"
+          >
+            <FontAwesomeIcon icon={faTrash} /> 削除
+          </Button>
         </div>
         <div style={{ height: "10px" }}></div>
         <div>
@@ -1418,38 +1473,38 @@ class salesMoneySet extends React.Component {
                 >
                   氏名
                 </TableHeaderColumn>
-                
+
                 <TableHeaderColumn
-                    width="10%"
-                    tdStyle={this.getTableRowStyle.bind(this)}
-                    dataField="startYearAndMonth"
-                  	dataFormat={this.startYearAndMonthFormat.bind(this)}
-                  >
-                    開始年月
+                  width="10%"
+                  tdStyle={this.getTableRowStyle.bind(this)}
+                  dataField="startYearAndMonth"
+                  dataFormat={this.startYearAndMonthFormat.bind(this)}
+                >
+                  開始年月
                 </TableHeaderColumn>
                 <TableHeaderColumn
-                    width="6%"
-                  	dataField="additionMoneyCode"
-                    tdStyle={this.getTableRowStyle.bind(this)}
-                  	dataFormat={this.additionMoneyCodeFormat.bind(this)}
-                  >
-                    金額
+                  width="6%"
+                  dataField="additionMoneyCode"
+                  tdStyle={this.getTableRowStyle.bind(this)}
+                  dataFormat={this.additionMoneyCodeFormat.bind(this)}
+                >
+                  金額
                 </TableHeaderColumn>
                 <TableHeaderColumn
-                    width="20%"
-                    dataField="additionMoneyResonCode"
-                    tdStyle={this.getTableRowStyle.bind(this)}
-                  	dataFormat={this.additionMoneyResonCodeFormat.bind(this)}
-                  >
-                    加算理由
+                  width="20%"
+                  dataField="additionMoneyResonCode"
+                  tdStyle={this.getTableRowStyle.bind(this)}
+                  dataFormat={this.additionMoneyResonCodeFormat.bind(this)}
+                >
+                  加算理由
                 </TableHeaderColumn>
                 <TableHeaderColumn
-                    width="20%"
-                    dataField="salesStaff"
-                    tdStyle={this.getTableRowStyle.bind(this)}
-                    dataFormat={this.salesStaffFormat.bind(this)}
-                  >
-                    営業担当
+                  width="20%"
+                  dataField="salesStaff"
+                  tdStyle={this.getTableRowStyle.bind(this)}
+                  dataFormat={this.salesStaffFormat.bind(this)}
+                >
+                  営業担当
                 </TableHeaderColumn>
               </BootstrapTable>
             </Col>
