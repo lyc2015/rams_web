@@ -55,7 +55,10 @@ class EmployeeInfo extends React.Component {
       departmentCodes: store.getState().dropDown[3] || [],
       homesAgentCodes: store.getState().dropDown[4] || [],
       authoritys: store.getState().dropDown[5] || [],
-
+      employmentInsuranceStatus: [
+        { code: "0", name: "未加入" },
+        { code: "1", name: "加入済み" }
+      ],
       // Temporary
       temporary_age: "",
       temporary_graduationYearAndMonth: "",
@@ -64,9 +67,11 @@ class EmployeeInfo extends React.Component {
       temporary_yearsOfExperience: "",
 
       // 社員情報
+      // Top
       employeeNo: employee.employeeNo || "",
       employeeFormCode: employee.employeeFormCode || "",
 
+      // Top Left
       employeeFirstName: employee.employeeFirstName || "",
       employeeLastName: employee.employeeLastName || "",
       furigana1: employee.furigana || "",
@@ -79,7 +84,7 @@ class EmployeeInfo extends React.Component {
       nationalityCode: employee.nationalityCode || "",
       birthplace: employee.birthplace || "",
 
-
+      // Top Middle
       companyMail: employee.companyMail || "",
       phoneNo1: employee.phoneNo ? employee.phoneNo.substring(0, 3) : "",
       phoneNo2: employee.phoneNo ? employee.phoneNo.substring(3, 7) : "",
@@ -89,35 +94,30 @@ class EmployeeInfo extends React.Component {
       lastHalfAddress: employee.lastHalfAddress || "",
       stationCode : employee.stationCode || "",
 
+      // Top Right
       image: default_avatar,
 
+      // Bottom Left
       authorityCode: employee.authorityCode || "",
       graduationUniversity: employee.graduationUniversity || "",
+      // major: employee.major || "",
+      graduationYearAndMonth: employee.graduationYearAndMonth ? moment(employee.graduationYearAndMonth) : null,
+      comeToJapanYearAndMonth: employee.comeToJapanYearAndMonth ? moment(employee.comeToJapanYearAndMonth) : null,
+      intoCompanyYearAndMonth: employee.intoCompanyYearAndMonth ? moment(employee.intoCompanyYearAndMonth) : null,
+      yearsOfExperience: employee.yearsOfExperience || null,
 
-      socialInsuranceNo: employee.socialInsuranceNo || "",
-  
+      // Bottom Middle
+      homesAgentCode: employee.homesAgentCode || "",
+      departmentCode: employee.departmentCode || "",
+      residenceCode: employee.residenceCode || "",
       employmentInsurance: employee.employmentInsurance || "",
+      socialInsuranceDate: employee.socialInsuranceDate ? moment(employee.socialInsuranceDate) : null,
+      retirementYearAndMonth: employee.retirementYearAndMonth ? moment(employee.retirementYearAndMonth) : null,
+
+      // Bottom Right
       employmentInsuranceNo: employee.employmentInsuranceNo ||"",
-      socialInsurance: employee.socialInsurance || "",
-
-
-
-      socialInsuranceDate: null,
-      graduationYearAndMonth: null,
-      comeToJapanYearAndMonth: null,
-      intoCompanyYearAndMonth: null,
-      yearsOfExperience: null,
-
-
-      employmentInsuranceStatus: [
-        { code: "0", name: "未加入" },
-        { code: "1", name: "加入済み" }
-      ],
-      socialInsuranceStatus: [
-        { code: "0", name: "未加入" },
-        { code: "1", name: "加入済み" }
-      ],
-
+      socialInsuranceNo: employee.socialInsuranceNo || "",
+      retirementResonClassificationCode: employee.retirementResonClassification || "",
     }
   }
   
@@ -130,38 +130,26 @@ class EmployeeInfo extends React.Component {
     let obj = document.getElementById("imageId");
     let imgSrc = obj.getAttribute("src");
     const emp = {
+      // TODO: password
+      password: publicUtils.nullToEmpty(this.state.passwordSetInfo),                // pw設定
+
       employeeNo: this.state.employeeNo,                                            // 社員番号
       employeeFormCode: publicUtils.nullToEmpty(this.state.employeeFormCode),       // 社員形式
 
       employeeFirstName: publicUtils.trim(this.state.employeeFirstName),            // 社員氏
       employeeLastName: publicUtils.trim(this.state.employeeLastName),              // 社員名
-      furigana1: publicUtils.nullToEmpty(this.state.furigana1),                     // カタカナ
-      furigana2: publicUtils.nullToEmpty(this.state.furigana2),                     // カタカナ
-      alphabetName1: publicUtils.nullToEmpty(this.state.alphabetName1),             // alphabet1
-      alphabetName2: publicUtils.nullToEmpty(this.state.alphabetName2),             // alphabet2
-      alphabetName3: publicUtils.nullToEmpty(this.state.alphabetName3),             // alphabet3
-      birthday: publicUtils.formateDate(this.state.birthday, true),                 // 年齢
+      furigana:                                                                     // カタカナ 
+        publicUtils.nullToEmpty(this.state.furigana1) + " " + 
+        publicUtils.nullToEmpty(this.state.furigana2),
+      alphabetName:                                                                 // ローマ字
+        publicUtils.nullToEmpty(this.state.alphabetName1) + " " +
+        publicUtils.nullToEmpty(this.state.alphabetName2) + " " +
+        publicUtils.nullToEmpty(this.state.alphabetName3),
       genderStatus: publicUtils.nullToEmpty(this.state.genderStatus),               // 性別
-      password: publicUtils.nullToEmpty(this.state.passwordSetInfo),                // pw設定
-      authorityCode: this.state.authorityCode,                                      // 権限
+      birthday: publicUtils.formateDate(this.state.birthday, true),                 // 年齢
       nationalityCode: publicUtils.nullToEmpty(this.state.nationalityCode),         // 出身地
-      stationCode: publicUtils.nullToEmpty(this.state.stationCode),            // 最寄駅
-      intoCompanyYearAndMonth: publicUtils.formateDate(                             // 入社年月
-        this.state.intoCompanyYearAndMonth, true),
-      retirementResonClassification: publicUtils.nullToEmpty(                       // 退職区分
-        this.state.retirementResonClassificationCode
-      ), 
-      retirementYearAndMonth: publicUtils.formateDate(                              // 退職年月
-        this.state.retirementYearAndMonth, true),
-      comeToJapanYearAndMonth: publicUtils.formateDate(                             // 来日年月
-        this.state.comeToJapanYearAndMonth, false),
-      graduationUniversity: publicUtils.nullToEmpty(                                // 卒業学校
-        this.state.graduationUniversity),
-      graduationYearAndMonth: publicUtils.formateDate(                              // 卒業年月
-        this.state.graduationYearAndMonth,
-        false
-      ),
-      residenceCode: publicUtils.nullToEmpty(this.state.residenceCode),             // 在留資格
+      birthplace: publicUtils.nullToEmpty(this.state.birthplace),                   // 出身地
+
       companyMail:                                                                  // 社内メール
         publicUtils.nullToEmpty(this.state.companyMail) === ""
           ? ""
@@ -170,19 +158,49 @@ class EmployeeInfo extends React.Component {
         publicUtils.nullToEmpty(this.state.phoneNo1) +
         publicUtils.nullToEmpty(this.state.phoneNo2) +
         publicUtils.nullToEmpty(this.state.phoneNo3), 
+      postalCode: publicUtils.nullToEmpty(this.state.postalCode),                  // 郵便番号
+      firstHalfAddress: publicUtils.nullToEmpty(this.state.firstHalfAddress),      // 都道府県
+      lastHalfAddress: publicUtils.nullToEmpty(this.state.lastHalfAddress),        // 以降住所
+      stationCode: publicUtils.nullToEmpty(this.state.stationCode),                // 最寄駅
+      picInfo: imgSrc,                                                             // 画像
+
+      authorityCode: this.state.authorityCode,                                      // 権限
+      graduationUniversity: publicUtils.nullToEmpty(                                // 卒業学校
+        this.state.graduationUniversity),
+      graduationYearAndMonth: publicUtils.formateDate(                              // 卒業年月
+        this.state.graduationYearAndMonth,
+        false
+      ),
+      comeToJapanYearAndMonth: publicUtils.formateDate(                             // 来日年月
+        this.state.comeToJapanYearAndMonth, false),
+      intoCompanyYearAndMonth: publicUtils.formateDate(                             // 入社年月
+        this.state.intoCompanyYearAndMonth, true),
+      yearsOfExperience: publicUtils.formateDate(                                   // 経験年数
+        this.state.yearsOfExperience,
+        false
+      ),
+
+      homesAgentCode: publicUtils.nullToEmpty(this.state.homesAgentCode),           // 仲介区分
+      departmentCode: publicUtils.nullToEmpty(this.state.departmentCode),           // 部署
+      residenceCode: publicUtils.nullToEmpty(this.state.residenceCode),             // 在留資格
       employmentInsuranceStatus: publicUtils.nullToEmpty(                           // 雇用保険加入
         this.state.employmentInsurance
       ),
       socialInsuranceStatus: publicUtils.nullToEmpty(                               // 社会保険加入
         this.state.socialInsurance
       ),
-      yearsOfExperience: publicUtils.formateDate(                                   // 経験年数
-        this.state.yearsOfExperience,
-        false
+      retirementYearAndMonth: publicUtils.formateDate(                              // 退職年月
+        this.state.retirementYearAndMonth, true),
+ 
+      employmentInsuranceNo: publicUtils.nullToEmpty(                               // 雇用保険番号
+        this.state.employmentInsuranceNo
+      ),
+      socialInsuranceNo: publicUtils.nullToEmpty(                                   // 社会保険番号
+        this.state.socialInsuranceNo
+      ),
+      retirementResonClassification: publicUtils.nullToEmpty(                       // 退職区分
+        this.state.retirementResonClassificationCode
       ), 
-      departmentCode: publicUtils.nullToEmpty(this.state.departmentCode),           // 部署
-      homesAgentCode: publicUtils.nullToEmpty(this.state.homesAgentCode),           // 仲介区分
-      picInfo: imgSrc,                                                              // 画像
     };
     
     request
@@ -492,7 +510,7 @@ class EmployeeInfo extends React.Component {
 
     // 
     return (  
-      <div className="container employeeInfo">
+      <div className="employeeInfo">
         <Row className="text-center mb-3">
           <Col>
             <h2>社員情報登録</h2>
@@ -614,8 +632,8 @@ class EmployeeInfo extends React.Component {
                   autoComplete="off"
                 >
                   <option value="">選択してください</option>
-                  <option value="M">男性</option>
-                  <option value="F">女性</option>
+                  <option value="0">男性</option>
+                  <option value="1">女性</option>
                 </Form.Control>
               </InputGroup>
               <InputGroup size="sm">
@@ -901,13 +919,13 @@ class EmployeeInfo extends React.Component {
                   name="graduatedSchool"
                   size="sm"
                 />
-                <FormControl
+                {/* <FormControl
                   placeholder="専門"
                   value={this.state.major}
                   onChange={this.valueChange}
                   name="major"
                   size="sm"
-                />
+                /> */}
               </InputGroup>
 
               <InputGroup size="sm" className="">
@@ -1137,12 +1155,17 @@ class EmployeeInfo extends React.Component {
                     退職年月日
                   </InputGroup.Text>
                 </InputGroup.Prepend>
-                <FormControl
-                  placeholder="退職年月日"
-                  value={retirementYearAndMonth}
-                  onChange={this.valueChange}
-                  name="permission"
-                  size="sm"
+                <AntdDatePicker
+                  allowClear={false}
+                  suffixIcon={false}
+                  value={retirementYearAndMonth ? moment(retirementYearAndMonth) : ""}
+                  // onChange={this.socialInsuranceDateChange}
+                  format="YYYY/MM/DD"
+                  locale="ja"
+                  showMonthYearPicker
+                  id="datePicker-empInsert-left"
+                  className="form-control form-control-sm"
+                  autoComplete="off"
                   disabled
                 />
               </InputGroup>

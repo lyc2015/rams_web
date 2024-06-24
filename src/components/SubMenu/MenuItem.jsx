@@ -32,8 +32,25 @@ const MenuItem = ({ icon, text, eventKey, isHover, onMouseEnter, onMouseLeave, o
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
-      <Accordion.Toggle as={Button} variant="link" eventKey={eventKey} onClick={onClick}>
-        <FontAwesomeIcon className="fa-fw" size="lg" icon={icon} /> {text}
+      <Accordion.Toggle 
+        as={Button} 
+        variant="link" 
+        eventKey={eventKey} 
+        onClick={onClick}
+      >
+        <font
+          className={
+            "linkFont"
+          }
+          onClick={() => this.click("現場")}
+        >
+          <FontAwesomeIcon 
+            className="fa-fw" 
+            size="lg" 
+            icon={icon}
+          />
+          {text}
+        </font>
       </Accordion.Toggle>
       <ReactTooltip
         id={text}

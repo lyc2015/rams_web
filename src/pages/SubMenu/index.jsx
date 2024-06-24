@@ -1,17 +1,20 @@
 // SubMenu.js
 import React, { Component } from "react";
 import { Row, Col, ListGroup, Accordion, Container } from "react-bootstrap";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import MenuItem from "../../components/SubMenu/MenuItem";
 import Header from "../../components/Header";
 import Routes from "../../components/SubMenu/SubPageRouter";
 import {
+  faAddressBook,
   faUsers,
+  faBuilding,
+  faHome,
+  faShoppingCart,
   faSave,
+  faSearch,
 } from "@fortawesome/free-solid-svg-icons";
 import "./index.css";
-
-import employeeInfo from "../EmployeeInfo";
 
 class SubMenu extends Component {
 
@@ -52,7 +55,7 @@ class SubMenu extends Component {
     const { isMobileDevice, nowDate, hover } = this.state;
     const menuItems = [
       {
-        icon: faUsers,
+        icon: faAddressBook,
         text: "従業員",
         eventKey: "2",
         subMenuItems: [
@@ -65,7 +68,7 @@ class SubMenu extends Component {
           {
             key: "従業員-2",
             label: "従業員検索",
-            icon: faSave,
+            icon: faSearch,
             path: "/submenu/employeeSearch",
           },
         ]
@@ -84,13 +87,13 @@ class SubMenu extends Component {
           {
             key: "お客様-2",
             label: "お客様検索",
-            icon: faSave,
+            icon: faSearch,
             path: "/submenu/employeeSearch",
           },
         ]
       },
       {
-        icon: faUsers,
+        icon: faHome,
         text: "売上情報・賃貸",
         eventKey: "2",
         subMenuItems: [
@@ -103,13 +106,13 @@ class SubMenu extends Component {
           {
             key: "売上情報・賃貸-2",
             label: "売上情報検索(賃貸)",
-            icon: faSave,
+            icon: faSearch,
             path: "/submenu/salesInfoSearch",
           },
         ]
       },
       {
-        icon: faUsers,
+        icon: faShoppingCart,
         text: "売上情報・贩壳",
         eventKey: "2",
         subMenuItems: [
@@ -122,13 +125,13 @@ class SubMenu extends Component {
           {
             key: "売上情報・贩壳-2",
             label: "売上情報検索(贩壳)",
-            icon: faSave,
+            icon: faSearch,
             path: "/submenu/employeeSearch",
           },
         ]
       },
       {
-        icon: faUsers,
+        icon: faBuilding,
         text: "管理会社",
         eventKey: "2",
         subMenuItems: [
@@ -141,7 +144,7 @@ class SubMenu extends Component {
           {
             key: "管理会社-2",
             label: "管理会社検索",
-            icon: faSave,
+            icon: faSearch,
             path: "/submenu/managementCompanySearch",
           },
         ]
@@ -193,10 +196,6 @@ class SubMenu extends Component {
               <div id="page" style={{ marginRight: 15 }}>
                 <br />
                   <Routes match={this.props.match} />
-                  <Switch>
-                  <Route path="/submenu/employeeInfo" component={employeeInfo} />
-
-                </Switch>
               </div>
             </Col>
           </Row>
