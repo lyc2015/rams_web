@@ -1,14 +1,10 @@
-/* 行被选中时的样式 */
-.selected-row {
-  background-color: #e6f7ff !important; /* 选中时的背景颜色 */
-  /* cursor: pointer; 添加指针光标，提升交互感 */
-}
-
-
 /* styles.css */
+
+
+
 .ant-table-thead > tr > th {
   white-space: nowrap; /* 禁止自动换行 */
-  background-color: #f0f0f0;  /*更改背景颜色 */
+  background-color: #5599FF;  /*更改背景颜色 */
   font-weight: 500;        /* 更改文字粗细 */
   padding: 12px; 
   text-align: left;       /* 更改文字对齐方式 */
@@ -27,6 +23,47 @@
   /* 你可以在这里添加更多自定义样式 */
 }
 
+/* 奇数行背景颜色 */
+.odd-row > td {
+  background-color: #f9f9f9;
+}
+
+/* 偶数行背景颜色 */
+.even-row > td {
+  background-color: #e9e9e9;
+}
+
+
+/* 定义奇数行的背景颜色 */
+.ant-table-tbody > tr:nth-child(odd) > td {
+  background-color: #f9f9f9;
+}
+
+/* 定义偶数行的背景颜色 */
+.ant-table-tbody > tr:nth-child(even) > td {
+  background-color: #ebebebc1;
+}
+
+/* 行被选中时的样式 */
+.selected-row > td {
+  background-color: #FAC0CB !important; /* 选中时的背景颜色 */
+   /*cursor: pointer; 添加指针光标，提升交互感 */
+  }
+
+
+/* 行被选中时的样式 */
+.selected-row {
+  background-color: #FAC0CB !important; /* 选中时的背景颜色 */
+  /* cursor: pointer; 添加指针光标，提升交互感 */
+}
+
+/* .ant-table-selection-column {
+  display: none;
+} */
+
+
+
 .ant-table-tbody > tr.ant-table-row:hover > td, .ant-table-tbody > tr > td.ant-table-cell-row-hover {
   background: none !important;
 }
+

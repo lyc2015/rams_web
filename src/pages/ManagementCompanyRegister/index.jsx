@@ -30,17 +30,16 @@ export default class ManagementCompanyRegister extends Component {
     // 从props.location.state中获取state参数
     const companyInfo = this.props.location?.state?.companyInfo ?? {};// 防止 state 为空时的错误
 
-
     this.state = {
       managementMaxCompanyID: "",
       managementCompanyID: companyInfo.managementCompanyID || "",
-      // managementCompanyID: "",
       managementCompanyName: companyInfo.managementCompanyName || "",
       managementCompanyMail: companyInfo.managementCompanyMail || "",
       managementCompanyPhoneNo: companyInfo.managementCompanyPhoneNo || "",
-      phoneNo1: companyInfo.managementCompanyPhoneNo && typeof companyInfo.managementCompanyPhoneNo === 'string' ? companyInfo.managementCompanyPhoneNo.substring(0, 3) : '',
-      phoneNo2: companyInfo.managementCompanyPhoneNo && typeof companyInfo.managementCompanyPhoneNo === 'string' ? companyInfo.managementCompanyPhoneNo.substring(3, 7) : '',
-      phoneNo3: companyInfo.managementCompanyPhoneNo && typeof companyInfo.managementCompanyPhoneNo === 'string' ? companyInfo.managementCompanyPhoneNo.substring(7, 11) : '',
+      phoneNo1: companyInfo.phoneNo1 || "",
+      phoneNo2: companyInfo.phoneNo2 || "",
+      phoneNo3: companyInfo.phoneNo3 || "",
+
 
       managementCompanyURL: companyInfo.managementCompanyURL || "",
       managementCompanyPostCode: companyInfo.managementCompanyPostCode || "",
@@ -58,7 +57,7 @@ export default class ManagementCompanyRegister extends Component {
       allowUpdate: false,
       showPopup: false,
       messageApi: "",
-      btnText:"更新",
+      btnText: companyInfo.managementCompanyID ? "更新" :"登録",
       payload:'',
       checkedItems:false,
     };
@@ -106,11 +105,14 @@ export default class ManagementCompanyRegister extends Component {
       hasPhoneNo2Error: false,
       hasPhoneNo3Error: false,
       hasPostError: false,
+      hasURLError: false,
       checkErrorMsg: ''
     });
 
     const regMail_full = /^[A-Za-z0-9]+([_\.][A-Za-z0-9]+)*@([A-Za-z0-9\-]+\.)+[A-Za-z]{2,6}$/;
     const reg_Tel = /^[0-9]+$/;
+    const reg_URL = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
+
 
     if (this.state.managementCompanyName === '') {
       this.setState({ hasNameError: true });
@@ -160,14 +162,15 @@ export default class ManagementCompanyRegister extends Component {
       this.setState({ hasPostError: true });
       message.error("正しい郵便番号を入力してください")
       
-
-    }else if (this.state.managementCompanyPostCode !== '' && this.state.managementCompanyAddress === "") {
+    } else if (this.state.managementCompanyPostCode !== '' && this.state.managementCompanyAddress === "") {
       this.setState({ hasPostError: true });
       message.error("正しい郵便番号を入力してください")
       
-
-    }
-     else{
+    } else if (this.state.managementCompanyURL !== '' && !reg_URL.test(this.state.managementCompanyURL)) {
+      this.setState({ hasURLError: true });
+      message.error("正しいURLを入力してください")
+      
+    }else{
       this.setState({ checkedItems: true });
     }
 
@@ -240,7 +243,7 @@ export default class ManagementCompanyRegister extends Component {
       })
 
       //取得した最大管理会社IDを反映する 
-      if (this.state.managementCompanyID === '') {
+      if (this.state.managementCompanyName === '') {
         this.setState({
           managementCompanyID: data.maxID,
           managementCompanyName: "",
@@ -253,7 +256,7 @@ export default class ManagementCompanyRegister extends Component {
           managementCompanyPostCode: "",
           managementCompanyAddress: "",
           managementCompanyRemark: "",
-          btnText:"登録"
+         // btnText:"登録"
         })
 
       }
@@ -397,7 +400,7 @@ export default class ManagementCompanyRegister extends Component {
             managementCompanyPostCode: '',
             managementCompanyAddress: '',
             managementCompanyRemark: '',
-
+            btnText: "登録",
           })
 
           //// 使用state传递值
@@ -453,7 +456,7 @@ export default class ManagementCompanyRegister extends Component {
     const phoneNo2InputStyle = this.state.hasPhoneNo2Error ? { borderColor: 'red' } : {};
     const phoneNo3InputStyle = this.state.hasPhoneNo3Error ? { borderColor: 'red' } : {};
     const postInputStyle = this.state.hasPostError ? { borderColor: 'red' } : {};
-
+    const urlInputStyle = this.state.hasURLError ? { borderColor: 'red' } : {};
 
 
     return (
@@ -607,6 +610,7 @@ export default class ManagementCompanyRegister extends Component {
                   name="managementCompanyURL"
                   size="sm"
                   maxLength={50}
+                  style={urlInputStyle}
                 />
               </InputGroup>
 
@@ -685,6 +689,5 @@ export default class ManagementCompanyRegister extends Component {
     )
   }
 }
-
 
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef  } from "react";
 import { message, AutoComplete, Input, Table } from "antd";
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
@@ -28,7 +28,11 @@ export default function ManagementCompanySearch() {
 
   //grid中の項目
   const [managementCompanyID, setManagementCompanyID] = useState('');
-  const [managementCompanyName, setManagementCompanyName] = useState('');
+  const [itemsCount, setItemsCount] = useState('');
+  const [allCount, setAllCount] = useState('');
+  const [phoneNo1, setPhoneNo1] = useState('');
+  const [phoneNo2, setPhoneNo2] = useState('');
+  const [phoneNo3, setPhoneNo3] = useState('');
   const [managementCompanyMail, setManagementCompanyMail] = useState('');
   const [managementCompanyPhoneNo, setManagementCompanyPhoneNo] = useState('');
   const [managementCompanyURL, setManagementCompanyURL] = useState('');
@@ -83,12 +87,29 @@ export default function ManagementCompanySearch() {
         
           //表
           const data = response.data.map((item, index) => ({
-            ...item,
+           // ...item,
+            managementCompanyID : item.managementCompanyID,
+            managementCompanyName : item.managementCompanyName,
+            managementCompanyAddress : item.managementCompanyAddress,
+            managementCompanyRemark : item.managementCompanyRemark,
+            managementCompanyMail : item.managementCompanyMail,
+
+            phoneNo1:item.managementCompanyPhoneNo.substring(0,3),
+            phoneNo2:item.managementCompanyPhoneNo.substring(3,7),
+            phoneNo3:item.managementCompanyPhoneNo.substring(7),
+
+            managementCompanyPhoneNo :item.managementCompanyPhoneNo ? item.managementCompanyPhoneNo.substring(0,3)+" - "+item.managementCompanyPhoneNo.substring(3,7)+" - "+item.managementCompanyPhoneNo.substring(7) :'',
+            managementCompanyURL : item.managementCompanyURL,
+            managementCompanyPostCode : item.managementCompanyPostCode,
+            
             key: index,
             番号: index + 1, // 自动生成类似行号的字段
           }));
           setDataSource(data);
           setAllData(data);
+
+          setItemsCount(data.length);
+          setAllCount(data.length);
 
           message.success("管理会社情報取得成功");
 
@@ -107,38 +128,49 @@ export default function ManagementCompanySearch() {
   const columns = [
     {
       title: '番号',
+      key: 'no',
       dataIndex: '番号',
       width: "5%",
       ellipsis: true,
     },
     {
       title: '管理会社ID',
+      key: 'managementCompanyID',
       dataIndex: 'managementCompanyID',
-      width: "8%", ellipsis: true,
+      width: "8%", 
+      ellipsis: true,
     },
     {
       title: '管理会社名',
+      key: 'managementCompanyName',
       dataIndex: 'managementCompanyName',
-      width: "10%", ellipsis: true,
+      width: "10%", 
+      ellipsis: true,
     },
     {
       title: '電話番号',
+      key: 'managementCompanyPhoneNo',
       dataIndex: 'managementCompanyPhoneNo',
-      width: "8%", ellipsis: true,
+      width: "15%", 
+      ellipsis: true,
     },
     {
       title: 'メール',
+      key: 'managementCompanyMail',
       dataIndex: 'managementCompanyMail',
-      width: "15%", ellipsis: true,
+      width: "15%", 
+      ellipsis: true,
     },
     {
       title: '住所',
+      key: 'managementCompanyAddress',
       dataIndex: 'managementCompanyAddress',
       width: "20%",
       ellipsis: true,
     },
     {
       title: '備考',
+      key: 'managementCompanyRemark',
       dataIndex: 'managementCompanyRemark',
       width: "15%",
       ellipsis: true,
@@ -155,14 +187,20 @@ export default function ManagementCompanySearch() {
       setAllowSearch(true);
       setAllowAllSearch(false);
       setSearchResult(result)
-
+      setItemsCount('1')
     } else if(inputValue !== '' && result === undefined){
       setDataSource([]);
+      setItemsCount('0')
       message.error('正しい管理会社名を入力してください');
     } 
     
     else if (inputValue === '') {
       setDataSource(allData);
+      setItemsCount(allCount)
+    }
+
+    if (buttonRef.current) {
+      buttonRef.current.blur();
     }
 
   }
@@ -213,14 +251,17 @@ export default function ManagementCompanySearch() {
     setCompanyInfo(record)
   };
 
-
-
-
   const rowClassName = (record) => {
     return record.key === selectedRowKey ? 'selected-row' : '';
   };
 
+
+  const buttonRef = useRef(null); // 创建一个ref用来引用按钮
+
+
+
   return (
+    
     <div className="container">
       <br></br>
       <Row className="text-center mb-3">
@@ -258,22 +299,27 @@ export default function ManagementCompanySearch() {
         </Row><br />
 
         <div style={{ textAlign: "center" }}>
-          <Button size="sm" variant="info" onClick={searchCompanyInfo}>
+          <Button size="sm" variant="info" onClick={searchCompanyInfo} ref={buttonRef} >
             検索
           </Button>
 
           <Button size="sm" variant="info" onClick={transferToRegister} style={{ marginLeft: '20px' }}>
             追加
           </Button>
-
         </div>
 
-        <div style={{ width: '95%', margin: '0 auto', display: 'flex', justifyContent: 'flex-end' }}>
-          <Button size="sm" variant="info" onClick={transferToModify} disabled={modifyBtnDisabled}>
-            修正
-          </Button>
+      
+        <div style={{ width: '95%', margin: '0 auto', display: 'flex', justifyContent:'space-between' }}>
+            <span size="sm" variant="info" style={{display:'flex', justifyContent: 'center', alignItems:'flex-end'}}>
+              総計 : {itemsCount}
+            </span>
+           <Button size="sm" variant="info" onClick={transferToModify} disabled={modifyBtnDisabled} >
+              修正
+            </Button>
         </div>
 
+    
+      
         <div style={{ width: '95%', margin: '0 auto', marginTop:'5px' }}>
           <Table
             bordered
@@ -283,14 +329,15 @@ export default function ManagementCompanySearch() {
             pagination={{ pageSize: 6 }}
             className="custom-table"
             rowClassName={rowClassName}
-
             onRow={(record) => ({
               onClick: () => onRowClick(record),
             })}
             
           />
-        </div>
 
+
+        </div>
+        
       </Form>
 
     </div>
