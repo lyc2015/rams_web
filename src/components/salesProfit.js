@@ -794,7 +794,7 @@ class salesProfit extends React.Component {
                       <TableHeaderColumn
                         dataField="employeeName"
                         tdStyle={{ padding: ".45em" }}
-                        width="160"
+                        width="190"
                         dataFormat={this.employeeNameFormat}
                       >
                         氏名
@@ -884,7 +884,7 @@ class salesProfit extends React.Component {
                       </TableHeaderColumn>
                       <TableHeaderColumn
                         dataField="remarks"
-                        width="240"
+                        width="210"
                         dataFormat={this.grayRow}
                         tdStyle={{ padding: ".45em" }}
                       >
