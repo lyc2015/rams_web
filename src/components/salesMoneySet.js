@@ -10,6 +10,7 @@ import {
   InputGroup,
   FormControl,
 } from "react-bootstrap";
+import moment from "moment";
 import axios from "axios";
 import "../asserts/css/development.css";
 import "../asserts/css/style.css";
@@ -49,6 +50,7 @@ class salesMoneySet extends React.Component {
     this.socialInsuranceValueChange =
       this.socialInsuranceValueChange.bind(this);
     this.ageValueChange = this.ageValueChange.bind(this);
+    this.getTableRowStyle = this.getTableRowStyle.bind(this);
   }
 
   // ageValueChange
@@ -402,7 +404,7 @@ class salesMoneySet extends React.Component {
           this.setState({
             errorsMessageShow: true,
             errorsMessageValue: response.data.isNullMessage,
-            employeeAdditionList: response.data,
+            employeeAdditionList: response.data
           });
         } else {
           this.setState({
@@ -1039,27 +1041,30 @@ class salesMoneySet extends React.Component {
     }
   }
 
-  getTableRowStyle(cell, row) {
-    var chooseDate = utils.formateDate(new Date())
-    console.log("getTableRowStyle=" + row.startYearAndMonth + ", " + chooseDate)
-    if (null != chooseDate && undefined != chooseDate && null != row.startYearAndMonth && undefined != row.startYearAndMonth) {
-      var rowYear = row.startYearAndMonth.substring(0, 4);
-      var rowMonth = row.startYearAndMonth.substring(4, 6);
-      var selectYear = chooseDate.substring(0, 4);
-      var selectMonth = chooseDate.substring(4, 6);
-      console.log("getTableRowStyle=" + rowYear + "," + rowMonth + "---" + selectYear + "," + selectMonth)
-      if (selectYear > rowYear) {
-        // 置灰
-        return { color: "#a0a3a1" }
-      }
-      if (selectYear == rowYear && selectMonth > rowMonth) {
-        // 置灰
-        return { color: "#a0a3a1" }
-      }
-      if (row.isFinalSiteFinish == true) {
-        // 置灰
-        return { color: "#a0a3a1" }
-      }
+  getTableRowStyle(row, rowIndex) {
+    // admissionEndDate 有值且admissionEndDate　 < 现在时间 或者  startYearAndMonth < admissionStartDate的时候置灰
+    if (!row) {
+      return
+    }
+    var chooseDate = moment(new Date()).format("YYYYMMDD") ?? '';
+    // var chooseDate = utils.formateDate(new Date())
+
+    const { admissionEndDate = "",
+      admissionStartDate = "",
+      startYearAndMonth = "" } = row
+
+    console.log({
+      admissionEndDate,
+      admissionStartDate: admissionStartDate?.substring(0, 6),
+      startYearAndMonth: startYearAndMonth,
+      chooseDate
+    }, "getTableRowStyle")
+
+
+    if ((admissionEndDate && (chooseDate > admissionEndDate)) ||
+      (startYearAndMonth < admissionStartDate?.substring(0, 6) ?? '')) {
+      // 置灰
+      return { color: "#a0a3a1" }
     }
     return { color: "#000000" }
   }
@@ -1309,8 +1314,8 @@ class salesMoneySet extends React.Component {
                 <Col sm={3}>
                   <InputGroup size="sm" className="mb-3 flexWrapNoWrap" hidden={this.state.additionNumberOfTimesStatus == 1}>
                     <InputGroup.Prepend>
-                      <InputGroup.Text id="inputGroup-sizing-sm">
-                        開始年月
+                      <InputGroup.Text id="inputGroup-sizing-sm" style={{ width: '6rem' }}>
+                        加算開始年月
                       </InputGroup.Text>
                     </InputGroup.Prepend>
                     <DatePicker
@@ -1454,10 +1459,10 @@ class salesMoneySet extends React.Component {
                 striped
                 hover
                 condensed
+                trStyle={this.getTableRowStyle}
               >
                 <TableHeaderColumn
                   width="6%"
-                  tdStyle={this.getTableRowStyle.bind(this)}
                   dataFormat={this.rowNoFormat.bind(this)}
                   dataField="rowNo"
                   isKey
@@ -1467,7 +1472,6 @@ class salesMoneySet extends React.Component {
                 </TableHeaderColumn>
                 <TableHeaderColumn
                   width="10%"
-                  tdStyle={this.getTableRowStyle.bind(this)}
                   dataField="employeeName"
                   dataFormat={this.employeeNameFormat.bind(this)}
                 >
@@ -1476,16 +1480,14 @@ class salesMoneySet extends React.Component {
 
                 <TableHeaderColumn
                   width="10%"
-                  tdStyle={this.getTableRowStyle.bind(this)}
                   dataField="startYearAndMonth"
                   dataFormat={this.startYearAndMonthFormat.bind(this)}
                 >
-                  開始年月
+                  加算開始年月
                 </TableHeaderColumn>
                 <TableHeaderColumn
                   width="6%"
                   dataField="additionMoneyCode"
-                  tdStyle={this.getTableRowStyle.bind(this)}
                   dataFormat={this.additionMoneyCodeFormat.bind(this)}
                 >
                   金額
@@ -1493,7 +1495,6 @@ class salesMoneySet extends React.Component {
                 <TableHeaderColumn
                   width="20%"
                   dataField="additionMoneyResonCode"
-                  tdStyle={this.getTableRowStyle.bind(this)}
                   dataFormat={this.additionMoneyResonCodeFormat.bind(this)}
                 >
                   加算理由
@@ -1501,7 +1502,6 @@ class salesMoneySet extends React.Component {
                 <TableHeaderColumn
                   width="20%"
                   dataField="salesStaff"
-                  tdStyle={this.getTableRowStyle.bind(this)}
                   dataFormat={this.salesStaffFormat.bind(this)}
                 >
                   営業担当
