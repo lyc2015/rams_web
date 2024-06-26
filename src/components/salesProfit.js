@@ -697,7 +697,9 @@ class salesProfit extends React.Component {
                     </Button>
                   </Col>
                   <Col sm={1}></Col>
-                  <Col>
+                  <Col hidden={
+                    this.state.authorityCode !== "4"
+                  }>
                     <InputGroup size="sm">
                       <InputGroup.Prepend>
                         <InputGroup.Text
@@ -713,7 +715,6 @@ class salesProfit extends React.Component {
 
                   <Col
                     hidden={
-                      this.state.occupationCode !== "5" &&
                       this.state.authorityCode !== "4"
                     }
                   >
@@ -733,7 +734,7 @@ class salesProfit extends React.Component {
                     </InputGroup>
                   </Col>
 
-                  <Col>
+                  <Col sm={3}>
                     <InputGroup size="sm">
                       <InputGroup.Prepend>
                         <InputGroup.Text className="input-group-indiv width-auto">
