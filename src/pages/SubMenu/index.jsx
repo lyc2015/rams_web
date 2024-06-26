@@ -82,7 +82,7 @@ class SubMenu extends Component {
             key: "お客様-1",
             label: "お客様登録",
             icon: faSave,
-            path: "/submenu/employeeInfo",
+            path: "/submenu/customerRegister",
           },
           {
             key: "お客様-2",
