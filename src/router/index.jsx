@@ -10,6 +10,7 @@ import SalesInfo from "../pages/SalesInfo";
 import SalesInfoSearch from "../pages/SalesInfoSearch";
 import ManagementCompanyRegister from "../pages/ManagementCompanyRegister";
 import ManagementCompanySearch from "../pages/ManagementCompanySearch";
+import CustomerRegister from "../pages/CustomerRegister"
 
 import SubMenuNew from "../pages/SubmenuNew";
 
@@ -26,7 +27,8 @@ export default function Router() {
       <Route exact path="/salesInfoSearch" component={SalesInfoSearch} />
       <Route exact path="/managementCompanyRegister" component={ManagementCompanyRegister} />
       <Route exact path="/managementCompanySearch" component={ManagementCompanySearch} />
-
+      <Route exact path="/customerRegister" component={CustomerRegister} />
+      
       <Route exact path="/submenuNew" component={SubMenuNew} />
     </Switch>
   );
