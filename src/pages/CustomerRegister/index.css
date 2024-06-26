@@ -1,0 +1,65 @@
+.form-control-s {
+    background-color: bisque;
+    display: block;
+    width: 30;
+    padding: 4px 8px;
+}
+
+.new {
+    background-color: bisque;
+    display: block;
+    width: 40;
+}
+
+.ant-picker {
+    /* background-color: rgb(116, 80, 37) !important; */
+    height: calc(1.5em + 0.5rem + 2px) !important;
+    width: 120px !important;
+    /* 设置宽度 */
+    justify-content: center !important;
+    /* 水平居中 */
+    align-items: center !important;
+    /* 垂直居中 */
+}
+
+.ant-picker-input {
+    /* background-color: rgb(189, 167, 167) !important; */
+    height: 10px !important;
+    padding: 0 !important;
+    justify-content: center !important;
+    /* 水平居中 */
+    align-items: center !important;
+    /* 垂直居中 */
+}
+
+
+/* .ant-picker-input.datePicker-empInsert-left {
+    background-repeat: no-repeat;
+    padding: 0 !important;
+    height:5px !important;
+  } */
+
+.input #datePicker-empInsert-left {
+    background-repeat: no-repeat;
+    padding: 0 !important;
+    height: 5px !important;
+
+}
+
+#datePicker {
+    background-color: transparent;
+    /* width: 5.5rem !important; */
+}
+
+.birthday-dateime .ant-picker-clear {
+    right: 26px;
+
+}
+
+.birthday-dateime {
+    width: 100% !important;
+}
+
+.birthday-wrapper .input-group-prepend {
+    width: 100%;
+}
