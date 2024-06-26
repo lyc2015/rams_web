@@ -5,6 +5,7 @@ import axios from "axios";
 import { connect } from "react-redux";
 import moment from "moment";
 import { useHistory } from "react-router-dom";
+import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 
 import "../asserts/css/annualSalesSituationConfirm.css";
 
@@ -51,49 +52,54 @@ const ListItem = ({
 
 const getColumns = (setSelectedItemEmployeeId) => [
   {
-    title: "日付",
-    dataIndex: "date",
-    key: "date",
+    text: "日付",
+    dataField: "date",
+    isKey: true,
     className: "columnHead",
+    width: 180
   },
   {
-    title: "人数",
-    dataIndex: "nums",
-    key: "nums",
+    text: "人数",
+    dataField: "nums",
     className: "columnHead",
+    width: 80
   },
   {
-    title: "詳細",
-    dataIndex: "details",
-    key: "details",
+    text: "詳細",
+    dataField: "details",
     className: "columnHead",
     render: (_, { details }) => {
-      if (details.length === 0) {
-        return <></>;
+      if (!details?.length) {
+        return null;
       }
 
       return (
-        <List
-          split
-          dataSource={details.slice(0, 5)}
-          grid={{ column: details.length }}
-          renderItem={(value, index) => {
-            const content = `${value.employeeFirstName}${value.employeeLastName
-              }(${value.customerAbbreviation}, ${value.admissionEndDate
-                ? moment(value.admissionEndDate).format("YYYY/MM") + "終了"
-                : "稼働"
-              })`;
+        <>
+          {!details?.length
+            ? null
+            : <List
+              split
+              dataSource={details.slice(0, 5)}
+              grid={{ column: details.length }}
+              renderItem={(value, index) => {
+                const content = `${value.employeeFirstName}${value.employeeLastName
+                  }(${value.customerAbbreviation}, ${value.admissionEndDate
+                    ? moment(value.admissionEndDate).format("YYYY/MM") + "終了"
+                    : "稼働"
+                  })`;
 
-            return (
-              <ListItem
-                isLastOne={index === details.length - 1}
-                setSelectedItemEmployeeId={setSelectedItemEmployeeId}
-                employeeNo={value.employeeNo}
-                content={content}
-              />
-            );
-          }}
-        />
+                return (
+                  <ListItem
+                    isLastOne={index === details.length - 1}
+                    setSelectedItemEmployeeId={setSelectedItemEmployeeId}
+                    employeeNo={value.employeeNo}
+                    content={content}
+                  />
+                );
+              }}
+            />
+          }
+        </>
       );
     },
   },
@@ -116,7 +122,7 @@ const useFetchAnnualSalesSituationConfirmList = ({ requestIP, year }) => {
         const detailsMap = new Map();
         const numsMap = new Map();
 
-        data.forEach((v) => {
+        data && data.forEach((v) => {
           const salesStaffCode = v["salesStaff"];
 
           detailsMap.has(salesStaffCode)
@@ -334,7 +340,6 @@ const AnnualSalesSituationConfirm = ({ serverIP, customerDrop }) => {
       setDisplayedSalesStaff([numsArray[0][0]]);
     }
   }, [numsArray, detailsMap, numsMap]);
-
   return (
     <div className="box">
       <h2 className="title">年度営業状況確認(正社員)</h2>
@@ -410,26 +415,36 @@ const AnnualSalesSituationConfirm = ({ serverIP, customerDrop }) => {
           className={selectedCardIndex === 1 ? "card selected" : "card"}
           onClick={() => handleCardClick(1)}
         >
-          <Table
+          <div style={{ minHeight: 46 }}>{isShowFirstSalesStaff
+            ? <SalesTitle
+              salesStaff={
+                firstSalesStaffName
+              }
+              totalNums={numsMap.get(firstSalesStaff)}
+            />
+            : null}</div>
+          <BootstrapTable
+            selectRow={[]}
             bordered
+            data={isShowFirstSalesStaff ? detailsMap.get(firstSalesStaff) : []}
             pagination={false}
-            columns={columns}
-            title={
-              isShowFirstSalesStaff
-                ? () => (
-                  <SalesTitle
-                    salesStaff={
-                      firstSalesStaffName
-                    }
-                    totalNums={numsMap.get(firstSalesStaff)}
-                  />
-                )
-                : undefined
-            }
-            dataSource={
-              isShowFirstSalesStaff ? detailsMap.get(firstSalesStaff) : []
-            }
-          />
+            headerStyle={{ background: "#5599FF" }}
+            striped
+            hover
+            condensed
+          >
+            {columns.map((column, index) => (
+              <TableHeaderColumn
+                key={index}
+                dataField={column.dataField}
+                width={column?.width}
+                isKey={column.isKey}
+                dataFormat={column?.render && column.render}
+              >
+                {column.text}
+              </TableHeaderColumn>
+            ))}
+          </BootstrapTable>
         </Card>
         <Card
           bordered={true}
@@ -437,26 +452,37 @@ const AnnualSalesSituationConfirm = ({ serverIP, customerDrop }) => {
           className={selectedCardIndex === 2 ? "card selected" : "card"}
           onClick={() => handleCardClick(2)}
         >
-          <Table
+
+          <div style={{ minHeight: 46 }}>{isShowSecondSalesStaff
+            ? <SalesTitle
+              salesStaff={
+                secondSalesStaffName
+              }
+              totalNums={numsMap.get(secondSalesStaff)}
+            />
+            : null}</div>
+          <BootstrapTable
+            selectRow={[]}
             bordered
-            columns={columns}
+            data={isShowSecondSalesStaff ? detailsMap.get(secondSalesStaff) : []}
             pagination={false}
-            title={
-              isShowSecondSalesStaff
-                ? () => (
-                  <SalesTitle
-                    salesStaff={
-                      secondSalesStaffName
-                    }
-                    totalNums={numsMap.get(secondSalesStaff)}
-                  />
-                )
-                : undefined
-            }
-            dataSource={
-              isShowSecondSalesStaff ? detailsMap.get(secondSalesStaff) : []
-            }
-          />
+            headerStyle={{ background: "#5599FF" }}
+            striped
+            hover
+            condensed
+          >
+            {columns.map((column, index) => (
+              <TableHeaderColumn
+                key={index}
+                dataField={column.dataField}
+                width={column?.width}
+                isKey={column.isKey}
+                dataFormat={column?.render && column.render}
+              >
+                {column.text}
+              </TableHeaderColumn>
+            ))}
+          </BootstrapTable>
         </Card>
       </div>
     </div>

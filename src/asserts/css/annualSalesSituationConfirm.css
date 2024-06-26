@@ -13,6 +13,7 @@ ul {
   font-size: 18px;
   font-weight: bold;
   margin: 0;
+  padding: 12px 14px;
 }
 
 .box {
@@ -39,19 +40,23 @@ ul {
   margin-top: 40px;
   margin-bottom: 30px;
 }
+
 .filterButtonLeft {
   display: flex;
   justify-content: flex-start;
   align-items: center;
 }
+
 .filterButtonBox {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
+
 .filterButtonBox:first-of-type {
   margin-right: 30px;
 }
+
 .filterButtonTitle {
   font-size: 0.85rem;
   font-family: "幼�?";
@@ -64,18 +69,21 @@ ul {
   background-color: #76a8af;
   color: rgb(255, 255, 255);
 }
+
 .filterButtonSelect .ant-select-selector {
   width: 100%;
   min-width: 8rem;
-  font-size: "0.85rem"; 
+  font-size: "0.85rem";
   line-height: "1.5";
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
 }
+
 .filterButtonSelect .ant-select {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
 }
+
 .filterButton {
   color: #fff;
   background-color: #17a2b8;
@@ -85,14 +93,17 @@ ul {
   line-height: 1.5;
   border-radius: 0.2rem;
 }
+
 .filterButton:first-of-type {
   margin-right: 4px;
 }
+
 .filterButton:hover {
   color: #fff;
-    background-color: #138496;
-    border-color: #117a8b;
+  background-color: #138496;
+  border-color: #117a8b;
 }
+
 .filterButton:focus,
 .filterButton:active {
   color: #fff;
@@ -108,11 +119,14 @@ ul {
   margin-top: 5px;
   border: 1px solid #312d2d;
 }
+
 .cardContainer .card {
   flex: 1;
 }
+
 .cardContainer .card.selected {
   border: 1px solid rgba(242, 36, 149, 0.5);
+  background-color: inherit;
 }
 
 .cardContainer .ant-card-body {
@@ -126,19 +140,22 @@ ul {
   margin: 0 !important;
   border-right: 1px solid #ccc;
 }
+
 .listItemNoBorder {
   border-right: none;
 }
+
 .listItemClicked {
   color: #117a8b;
 }
+
 .listItemContent {
   width: 100%;
   padding-right: 5px;
   padding-left: 5px;
   text-wrap: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis; 
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
@@ -146,14 +163,17 @@ table td.ant-table-cell {
   padding-top: 8px;
   padding-bottom: 8px;
 }
+
 table td.ant-table-cell:nth-child(3) {
   padding-top: 0;
   padding-bottom: 0;
 }
-tbody tr:nth-child(odd) {
-  background-color:#F2F2F2;
+
+/* tbody tr:nth-child(odd) {
+  background-color: #F2F2F2;
   border-color: #dee2e6;
-}
+} */
+
 th.ant-table-cell.columnHead {
   padding-top: 6px;
   padding-bottom: 6px;
@@ -162,12 +182,15 @@ th.ant-table-cell.columnHead {
   font-size: 16px;
   font-weight: bold;
 }
+
 td.ant-table-cell.columnHead:nth-child(1) {
   border-left: 1px solid #ccc !important;
 }
+
 td.ant-table-cell.columnHead:nth-child(2) {
   width: 65px;
 }
+
 td.ant-table-cell.columnHead {
   border-right: 1px solid #ccc !important;
 }
