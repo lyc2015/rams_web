@@ -21,11 +21,13 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import * as utils from "./utils/publicUtils.js";
 import Autocomplete from "@material-ui/lab/Autocomplete";
+import TextField from "@material-ui/core/TextField";
 import store from "./redux/store";
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker, { registerLocale } from "react-datepicker";
-import { Divider, Collapse, message } from "antd";
+import { Divider, Collapse, message, } from "antd";
 import Clipboard from "clipboard";
+import "../asserts/css/projectInfo.css";
 
 const { Panel } = Collapse;
 
@@ -37,6 +39,9 @@ class projectInfo extends Component {
     this.state = this.initialState; //初期化
     this.toroku = this.toroku.bind(this);
     this.initPage = this.initPage.bind(this);
+    this.giveValue = this.giveValue.bind(this);
+
+    this.textFieldRef = React.createRef();
   }
 
   initialState = {
@@ -48,6 +53,7 @@ class projectInfo extends Component {
     nationalityCode: "",
     admissionPeriod: "",
     admissionMonthCode: "",
+    admissionDay: "",
     projectType: "",
     successRate: "",
     customerNo: "",
@@ -136,6 +142,7 @@ class projectInfo extends Component {
       nationalityCode: "",
       admissionPeriod: "",
       admissionMonthCode: "",
+      admissionDay: "",
       projectType: "",
       successRate: "",
       customerNo: "",
@@ -179,7 +186,8 @@ class projectInfo extends Component {
         projectInfoMod.admissionPeriod,
         false
       ),
-      admissionMonthCode: projectInfoMod.admissionMonthCode,
+      admissionMonthCode: projectInfoMod.admissionMonthCode ?? "",
+      admissionDay: projectInfoMod.admissionDay,
       projectType: projectInfoMod.projectType,
       successRate: projectInfoMod.successRate,
       customerNo: projectInfoMod.customerNo,
@@ -491,6 +499,8 @@ class projectInfo extends Component {
     projectInfoModel["actionType"] = this.state.actionType;
     projectInfoModel["experienceYear"] = this.state.experienceYear;
     projectInfoModel["salesStaff"] = this.state.salesStaff;
+    projectInfoModel["admissionDay"] = this.state.admissionDay;
+    projectInfoModel["admissionMonthCode"] = this.state.admissionMonthCode;
     return projectInfoModel;
   };
   /**
@@ -595,6 +605,7 @@ class projectInfo extends Component {
       projectName,
       admissionPeriod,
       admissionMonthCode,
+      admissionDay,
       siteLocation,
       projectPhaseStart,
       projectPhaseEnd,
@@ -728,7 +739,7 @@ class projectInfo extends Component {
   };
 
   render() {
-    console.log(this.state.projectNo, 'debug:0624-render')
+    console.log(this.state, 'debug:0626-render')
     const {
       projectNo,
       projectName,
@@ -760,6 +771,7 @@ class projectInfo extends Component {
       recruitmentNumbers,
       workStartPeriodForDate,
       admissionMonthCode,
+      admissionDay,
       remark,
       actionType,
       backPage,
@@ -787,12 +799,13 @@ class projectInfo extends Component {
       getFrameWorkDrop,
     } = this.state;
 
+    const admissionDayUserInputMode = admissionMonthCode === '' || admissionMonthCode === null
     console.log(
       { state: this.state, location: this.props.locations },
       "render"
     );
     return (
-      <div>
+      <div id="project-info">
         <div id="Home">
           <Row inline="true">
             <Col className="text-center">
@@ -985,8 +998,65 @@ class projectInfo extends Component {
                       locale="ja"
                       disabled={actionType === "detail" ? true : false}
                     />
+                    <Autocomplete
+                      inputValue={admissionDayUserInputMode ? admissionDay : (admissionMonthDrop.find((v) => v.code === admissionMonthCode)?.name)}
+                      id="admissionMonthCode"
+                      className="admissionMonthCode"
+                      style={{ minWidth: "4.2rem" }}
+                      name="admissionMonthCode"
+                      filterOptions={(options) => {
+                        return options; // 返回所有选项，不进行筛选
+                      }} // 使用自定义的过滤函数
+                      value={
+                        admissionMonthDrop.find((v) => v.code === admissionMonthCode) || {}
+                      }
+                      options={admissionMonthDrop}
+                      getOptionLabel={(option) => option?.name ?? ""}
+                      onChange={(event, values, details) => {
+                        console.log({ event: event.target.value, values, details }, 'debug:0626-onchange')
+                        this.setState({ admissionMonthCode: values?.code })
+                        this.setState({ admissionDay: "" })
+                      }
+                      }
+                      freeSolo={admissionDayUserInputMode}
+                      disableClearable
+                      renderInput={(params) => {
+                        console.log(params, 'params.InputProps')
+                        if (admissionDayUserInputMode) {
+                          params.InputProps.readOnly = false
+                          // 去掉前导零
+                          params.inputProps.value = params.inputProps.value.replace(/^0+/, '')
+                          // 2位数
+                          if (params.inputProps.value.length > 2) {
+                            params.inputProps.value = params.inputProps.value.slice(0, 2)
+                          }
+                        } else {
+                          params.InputProps.readOnly = true
+                        }
 
-                    <FormControl
+                        return (
+                          <TextField
+                            inputRef={this.textFieldRef}
+                            id="admissionMonthCodeInput"
+                            size="small"
+                            type={admissionDayUserInputMode ? "number" : 'text'}
+                            {...params}
+                            className="auto form-control Autocompletestyle-projectInfo-siteLocation"
+                            onChange={(event) => {
+                              console.log(event.target.value, 'debug:0626-TextField-onInput')
+                              if (admissionDayUserInputMode) {
+                                let value = event.target.value
+                                this.setState({ admissionDay: value })
+                              }
+                            }}
+                            // readOnly={!admissionDayUserInputMode} //効かない為InputPropsで実現。
+                            variant="outlined"
+
+                          />
+                        )
+                      }}
+                    />
+                    {/* <FormControl
                       as="select"
                       value={admissionMonthCode}
                       name="admissionMonthCode"
@@ -999,7 +1069,7 @@ class projectInfo extends Component {
                           {date.name}
                         </option>
                       ))}
-                    </FormControl>
+                    </FormControl> */}
                   </InputGroup>
                 </Col>
                 <Col sm={4}>

@@ -1,0 +1,17 @@
+#project-info .admissionMonthCode.MuiAutocomplete-root .form-control {
+    padding: 0;
+}
+
+#project-info .admissionMonthCode.MuiAutocomplete-root .form-control[readonly] {
+    background: inherit;
+}
+
+#project-info .admissionMonthCode .MuiAutocomplete-inputRoot .MuiAutocomplete-input {
+    padding: 0 4px;
+    font-size: 14px;
+}
+
+#project-info .admissionMonthCode .MuiAutocomplete-inputRoot[class*="MuiOutlinedInput-root"] {
+    padding: 0;
+    min-height: 31px;
+}
