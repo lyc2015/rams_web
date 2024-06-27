@@ -999,7 +999,7 @@ class projectInfo extends Component {
                       disabled={actionType === "detail" ? true : false}
                     />
                     <Autocomplete
-                      inputValue={admissionDayUserInputMode ? admissionDay : (admissionMonthDrop.find((v) => v.code === admissionMonthCode)?.name)}
+                      inputValue={admissionDayUserInputMode ? (admissionDay ?? '') : (admissionMonthDrop.find((v) => v.code === admissionMonthCode)?.name ?? '')}
                       id="admissionMonthCode"
                       className="admissionMonthCode"
                       style={{ minWidth: "4.2rem" }}
