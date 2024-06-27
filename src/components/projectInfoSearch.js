@@ -13,6 +13,7 @@ import $ from "jquery";
 import ErrorsMessageToast from "./errorsMessageToast";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import moment from "moment";
 import {
   faSave,
   faUndo,
@@ -670,7 +671,7 @@ class ProjectInfoSearch extends Component {
       textOverflow: "ellipsis",
       overflow: "hidden",
     };
-    if (row.endFlag === "0") style.color = "#9495aa";
+    if (row.endFlag === "0" || (row.admissionPeriod < (moment(new Date()).format("YYYYMM") ?? ''))) style.color = "#9495aa";
     else if (row.successRate === "0" || row.successRate === "1")
       style.color = "red";
 
