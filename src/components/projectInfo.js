@@ -21,6 +21,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import * as utils from "./utils/publicUtils.js";
 import Autocomplete from "@material-ui/lab/Autocomplete";
+import InputAdornment from '@material-ui/core/InputAdornment';
 import TextField from "@material-ui/core/TextField";
 import store from "./redux/store";
 import "react-datepicker/dist/react-datepicker.css";
@@ -1023,13 +1024,27 @@ class projectInfo extends Component {
                       renderInput={(params) => {
                         console.log(params, 'params.InputProps')
                         if (admissionDayUserInputMode) {
+                          let sourceValue = params.inputProps.value
+                          params.InputProps.endAdornment = <InputAdornment position="start">日</InputAdornment>
                           params.InputProps.readOnly = false
                           // 去掉前导零
-                          params.inputProps.value = params.inputProps.value.replace(/^0+/, '')
+                          sourceValue = sourceValue.replace(/^0+/, '')
                           // 2位数
-                          if (params.inputProps.value.length > 2) {
-                            params.inputProps.value = params.inputProps.value.slice(0, 2)
+                          if (sourceValue.length > 2) {
+                            sourceValue = sourceValue.slice(0, 2)
                           }
+                          // 检查范围
+                          const numericValue = parseInt(sourceValue, 10);
+                          if (numericValue < 1 || numericValue > 31) {
+                            if (String(sourceValue) === '32') {
+                              sourceValue = '1'
+                            } else {
+                              sourceValue = sourceValue.slice(0, -1); // 移除最后一个字符
+                            }
+                          }
+                          params.inputProps.value = sourceValue
+
+
                         } else {
                           params.InputProps.readOnly = true
                         }
