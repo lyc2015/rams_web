@@ -1043,6 +1043,7 @@ class salesMoneySet extends React.Component {
 
   getTableRowStyle(row, rowIndex) {
     // admissionEndDate 有值且admissionEndDate　 < 现在时间 或者  startYearAndMonth < admissionStartDate的时候置灰
+    // 固定的情况下，加算开始年月= 现场的开始年月+1的i情况下，这条依然是黑色的
     if (!row) {
       return
     }
@@ -1053,16 +1054,30 @@ class salesMoneySet extends React.Component {
       admissionStartDate = "",
       startYearAndMonth = "" } = row
 
+    let date = moment(startYearAndMonth, 'YYYYMM');
+    let startYearAndMonthPlus1 = ''
+    if (date.isValid()) {
+      startYearAndMonthPlus1 = date.add(1, 'months').format('YYYYMM');
+    }
+
+    // if (row.employeeNo === "LYC234") {
     console.log({
+      row,
       admissionEndDate,
+      startYearAndMonthPlus1,
       admissionStartDate: admissionStartDate?.substring(0, 6),
       startYearAndMonth: startYearAndMonth,
       chooseDate
     }, "getTableRowStyle")
+    // }
 
+
+    if (row.additionNumberOfTimesStatus === '1' && (admissionStartDate?.substring(0, 6) === startYearAndMonthPlus1)) {
+      return { color: "#000000" }
+    }
 
     if ((admissionEndDate && (chooseDate > admissionEndDate)) ||
-      (startYearAndMonth < admissionStartDate?.substring(0, 6) ?? '')) {
+      ((startYearAndMonth < admissionStartDate?.substring(0, 6) ?? ''))) {
       // 置灰
       return { color: "#a0a3a1" }
     }
