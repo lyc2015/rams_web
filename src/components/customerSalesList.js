@@ -52,7 +52,21 @@ class customerSalesList extends React.Component {
     countPeo: 0,
   };
 
+  getAuthorityCode = async () => {
+    axios
+      .post(this.state.serverIP + "sendLettersConfirm/getLoginUserInfo")
+      .then((result) => {
+        this.setState({
+          authorityCode: result.data[0].authorityCode,
+        });
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
   componentDidMount() {
+    this.getAuthorityCode();
     this.searchCustomer();
   }
 
@@ -363,8 +377,8 @@ class customerSalesList extends React.Component {
         if (
           this.state.perCal[i] ===
           parseInt(row.totalUnitPrice) +
-            parseInt(row.overTimeFee) +
-            parseInt(row.expectFee)
+          parseInt(row.overTimeFee) +
+          parseInt(row.expectFee)
         ) {
           this.state.perCal.splice(i, 1);
         }
@@ -452,9 +466,7 @@ class customerSalesList extends React.Component {
                 <DatePicker
                   selected={this.state.customerSalesListYearAndMonth}
                   onChange={this.customerSalesListYearAndMonth}
-                  dateFormat={"yyyy MM"}
                   autoComplete="off"
-                  locale="pt-BR"
                   showMonthYearPicker
                   showFullMonthYearPicker
                   showDisabledMonthNavigation
@@ -482,8 +494,7 @@ class customerSalesList extends React.Component {
               <FormControl value={this.state.totalpercent} disabled />
             </InputGroup>
           </Col>
-
-          <Col>
+          {this.state.authorityCode === '4' ? <Col>
             <InputGroup size="sm">
               <InputGroup.Prepend>
                 <InputGroup.Text
@@ -495,7 +506,8 @@ class customerSalesList extends React.Component {
               </InputGroup.Prepend>
               <FormControl value={this.state.grossProfitPercent} disabled />
             </InputGroup>
-          </Col>
+          </Col> : null}
+
 
           <Col>
             <InputGroup size="sm">
@@ -524,8 +536,7 @@ class customerSalesList extends React.Component {
               <FormControl value={this.state.totalSales} disabled />
             </InputGroup>
           </Col>
-
-          <Col>
+          {this.state.authorityCode === '4' ? <Col>
             <InputGroup size="sm">
               <InputGroup.Prepend>
                 <InputGroup.Text
@@ -537,7 +548,8 @@ class customerSalesList extends React.Component {
               </InputGroup.Prepend>
               <FormControl value={this.state.totalgrossProfit} disabled />
             </InputGroup>
-          </Col>
+          </Col> : null}
+
         </Row>
         <Col>
           <BootstrapTable

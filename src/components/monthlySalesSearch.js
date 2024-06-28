@@ -40,11 +40,13 @@ class monthlySalesSearch extends Component {
     sendFlag: "",
     rowNo: "",
     bpFlag: false,
+    authorityCode: ''
   };
   constructor(props) {
     super(props);
     this.state = this.initialState;
     this.valueChange = this.valueChange.bind(this);
+    this.getAuthorityCode = this.getAuthorityCode.bind(this);
     this.options = {
       sizePerPage: 12,
       pageStartIndex: 1,
@@ -70,8 +72,25 @@ class monthlySalesSearch extends Component {
     monthlySales_startYearAndMonth: new Date(),
     monthlySales_endYearAndMonth: new Date(),
   };
+
+  getAuthorityCode = async () => {
+    axios
+      .post(this.state.serverIP + "sendLettersConfirm/getLoginUserInfo")
+      .then((result) => {
+        this.setState({
+          authorityCode: result.data[0].authorityCode,
+        });
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+
   componentDidMount() {
     this.searchMonthlySales();
+    this.getAuthorityCode();
+
     var date = new Date();
     var year = date.getFullYear();
     $("#fiscalYear").append('<option value="">' + "" + "</option>");
@@ -313,7 +332,7 @@ class monthlySalesSearch extends Component {
       } else {
         if (
           this.state.monthlySalesInfoList[i].deductionsAndOvertimePay ===
-            null ||
+          null ||
           this.state.monthlySalesInfoList[i].deductionsAndOvertimePay === ""
         ) {
           salaryTotal =
@@ -819,9 +838,7 @@ class monthlySalesSearch extends Component {
                   <DatePicker
                     selected={this.state.monthlySales_startYearAndMonth}
                     onChange={this.monthlySalesStartYearAndMonthChange}
-                    dateFormat={"yyyy MM"}
                     autoComplete="off"
-                    locale="pt-BR"
                     showMonthYearPicker
                     showFullMonthYearPicker
                     showDisabledMonthNavigation
@@ -839,9 +856,7 @@ class monthlySalesSearch extends Component {
                   <DatePicker
                     selected={this.state.monthlySales_endYearAndMonth}
                     onChange={this.monthlySalesEndYearAndMonthChange}
-                    dateFormat={"yyyy MM"}
                     autoComplete="off"
-                    locale="pt-BR"
                     showMonthYearPicker
                     showFullMonthYearPicker
                     showDisabledMonthNavigation
@@ -937,56 +952,58 @@ class monthlySalesSearch extends Component {
               給料情報
             </Button>
           </div>
-          <Col>
+          <Col sm={3}>
             <InputGroup size="sm">
               <InputGroup.Prepend>
                 <InputGroup.Text
                   id="inputGroup-sizing-sm"
                   className="input-group-indiv"
                 >
-                  単価総額
+                  売上总额
                 </InputGroup.Text>
               </InputGroup.Prepend>
               <FormControl value={this.state.unitPirceTotal} disabled />
             </InputGroup>
           </Col>
-
-          <Col>
-            <InputGroup size="sm">
-              <InputGroup.Prepend>
-                <InputGroup.Text
-                  id="inputGroup-sizing-sm"
-                  className="input-group-indiv"
-                >
-                  支給総額
-                </InputGroup.Text>
-              </InputGroup.Prepend>
-              <FormControl value={this.state.salaryTotal} disabled />
-            </InputGroup>
-          </Col>
-          <Col>
-            <InputGroup size="sm">
-              <InputGroup.Prepend>
-                <InputGroup.Text id="fiveKanji" className="input-group-indiv">
-                  非稼働総額
-                </InputGroup.Text>
-              </InputGroup.Prepend>
-              <FormControl value={this.state.TotalNonOperation} disabled />
-            </InputGroup>
-          </Col>
-          <Col>
-            <InputGroup size="sm">
-              <InputGroup.Prepend>
-                <InputGroup.Text
-                  id="inputGroup-sizing-sm"
-                  className="input-group-indiv"
-                >
-                  粗利総額
-                </InputGroup.Text>
-              </InputGroup.Prepend>
-              <FormControl value={this.state.grossProfitTotal} disabled />
-            </InputGroup>
-          </Col>
+          {this.state.authorityCode === "4" ?
+            <>
+              <Col>
+                <InputGroup size="sm">
+                  <InputGroup.Prepend>
+                    <InputGroup.Text
+                      id="inputGroup-sizing-sm"
+                      className="input-group-indiv"
+                    >
+                      支給総額
+                    </InputGroup.Text>
+                  </InputGroup.Prepend>
+                  <FormControl value={this.state.salaryTotal} disabled />
+                </InputGroup>
+              </Col>
+              <Col>
+                <InputGroup size="sm">
+                  <InputGroup.Prepend>
+                    <InputGroup.Text id="fiveKanji" className="input-group-indiv">
+                      非稼働総額
+                    </InputGroup.Text>
+                  </InputGroup.Prepend>
+                  <FormControl value={this.state.TotalNonOperation} disabled />
+                </InputGroup>
+              </Col>
+              <Col>
+                <InputGroup size="sm">
+                  <InputGroup.Prepend>
+                    <InputGroup.Text
+                      id="inputGroup-sizing-sm"
+                      className="input-group-indiv"
+                    >
+                      粗利総額
+                    </InputGroup.Text>
+                  </InputGroup.Prepend>
+                  <FormControl value={this.state.grossProfitTotal} disabled />
+                </InputGroup>
+              </Col>
+            </> : null}
         </Row>
         <div>
           <BootstrapTable
@@ -1082,7 +1099,6 @@ class monthlySalesSearch extends Component {
             </TableHeaderColumn>
             <TableHeaderColumn
               tdStyle={{ padding: ".45em" }}
-              width="125"
               dataField="monthlyGrosProfits"
               dataFormat={this.monthlyGrosProfitsAddComma}
               width="120"

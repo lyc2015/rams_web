@@ -45,9 +45,25 @@ class IndividualCustomerSales extends React.Component {
       hideSizePerPage: true,
       alwaysShowAllBtns: true,
       paginationShowsTotal: this.renderShowsTotal,
+      authorityCode: ''
     };
   }
+
+  getAuthorityCode = async () => {
+    axios
+      .post(this.state.serverIP + "sendLettersConfirm/getLoginUserInfo")
+      .then((result) => {
+        this.setState({
+          authorityCode: result.data[0].authorityCode,
+        });
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
   componentDidMount() {
+    this.getAuthorityCode();
     var date = new Date();
     var year = date.getFullYear();
     $("#fiscalYear").append('<option value="">' + "" + "</option>");
@@ -550,9 +566,7 @@ class IndividualCustomerSales extends React.Component {
                     this.state.individualCustomerSales_startYearAndMonth
                   }
                   onChange={this.individualCustomerSalesStartYearAndMonthChange}
-                  dateFormat={"yyyy MM"}
                   autoComplete="off"
-                  locale="pt-BR"
                   showMonthYearPicker
                   showFullMonthYearPicker
                   showDisabledMonthNavigation
@@ -570,9 +584,7 @@ class IndividualCustomerSales extends React.Component {
                 <DatePicker
                   selected={this.state.individualCustomerSales_endYearAndMonth}
                   onChange={this.individualCustomerSalesEndYearAndMonthChange}
-                  dateFormat={"yyyy MM"}
                   autoComplete="off"
-                  locale="pt-BR"
                   showMonthYearPicker
                   showFullMonthYearPicker
                   showDisabledMonthNavigation
@@ -627,19 +639,21 @@ class IndividualCustomerSales extends React.Component {
               <FormControl value={overTimeOrExpectFee} disabled />
             </InputGroup>
           </Col>
-          <Col sm={3}>
-            <InputGroup size="sm">
-              <InputGroup.Prepend>
-                <InputGroup.Text
-                  id="inputGroup-sizing-sm"
-                  className="input-group-indiv"
-                >
-                  粗利合計
-                </InputGroup.Text>
-              </InputGroup.Prepend>
-              <FormControl value={totalgrossProfit} disabled />
-            </InputGroup>
-          </Col>
+          {this.state.authorityCode === "4" ?
+            <Col sm={3}>
+              <InputGroup size="sm">
+                <InputGroup.Prepend>
+                  <InputGroup.Text
+                    id="inputGroup-sizing-sm"
+                    className="input-group-indiv"
+                  >
+                    粗利合計
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl value={totalgrossProfit} disabled />
+              </InputGroup>
+            </Col>
+            : null}
         </Row>
         <Col>
           <BootstrapTable
