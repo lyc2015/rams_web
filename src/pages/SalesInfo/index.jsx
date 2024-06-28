@@ -478,7 +478,7 @@ export default function SalesInfo() {
 
 
     return (
-        <div className="container salesInfo">
+        <div className="salesInfo">
             {contextHolder}
             <Row className="text-center mb-3">
                 <Col>

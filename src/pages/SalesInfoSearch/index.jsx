@@ -708,7 +708,7 @@ export default function SalesInfoSearch() {
   }
 
   return (
-    <div className="container salesInfo">
+    <div className="salesInfo">
       <Row className="text-center mb-3">
         <Col>
           <h2>売上情報登録(賃貸)</h2>

@@ -1,6 +1,7 @@
 import { fetchDropDown } from "./dropDown";
+import { fetchGetAllEmployee } from './allEmployee'
 
 export default {
   dropDown: fetchDropDown(),
-  initEmployee: {},
+  allEmployee: fetchGetAllEmployee(),
 };

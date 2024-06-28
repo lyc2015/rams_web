@@ -46,6 +46,8 @@ class EmployeeInfo extends React.Component {
     const employee = this.props.location.state ? this.props.location.state.employee : {};
 
     this.state = { // 初期化
+      // 加载 gif
+      loading: true,
       employee: employee,
 
       // dropDown
@@ -55,10 +57,12 @@ class EmployeeInfo extends React.Component {
       departmentCodes: store.getState().dropDown[3] || [],
       homesAgentCodes: store.getState().dropDown[4] || [],
       authoritys: store.getState().dropDown[5] || [],
+      residenceCodes: store.getState().dropDown[6] || [],
       employmentInsuranceStatus: [
         { code: "0", name: "未加入" },
         { code: "1", name: "加入済み" }
       ],
+
       // Temporary
       temporary_age: "",
       temporary_graduationYearAndMonth: "",
@@ -69,36 +73,36 @@ class EmployeeInfo extends React.Component {
       // 社員情報
       // Top
       employeeNo: employee.employeeNo || "",
-      employeeFormCode: employee.employeeFormCode || "",
+      employeeFormCode: employee.employeeFormCode ?? "",
 
       // Top Left
       employeeFirstName: employee.employeeFirstName || "",
       employeeLastName: employee.employeeLastName || "",
-      furigana1: employee.furigana || "",
-      furigana2: employee.furigana || "",
-      alphabetName1: employee.alphabetName || "",
-      alphabetName2: employee.alphabetName || "",
-      alphabetName3: employee.alphabetName || "",
+      furigana1: (employee.furigana || "").split(' ')[0] || "",
+      furigana2: (employee.furigana || "").split(' ')[1] || "",
+      alphabetName1: (employee.alphabetName || "").split(' ')[0],
+      alphabetName2: (employee.alphabetName || "").split(' ')[1],
+      alphabetName3: (employee.alphabetName || "").split(' ')[2],
       genderStatus: employee.genderStatus || "",
       birthday: employee.birthday ? moment(employee.birthday) : null,
-      nationalityCode: employee.nationalityCode || "",
+      nationalityCode: employee.nationalityCode ?? "",
       birthplace: employee.birthplace || "",
 
       // Top Middle
-      companyMail: employee.companyMail || "",
+      companyMail: (employee.companyMail || "").split('@')[0],
       phoneNo1: employee.phoneNo ? employee.phoneNo.substring(0, 3) : "",
       phoneNo2: employee.phoneNo ? employee.phoneNo.substring(3, 7) : "",
       phoneNo3: employee.phoneNo ? employee.phoneNo.substring(7, 11) : "",
       postalCode: employee.postalCode || "",
       firstHalfAddress: employee.firstHalfAddress || "",
       lastHalfAddress: employee.lastHalfAddress || "",
-      stationCode : employee.stationCode || "",
+      stationCode : employee.stationCode ?? "",
 
       // Top Right
-      image: default_avatar,
+      image: employee.picInfo || default_avatar,
 
       // Bottom Left
-      authorityCode: employee.authorityCode || "",
+      authorityCode: employee.authorityCode ?? "",
       graduationUniversity: employee.graduationUniversity || "",
       // major: employee.major || "",
       graduationYearAndMonth: employee.graduationYearAndMonth ? moment(employee.graduationYearAndMonth) : null,
@@ -107,11 +111,11 @@ class EmployeeInfo extends React.Component {
       yearsOfExperience: employee.yearsOfExperience || null,
 
       // Bottom Middle
-      homesAgentCode: employee.homesAgentCode || "",
-      departmentCode: employee.departmentCode || "",
-      residenceCode: employee.residenceCode || "",
-      employmentInsurance: employee.employmentInsurance || "",
-      socialInsuranceDate: employee.socialInsuranceDate ? moment(employee.socialInsuranceDate) : null,
+      homesAgentCode: employee.homesAgentCode ?? "",
+      departmentCode: employee.departmentCode ?? "",
+      residenceCode: employee.residenceCode ?? "",
+      employmentInsurance: employee.employmentInsuranceStatus || "",
+      socialInsuranceStatus: employee.socialInsuranceStatus ? moment(employee.socialInsuranceStatus) : null,
       retirementYearAndMonth: employee.retirementYearAndMonth ? moment(employee.retirementYearAndMonth) : null,
 
       // Bottom Right
@@ -120,12 +124,23 @@ class EmployeeInfo extends React.Component {
       retirementResonClassificationCode: employee.retirementResonClassification || "",
     }
   }
-  
 
   /**
    * 处理员工信息提交
    */
   handleEmployeeSubmit = (url, successMessage, errorMessage) => {
+    this.setState({loading: false })
+    // check
+    const { employeeNo, employeeFirstName, employeeLastName, authorityCode } = this.state;
+    console.log({ employeeNo, employeeFirstName, employeeLastName, authorityCode });
+    console.log(!authorityCode);
+    if (!employeeNo || !employeeFirstName || !employeeLastName || authorityCode == null) {
+      this.setState({ loading: true })      
+      AntMessage.error('社員番号、社員氏、社員名、権限は必須項目です。');
+      return;
+    }
+
+    //
 
     let obj = document.getElementById("imageId");
     let imgSrc = obj.getAttribute("src");
@@ -164,7 +179,7 @@ class EmployeeInfo extends React.Component {
       stationCode: publicUtils.nullToEmpty(this.state.stationCode),                // 最寄駅
       picInfo: imgSrc,                                                             // 画像
 
-      authorityCode: this.state.authorityCode,                                      // 権限
+      authorityCode:  publicUtils.nullToEmpty(this.state.authorityCode),            // 権限
       graduationUniversity: publicUtils.nullToEmpty(                                // 卒業学校
         this.state.graduationUniversity),
       graduationYearAndMonth: publicUtils.formateDate(                              // 卒業年月
@@ -186,8 +201,9 @@ class EmployeeInfo extends React.Component {
       employmentInsuranceStatus: publicUtils.nullToEmpty(                           // 雇用保険加入
         this.state.employmentInsurance
       ),
-      socialInsuranceStatus: publicUtils.nullToEmpty(                               // 社会保険加入
-        this.state.socialInsurance
+      socialInsuranceStatus: publicUtils.formateDate(                               // 社会保険加入
+        this.state.socialInsuranceStatus,
+        false
       ),
       retirementYearAndMonth: publicUtils.formateDate(                              // 退職年月
         this.state.retirementYearAndMonth, true),
@@ -210,31 +226,23 @@ class EmployeeInfo extends React.Component {
         }
       })
       .then((result) => {
-        console.log('result', result);
         if (result) {
+          this.setState({ loading: true })
           AntMessage.success(successMessage);
+          // update redux: all Employee
+          store.dispatch({type: "UPDATE_ALL_EMPLOYEE"})
         } else {
+          this.setState({ loading: true })
           AntMessage.error(errorMessage);
           this.setState({
             employeeFirstName: publicUtils.trim(this.state.employeeFirstName), // 社員氏
             employeeLastName: publicUtils.trim(this.state.employeeLastName), // 社員名
             disabledFalg: false,
           });
-          // //window.location.reload();
-          // store.dispatch({ type: "UPDATE_STATE", dropName: "getEmployeeName" });
-          // store.dispatch({
-          //   type: "UPDATE_STATE",
-          //   dropName: "getEmployeeNameNoBP",
-          // });
-          // store.dispatch({
-          //   type: "UPDATE_STATE",
-          //   dropName: "getEmployeeNameByOccupationName",
-          // });
-          // //this.getNO(this.state.empNoHead);// 採番番号
-          // setTimeout(() => this.changePage(), 3000);
         }
       })
       .catch((error) => {
+        this.setState({ loading: true })
         AntMessage.error("登録失敗")
       });
   };
@@ -276,6 +284,7 @@ class EmployeeInfo extends React.Component {
     });
   };
 
+  // 年齢
   inactiveBirthday = (date) => {
     this.setState({
       birthday: date,
@@ -294,31 +303,13 @@ class EmployeeInfo extends React.Component {
     return age;
   };
 
-
-
   valueChange = (event) => {
     this.setState({
       [event.target.name]: event.target.value,
     });
   };
 
-  valueChangeEmployeeInsuranceStatus = (event) => {
-    this.setState({
-      employmentInsurance: event.target.value
-    });
-  };
 
-  valueChangesocialInsuranceStatus = (event) => {
-    this.setState({
-      socialInsurance: event.target.value
-    });
-  };
-
-  socialInsuranceDateChange = (date) => {
-    this.setState({
-      socialInsuranceDate: date
-    });
-  };
 
   // 卒業
 
@@ -330,10 +321,16 @@ class EmployeeInfo extends React.Component {
   };
 
   /**
-   * 卒業年月
+   * Data
    * 
    * @param {*} date 
    */
+  socialInsuranceStatusChange = (date) => {
+    this.setState({
+      socialInsuranceStatus: date
+    });
+  };
+
   inactiveGraduationYearAndMonth = (date) => {
     const yearsDiff = moment().diff(date, 'years');
     const monthsDiff = moment().diff(date, 'months') % 12;
@@ -342,14 +339,7 @@ class EmployeeInfo extends React.Component {
     this.setState({
       graduationYearAndMonth: date,
       temporary_graduationYearAndMonth: formattedDuration
-    }, () => {
-      if (!this.state.yearsOfExperience) {
-        this.setState({
-          yearsOfExperience: date,
-          temporary_yearsOfExperience: formattedDuration
-        });
-      }
-    });
+    })
   };
 
   inactiveComeToJapanYearAndMonth = (date) => {
@@ -433,7 +423,6 @@ class EmployeeInfo extends React.Component {
    *            name
    */
   addFile = (event, name) => {
-    console.log('click file')
     $("#" + name).click();
   };
 
@@ -453,11 +442,30 @@ class EmployeeInfo extends React.Component {
   };
 
   /**
-   * get maxID
+   * 在组件挂载到 DOM 之后调用
    */
 
   componentDidMount() {
+    // get maxID
     this.fetchMaxEmployeeNo();
+    // set birthday
+    if (this.state.birthday) {
+      this.setState({
+        temporary_age: this.calculateAge(this.state.birthday),
+      });
+    }
+    if (this.state.graduationYearAndMonth) {
+      this.inactiveGraduationYearAndMonth(this.state.graduationYearAndMonth)
+    }
+    if (this.state.comeToJapanYearAndMonth) {
+      this.inactiveComeToJapanYearAndMonth(this.state.comeToJapanYearAndMonth)
+    }
+    if (this.state.intoCompanyYearAndMonth) {
+      this.inactiveintoCompanyYearAndMonth(this.state.intoCompanyYearAndMonth)
+    }
+    if (this.state.yearsOfExperience) {
+      this.inactiveyearsOfExperience(this.state.yearsOfExperience)
+    }
   }
 
   fetchMaxEmployeeNo = async () => {
@@ -474,36 +482,68 @@ class EmployeeInfo extends React.Component {
       AntMessage.error('Error fetching the max employee number');
     }
   };
+  
+  //戻るボタン
+  backToSearch = () => {
+    // 使用state传递值
+    this.props.history.push({
+      pathname: '/submenu/employeeSearch',
+      state: {}
+    });
+  }
 
   render() {
     const {
       employee,
-      nationalityCodes,
-      employeeFirstName,
-      employeeFormCodes,
-      companyMail,
-      phoneNo1,
-      phoneNo2,
-      phoneNo3,
-      employmentInsurance, 
-      socialInsuranceDate, 
+      residenceCode,
+      socialInsuranceStatus, 
       graduationYearAndMonth,
       comeToJapanYearAndMonth,
       intoCompanyYearAndMonth,
       yearsOfExperience,
+      retirementYearAndMonth,
+
+      // temporary
       temporary_graduationYearAndMonth,
       temporary_comeToJapanYearAndMonth,
       temporary_intoCompanyYearAndMonth,
       temporary_yearsOfExperience,
-      retirementYearAndMonth,
-      employmentInsuranceNo,
-      socialInsuranceNo,
       temporary_retirementYearAndMonth,
-      stationCodeValue,
+
+      // dropDown
+      nationalityCodes,
+      employeeFormCodes,
       departmentCodes,
       homesAgentCodes,
       stations,
       authoritys,
+      residenceCodes,
+
+      // database
+      employeeNo,
+      // employeeFormCode,
+      // password,
+      // japaneseCalendar,
+      employeeFirstName,
+      employeeLastName,
+      // furigana
+      furigana1,
+      furigana2,
+      // alphabetName
+      alphabetName1,
+      alphabetName2,
+      alphabetName3,
+      genderStatus,
+      birthday,
+
+      companyMail,
+      // phoneNo
+      phoneNo1,
+      phoneNo2,
+      phoneNo3,
+      employmentInsurance,
+      employmentInsuranceNo,
+      socialInsuranceNo,
     } = this.state;
 
     const hasEmployeeData = Object.keys(employee).length > 0;
@@ -531,12 +571,16 @@ class EmployeeInfo extends React.Component {
                 </InputGroup.Prepend>
                 <Autocomplete
                   className="input-group-right-item"
+                  value={
+                    employeeFormCodes.find(
+                        (option) => String(option.code) === String(this.state.employeeFormCode)
+                      ) || null
+                  }
                   options={employeeFormCodes || []}
                   getOptionLabel={(option) => option.name || ""}
                   onChange={(event, values) => {
-                    console.log('values', values)
                     this.setState({
-                      employeeFormCode: values.code,
+                      employeeFormCode: values ? values.code : "",
                     });
                   }}
                   renderInput={(params) => (
@@ -567,7 +611,7 @@ class EmployeeInfo extends React.Component {
                 />
                 <FormControl
                   placeholder="社員名"
-                  value={this.state.employeeLastName}
+                  value={employeeLastName}
                   onChange={this.valueChange}
                   onBlur={this.katakanaApiChange.bind(this)}
                   name="employeeLastName"
@@ -580,14 +624,14 @@ class EmployeeInfo extends React.Component {
                 </InputGroup.Prepend>
                 <FormControl
                   placeholder="カタカナ"
-                  value={this.state.furigana1}
+                  value={furigana1}
                   onChange={this.valueChange}
                   name="furigana1"
                   size="sm"
                 />
                 <FormControl
                   placeholder="カタカナ"
-                  value={this.state.furigana2}
+                  value={furigana2}
                   onChange={this.valueChange}
                   name="furigana2"
                   size="sm"
@@ -599,21 +643,21 @@ class EmployeeInfo extends React.Component {
                 </InputGroup.Prepend>
                 <FormControl
                   placeholder="first"
-                  value={this.state.alphabetName1}
+                  value={alphabetName1}
                   onChange={this.valueChange}
                   name="alphabetName1"
                   size="sm"
                 />
                 <FormControl
                   placeholder="last"
-                  value={this.state.alphabetName2}
+                  value={alphabetName2}
                   onChange={this.valueChange}
                   name="alphabetName2"
                   size="sm"
                 />
                 <FormControl
                   placeholder="last"
-                  value={this.state.alphabetName3}
+                  value={alphabetName3}
                   onChange={this.valueChange}
                   name="alphabetName3"
                   size="sm"
@@ -627,7 +671,7 @@ class EmployeeInfo extends React.Component {
                   as="select"
                   size="sm"
                   name="genderStatus"
-                  value={this.state.genderStatus}
+                  value={genderStatus}
                   onChange={this.valueChange}
                   autoComplete="off"
                 >
@@ -641,21 +685,20 @@ class EmployeeInfo extends React.Component {
                   <InputGroup.Text id="inputGroup-sizing-sm">年齢</InputGroup.Text>
                 </InputGroup.Prepend>
                 <InputGroup.Prepend>
-                <AntdDatePicker
-                  allowClear={false}
-                  suffixIcon={false}
-                  value={this.state.birthday ? moment(this.state.birthday) : ""}
-                  onChange={this.inactiveBirthday}
-                  format="YYYY/MM/DD"
-                  locale="ja"
-                  showMonthYearPicker
-                  className="form-control form-control-sm"
-                  autoComplete="off"
-                  id="datePicker-empInsert-left"
-                />
+                  <AntdDatePicker
+                    allowClear={false}
+                    suffixIcon={false}
+                    value={birthday ? moment(birthday) : ""}
+                    onChange={this.inactiveBirthday}
+                    format="YYYY/MM/DD"
+                    locale="ja"
+                    showMonthYearPicker
+                    className="form-control form-control-sm"
+                    autoComplete="off"
+                    id="datePicker-empInsert-left"
+                  />
                 </InputGroup.Prepend>
                 <FormControl
-                  id="temporary_age"
                   value={this.state.temporary_age}
                   autoComplete="off"
                   onChange={this.valueChange}
@@ -672,12 +715,16 @@ class EmployeeInfo extends React.Component {
                 </InputGroup.Prepend>
                 <Autocomplete
                   className="input-group-right-item"
+                  value={
+                    nationalityCodes.find(
+                        (option) => String(option.code) === String(this.state.nationalityCode)
+                      ) || {}
+                  }
                   options={nationalityCodes || []}
                   getOptionLabel={(option) => option.name || ""}
                   onChange={(event, values) => {
-                    console.log('values', values)
                     this.setState({
-                      nationalityCode: values.code,
+                      nationalityCode: values ? values.code : "",
                     });
                   }}
                   renderInput={(params) => (
@@ -710,7 +757,7 @@ class EmployeeInfo extends React.Component {
                 </InputGroup.Prepend>
                 <FormControl
                   placeholder="社員番号"
-                  value={this.state.employeeNo}
+                  value={employeeNo}
                   onChange={this.valueChange}
                   name="employeeNo"
                   size="sm"
@@ -829,12 +876,16 @@ class EmployeeInfo extends React.Component {
                 </InputGroup.Prepend>
                 <Autocomplete
                   className="input-group-right-item"
+                  value={
+                    stations.find(
+                        (option) => String(option.code) === String(this.state.stationCode)
+                      ) || {}
+                  }
                   options={stations || []}
                   getOptionLabel={(option) => option.name || ""}
                   onChange={(event, values) => {
-                    console.log('values', values)
                     this.setState({
-                      station: values.code,
+                      stationCode: values ? values.code : "",
                     });
                   }}
                   renderInput={(params) => (
@@ -888,12 +939,16 @@ class EmployeeInfo extends React.Component {
                 </InputGroup.Prepend>
                 <Autocomplete
                   className="input-group-right-item"
+                  value={
+                    authoritys.find(
+                        (option) => String(option.code) === String(this.state.authorityCode)
+                      ) || {}
+                  }
                   options={authoritys || []}
                   getOptionLabel={(option) => option.name || ""}
                   onChange={(event, values) => {
-                    console.log('values', values)
                     this.setState({
-                      authority: values.code,
+                      authorityCode: values ? values.code : "",
                     });
                   }}
                   renderInput={(params) => (
@@ -914,9 +969,9 @@ class EmployeeInfo extends React.Component {
                 </InputGroup.Prepend>
                 <FormControl
                   placeholder="学校"
-                  value={this.state.graduatedSchool}
+                  value={this.state.graduationUniversity}
                   onChange={this.valueChange}
-                  name="graduatedSchool"
+                  name="graduationUniversity"
                   size="sm"
                 />
                 {/* <FormControl
@@ -1054,8 +1109,18 @@ class EmployeeInfo extends React.Component {
                 </InputGroup.Prepend>
                 <Autocomplete
                   className="input-group-right-item"
+                  value={
+                    homesAgentCodes.find(
+                        (option) => String(option.code) === String(this.state.homesAgentCode)
+                      ) || {}
+                  }
                   options={homesAgentCodes || []}
                   getOptionLabel={(option) => option.name || ""}
+                  onChange={(event, values) => {
+                    this.setState({
+                      homesAgentCode: values ? values.code : "",
+                    });
+                  }}
                   renderInput={(params) => (
                     <div ref={params.InputProps.ref}>
                       <input
@@ -1076,12 +1141,22 @@ class EmployeeInfo extends React.Component {
                 </InputGroup.Prepend>
                 <Autocomplete
                   className="input-group-right-item"
+                  value={
+                    departmentCodes.find(
+                        (option) => String(option.code) === String(this.state.departmentCode)
+                      ) || {}
+                  }
                   options={departmentCodes || []}
                   getOptionLabel={(option) => option.name || ""}
+                  onChange={(event, values) => {
+                    this.setState({
+                      departmentCode: values ? values.code : "",
+                    });
+                  }}
                   renderInput={(params) => (
                     <div ref={params.InputProps.ref}>
                       <input
-                        placeholder="例：秋葉原駅"
+                        placeholder=""
                         type="text"
                         {...params.inputProps}
                         className="auto form-control Autocompletestyle-emp-station"
@@ -1096,13 +1171,32 @@ class EmployeeInfo extends React.Component {
                     在留資格
                   </InputGroup.Text>
                 </InputGroup.Prepend>
-                <FormControl
-                  placeholder="在留資格"
-                  value={this.state.residenceStatus}
-                  onChange={this.valueChange}
-                  name="residenceStatus"
-                  size="sm"
+                <Autocomplete
+                  className="input-group-right-item"
+                  value={
+                    residenceCodes.find(
+                        (option) => String(option.code) === String(residenceCode)
+                      ) || null
+                  }
+                  options={residenceCodes || []}
+                  getOptionLabel={(option) => option.name || ""}
+                  onChange={(event, values) => {
+                    this.setState({
+                      residenceCode: values ? values.code : '',
+                    });
+                  }}
+                  renderInput={(params) => (
+                    <div ref={params.InputProps.ref}>
+                      <input
+                        placeholder=""
+                        type="text"
+                        {...params.inputProps}
+                        className="auto form-control Autocompletestyle-emp-station"
+                      />
+                    </div>
+                  )}
                 />
+
               </InputGroup>
 
               <InputGroup size="sm" className="flexWrapNoWrap">
@@ -1114,7 +1208,7 @@ class EmployeeInfo extends React.Component {
                 <Form.Control
                   as="select"
                   size="sm"
-                  onChange={this.valueChangeEmployeeInsuranceStatus}
+                  onChange={this.valueChange}
                   name="employmentInsurance"
                   value={employmentInsurance}
                   autoComplete="off"
@@ -1133,22 +1227,21 @@ class EmployeeInfo extends React.Component {
                     社会保険加入
                   </InputGroup.Text>
                 </InputGroup.Prepend>
-                <AntdDatePicker
-                  allowClear={false}
-                  suffixIcon={false}
-                  value={socialInsuranceDate ? moment(socialInsuranceDate) : ""}
-                  onChange={this.socialInsuranceDateChange}
-                  format="YYYY/MM/DD"
-                  locale="ja"
-                  showMonthYearPicker
-                  id="datePicker-empInsert-left"
-                  className="form-control form-control-sm"
-                  autoComplete="off"
-                />
-              </InputGroup>           
-
-              
-
+                {/* <InputGroup.Prepend> */}
+                  <AntdDatePicker
+                    allowClear={false}
+                    suffixIcon={false}
+                    value={socialInsuranceStatus ? moment(socialInsuranceStatus) : ""}
+                    onChange={this.socialInsuranceStatusChange}
+                    format="YYYY/MM/DD"
+                    locale="ja"
+                    showMonthYearPicker
+                    className="form-control form-control-sm"
+                    autoComplete="off"
+                    id="datePicker-empInsert-left"
+                  />
+                {/* </InputGroup.Prepend> */}
+              </InputGroup>
               <InputGroup size="sm" >
                 <InputGroup.Prepend>
                   <InputGroup.Text　id="sevenKanji">
@@ -1159,7 +1252,6 @@ class EmployeeInfo extends React.Component {
                   allowClear={false}
                   suffixIcon={false}
                   value={retirementYearAndMonth ? moment(retirementYearAndMonth) : ""}
-                  // onChange={this.socialInsuranceDateChange}
                   format="YYYY/MM/DD"
                   locale="ja"
                   showMonthYearPicker
@@ -1180,7 +1272,7 @@ class EmployeeInfo extends React.Component {
                   placeholder="雇用保険番号"
                   value={employmentInsuranceNo}
                   onChange={this.valueChange}
-                  name="permission"
+                  name="employmentInsuranceNo"
                   size="sm"
                 />
               </InputGroup>
@@ -1192,9 +1284,8 @@ class EmployeeInfo extends React.Component {
                   placeholder="社会保険番号"
                   value={socialInsuranceNo}
                   onChange={this.valueChange}
-                  name="permission"
+                  name="socialInsuranceNo"
                   size="sm"
-                  disabled
                 />
               </InputGroup>
               <InputGroup size="sm" >
@@ -1212,6 +1303,7 @@ class EmployeeInfo extends React.Component {
               </InputGroup>
             </Col>
           </Row>
+            <br/>
             <div style={{ textAlign: "center" }}>
               <Button
                 size="sm"
@@ -1221,7 +1313,21 @@ class EmployeeInfo extends React.Component {
               >
                 <FontAwesomeIcon icon={hasEmployeeData ? faEdit : faSave} /> {hasEmployeeData ? "更新" : "登録"}
               </Button>
+              <Button
+                size="sm"
+                variant="info"
+                onClick={this.backToSearch}
+                type="button"
+                style={{ marginLeft: '20px' }}
+              >
+                <FontAwesomeIcon /> 戻る
+              </Button>
             </div>
+            {/*  */}
+            <div className="loadingImageContainer">
+              <div className="loadingImage" hidden={this.state.loading}></div>
+            </div>
+            <br/>
         </Form>
       </div>
     );

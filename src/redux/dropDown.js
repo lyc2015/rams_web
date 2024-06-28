@@ -9,6 +9,7 @@ const methodNameList = [
   "getDepartment",            // 部署
   "getHomesAgentCode",        // 仲介区分
   "getAuthority",             // 権限
+  "getResidence",             // 在留資格
 ];
 
 const serverIP = "http://127.0.0.1:8080/";
