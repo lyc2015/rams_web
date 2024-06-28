@@ -941,6 +941,7 @@ class monthlySalesSearch extends Component {
 
             <font style={{ marginLeft: "2px", marginRight: "2px" }}></font>
             <Button
+              hidden={this.state.authorityCode === "3"}
               size="sm"
               onClick={this.shuseiTo.bind(this, "wagesInfo")}
               disabled={this.state.rowSelectemployeeNo === "" ? true : false}

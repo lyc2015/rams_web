@@ -70,6 +70,8 @@ class IndividualCustomerSales extends React.Component {
     for (var i = year - 1; i <= year + 1; i++) {
       $("#fiscalYear").append('<option value="' + i + '">' + i + "</option>");
     }
+
+    this.setState({ fiscalYear: year })
   }
   initialState = {
     customerInfo: store.getState().dropDown[73].slice(1),
