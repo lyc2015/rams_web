@@ -89,6 +89,7 @@
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
@@ -230,8 +231,7 @@ body {
 #datePicker {
   background-repeat: no-repeat;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: white;
@@ -241,8 +241,7 @@ body {
 #datePicker-invoicePDF {
   background-repeat: no-repeat;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   /* background-color: white; */
@@ -252,8 +251,7 @@ body {
 #datePicker-duty {
   background-repeat: no-repeat;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: white;
@@ -263,8 +261,7 @@ body {
 #datePicker-invoice {
   background-repeat: no-repeat;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: white;
@@ -275,8 +272,7 @@ body {
   border-color: red;
   background-repeat: no-repeat;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: white;
@@ -286,8 +282,7 @@ body {
 #datePicker-certificatePrinting-birthday {
   background-repeat: no-repeat;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   /*background-color: white;*/
@@ -297,8 +292,7 @@ body {
 #datePicker-certificatePrinting-intoCompanyYearAndMonth {
   background-repeat: no-repeat;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   /* background-color: white;*/
@@ -308,8 +302,7 @@ body {
 #datePicker-interview {
   background-repeat: no-repeat;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: white;
@@ -319,8 +312,7 @@ body {
 #datePickerReadonlyDefault {
   background-repeat: no-repeat;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: #e9ecef;
@@ -330,8 +322,7 @@ body {
 #datePickerReadonlyDefault-duty {
   background-repeat: no-repeat;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: #e9ecef;
@@ -341,8 +332,7 @@ body {
 #siteDatePickerReadonlyDefault {
   background-repeat: no-repeat;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: #e9ecef;
@@ -352,8 +342,7 @@ body {
 #datePickerReadonly {
   background-repeat: no-repeat;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: #e9ecef;
@@ -366,8 +355,7 @@ body {
 #datePicker2 {
   background-repeat: no-repeat;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: white;
@@ -377,8 +365,7 @@ body {
 #scheduledEndDate-siteInfo {
   background-repeat: no-repeat;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: white;
@@ -388,8 +375,7 @@ body {
 #scheduledEndDate-siteInfoReadOnly {
   background-repeat: no-repeat;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: #e9ecef;
@@ -399,8 +385,7 @@ body {
 #scheduledEndDate {
   background-repeat: no-repeat;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: white;
@@ -410,8 +395,7 @@ body {
 #admissionStartDate {
   background-repeat: no-repeat;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   /*background-color: white;*/
@@ -421,8 +405,7 @@ body {
 #admissionStartDateReadOnly {
   background-repeat: no-repeat;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: #e9ecef;
@@ -432,8 +415,7 @@ body {
 #admissionEndDate {
   background-repeat: no-repeat;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   /*background-color: white;*/
@@ -444,8 +426,7 @@ body {
   background-repeat: no-repeat;
   width: 7.7rem;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: white;
@@ -455,8 +436,7 @@ body {
   background-repeat: no-repeat;
   width: 12.3rem;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: white;
@@ -466,8 +446,7 @@ body {
   background-repeat: no-repeat;
   width: 13.55rem;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: white;
@@ -477,8 +456,7 @@ body {
   background-repeat: no-repeat;
   width: 15.1rem;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: white;
@@ -488,8 +466,7 @@ body {
   background-repeat: no-repeat;
   width: 6.7rem;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: #e9ecef;
@@ -499,8 +476,7 @@ body {
   background-repeat: no-repeat;
   width: 8.4rem;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: white;
@@ -510,8 +486,7 @@ body {
   background-repeat: no-repeat;
   width: 240px;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: white;
@@ -521,8 +496,7 @@ body {
   background-repeat: no-repeat;
   width: 230px;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: white;
@@ -532,8 +506,7 @@ body {
   background-repeat: no-repeat;
   /* width: 150px; */
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: white;
@@ -543,16 +516,14 @@ body {
   background-repeat: no-repeat;
   /* width: 150px; */
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: white;
   background-repeat: no-repeat;
   /* width: 150px; */
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: white;
@@ -562,8 +533,7 @@ body {
   background-repeat: no-repeat;
   /* width: 15rem; */
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: white;
@@ -573,8 +543,7 @@ body {
   background-repeat: no-repeat;
   /* width: 14rem; */
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: white;
@@ -584,8 +553,7 @@ body {
   background-repeat: no-repeat;
   /* width: 15rem; */
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: white;
@@ -595,8 +563,7 @@ body {
   background-repeat: no-repeat;
   width: 15rem;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: #e9ecef;
@@ -606,8 +573,7 @@ body {
   background-repeat: no-repeat;
   /* width: 15rem; */
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: #e9ecef;
@@ -617,8 +583,7 @@ body {
   background-repeat: no-repeat;
   /* width: 115px; */
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: white;
@@ -628,8 +593,7 @@ body {
   background-repeat: no-repeat;
   width: 160px;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: white;
@@ -810,8 +774,7 @@ body {
   background-repeat: no-repeat;
   width: 10rem;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: white;
@@ -821,8 +784,7 @@ body {
   background-repeat: no-repeat;
   background-position: 10px 7px;
   /* width: 10rem; */
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: white;
@@ -832,8 +794,7 @@ body {
   background-repeat: no-repeat;
   background-position: 10px 7px;
   width: 7.3rem;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: white;
@@ -843,19 +804,18 @@ body {
   background-repeat: no-repeat;
   background-position: 10px 7px;
   /* width: 7.6rem; */
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
-  /*background-color: white*/;
+  /*background-color: white*/
+  ;
 }
 
 #datePicker-empInsert-right-immigrationTime {
   background-repeat: no-repeat;
   background-position: 10px 7px;
   width: 7.3rem;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: white;
@@ -865,8 +825,7 @@ body {
   background-repeat: no-repeat;
   background-position: 10px 7px;
   width: 7.3rem;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: white;
@@ -876,8 +835,7 @@ body {
   background-repeat: no-repeat;
   background-position: 10px 7px;
   width: 7.3rem;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: white;
@@ -887,18 +845,17 @@ body {
   background-repeat: no-repeat;
   background-position: 10px 7px;
   width: 10.47rem;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: white;
 }
+
 #datePickerReadonlyDefault-empInsert-left {
   background-repeat: no-repeat;
   background-position: 10px 7px;
   width: 10.47rem;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: #e9ecef;
@@ -908,8 +865,7 @@ body {
   background-repeat: no-repeat;
   background-position: 10px 7px;
   width: 10rem;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: #e9ecef;
@@ -919,8 +875,7 @@ body {
   background-repeat: no-repeat;
   background-position: 10px 7px;
   width: 7.3rem;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: #e9ecef;
@@ -930,8 +885,7 @@ body {
   background-repeat: no-repeat;
   background-position: 10px 7px;
   /* width: 9.6rem; */
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: #e9ecef;
@@ -941,8 +895,7 @@ body {
   background-repeat: no-repeat;
   background-position: 10px 7px;
   width: 7.3rem;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: #e9ecef;
@@ -952,8 +905,7 @@ body {
   background-repeat: no-repeat;
   background-position: 10px 7px;
   width: 7.3rem;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: #e9ecef;
@@ -963,8 +915,7 @@ body {
   background-repeat: no-repeat;
   background-position: 10px 7px;
   width: 7.3rem;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: #e9ecef;
@@ -1023,7 +974,7 @@ body {
   height: auto;
 }
 
-.uploadPicturesWrapper > div:empty {
+.uploadPicturesWrapper>div:empty {
   height: 0px;
 }
 
@@ -1199,8 +1150,7 @@ body {
 .ageCss {
   background-repeat: no-repeat;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: white;
@@ -1521,6 +1471,10 @@ body {
   color: "#495057";
 }
 
+.Autocompletestyle-projectInfo-siteLocation.readOnly {
+  background-color: #e9ecef;
+}
+
 .Autocompletestyle-projectInfo-keyWordOfLanagurue {
   /* width: 6.6rem; */
   height: 31px;
@@ -1545,8 +1499,7 @@ body {
   background-repeat: no-repeat;
   /* width: 8rem; */
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: white;
@@ -1556,8 +1509,7 @@ body {
   background-repeat: no-repeat;
   width: 8rem;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: #e9ecef;
@@ -1567,8 +1519,7 @@ body {
   background-repeat: no-repeat;
   width: 8rem;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: white;
@@ -1630,8 +1581,7 @@ body {
 #siteAdmissionStartReadonlyDefault {
   background-repeat: no-repeat;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   /* background-color: #e9ecef; */
@@ -1641,8 +1591,7 @@ body {
 #siteAdmissionStart {
   background-repeat: no-repeat;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   /* background-color: white; */
@@ -1787,8 +1736,7 @@ body {
 #datePickerReadonlyDefault-bpInfo {
   background-repeat: no-repeat;
   background-position: 15px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: #e9ecef;
@@ -1798,8 +1746,7 @@ body {
 #datePicker-bpInfo {
   background-repeat: no-repeat;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: white;
@@ -1840,8 +1787,7 @@ body {
   background-repeat: no-repeat;
   /* width: 13.55rem; */
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: #e9ecef;
@@ -1851,8 +1797,7 @@ body {
   background-repeat: no-repeat;
   /* width: 15.1rem; */
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: #e9ecef;
@@ -1862,8 +1807,7 @@ body {
   background-repeat: no-repeat;
   width: 8.4rem;
   background-position: 10px 7px;
-  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-    center transparent;
+  background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
   padding-right: 0px;
   height: calc(1.5em + 0.5rem + 2px);
   background-color: #e9ecef;
@@ -1894,27 +1838,26 @@ body {
     background-repeat: no-repeat;
     width: 10rem;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: white;
   }
+
   #customerInfoDatePickerReadOnly {
     background-repeat: no-repeat;
     width: 10rem;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: #e9ecef;
   }
+
   .ageccCss {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: white;
@@ -1924,33 +1867,33 @@ body {
   .ageCss {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: white;
     width: 5.5rem;
   }
+
   #admissionStartDate {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     /*background-color: white;*/
     /* width: 10rem; */
   }
+
   #admissionStartDateReadOnly {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: #e9ecef;
     width: 10rem;
   }
+
   .Autocompletestyle {
     width: 8rem;
     height: 31px;
@@ -1960,6 +1903,7 @@ body {
     font-size: ".875rem";
     color: "#495057";
   }
+
   .Autocompletestyle-interview {
     width: 5.8rem;
     height: 31px;
@@ -1989,6 +1933,7 @@ body {
     font-size: ".875rem";
     color: "#495057";
   }
+
   .Autocompletestyle-emp-station {
     /* width: 14.24rem; */
     height: 31px;
@@ -2028,6 +1973,7 @@ body {
     font-size: ".875rem";
     color: "#495057";
   }
+
   .Autocompletestyle-costRe {
     width: 5.6rem;
     height: 31px;
@@ -2037,6 +1983,7 @@ body {
     font-size: ".875rem";
     color: "#495057";
   }
+
   .Autocompletestyle-master {
     /* width: 11.7rem; */
     height: 31px;
@@ -2046,6 +1993,7 @@ body {
     font-size: ".875rem";
     color: "#495057";
   }
+
   .Autocompletestyle-projectInfo {
     width: 9.2rem;
     height: 31px;
@@ -2085,6 +2033,7 @@ body {
     font-size: ".875rem";
     color: "#495057";
   }
+
   .input-group-text {
     background-color: #76a8af;
     font-family: "幼圆";
@@ -2092,22 +2041,25 @@ body {
     color: rgb(255, 255, 255);
     width: 4.1rem;
   }
+
   .cssNikanji {
     width: 3rem;
   }
+
   #inputGroup-sizing-sm {
     font-size: 0.85rem;
   }
+
   #projectInfoDatepicker {
     background-repeat: no-repeat;
     width: 8rem;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: white;
   }
+
   .Autocompletestyle-salesSend {
     width: 4.5rem;
     height: 31px;
@@ -2117,6 +2069,7 @@ body {
     font-size: ".875rem";
     color: "#495057";
   }
+
   .Autocompletestyle-salesSend-customers {
     /* width: 14.7rem; */
     height: 31px;
@@ -2127,6 +2080,7 @@ body {
     color: "#495057";
     margin-right: 1.3rem;
   }
+
   .Autocompletestyle-sendRepot {
     /* width: 9rem; */
     height: 31px;
@@ -2147,6 +2101,7 @@ body {
     font-size: ".875rem";
     color: "#495057";
   }
+
   .Autocompletestyle-salesEmpAdd {
     width: 3.5rem;
     height: 31px;
@@ -2156,6 +2111,7 @@ body {
     font-size: ".875rem";
     color: "#495057";
   }
+
   .Autocompletestyle-salesSend-personInCharge {
     /* width: 6rem; */
     height: 31px;
@@ -2166,11 +2122,11 @@ body {
     color: "#495057";
     margin-right: 1rem;
   }
+
   #datePickerReadonly {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: #e9ecef;
@@ -2178,31 +2134,31 @@ body {
     height: calc(1.5em + 0.5rem + 2px);
     background-color: #e9ecef;
   }
+
   #datePicker2 {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: white;
     width: 6.5rem;
   }
+
   #datePicker {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: white;
     /* width: 5.5rem !important; */
   }
+
   #datePicker-invoicePDF {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     /* background-color: white; */
@@ -2212,8 +2168,7 @@ body {
   #datePicker-duty {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: white;
@@ -2223,8 +2178,7 @@ body {
   #datePicker-certificatePrinting-birthday {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: white;
@@ -2234,8 +2188,7 @@ body {
   #datePicker-certificatePrinting-intoCompanyYearAndMonth {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     /*background-color: white;*/
@@ -2245,13 +2198,13 @@ body {
   #datePicker-interview {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: white;
     width: 6.3rem !important;
   }
+
   .input-group-text {
     background-color: #76a8af;
     font-family: "幼�?";
@@ -2259,36 +2212,37 @@ body {
     width: 5.1rem;
     /* width:4.5rem; */
   }
+
   #expensesInfoDatePicker {
     background-repeat: no-repeat;
     width: 6rem;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: white;
   }
+
   #workStartPeriodDatePicker {
     background-repeat: no-repeat;
     /* width: 6rem; */
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: white;
   }
+
   #workStartPeriodDatePickerReadOnly {
     background-repeat: no-repeat;
     width: 6rem;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: #e9ecef;
   }
+
   .Autocompletestyle-branchInsertInfo {
     width: 11.7rem;
     height: 31px;
@@ -2298,12 +2252,15 @@ body {
     font-size: ".875rem";
     color: "#495057";
   }
+
   .popoverC {
     max-width: 650px !important;
   }
+
   .selectWidth {
     max-width: 310px !important;
   }
+
   .Autocompletestyle-siteInfo-relatedEmployees {
     /* width: 6.5rem; */
     height: 31px;
@@ -2313,9 +2270,11 @@ body {
     font-size: ".875rem";
     color: "#495057";
   }
+
   .hiwari {
     width: 3rem;
   }
+
   .unitPrice {
     width: 1rem;
   }
@@ -2323,9 +2282,11 @@ body {
   #sanKanji {
     width: 3.5rem;
   }
+
   #niKanji {
     width: 2.8rem;
   }
+
   .Autocompletestyle-siteInfoSearch-bpCustomerNo {
     width: 10.3rem;
     height: 31px;
@@ -2335,6 +2296,7 @@ body {
     font-size: ".875rem";
     color: "#495057";
   }
+
   .Autocompletestyle-siteInfoSearch-topCustomer {
     width: 9rem;
     height: 31px;
@@ -2344,6 +2306,7 @@ body {
     font-size: ".875rem";
     color: "#495057";
   }
+
   .Autocompletestyle-siteInfoSearch-station {
     width: 10.4rem;
     height: 31px;
@@ -2353,6 +2316,7 @@ body {
     font-size: ".875rem";
     color: "#495057";
   }
+
   .Autocompletestyle-employeeInsertNew-employeeNo {
     width: 5.8rem;
     height: 31px;
@@ -2362,6 +2326,7 @@ body {
     font-size: ".875rem";
     color: "#495057";
   }
+
   .Autocompletestyle-siteInfoSearch-employeeNo {
     width: 10rem;
     height: 31px;
@@ -2371,6 +2336,7 @@ body {
     font-size: ".875rem";
     color: "#495057";
   }
+
   .Autocompletestyle-siteInfoSearch-developLanguageCode {
     /* width: 5rem; */
     height: 31px;
@@ -2380,163 +2346,166 @@ body {
     font-size: ".875rem";
     color: "#495057";
   }
+
   #customerInfoDatePicker {
     background-repeat: no-repeat;
     width: 10rem;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: white;
   }
+
   #customerInfoDatePicker-establishmentDate {
     background-repeat: no-repeat;
     width: 10.3rem;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: white;
   }
+
   #customerInfoDatePickerReadOnly-establishmentDate {
     background-repeat: no-repeat;
     width: 10.3rem;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: #e9ecef;
   }
+
   #siteDatePickerReadonlyDefault {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: #e9ecef;
     /*width: 9.95rem;*/
   }
+
   #admissionEndDate {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     /*background-color: white;*/
     /*width: 9.95rem;*/
   }
+
   #siteAdmissionStartReadonlyDefault {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     /* background-color: #e9ecef; */
     width: 6.5rem;
   }
+
   #siteAdmissionStart {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     /* background-color: white; */
     width: 6.5rem;
   }
+
   .siteTime {
     width: 4rem;
   }
+
   .site-mark {
     width: 0.001rem;
     /* margin-left: 0.15rem; */
   }
+
   #customerInfoDatePickerReadOnly {
     background-repeat: no-repeat;
     width: 10rem;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: #e9ecef;
   }
+
   .ageccCss {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: white;
     width: 7rem;
   }
+
   .ageCss {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: white;
     width: 5.5rem;
   }
+
   #scheduledEndDate-siteInfo {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: white;
     width: 10rem;
   }
+
   #scheduledEndDate-siteInfoReadOnly {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: #e9ecef;
     /* width: 10rem; */
   }
+
   #scheduledEndDate {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: white;
     width: 9rem;
   }
+
   #admissionStartDate {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     /*background-color: white;*/
     /* width: 4.5rem; */
   }
+
   #admissionStartDateReadOnly {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: #e9ecef;
     width: 4.5rem;
   }
+
   .Autocompletestyle {
     width: 8rem;
     height: 31px;
@@ -2546,6 +2515,7 @@ body {
     font-size: ".875rem";
     color: "#495057";
   }
+
   .Autocompletestyle-siteInfo {
     /* width: 10.4rem; */
     height: 31px;
@@ -2555,6 +2525,7 @@ body {
     font-size: ".875rem";
     color: "#495057";
   }
+
   .Autocompletestyle-siteInfo-developLanguageCode {
     width: 5.2rem;
     height: 31px;
@@ -2564,6 +2535,7 @@ body {
     font-size: ".875rem";
     color: "#495057";
   }
+
   .Autocompletestyle-siteInfo-topCustomer {
     width: 9rem;
     height: 31px;
@@ -2573,6 +2545,7 @@ body {
     font-size: ".875rem";
     color: "#495057";
   }
+
   .Autocompletestyle-siteInfoSearch-customerNo {
     /* width: 10.4rem; */
     height: 31px;
@@ -2622,6 +2595,7 @@ body {
     font-size: ".875rem";
     color: "#495057";
   }
+
   .Autocompletestyle-siteInfo-employeeNo {
     /* width: 9rem; */
     height: 31px;
@@ -2631,9 +2605,11 @@ body {
     font-size: ".875rem";
     color: "#495057";
   }
+
   #siteInfo-siteRoleCode {
     width: 3rem;
   }
+
   #empinsert-right-kanji {
     /* width: 5.1rem; */
   }
@@ -2661,6 +2637,7 @@ body {
     font-size: ".875rem";
     color: "#495057";
   }
+
   .Autocompletestyle-customer {
     width: 10.4rem;
     height: 31px;
@@ -2670,6 +2647,7 @@ body {
     font-size: ".875rem";
     color: "#495057";
   }
+
   .Autocompletestyle-developLanguage {
     /* width: 5.2rem; */
     height: 31px;
@@ -2679,6 +2657,7 @@ body {
     font-size: ".875rem";
     color: "#495057";
   }
+
   .Autocompletestyle-customerInfoSearch {
     width: 10rem;
     height: 31px;
@@ -2688,6 +2667,7 @@ body {
     font-size: ".875rem";
     color: "#495057";
   }
+
   .Autocompletestyle-customerInfo-topCustomer {
     width: 10rem;
     height: 31px;
@@ -2697,6 +2677,7 @@ body {
     font-size: ".875rem";
     color: "#495057";
   }
+
   .Autocompletestyle-situation {
     width: 4.5rem;
     height: 31px;
@@ -2706,6 +2687,7 @@ body {
     font-size: ".875rem";
     color: "#495057";
   }
+
   .Autocompletestyle-costRe {
     width: 5.6rem;
     height: 31px;
@@ -2715,6 +2697,7 @@ body {
     font-size: ".875rem";
     color: "#495057";
   }
+
   .Autocompletestyle-master {
     /* width: 11.7rem; */
     height: 31px;
@@ -2724,6 +2707,7 @@ body {
     font-size: ".875rem";
     color: "#495057";
   }
+
   .Autocompletestyle-projectInfo {
     width: 9.2rem;
     height: 31px;
@@ -2733,6 +2717,7 @@ body {
     font-size: ".875rem";
     color: "#495057";
   }
+
   .input-group-text {
     background-color: #76a8af;
     font-family: "幼圆";
@@ -2740,9 +2725,11 @@ body {
     color: rgb(255, 255, 255);
     width: 4.1rem;
   }
+
   .cssNikanji {
     width: 3rem;
   }
+
   #inputGroup-sizing-sm {
     font-size: 0.85rem;
   }
@@ -2751,62 +2738,62 @@ body {
     background-repeat: no-repeat;
     width: 8rem;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: white;
   }
+
   #wagesInfoDatePicker {
     background-repeat: no-repeat;
     width: 5.3rem;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: white;
   }
+
   #projectInfoSearchDatePicker {
     background-repeat: no-repeat;
     width: 9.2rem;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: white;
   }
+
   #wagesInfoDatePicker-nextRaiseMonth {
     background-repeat: no-repeat;
     width: 9.1rem;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: white;
   }
+
   #wagesInfoDatePicker-reflectYearAndMonth {
     background-repeat: no-repeat;
     width: 10.35rem;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: white;
   }
+
   #wagesInfoDatePickerReadOnly {
     background-repeat: no-repeat;
     width: 5.3rem;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: #e9ecef;
   }
+
   .Autocompletestyle-salesSend {
     width: 4.5rem;
     height: 31px;
@@ -2816,6 +2803,7 @@ body {
     font-size: ".875rem";
     color: "#495057";
   }
+
   .Autocompletestyle-salesEmpAdd {
     width: 3.5rem;
     height: 31px;
@@ -2825,11 +2813,11 @@ body {
     font-size: ".875rem";
     color: "#495057";
   }
+
   #datePickerReadonly {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: #e9ecef;
@@ -2837,21 +2825,21 @@ body {
     height: calc(1.5em + 0.5rem + 2px);
     background-color: #e9ecef;
   }
+
   #datePicker2 {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: white;
     width: 6.5rem;
   }
+
   #datePicker {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: white;
@@ -2861,8 +2849,7 @@ body {
   #datePicker-empInsert-right {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: white;
@@ -2872,8 +2859,7 @@ body {
   #datePicker-empInsert-right-stayPeriod {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     /*background-color: white;*/
@@ -2883,8 +2869,7 @@ body {
   #datePicker-empInsert-right-immigrationTime {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: white;
@@ -2894,8 +2879,7 @@ body {
   #datePicker-empInsert-right-socialInsuranceDate {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: white;
@@ -2905,8 +2889,7 @@ body {
   #datePicker-employeeSearch {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: white;
@@ -2916,13 +2899,13 @@ body {
   #datePicker-empInsert-left {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: white;
     width: 7.1rem !important;
   }
+
   .input-group-text {
     background-color: #76a8af;
     font-family: "幼�?";
@@ -2943,32 +2926,32 @@ body {
     background-repeat: no-repeat;
     width: 8.5rem;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: white;
   }
+
   #workStartPeriodDatePicker {
     background-repeat: no-repeat;
     /* width: 6rem; */
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: white;
   }
+
   #workStartPeriodDatePickerReadOnly {
     background-repeat: no-repeat;
     width: 6rem;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: #e9ecef;
   }
+
   .Autocompletestyle-branchInsertInfo {
     width: 11.7rem;
     height: 31px;
@@ -2978,6 +2961,7 @@ body {
     font-size: ".875rem";
     color: "#495057";
   }
+
   .Autocompletestyle-siteInfo-relatedEmployees {
     /* width: 6.93rem; */
     height: 31px;
@@ -2987,12 +2971,15 @@ body {
     font-size: ".875rem";
     color: "#495057";
   }
+
   .hiwari {
     width: 3rem;
   }
+
   .unitPrice {
     width: 1rem;
   }
+
   .Autocompletestyle-employeeInsert-developLanguage {
     /* width: 7.13rem; */
     height: 31px;
@@ -3002,6 +2989,7 @@ body {
     font-size: ".875rem";
     color: "#495057";
   }
+
   .Autocompletestyle-employeeInsert-upload {
     width: 4.2rem;
     height: 31px;
@@ -3011,6 +2999,7 @@ body {
     font-size: ".875rem";
     color: "#495057";
   }
+
   #Autocompletestyle-employeeInsert-resumeInfo {
     width: 3.8rem;
     height: 31px;
@@ -3020,6 +3009,7 @@ body {
     font-size: ".875rem";
     color: "#495057";
   }
+
   #Autocompletestyle-employeeInsert-employeeFormCode {
     width: 1.3rem;
     height: 31px;
@@ -3029,6 +3019,7 @@ body {
     font-size: ".875rem";
     color: "#495057";
   }
+
   .Autocompletestyle-bpInfo-bpBelongCustomerCode {
     width: 9rem;
     height: 31px;
@@ -3038,11 +3029,11 @@ body {
     font-size: 0.85rem;
     color: "#495057";
   }
+
   #datePickerReadonlyDefault-bpInfo {
     background-repeat: no-repeat;
     background-position: 15px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: #e9ecef;
@@ -3053,8 +3044,7 @@ body {
     background-repeat: no-repeat;
     background-position: 10px 7px;
     width: 3.96rem;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: #e9ecef;
@@ -3064,8 +3054,7 @@ body {
     background-repeat: no-repeat;
     background-position: 10px 7px;
     /* width: 6.2rem; */
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: #e9ecef;
@@ -3075,8 +3064,7 @@ body {
     background-repeat: no-repeat;
     background-position: 10px 7px;
     width: 4.3rem;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: #e9ecef;
@@ -3086,8 +3074,7 @@ body {
     background-repeat: no-repeat;
     background-position: 10px 7px;
     width: 4.3rem;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: #e9ecef;
@@ -3097,8 +3084,7 @@ body {
     background-repeat: no-repeat;
     background-position: 10px 7px;
     width: 6.5rem;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: #e9ecef;
@@ -3108,22 +3094,22 @@ body {
     background-repeat: no-repeat;
     background-position: 10px 7px;
     width: 7.1rem !important;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: #e9ecef;
   }
+
   #datePicker-bpInfo {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: white;
     /* width: 7.6rem !important; */
   }
+
   .Autocompletestyle-wagesInfo-employeeName {
     width: 10.2rem;
     height: 31px;
@@ -3133,57 +3119,61 @@ body {
     font-size: ".875rem";
     color: "#495057";
   }
+
   #wagesInfoDatePicker-nextRaiseMonth-readOnly {
     background-repeat: no-repeat;
     width: 9.1rem;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: #e9ecef;
   }
+
   #wagesInfoDatePicker-reflectYearAndMonth-readOnly {
     background-repeat: no-repeat;
     /* width: 10.35rem; */
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: #e9ecef;
   }
+
   #expensesInfoDatePicker-readOnly {
     background-repeat: no-repeat;
     width: 8.5rem;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: #e9ecef;
   }
+
   .modal-expensesInfo {
     width: 51%;
     max-width: none !important;
   }
+
   .totalAmountWidth {
     max-width: 380px !important;
   }
+
   #monthlysalesSearchDatePicker {
     background-repeat: no-repeat;
     /* width: 76px; */
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: white;
   }
+
   .customerSalesWidth {
     max-width: 380px !important;
     margin-top: 10px !important;
   }
+
   .customerSalesPeoWidth {
     max-width: 200px !important;
     margin-top: 10px !important;
@@ -3193,8 +3183,7 @@ body {
     background-repeat: no-repeat;
     width: 9.6rem;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: white;
@@ -3211,7 +3200,7 @@ body {
     font-size: 14px !important;
   }
 
-  .react-bs-table thead > tr:first-child > th {
+  .react-bs-table thead>tr:first-child>th {
     padding: 10px 8px;
   }
 }
@@ -3220,6 +3209,7 @@ body {
   #ichiKanjiFor150 {
     width: 2rem;
   }
+
   #niKanjiFor150 {
     width: 3rem;
   }
@@ -3235,8 +3225,7 @@ body {
   #datePicker {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: white;
@@ -3246,8 +3235,7 @@ body {
   #datePicker-duty {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: white;
@@ -3258,8 +3246,7 @@ body {
     border-color: red;
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: white;
@@ -3269,8 +3256,7 @@ body {
   #datePickerReadonlyDefault {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: #e9ecef;
@@ -3280,8 +3266,7 @@ body {
   #datePickerReadonlyDefault-duty {
     background-repeat: no-repeat;
     background-position: 10px 7px;
-    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right
-      center transparent;
+    background: url(date_24px_533395_easyicon.net.ico) no-repeat scroll right center transparent;
     padding-right: 0px;
     height: calc(1.5em + 0.5rem + 2px);
     background-color: #e9ecef;
@@ -3322,12 +3307,13 @@ select {
   background-repeat: no-repeat;
   background-position: right center;
 }
+
 /*清除IE默认下拉按钮，但是测试发现IE10以上有效，IE8，9默认下拉按钮仍旧存在*/
 select::-ms-expand {
   display: none;
 }
 
-.btn-group-sm > .btn,
+.btn-group-sm>.btn,
 .btn-sm {
   flex-shrink: 0;
 }

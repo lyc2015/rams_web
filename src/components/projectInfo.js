@@ -474,7 +474,23 @@ class projectInfo extends Component {
 
   getProjectInfoModel = () => {
     var projectInfoModel = {};
+
+    $("#projectInfoForm").find(':disabled').each(function () {
+      $(this).removeAttr('disabled');
+      $(this).addClass('ichiji-undisabled');
+    });
+
     var formArray = $("#projectInfoForm").serializeArray();
+
+    // Re-disable inputs if needed
+    $("#projectInfoForm").find('.ichiji-undisabled').each(function () {
+      $(this).attr('disabled', 'disabled');
+      $(this).removeClass('ichiji-undisabled')
+
+    });
+
+
+    // var formArray = $("#projectInfoForm").serializeArray();
     $.each(formArray, function (i, item) {
       projectInfoModel[item.name] = item.value;
     });
@@ -602,6 +618,7 @@ class projectInfo extends Component {
   };
 
   getCopyText = () => {
+    let projectInfoModel = this.getProjectInfoModel();
     let {
       projectName,
       admissionPeriod,
@@ -617,8 +634,8 @@ class projectInfo extends Component {
       japaneaseConversationLevel,
       noOfInterviewCode,
       remark,
-    } = this.getProjectInfoModel();
-    console.log(this.getProjectInfoModel(), "this.getProjectInfoModel()");
+    } = projectInfoModel
+    console.log(projectInfoModel, "this.getProjectInfoModel()");
 
     // format code to name from dropDown
     let admissionMonthName = utils.findItemByKey(
@@ -1021,6 +1038,7 @@ class projectInfo extends Component {
                       }
                       freeSolo={admissionDayUserInputMode}
                       disableClearable
+                      disabled={actionType === "detail" ? true : false}
                       renderInput={(params) => {
                         console.log(params, 'params.InputProps')
                         if (admissionDayUserInputMode) {
@@ -1056,7 +1074,7 @@ class projectInfo extends Component {
                             size="small"
                             type={admissionDayUserInputMode ? "number" : 'text'}
                             {...params}
-                            className="auto form-control Autocompletestyle-projectInfo-siteLocation"
+                            className={"auto form-control Autocompletestyle-projectInfo-siteLocation " + (actionType === "detail" ? 'readOnly' : '')}
                             onChange={(event) => {
                               console.log(event.target.value, 'debug:0626-TextField-onInput')
                               if (admissionDayUserInputMode) {
