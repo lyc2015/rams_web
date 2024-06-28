@@ -426,6 +426,9 @@ class siteInfo extends Component {
 
     if (this.props.location.state) {
       let employeeNo = this.props.location.state.employeeNo;
+      const employeeAllName = this.state.employeeInfo.find(
+        (v) => v.code === employeeNo
+      )?.name
       this.setState({
         backPage: this.props.location.state.backPage,
         sendValue: this.props.location.state.sendValue,
@@ -454,6 +457,7 @@ class siteInfo extends Component {
             this.setState({
               siteData: response.data.siteList,
               employeeName: employeeNo,
+              employeeAllName,
               disabledFlag: false,
             });
             let key =
@@ -470,6 +474,7 @@ class siteInfo extends Component {
             message.error(response.data.errorsMessage);
             this.setState({
               employeeName: employeeNo,
+              employeeAllName,
               siteData: [],
               disabledFlag: false,
             });

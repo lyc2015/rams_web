@@ -273,6 +273,8 @@ class bpInfo extends React.Component {
   render() {
     const { bpUnitPrice, bpSalesProgressCode, bpRemark, pbInfoEmployeeName } =
       this.state;
+
+    console.log(this.state, this.props, 'debug:0628-state')
     // テーブルの行の選択
     const selectRow = {
       mode: "radio",
