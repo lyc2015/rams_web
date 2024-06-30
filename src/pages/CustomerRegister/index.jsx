@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react'
+import { Provider } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchNationalityCodes, fetchVISATypes, fetchCustomerBase, fetchStations, fetchMaxId } from '../../redux/customerRegister/actions.js';
+import { useHistory, useLocation } from 'react-router-dom';
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSave } from "@fortawesome/free-solid-svg-icons";
 import dateImg from '../../assets/images/date_icon.ico'
-
-import { DatePicker, message, Select as AntSelect } from "antd";
+import axios from 'axios';
+import { DatePicker, message, Select as AntSelect, AutoComplete } from "antd";
 import FromCol from "../../components/SalesInfo/FromCol/index.jsx";
-import SalesTable from '../../components/SalesInfo/SalesTable/index.jsx';
-
 import request from "../../service/request.js";
-
-import { postcodeApi } from "../../utils/publicUtils.js"
+import * as publicUtils from "../../utils/publicUtils.js";
 import "./index.css";
 
 
@@ -27,6 +29,9 @@ import moment from "moment";
 moment.locale("ja");
 
 const dateIcon = <img src={dateImg} alt="" />;
+
+
+
 
 export default function CustomerRegister() {
 
@@ -98,6 +103,216 @@ export default function CustomerRegister() {
 
     const [updateUser, setUpdateUser] = useState('');
 
+    //国籍 
+    const [allNationalityInfo, setAllNationalityInfo] = useState([]);
+    const [nationalityOptions, setNationalityOptions] = useState('');
+    const [inputNationalityValue, setInputNationalityValue] = useState('');
+
+    //visa
+    const [visaOptions, setVisaOptions] = useState('');
+    const [allVisaInfo, setAllVisaInfo] = useState([]);
+    const [inputVisaValue, setInputVisaValue] = useState('');
+
+    //顧客出所
+    const [customerBaseOptions, setCustomerBaseOptions] = useState('');
+    const [allCustomerBase, setAllCustomerBase] = useState([]);
+    const [inputCustomerBaseValue, setInputCustomerBaseValue] = useState('');
+
+
+    //最寄り駅
+    const [stationOptions, setStationOptions] = useState('');
+    const [allStation, setAllStation] = useState([]);
+    const [inputStationeValue, setInputStationBaseValue] = useState('');
+
+    const handleStationSearch = (value) => {
+        setInputStationBaseValue(value);
+    };
+
+    const handleStationSelect = (value) => {
+        setInputStationBaseValue(value);
+    };
+
+    const filterStationOption = (setInputStationBaseValue, option) =>
+        option.value.toLowerCase().includes(setInputStationBaseValue.toLowerCase());
+
+
+    const handleSearch = (value) => {
+        setInputNationalityValue(value);
+    };
+
+    const handleVisaSearch = (value) => {
+        setInputVisaValue(value);
+    };
+
+    const handleCustomerBaseSearch = (value) => {
+        setInputCustomerBaseValue(value);
+    };
+
+    const handleSelect = (value) => {
+        setInputNationalityValue(value);
+    };
+
+    const handleVisaSelect = (value) => {
+        setInputVisaValue(value);
+    };
+
+    const handleCustomerBaseSelect = (value) => {
+        setInputCustomerBaseValue(value);
+    };
+
+    const filterOption = (setInputNationalityValue, option) =>
+        option.value.toLowerCase().includes(setInputNationalityValue.toLowerCase());
+
+    const filterVisaOption = (setInputVisaValue, option) =>
+        option.value.toLowerCase().includes(setInputVisaValue.toLowerCase());
+
+    const filterCustomerBaseOption = (setInputCustomerBaseValue, option) =>
+        option.value.toLowerCase().includes(setInputCustomerBaseValue.toLowerCase());
+
+
+    //郵便番号api
+    const postApi = (event) => {
+
+        //errorMsgをクリア
+
+        const reg_Tel = /^[0-9]+$/;
+        let value = event.target.value;
+
+
+        message.error(value)
+        console.log('reg_Tel.test(value)', reg_Tel.test(value))
+
+
+        if (value !== '' && reg_Tel.test(value)) {
+            const promise = Promise.resolve(publicUtils.postcodeApi(value));
+            promise.then((data) => {
+
+                if (data !== undefined && data !== null && data !== "") {
+                    setAddress(data)
+
+                } else {
+                    message.error('正しい郵便番号を入力してください')
+                    setAddress('')
+                }
+            });
+        } else if (value !== '' && !reg_Tel.test(value)) {
+            message.error('正しい郵便番号を入力してください')
+        }
+    };
+
+
+
+    //redux---------------------------------------
+    const dispatch = useDispatch();
+    const history = useHistory();
+
+    const nationalityCodes = useSelector(state => state.data.nationalityCodes);
+    const visaTypes = useSelector(state => state.data.visaTypes);
+    const customerSource = useSelector(state => state.data.customerSource);
+    const allStations = useSelector(state => state.data.stations);
+    const maxId = useSelector(state => state.data.maxId);
+    const loading = useSelector(state => state.data.loading);
+    const error = useSelector(state => state.data.error);
+
+
+    useEffect(() => {
+        dispatch(fetchNationalityCodes());
+        dispatch(fetchVISATypes());
+        dispatch(fetchCustomerBase());
+        dispatch(fetchStations());
+        dispatch(fetchMaxId());
+    }, [dispatch]);
+
+    //FETCH_STATION
+
+    useEffect(() => {
+        if (nationalityCodes.length && visaTypes.length && customerSource.length   && maxId) {
+            setAllNationalityInfo(nationalityCodes);
+            setNationalityOptions(nationalityCodes);
+            setAllVisaInfo(visaTypes);
+            setVisaOptions(visaTypes);
+            setAllCustomerBase(customerSource);
+            setCustomerBaseOptions(customerSource);
+            // setAllStation(allStations);
+            // allStations(allStations);
+            setCustomerID(maxId.maxID);
+            message.success("顧客出所、国籍、ビザ情報取得成功");
+
+            console.log('allStations', allStations)
+        }
+    }, [nationalityCodes, visaTypes, customerSource, maxId]);
+
+    if (loading) return <div>Loading...</div>;
+    if (error) return <div>Error: {error.message}</div>;
+
+    //---------------------------------------
+
+
+
+    //登録する際に、各項目をチェック
+    const checkItems = () => {
+
+        const resultNationality = allNationalityInfo.find(item => item.value === inputNationalityValue)
+        const resultVisa = allVisaInfo.find(item => item.value === inputVisaValue)
+        const resultCustomerBase = allCustomerBase.find(item => item.value === inputCustomerBaseValue)
+
+        if (inputCustomerBaseValue === '') {
+            message.error('顧客出所を入力してください');
+        }
+        else if (inputCustomerBaseValue !== '' && resultCustomerBase === undefined) {
+            message.error('正しい顧客出所を入力してください');
+        }
+        else if (customerLastName === '' || customerFirstName === '') {
+            message.error('お客様名を入力してください');
+        }
+
+
+
+    }
+
+
+
+
+
+    const testRegister = () => {
+
+        checkItems();
+
+        const resultNationality = allNationalityInfo.find(item => item.value === inputNationalityValue)
+        const resultVisa = allVisaInfo.find(item => item.value === inputVisaValue)
+        const resultCustomerBase = allCustomerBase.find(item => item.value === inputCustomerBaseValue)
+
+        if (inputNationalityValue !== '' && resultNationality !== undefined) {
+            setNationalityCode(resultNationality.key ? resultNationality.key : '');
+        } else if (inputNationalityValue !== '' && resultNationality === undefined) {
+            message.error('正しい国籍を入力してください');
+        }
+
+        if (inputVisaValue !== '' && resultVisa !== undefined) {
+            setResidenceCode(resultVisa.key);
+        } else if (inputVisaValue !== '' && resultVisa === undefined) {
+            message.error('正しいビザタイプを入力してください');
+        }
+
+
+        //赋值
+        if (inputCustomerBaseValue !== '' && resultCustomerBase !== undefined) {
+            setCustomerBase(resultCustomerBase.key);
+        }
+
+
+        console.log('resultNationality----', resultNationality)
+
+        //  console.log('resultNationality.key----', resultNationality.key )
+        //  console.log('resultVisa.key----', resultVisa.key)
+        //  console.log('resultCustomerBase.key.key----', resultCustomerBase.key)
+
+
+
+
+
+    }
+
 
     return (
         <div className="container"><br></br>
@@ -106,6 +321,7 @@ export default function CustomerRegister() {
                     <h2>お客様情報登録</h2>
                 </Col>
             </Row>
+
 
             <Form>
                 <Row>
@@ -118,9 +334,8 @@ export default function CustomerRegister() {
                             </InputGroup.Prepend>
                             <FormControl
                                 value={customerID}
-                                onChange={(e) => setCustomerID(e.target.value)}
+                                // onChange={(e) => setCustomerID(e.target.value)}
                                 size="sm"
-                                maxLength={7}
                                 disabled
                             />
                         </InputGroup>
@@ -133,11 +348,17 @@ export default function CustomerRegister() {
                                     顧客出所
                                 </InputGroup.Text>
                             </InputGroup.Prepend>
-                            <FormControl
-                                value={customerBase}
-                                size="sm"
-                                onChange={(e) => setCustomerBase(e.target.value)}
-                            />
+
+                            <AutoComplete
+                                style={{ flexGrow: '1' }}
+                                options={customerBaseOptions}
+                                onSearch={handleCustomerBaseSearch}
+                                value={inputCustomerBaseValue}
+                                onChange={setInputCustomerBaseValue}
+                                onSelect={handleCustomerBaseSelect}
+                                filterOption={filterCustomerBaseOption}>
+                            </AutoComplete>
+
                         </InputGroup>
                     </Col>
                 </Row><br />
@@ -196,12 +417,17 @@ export default function CustomerRegister() {
                                     国籍
                                 </InputGroup.Text>
                             </InputGroup.Prepend>
-                            <FormControl
-                                value={nationality}
-                                size="sm"
-                                maxLength={7}
-                                onChange={(e) => setNationality(e.target.value)}
-                            />
+
+                            <AutoComplete
+                                options={nationalityOptions}
+                                onSearch={handleSearch}
+                                style={{ flexGrow: '1' }}
+                                value={inputNationalityValue}
+                                onChange={setInputNationalityValue}
+                                onSelect={handleSelect}
+                                filterOption={filterOption}>
+                            </AutoComplete>
+
                         </InputGroup>
                     </Col>
 
@@ -212,12 +438,19 @@ export default function CustomerRegister() {
                                     ビザ
                                 </InputGroup.Text>
                             </InputGroup.Prepend>
-                            <FormControl
-                                value={visa}
-                                size="sm"
-                                maxLength={10}
-                                onChange={(e) => setVisa(e.target.value)}
-                            />
+
+
+                            <AutoComplete
+                                options={visaOptions}
+                                onSearch={handleVisaSearch}
+                                style={{ flexGrow: '1' }}
+                                value={inputVisaValue}
+                                onChange={setInputVisaValue}
+                                onSelect={handleVisaSelect}
+                                filterOption={filterVisaOption}>
+                            </AutoComplete>
+
+
                         </InputGroup>
                     </Col>
                 </Row><br />
@@ -386,12 +619,17 @@ export default function CustomerRegister() {
                                     最寄駅
                                 </InputGroup.Text>
                             </InputGroup.Prepend>
-                            <FormControl
-                                value={station}
-                                size="sm"
-                                maxLength={7}
-                                onChange={(e) => setStation(e.target.value)}
-                            />
+
+
+                            <AutoComplete
+                                style={{ flexGrow: '1' }}
+                                options={stationOptions}
+                                onSearch={handleStationSearch}
+                                value={inputStationeValue}
+                                onChange={setInputStationBaseValue}
+                                onSelect={handleStationSelect}
+                                filterOption={filterStationOption}>
+                            </AutoComplete>
                         </InputGroup>
                     </Col>
 
@@ -412,7 +650,6 @@ export default function CustomerRegister() {
                     </Col>
                 </Row><br />
 
-
                 <Row>
                     <Col md={3}>
                         <InputGroup size="sm" >
@@ -426,10 +663,10 @@ export default function CustomerRegister() {
                                 size="sm"
                                 maxLength={7}
                                 onChange={(e) => setPostcode(e.target.value)}
+                                onBlur={postApi}
                             />
                         </InputGroup>
                     </Col>
-
 
                     <Col md={5}>
                         <InputGroup size="sm" >
@@ -449,7 +686,7 @@ export default function CustomerRegister() {
                 </Row><br />
 
                 <div style={{ textAlign: "center" }}>
-                    <Button size="sm" variant="info"  >
+                    <Button size="sm" variant="info" onClick={testRegister} >
                         登録
                     </Button>
 
@@ -459,8 +696,11 @@ export default function CustomerRegister() {
                 </div>
 
             </Form>
-
+            <br />
         </div>
+
+        // <Provider store={store}>
+        // </Provider>
 
     )
 }
