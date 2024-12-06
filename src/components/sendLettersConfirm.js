@@ -2314,13 +2314,13 @@ Email：` +
               </InputGroup.Prepend>
               <textarea
                 ref={(textarea) => (this.textArea = textarea)}
-                maxLength="100"
+                maxLength="300"
                 value={this.state.greetinTtext}
                 id="greetinTtext"
                 name="greetinTtext"
                 onChange={this.valueChange}
                 style={{
-                  height: "60px",
+                  height: "150px",
                   width: "100%",
                   resize: "none",
                   overflow: "hidden",

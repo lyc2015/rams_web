@@ -1249,7 +1249,7 @@ class manageSituation extends React.Component {
               resumeInfo2: row.resumeInfo2 === null ? "" : row.resumeInfo2,
               resumeName1: row.resumeName1 === null ? "" : row.resumeName1,
               resumeName2: row.resumeName2 === null ? "" : row.resumeName2,
-              resumeDate: row.resumeDate === null ? "" : row.resumeDate,
+              resumeDate: row.resumeDate == null ? "" : row.resumeDate,
               customerContractStatus:
                 row.customerContractStatus === null
                   ? ""
@@ -1364,7 +1364,7 @@ class manageSituation extends React.Component {
                 resumeInfo2: row.resumeInfo2 === null ? "" : row.resumeInfo2,
                 resumeName1: row.resumeName1 === null ? "" : row.resumeName1,
                 resumeName2: row.resumeName2 === null ? "" : row.resumeName2,
-                resumeDate: row.resumeDate === null ? "" : row.resumeDate,
+                resumeDate: row.resumeDate == null ? "" : row.resumeDate,
                 customerContractStatus:
                   row.customerContractStatus === null
                     ? ""
@@ -1498,7 +1498,7 @@ class manageSituation extends React.Component {
               resumeInfo2: row.resumeInfo2 === null ? "" : row.resumeInfo2,
               resumeName1: row.resumeName1 === null ? "" : row.resumeName1,
               resumeName2: row.resumeName2 === null ? "" : row.resumeName2,
-              resumeDate: row.resumeDate === null ? "" : row.resumeDate,
+              resumeDate: row.resumeDate == null ? "" : row.resumeDate,
               customerContractStatus:
                 row.customerContractStatus === null
                   ? ""
@@ -1612,7 +1612,7 @@ class manageSituation extends React.Component {
                 unitPrice: row.price === null ? row.unitPrice : row.price,
                 resumeInfo1: row.resumeInfo1 === null ? "" : row.resumeInfo1,
                 resumeInfo2: row.resumeInfo2 === null ? "" : row.resumeInfo2,
-                resumeDate: row.resumeDate === null ? "" : row.resumeDate,
+                resumeDate: row.resumeDate == null ? "" : row.resumeDate,
                 resumeName1: row.resumeName1 === null ? "" : row.resumeName1,
                 resumeName2: row.resumeName2 === null ? "" : row.resumeName2,
                 customerContractStatus:
