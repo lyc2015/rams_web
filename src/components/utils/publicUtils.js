@@ -376,6 +376,12 @@ export function strToTime(datetime) {
   }
 }
 
+//月の最初の日を取得する
+export function getMonthFirstDay(datetime) {
+    const now = !!datetime ? new Date(datetime) : new Date()
+    return new Date(now.getFullYear(), now.getMonth(), 1)
+}
+
 // 誕生日ー年齢計算
 export function birthday_age(age) {
   if (age !== undefined && age !== null && age !== "") {

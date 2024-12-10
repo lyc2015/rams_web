@@ -2362,9 +2362,9 @@ class manageSituation extends React.Component {
       yearsOfExperience;
     if (japaneaseConversationLevel === "" || japaneaseConversationLevel === null) {
       let japaneseLevelCode = salesSituationLists[Number(this.state.rowNo) - 1].japaneseLevelCode
-      salesSituationLists[Number(this.state.rowNo) - 1].japaneaseLevelDesc = this.state.japaneseLevels.find((v) => v.code === japaneseLevelCode).name;
+      salesSituationLists[Number(this.state.rowNo) - 1].japaneaseLevelDesc = this.state.japaneseLevels.find((v) => v.code === japaneseLevelCode)?.name||'';
     } else {
-      let temp = this.state.japaneaseConversationLevels.find((v) => v.code === japaneaseConversationLevel).name
+      let temp = this.state.japaneaseConversationLevels.find((v) => v.code === japaneaseConversationLevel)?.name||''
       if (temp.endsWith('業務確認')) {
         temp = temp.substring(0, temp.length - 5);
       }
