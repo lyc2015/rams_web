@@ -1558,8 +1558,8 @@ class siteInfo extends Component {
           </Modal.Header>
           <Modal.Body>
             <BpInfoModel
-              /*bpInfoModel={bpInfoModel}*/ customer={this.state.customer}
-              actionType={"update"}
+              customer={this.state.customer}
+              actionType={"updateInsert"}
               employeeNo={this.state.employeeName}
               employeeName={this.state.employeeAllName}
               employeeLastName={this.state.employeeLastName}

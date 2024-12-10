@@ -44,6 +44,7 @@ class bpInfo extends React.Component {
     customer: store.getState().dropDown[15].slice(1),
     salesProgressCodes: store.getState().dropDown[16].slice(1),
     serverIP: store.getState().dropDown[store.getState().dropDown.length - 1],
+    actionType: this.props.actionType
   };
   valueChange = (event) => {
     this.setState({
@@ -67,15 +68,21 @@ class bpInfo extends React.Component {
     }
   };
   // リセット
-  resetButton = () => {
+  resetButton = (BP) => {
+    !BP && this.setState({
+        bpBelongCustomerCode: "" // 選択中のBP所属
+    })
     this.setState({
-      bpBelongCustomerCode: "", // 選択中のBP所属
       bpUnitPrice: "", // 単価
       bpSalesProgressCode:
         String(this.props.employeeNo).substring(0, 3) === "BPR" ? "3" : "4", // 選択中の営業状況
       bpOtherCompanyAdmissionEndDate: "", // 所属現場終年月
       bpRemark: "", // 備考
+      oldUnitPriceStartMonth: null,
+      actionType: this.props.actionType,
+      unitPriceStartMonth: ''
     });
+    this.refs.bpInfoTable.reset(); 
   };
 
   deleteRow = () => {
@@ -99,6 +106,7 @@ class bpInfo extends React.Component {
             setTimeout(() => this.setState({ myToastShow: false }), 3000);
           }
           this.getbpInfoList();
+          this.resetButton(true);
         })
         .catch((error) => {
           console.error("Error - " + error);
@@ -133,6 +141,9 @@ class bpInfo extends React.Component {
       .post(this.state.serverIP + "bpInfo/getBpInfo", formData)
       .then((response) => response.data)
       .then((data) => {
+        //let monthList = data.bpInfoList.map(item =>
+        //    !!item.unitPriceStartMonth && utils.converToLocalTime(item.unitPriceStartMonth, false)
+        //)
         this.setState({
           bpInfoTable: data.bpInfoList,
           bpBelongCustomerCode:
@@ -146,23 +157,13 @@ class bpInfo extends React.Component {
                 data.model.bpOtherCompanyAdmissionEndDate,
                 false
               ),
+          //monthList: monthList.filter(item => !!item)
         });
-        if (data.bpInfoList.length > 0) {
-          this.setState({
-            unitPriceStartMonth: utils.converToLocalTime(
-              data.bpInfoList[data.bpInfoList.length - 1].unitPriceStartMonth,
-              false
-            ),
-            bpUnitPrice:
-              data.bpInfoList[data.bpInfoList.length - 1].bpUnitPrice,
-            bpRemark: data.bpInfoList[data.bpInfoList.length - 1].bpRemark,
-          });
-        }
       });
   };
 
   setEmployeeName = () => {
-    if (this.props.employeeName === undefined) {
+    if (!this.props.employeeName) {
       this.setState({
         pbInfoEmployeeName: "",
       });
@@ -178,23 +179,13 @@ class bpInfo extends React.Component {
       this.setState({
         oldUnitPriceStartMonth: row.unitPriceStartMonth,
         unitPriceStartMonth:
-          row.unitPriceStartMonth === null ||
-            row.unitPriceStartMonth === undefined ||
-            row.unitPriceStartMonth === ""
-            ? ""
-            : utils.converToLocalTime(row.unitPriceStartMonth, false),
-        bpUnitPrice:
-          row.bpUnitPrice === null ||
-            row.bpUnitPrice === undefined ||
-            row.bpUnitPrice === ""
-            ? ""
-            : row.bpUnitPrice,
-        bpRemark:
-          row.bpRemark === null ||
-            row.bpRemark === undefined ||
-            row.bpRemark === ""
-            ? ""
-            : row.bpRemark,
+          !row.unitPriceStartMonth ? "" : utils.converToLocalTime(row.unitPriceStartMonth, false),
+        bpUnitPrice: !row.bpUnitPrice  ? "" : row.bpUnitPrice,
+        bpRemark: !row.bpRemark ? "" : row.bpRemark,
+        bpSalesProgressCode: row.bpSalesProgressCode,
+        actionType: this.props.actionType === 'updateInsert' ? 'update' : this.props.actionType,
+        bpBelongCustomerCode: row.bpBelongCustomerCode,
+        bpOtherCompanyAdmissionEndDate: row.bpOtherCompanyAdmissionEndDate
       });
     } else {
       this.setState({
@@ -202,6 +193,7 @@ class bpInfo extends React.Component {
         unitPriceStartMonth: "",
         bpUnitPrice: "",
         bpRemark: "",
+        actionType: this.props.actionType === 'updateInsert' ? 'updateInsert' : this.props.actionType
       });
     }
   };
@@ -235,7 +227,7 @@ class bpInfo extends React.Component {
       bpRemark: this.state.bpRemark,
       oldUnitPriceStartMonth: this.state.oldUnitPriceStartMonth,
     };
-    if (this.props.actionType === "update") {
+    if (this.state.actionType === "update" || this.state.actionType === 'updateInsert') {
       axios
         .post(this.state.serverIP + "employee/updatebpInfo", bpInfoModel)
         .then((response) => {
@@ -271,10 +263,8 @@ class bpInfo extends React.Component {
     }
   };
   render() {
-    const { bpUnitPrice, bpSalesProgressCode, bpRemark, pbInfoEmployeeName } =
-      this.state;
+    const { bpUnitPrice, bpSalesProgressCode, bpRemark, pbInfoEmployeeName } = this.state;
 
-    console.log(this.state, this.props, 'debug:0628-state')
     // テーブルの行の選択
     const selectRow = {
       mode: "radio",
@@ -341,7 +331,7 @@ class bpInfo extends React.Component {
                       this.getCustomer(event, values)
                     }
                     options={this.state.customer}
-                    disabled={this.props.actionType === "detail" ? true : false}
+                    disabled={!!(this.state.actionType === "detail")}
                     getOptionLabel={(option) => option.name || ""}
                     renderInput={(params) => (
                       <div ref={params.InputProps.ref}>
@@ -353,7 +343,7 @@ class bpInfo extends React.Component {
                           id="bpBelongCustomerCode"
                           style={{
                             backgroundColor:
-                              this.props.actionType === "detail"
+                              this.state.actionType === "detail"
                                 ? "#e9ecef"
                                 : "",
                           }}
@@ -378,7 +368,7 @@ class bpInfo extends React.Component {
                     name="bpSalesProgressCode"
                     value={bpSalesProgressCode}
                     autoComplete="off"
-                    disabled={this.props.actionType === "detail" ? true : false}
+                    disabled={!!(this.state.actionType === "detail")}
                   >
                     {this.state.salesProgressCodes.map((date) => (
                       <option key={date.code} value={date.code}>
@@ -403,10 +393,12 @@ class bpInfo extends React.Component {
                     autoComplete="off"
                     showMonthYearPicker
                     showFullMonthYearPicker
+                    //minDate={utils.getMonthFirstDay()}
+                    //excludeDates={this.state.monthList}
                     showDisabledMonthNavigation
                     className="form-control form-control-sm"
                     id={
-                      this.props.actionType === "detail" ||
+                      this.state.actionType === "detail" ||
                         bpSalesProgressCode === "4"
                         ? "datePickerReadonlyDefault-bpInfo"
                         : "datePicker-bpInfo"
@@ -414,10 +406,8 @@ class bpInfo extends React.Component {
                     dateFormat={"yyyy/MM"}
                     locale="ja"
                     disabled={
-                      this.props.actionType === "detail" ||
-                        bpSalesProgressCode === "4"
-                        ? true
-                        : false
+                      this.state.actionType === "detail" ||
+                        !!(bpSalesProgressCode === "4")
                     }
                   />
                 </InputGroup>
@@ -439,7 +429,7 @@ class bpInfo extends React.Component {
                     }
                     size="sm"
                     name="bpUnitPrice"
-                    disabled={this.props.actionType === "detail" ? true : false}
+                    disabled={!!(this.props.actionType === "detail")}
                     maxLength="3"
                     controls={false}
                   />
@@ -464,9 +454,10 @@ class bpInfo extends React.Component {
                     showMonthYearPicker
                     showFullMonthYearPicker
                     showDisabledMonthNavigation
+                    //minDate={utils.getMonthFirstDay(this.state.unitPriceStartMonth)}
                     className="form-control form-control-sm"
                     id={
-                      this.props.actionType === "detail" ||
+                      this.state.actionType === "detail" ||
                         bpSalesProgressCode === "4"
                         ? "datePickerReadonlyDefault-bpInfo"
                         : "datePicker-bpInfo"
@@ -474,10 +465,8 @@ class bpInfo extends React.Component {
                     dateFormat={"yyyy/MM"}
                     locale="ja"
                     disabled={
-                      this.props.actionType === "detail" ||
-                        bpSalesProgressCode === "4"
-                        ? true
-                        : false
+                      this.state.actionType === "detail" ||
+                        !!(bpSalesProgressCode === "4")
                     }
                   />
                 </InputGroup>
@@ -493,7 +482,7 @@ class bpInfo extends React.Component {
                     name="bpRemark"
                     value={bpRemark}
                     autoComplete="off"
-                    disabled={this.props.actionType === "detail" ? true : false}
+                    disabled={!!(this.state.actionType === "detail")}
                     onChange={this.valueChange}
                     type="text"
                     aria-label="Small"
@@ -506,7 +495,7 @@ class bpInfo extends React.Component {
           </Form.Group>
           <div
             style={{ textAlign: "center" }}
-            hidden={this.props.actionType === "detail"}
+            hidden={this.state.actionType === "detail"}
           >
             <Button
               size="sm"
@@ -516,7 +505,7 @@ class bpInfo extends React.Component {
               on="true"
             >
               <FontAwesomeIcon icon={faSave} />{" "}
-              {this.props.actionType === "update" ? "更新" : "登録"}
+              {this.state.actionType === "update" ? "更新" : "登録"}
             </Button>{" "}
             <Button size="sm" variant="info" onClick={this.resetButton}>
               <FontAwesomeIcon icon={faUndo} /> リセット
@@ -524,7 +513,7 @@ class bpInfo extends React.Component {
           </div>
           <div
             style={{ textAlign: "right" }}
-            hidden={this.props.actionType === "detail"}
+            hidden={this.state.actionType === "detail"}
           >
             <Col>
               <Button
@@ -592,16 +581,4 @@ class bpInfo extends React.Component {
   }
 }
 
-/*
- * const mapStateToProps = state => { return { customer:
- * state.data.dataReques.length >= 1 ? state.data.dataReques[15].slice(1) : [],
- * salesProgressCodes: state.data.dataReques.length >= 1 ?
- * state.data.dataReques[16].slice(1) : [], serverIP:
- * state.data.dataReques[state.data.dataReques.length - 1],
- *  } };
- *
- * const mapDispatchToProps = dispatch => { return { fetchDropDown: () =>
- * dispatch(fetchDropDown()) } }; export default connect(mapStateToProps,
- * mapDispatchToProps)(bpInfo);
- */
 export default bpInfo;
