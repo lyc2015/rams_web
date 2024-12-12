@@ -469,6 +469,7 @@ class WagesInfo extends Component {
       );
     }
     this.getemployeeStatus(this.state.employeeNo);
+    this.setState({period: ''})
   };
 
   /**
@@ -671,6 +672,8 @@ class WagesInfo extends Component {
             errorsMessageValue: result.data.errorsMessage,
           });
         }
+        let _row = result.data.wagesInfoList?.length >= 1 && result.data.wagesInfoList[result.data.wagesInfoList.length-1]
+        this.handleRowSelect(_row, true)
       })
       .catch((error) => {
         console.log(error);
@@ -1334,6 +1337,7 @@ class WagesInfo extends Component {
       clickToSelect: true, // click to select, default is false
       clickToExpand: true, // click to expand row, default is false
       onSelect: this.handleRowSelect,
+      selected: [this.state.period]
     };
     //テーブルの列の選択(詳細)
     const selectRowDetail = {};

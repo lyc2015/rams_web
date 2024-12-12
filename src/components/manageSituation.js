@@ -2540,7 +2540,7 @@ class manageSituation extends React.Component {
     );
 
     return (
-      <div>
+      <div className="manageSituatin">
         <div style={{ display: this.state.myToastShow ? "block" : "none" }}>
           <MyToast
             myToastShow={this.state.myToastShow}
