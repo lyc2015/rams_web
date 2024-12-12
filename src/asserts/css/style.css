@@ -3317,3 +3317,8 @@ select::-ms-expand {
 .btn-sm {
   flex-shrink: 0;
 }
+
+.manageSituatin .table-hover tbody tr:hover{
+  background-color: rgba(0, 0, 0, .275); /* 鼠标悬停的背景颜色 */
+  color: #212529; /* 悬停文字颜色 */
+}

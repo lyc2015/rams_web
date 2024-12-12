@@ -363,8 +363,8 @@ const AnnualSalesSituationConfirm = ({ serverIP, customerDrop }) => {
               onChange={handleSelectSalesStaffChange}
               className="filterButtonSelect"
               options={customerDrop?.map((item) => ({
-                value: item.name,
-                label: item.text,
+                value: item.employeeFormCode == "3" ? `${item.name}(転)` : item.name,
+                label: item.employeeFormCode == "3" ? `${item.text}(転)` : item.text,
                 code: item.code,
               }))}
             />
