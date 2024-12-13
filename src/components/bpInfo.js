@@ -185,7 +185,7 @@ class bpInfo extends React.Component {
         bpSalesProgressCode: row.bpSalesProgressCode,
         actionType: this.props.actionType === 'updateInsert' ? 'update' : this.props.actionType,
         bpBelongCustomerCode: row.bpBelongCustomerCode,
-        bpOtherCompanyAdmissionEndDate: row.bpOtherCompanyAdmissionEndDate
+        bpOtherCompanyAdmissionEndDate: utils.converToLocalTime(row.bpOtherCompanyAdmissionEndDate, false)
       });
     } else {
       this.setState({
