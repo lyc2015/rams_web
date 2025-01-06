@@ -273,3 +273,28 @@ h2 {
     margin-left: -1.6rem;
   }
 } */
+
+.payroll-table {
+  margin: 10px 0;
+  .ant-table-thead {
+    > tr {
+      > th {
+        background: #5599FF !important;
+        vertical-align: middle;
+        font-weight: 700;
+        font-size: 14px;
+      }
+    }
+  }
+}
+
+.payroll-table .salary-increase-item>td{
+  border-bottom: 2px solid #00bfff;
+}
+.payroll-table .salary-item>td:last-child{
+  background-color: #ffffff !important;
+}
+
+.payroll-table .ant-table-tbody > tr:hover > td {
+  background: none !important; /* 禁用所有表格的 hover 背景 */
+}

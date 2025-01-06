@@ -8,7 +8,6 @@ import {
   Navbar,
   Container,
 } from "react-bootstrap";
-import $ from "jquery";
 import title from "../asserts/images/LYCmark.png";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import EmployeeInsert from "./employeeInsert";
@@ -37,6 +36,7 @@ import salesMoneySet from "./salesMoneySet";
 import salesProfit from "./salesProfit";
 import salesPoint from "./salesPoint";
 import WagesInfo from "./wagesInfo";
+import Payroll from "./payroll";
 import workRepot from "./workRepot";
 import costRegistration from "./costRegistration";
 import DutyRegistration from "./dutyRegistration";
@@ -138,6 +138,7 @@ class SubMenu extends Component {
           resultMap.data["authorityName"] +
           "：" +
           resultMap.data["employeeName"];
+          sessionStorage.setItem("employeeNo", resultMap.data["employeeNo"])
       } else {
         this.props.history.push("/");
       }
@@ -1058,6 +1059,32 @@ class SubMenu extends Component {
                                                 icon={faCommentDollar}
                                               />{" "}
                                               給料情報
+                                            </Link>
+                                          </div>
+                                        </ListGroup.Item>
+                                        <ListGroup.Item
+                                          style={
+                                            this.state.hover.search("7") !== -1 ? subMenuHover : subMenu
+                                          }
+                                          onMouseEnter={this.toggleHover.bind( this, "給料・売上-7" )}
+                                          onMouseLeave={this.toggleHover.bind( this, "給料・売上" )}
+                                          onClick={this.shuseiTo.bind(this, {
+                                            pathname: "/subMenuManager/payroll",
+                                          })}
+                                        >
+                                          <div>
+                                            <Link
+                                              className={
+                                                this.state.hover.search("7") !== -1 ? "my-tabcolor-font-hover" : "my-tabcolor-font"
+                                              }
+                                              to="/subMenuManager/payroll"
+                                            >
+                                              <FontAwesomeIcon
+                                                className="fa-fw"
+                                                size="lg"
+                                                icon={faCommentDollar}
+                                              />{" "}
+                                              年間給料精算
                                             </Link>
                                           </div>
                                         </ListGroup.Item>
@@ -2360,6 +2387,11 @@ class SubMenu extends Component {
                   exact
                   path={`${this.props.match.url}/wagesInfo`}
                   component={WagesInfo}
+                />
+                <Route
+                  exact
+                  path={`${this.props.match.url}/payroll`}
+                  component={Payroll}
                 />
                 <Route
                   exact
