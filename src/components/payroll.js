@@ -260,9 +260,9 @@ export default class Payroll extends Component {
         let table_key = this.state.table_key;
         const newList = [...this.state.payrollList];
 
-        newList[index][key] = e.target.value
+        newList[index+(this.state.currentPage-1)*this.state.pageSize][key] = e.target.value.replace(/^0/, "")
 
-        this.setState({ table_key: table_key + '1', payrollList: [...newList] }, () => {
+        this.setState({ table_key: table_key + `1`, payrollList: [...newList] }, () => {
             this[`${key}${index}`].focus()
         })
     }
