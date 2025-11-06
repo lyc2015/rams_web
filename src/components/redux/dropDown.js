@@ -91,7 +91,7 @@ var methodNameList = [
   "getServerIP", // 最後, 如果有新增的配置必须在getServerIP之前
 ];
 
-const serverIP = "http://127.0.0.1:8080/";
+const serverIP = "/api-backend/";
 
 export function fetchDropDown(state = defaultState) {
   var outArray = [];
@@ -105,8 +105,16 @@ export function fetchDropDown(state = defaultState) {
     url: serverIP + "initializationPage",
     data: par,
     async: false,
+    xhrFields: {
+      // 允许带上凭据，解决 CORS 问题
+      withCredentials: true,
+    },
     contentType: "application/json",
     success: function (resultList) {
+      if (!resultList || resultList.length === 0) {
+        console.warn("fetchDropDown: API 返回空数据");
+        return;
+      }
       for (let j = 0; j < resultList.length; j++) {
         var array = [{ code: "", name: "" }];
         var list = resultList[j];
@@ -116,9 +124,43 @@ export function fetchDropDown(state = defaultState) {
         outArray.push(array);
       }
     },
+    error: function(xhr, status, error) {
+      console.error("fetchDropDown: 后端 API 调用失败");
+      console.error("URL:", serverIP + "initializationPage");
+      console.error("状态码:", xhr.status);
+      console.error("状态文本:", xhr.statusText);
+      console.error("错误信息:", error);
+      console.error("响应:", xhr.responseText);
+    }
   });
-  outArray.push(outArray[outArray.length - 1]?.slice(1)[0].name);
-  console.log(outArray, 'outArray')
+  
+  // 从 getServerIP 的结果中提取 serverIP
+  if (outArray.length > 0) {
+    // getServerIP 是最后一个方法，应该返回最后一个结果
+    const getServerIPIndex = methodNameList.length - 1; // getServerIP 是最后一个
+    if (outArray[getServerIPIndex]) {
+      const serverIPArray = outArray[getServerIPIndex];
+      // 跳过第一个空元素，取第一个实际数据
+      const serverIPValue = serverIPArray?.slice(1)?.[0]?.name;
+      if (serverIPValue && serverIPValue !== "") {
+        // 将绝对路径转换为代理路径，避免 CORS 问题
+        let proxyServerIP = serverIPValue;
+        if (serverIPValue.includes('http://127.0.0.1:8080') || serverIPValue.includes('http://localhost:8080')) {
+          proxyServerIP = "/api-backend/";
+        }
+        outArray.push(proxyServerIP);
+      } else {
+        console.error("getServerIP 返回的数据格式不正确，serverIP 为 undefined");
+        outArray.push(undefined);
+      }
+    } else {
+      console.error("无法找到 getServerIP 的结果，serverIP 为 undefined");
+      outArray.push(undefined);
+    }
+  } else {
+    console.error("fetchDropDown: outArray 为空，API 调用失败，serverIP 为 undefined");
+    outArray.push(undefined);
+  }
   return outArray;
 }
 /**

@@ -2,6 +2,21 @@ const { createProxyMiddleware } = require('http-proxy-middleware');
 
 
 module.exports = function(app) {
+	// 后端 API 代理，解决 CORS 问题 - 放在最前面优先匹配
+	app.use('/api-backend', createProxyMiddleware({
+		target: "http://localhost:8080",
+		changeOrigin: true,
+		secure: false,
+		ws: true,
+		logLevel: 'debug',
+		pathRewrite: {
+			"^/api-backend": ""
+		},
+		onError: (err, req, res) => {
+			console.error('[代理] 错误:', err.message);
+		}
+	}))
+
 	app.use(createProxyMiddleware('/api',
 		{
 			target: "https://asia-northeast1-tsunagi-all.cloudfunctions.net/",
