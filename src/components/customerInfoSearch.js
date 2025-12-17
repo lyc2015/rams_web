@@ -708,7 +708,7 @@ class CustomerInfoSearch extends Component {
                       ) || ""
                   }
                   options={store.getState().dropDown[73].slice(1)}
-                  getOptionLabel={(option) => (option.text ? option.text : "")}
+                  getOptionLabel={(option) => (option.name ? option.name : "")}
                   onChange={(event, values) => this.getCustomer(event, values)}
                   renderOption={(option) => {
                     return <React.Fragment>{option.name || ""}</React.Fragment>;
