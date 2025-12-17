@@ -139,6 +139,16 @@ class siteSearch extends Component {
     admissionEndDate: new Date(),
   };
   componentDidMount() {
+    this.state.customerMaster = this.state.customerMaster.map(v=>{
+      let cusName = '';
+      if(v.customerName) {
+        cusName = v.customerName.replace("株式会社", "");
+      }
+      v.customerFullName =v.name+'('+ cusName +')'
+      return v;
+    })
+    console.log('現場情報検索 componentDidMount  =>',this.state.customerMaster)
+
     $("#siteInfo").attr("disabled", true);
     if (this.props.location.state !== undefined) {
       var sendValue = this.props.location.state.sendValue;
@@ -682,7 +692,7 @@ class siteSearch extends Component {
                       id="customerNo"
                       name="customerNo"
                       options={this.state.customerMaster}
-                      getOptionLabel={(option) => option.name || ""}
+                      getOptionLabel={(option) => option.customerFullName || ""}
                       value={
                         this.state.customerMaster.find(
                           (v) => v.code === this.state.customerNo
