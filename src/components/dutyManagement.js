@@ -102,6 +102,8 @@ class dutyManagement extends React.Component {
     } else {
       this.searchDutyManagement();
     }
+    // filter ex-employee
+    this.setState({ employeeInfo: this.state.employeeInfo.filter(v=> v.employeeFormCode!='4') });
   }
   //onchange
   approvalStatusChange = (event) => {
