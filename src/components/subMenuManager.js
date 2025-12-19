@@ -22,6 +22,7 @@ import masterInsert from "./masterInsert";
 import masterUpdate from "./masterUpdate";
 import dataShare from "./dataShare";
 import systemSet from "./systemSet";
+import PartnerCompaniesInfoSearch from "./partnerCompaniesInfoSearch";
 import profitChartist from "./profitChartist";
 import CustomerInfoSearch from "./customerInfoSearch";
 import siteInfo from "./siteInfo";
@@ -952,6 +953,44 @@ class SubMenu extends Component {
                                       </Link>
                                     </div>
                                   </ListGroup.Item>
+
+                                  <ListGroup.Item
+                                    style={
+                                      this.state.hover.search("3") !== -1
+                                        ? subMenuHover
+                                        : subMenu
+                                    }
+                                    onMouseEnter={this.toggleHover.bind(
+                                      this,
+                                      "お客様-3"
+                                    )}
+                                    onMouseLeave={this.toggleHover.bind(
+                                      this,
+                                      "お客様"
+                                    )}
+                                    onClick={this.shuseiTo.bind(this, {
+                                      pathname:
+                                        "/subMenuManager/partnerCompaniesInfoSearch",
+                                    })}
+                                  >
+                                    <div>
+                                      <Link
+                                        className={
+                                          this.state.hover.search("3") !== -1
+                                            ? "my-tabcolor-font-hover"
+                                            : "my-tabcolor-font"
+                                        }
+                                        to="/subMenuManager/partnerCompaniesInfoSearch"
+                                      >
+                                        <FontAwesomeIcon
+                                          className="fa-fw"
+                                          size="lg"
+                                          icon={faSearch}
+                                        />{" "}
+                                        協力会社売上一覧
+                                      </Link>
+                                    </div>
+                                  </ListGroup.Item>
                                 </Accordion>
                               </ListGroup>
                             </div>
@@ -1213,6 +1252,26 @@ class SubMenu extends Component {
                                           お客様売上一覧
                                         </Link>
                                       </div>
+                                    </ListGroup.Item>
+                                                                        <ListGroup.Item
+                                      style={
+                                        this.state.hover.search("5") !== -1
+                                          ? subMenuHover
+                                          : subMenu
+                                      }
+                                      onMouseEnter={this.toggleHover.bind(
+                                        this,
+                                        "給料・売上-5"
+                                      )}
+                                      onMouseLeave={this.toggleHover.bind(
+                                        this,
+                                        "給料・売上"
+                                      )}
+                                      onClick={this.shuseiTo.bind(this, {
+                                        pathname:
+                                          "/subMenuManager/customerSalesList",
+                                      })}
+                                    >
                                     </ListGroup.Item>
                                     {
                                       authorityCode === "4" ? <ListGroup.Item
@@ -2325,6 +2384,11 @@ class SubMenu extends Component {
                   exact
                   path={`${this.props.match.url}/customerInfoSearch`}
                   component={CustomerInfoSearch}
+                />
+                <Route
+                  exact
+                  path={`${this.props.match.url}/partnerCompaniesInfoSearch`}
+                  component={PartnerCompaniesInfoSearch}
                 />
                 <Route
                   exact
