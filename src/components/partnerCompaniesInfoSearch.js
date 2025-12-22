@@ -70,7 +70,7 @@ class partnerCompaniesInfoSearch extends React.Component {
   renderShowsTotal = () => {
     return (
       <p
-        hidden={!this.state.CustomerSaleslListInfoList.length > 0}
+        hidden={!1 > 0}
         style={{ color: "dark", float: "left" }}
       >
         稼働人数：{this.state.countPeo}
@@ -95,7 +95,7 @@ class partnerCompaniesInfoSearch extends React.Component {
 
   searchCustomer = () => {
     const customerSalesListInfo = {
-      yearAndMonth: publicUtils.formateDate(
+      unitPriceStartMonth: publicUtils.formateDate(
         this.state.customerSalesListYearAndMonth,
         false
       ),
@@ -103,7 +103,7 @@ class partnerCompaniesInfoSearch extends React.Component {
 
     axios
       .post(
-        this.state.serverIP + "customerSalesList/searchCustomerSalesList",
+        this.state.serverIP + "bpInfo/getPartnerBpInfo",
         customerSalesListInfo
       )
       .then((response) => {
@@ -119,49 +119,12 @@ class partnerCompaniesInfoSearch extends React.Component {
           });
         } else {
           let countPeo = 0;
-          for (let i in response.data.data) {
-            countPeo += Number(response.data.data[i].countPeo);
-          }
-
+       
+          console.log('loading data =>',response.data.bpInfoList);
           this.setState({ errorsMessageShow: false });
-          this.setState({ CustomerSaleslListInfoList: response.data.data });
-          this.setState({
-            calPeoCount: this.state.CustomerSaleslListInfoList[0].calPeoCount,
-          });
-          this.setState({
-            unitPTotal: publicUtils.addComma(
-              this.state.CustomerSaleslListInfoList[0].unitPTotal,
-              false
-            ),
-          });
-          this.setState({
-            totalSales: publicUtils.addComma(
-              this.state.CustomerSaleslListInfoList[0].totalSales,
-              false
-            ),
-          });
-          this.setState({
-            totalgrossProfit: publicUtils.addComma(
-              this.state.CustomerSaleslListInfoList[0].totalgrossProfit,
-              false
-            ),
-          });
-          /*this.setState({totalpercent:''})*/
-          this.refs.CustomerSaleslListInfoListTable.setState({
-            selectedRowKeys: [],
-          });
-          this.setState({ totalHidden: "" });
-          this.setState({
-            perCal: [],
-            totalGrossProfitAdd: 0,
-            countPeo: countPeo,
-            unitPTotal: publicUtils.addComma(
-              (
-                this.state.CustomerSaleslListInfoList[0].unitPTotal / countPeo
-              ).toFixed(0),
-              false
-            ),
-          });
+          this.setState({ CustomerSaleslListInfoList: response.data.bpInfoList });
+         
+          
         }
       })
       .catch((error) => {
@@ -537,7 +500,7 @@ class partnerCompaniesInfoSearch extends React.Component {
               tdStyle={{ padding: ".45em" }}
               dataField="rowNo"
               isKey
-              width="60"
+              width="50"
             >
               番号
             </TableHeaderColumn>
@@ -553,7 +516,7 @@ class partnerCompaniesInfoSearch extends React.Component {
               tdStyle={{ padding: ".45em" }}
               dataField="totalUnitPrice"
               dataFormat={this.totalUnitPriceFormat}
-              width="100"
+              width="80"
             >
               単価合計
             </TableHeaderColumn>
@@ -561,29 +524,29 @@ class partnerCompaniesInfoSearch extends React.Component {
               tdStyle={{ padding: ".45em" }}
               dataField="averUnitPrice"
               dataFormat={this.averUnitPriceFormat}
-              width="100"
+              width="80"
             >
               粗利
             </TableHeaderColumn>
             <TableHeaderColumn
               tdStyle={{ padding: ".45em" }}
               dataField="countPeo"
-              width="100"
+              width="50"
             >
               稼働人数
             </TableHeaderColumn>
-            <TableHeaderColumn
+            {/* <TableHeaderColumn
               tdStyle={{ padding: ".45em" }}
               dataField="lastMonthCountPeo"
               width="100"
             >
               先月稼働人数
-            </TableHeaderColumn>
+            </TableHeaderColumn> */}
             <TableHeaderColumn
               tdStyle={{ padding: ".45em" }}
-              dataField="empDetailCheck"
-              dataFormat={this.empDetailCheck.bind(this)}
-              width="100"
+              dataField="employeeName"
+              
+              width="250"
             >
               要員リスト
             </TableHeaderColumn>
