@@ -63,6 +63,7 @@ import customerSalesList from "./customerSalesList";
 import ReactTooltip from "react-tooltip";
 import { connect } from "react-redux";
 import EventEmitter from "./utils/EventEmitter";
+import PartnerCompaniesInfoSearch from "./partnerCompaniesInfoSearch";
 
 import {
   faAddressBook,
@@ -949,6 +950,44 @@ class SubMenu extends Component {
                                           icon={faSearch}
                                         />{" "}
                                         お客様情報検索
+                                      </Link>
+                                    </div>
+                                  </ListGroup.Item>
+
+                                  <ListGroup.Item
+                                    style={
+                                      this.state.hover.search("3") !== -1
+                                        ? subMenuHover
+                                        : subMenu
+                                    }
+                                    onMouseEnter={this.toggleHover.bind(
+                                      this,
+                                      "お客様-3"
+                                    )}
+                                    onMouseLeave={this.toggleHover.bind(
+                                      this,
+                                      "お客様"
+                                    )}
+                                    onClick={this.shuseiTo.bind(this, {
+                                      pathname:
+                                        "/subMenuManager/partnerCompaniesInfoSearch",
+                                    })}
+                                  >
+                                    <div>
+                                      <Link
+                                        className={
+                                          this.state.hover.search("3") !== -1
+                                            ? "my-tabcolor-font-hover"
+                                            : "my-tabcolor-font"
+                                        }
+                                        to="/subMenuManager/partnerCompaniesInfoSearch"
+                                      >
+                                        <FontAwesomeIcon
+                                          className="fa-fw"
+                                          size="lg"
+                                          icon={faSearch}
+                                        />{" "}
+                                        協力会社売上一覧
                                       </Link>
                                     </div>
                                   </ListGroup.Item>
@@ -2260,6 +2299,11 @@ class SubMenu extends Component {
                   exact
                   path={`${this.props.match.url}/`}
                   component={EmployeeSearch}
+                />
+                <Route
+                  exact
+                  path={`${this.props.match.url}/partnerCompaniesInfoSearch`}
+                  component={PartnerCompaniesInfoSearch}
                 />
                 <Route
                   exact
