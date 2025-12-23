@@ -13,6 +13,7 @@ import DatePicker from "react-datepicker";
 import * as publicUtils from "./utils/publicUtils.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import Autocomplete from "@material-ui/lab/Autocomplete";
 import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import axios from "axios";
 import ErrorsMessageToast from "./errorsMessageToast";
@@ -42,11 +43,13 @@ class partnerCompaniesInfoSearch extends React.Component {
   }
   initialState = {
     customerSalesListYearAndMonth: new Date(),
+    customerCode: '',
     serverIP: store.getState().dropDown[store.getState().dropDown.length - 1],
     perCal: [],
     CustomerSaleslListInfoList: [],
     totalGrossProfitAdd: 0,
     countPeo: 0,
+    allData:[]
   };
 
   getAuthorityCode = async () => {
@@ -63,20 +66,34 @@ class partnerCompaniesInfoSearch extends React.Component {
   }
 
   componentDidMount() {
+    console.log(1111,store.getState().dropDown[53].slice(1))
     this.getAuthorityCode();
     this.searchCustomer();
   }
 
   renderShowsTotal = () => {
-    return (
-      <p
-        hidden={!1 > 0}
-        style={{ color: "dark", float: "left" }}
-      >
-        稼働人数：{this.state.countPeo}
-      </p>
-    );
+    // return (
+    //   <p
+    //     hidden={!1 > 0}
+    //     style={{ color: "dark", float: "left" }}
+    //   >
+    //     稼働人数：{this.state.countPeo}
+    //   </p>
+    // );
+    return ''
   };
+
+  customerNoChange = (event, newValue)=>{
+    if (newValue && newValue.hasOwnProperty('code') && newValue.code !== null) {
+      this.setState(
+        {
+          customerCode: newValue.code,
+        },
+        () => this.searchCustomer()
+      );
+    }
+
+  }
 
   customerSalesListYearAndMonth = (date) => {
     if (date !== null) {
@@ -99,8 +116,9 @@ class partnerCompaniesInfoSearch extends React.Component {
         this.state.customerSalesListYearAndMonth,
         false
       ),
+      customerCode : this.state.customerCode
     };
-
+    console.log(this.state.customerCode, customerSalesListInfo)
     axios
       .post(
         this.state.serverIP + "bpInfo/getPartnerBpInfo",
@@ -118,9 +136,16 @@ class partnerCompaniesInfoSearch extends React.Component {
             errorsMessageValue: response.data.noData,
           });
         } else {
-          let countPeo = 0;
        
           console.log('loading data =>',response.data.bpInfoList);
+          
+          this.setState(
+            { allData: response.data.allbpInfoList },
+            () => {
+              console.log("loading all data =>", this.state.allData);
+            }
+          );
+
           this.setState({ errorsMessageShow: false });
           this.setState({ CustomerSaleslListInfoList: response.data.bpInfoList });
          
@@ -229,14 +254,14 @@ class partnerCompaniesInfoSearch extends React.Component {
                     dataField="unitPrice"
                     tdStyle={{ padding: ".45em" }}
                   >
-                    単価(万)
+                    単価
                   </TableHeaderColumn>
                   <TableHeaderColumn
                     dataField="cost"
                     dataFormat={this.costChange}
                     tdStyle={{ padding: ".45em" }}
                   >
-                    費用(万)
+                    費用
                   </TableHeaderColumn>
                 </BootstrapTable>
               </div>
@@ -297,95 +322,11 @@ class partnerCompaniesInfoSearch extends React.Component {
   };
 
   handleRowSelect = (row, isSelected, e) => {
+    console.log('handleRowSelect=>',isSelected)
     if (isSelected) {
-      let percent =
-        parseInt(row.totalUnitPrice) +
-        parseInt(row.overTimeFee) +
-        parseInt(row.expectFee);
-      this.state.perCal.push(percent);
-      var salesCal = 0;
-      for (var i = 0; i < this.state.perCal.length; i++) {
-        salesCal = parseInt(salesCal) + parseInt(this.state.perCal[i]);
-      }
-      var salesPercet = salesCal / row.totalSales;
-      var salesToPercet =
-        (Math.round(salesPercet * 10000) / 100).toFixed(1) + "%";
 
-      let totalGrossProfitAdd =
-        parseInt(this.state.totalGrossProfitAdd) + parseInt(row.grossProfit);
-      let grossProfitPercet = 0;
-      if (totalGrossProfitAdd > 0) {
-        let totalgrossProfit = publicUtils.deleteComma(
-          this.state.totalgrossProfit,
-          false
-        );
-        grossProfitPercet =
-          parseInt(totalGrossProfitAdd) / parseInt(totalgrossProfit);
-      }
-      grossProfitPercet =
-        (Math.round(grossProfitPercet * 10000) / 100).toFixed(1) + "%";
-      this.setState({
-        totalpercent: salesToPercet,
-        totalGrossProfitAdd: totalGrossProfitAdd,
-        grossProfitPercent: grossProfitPercet,
-      });
-      this.setState({
-        totalHidden: salesCal,
-      });
     } else {
-      for (var i = this.state.perCal.length; i >= 0; i--) {
-        if (
-          this.state.perCal[i] ===
-          parseInt(row.totalUnitPrice) +
-          parseInt(row.overTimeFee) +
-          parseInt(row.expectFee)
-        ) {
-          this.state.perCal.splice(i, 1);
-        }
-      }
-      var caltotalSales = 0;
-      for (var j = 0; j < this.state.perCal.length; j++) {
-        caltotalSales = caltotalSales + parseInt(this.state.perCal[j]);
-      }
-      var percentCal =
-        parseInt(this.state.totalHidden) -
-        (parseInt(row.totalUnitPrice) +
-          parseInt(row.overTimeFee) +
-          parseInt(row.expectFee));
-      var salesPercet = percentCal / row.totalSales;
-      var salesToPercet =
-        (Math.round(salesPercet * 10000) / 100).toFixed(1) + "%";
-
-      let totalGrossProfitAdd =
-        parseInt(this.state.totalGrossProfitAdd) - parseInt(row.grossProfit);
-      let grossProfitPercet = 0;
-      if (totalGrossProfitAdd > 0) {
-        let totalgrossProfit = publicUtils.deleteComma(
-          this.state.totalgrossProfit,
-          false
-        );
-        grossProfitPercet =
-          parseInt(totalGrossProfitAdd) / parseInt(totalgrossProfit);
-      }
-      grossProfitPercet =
-        (Math.round(grossProfitPercet * 10000) / 100).toFixed(1) + "%";
-
-      this.setState({
-        totalpercent: salesToPercet,
-        totalGrossProfitAdd: totalGrossProfitAdd,
-        grossProfitPercent: grossProfitPercet,
-      });
-      this.setState({
-        totalHidden: caltotalSales,
-      });
-      if (salesToPercet == "0.0%") {
-        /*                this.setState({
-                    totalpercent:''
-                })*/
-        if (this.state.totalHidden === 0) {
-          this.state.perCal = [];
-        }
-      }
+    
     }
   };
 
@@ -418,7 +359,7 @@ class partnerCompaniesInfoSearch extends React.Component {
         </Row>
         <Row>
           <Col>
-            <InputGroup size="sm" className="mb-3">
+            <InputGroup size="sm"  className="mb-3">
               <InputGroup.Prepend>
                 <InputGroup.Text id="inputGroup-sizing-sm">
                   年月
@@ -430,7 +371,6 @@ class partnerCompaniesInfoSearch extends React.Component {
                   showMonthYearPicker
                   showFullMonthYearPicker
                   showDisabledMonthNavigation
-                  className="form-control form-control-sm"
                   id="customerSalesListDatePicker"
                   dateFormat={"yyyy/MM"}
                   name="customerSalesListYearAndMonth"
@@ -438,6 +378,43 @@ class partnerCompaniesInfoSearch extends React.Component {
                 />
               </InputGroup.Prepend>
             </InputGroup>
+          </Col>
+
+          <Col>
+            <InputGroup size="sm" className="mb-3">
+                <InputGroup.Prepend>
+                  <InputGroup.Text>お客様名</InputGroup.Text>
+                </InputGroup.Prepend>
+                <Autocomplete
+                  id="customerNo"
+                  name="customerNo"
+                  value={
+                    store
+                      .getState()
+                      .dropDown[53].slice(1)
+                      .find((v) => v.code === this.state.customerCode) || ""
+                  }
+                  options={store.getState().dropDown[53].slice(1)}
+                  // options={[
+                  //       { code: "", name: "" },
+                  //       ...store.getState().dropDown[53].slice(1)
+                  //     ]}
+                  getOptionLabel={(option) => (option.name ? option.name : "")}
+                  renderOption={(option) => {
+                    return <React.Fragment>{option.name || ""}</React.Fragment>;
+                  }}
+                  onChange={this.customerNoChange}
+                  renderInput={(params) => (
+                    <div ref={params.InputProps.ref}>
+                      <input
+                        type="text"
+                        {...params.inputProps}
+                        className="auto form-control Autocompletestyle-customerInfoSearch w100p"
+                      />
+                    </div>
+                  )}
+                />
+              </InputGroup>
           </Col>
         </Row>
         <Row>
@@ -483,6 +460,20 @@ class partnerCompaniesInfoSearch extends React.Component {
               <FormControl value={this.state.unitPTotal} disabled />
             </InputGroup>
           </Col>
+
+          <Col>
+            <InputGroup size="sm">
+              <InputGroup.Prepend>
+                <InputGroup.Text
+                  id="inputGroup-sizing-sm"
+                  className="input-group-indiv"
+                >
+                  稼動人月
+                </InputGroup.Text>
+              </InputGroup.Prepend>
+              <FormControl value={this.state.unitPTotal} disabled />
+            </InputGroup>
+          </Col>
         </Row>
         <Col>
           <BootstrapTable
@@ -500,14 +491,14 @@ class partnerCompaniesInfoSearch extends React.Component {
               tdStyle={{ padding: ".45em" }}
               dataField="rowNo"
               isKey
-              width="50"
+              width="40"
             >
               番号
             </TableHeaderColumn>
             <TableHeaderColumn
               tdStyle={{ padding: ".45em" }}
               dataField="customerName"
-              width="150"
+              width="130"
               dataFormat={this.customerNameFormat.bind(this)}
             >
               協力会社
@@ -516,7 +507,7 @@ class partnerCompaniesInfoSearch extends React.Component {
               tdStyle={{ padding: ".45em" }}
               dataField="totalUnitPrice"
               dataFormat={this.totalUnitPriceFormat}
-              width="80"
+              width="60"
             >
               単価合計
             </TableHeaderColumn>
@@ -524,7 +515,7 @@ class partnerCompaniesInfoSearch extends React.Component {
               tdStyle={{ padding: ".45em" }}
               dataField="averUnitPrice"
               dataFormat={this.averUnitPriceFormat}
-              width="80"
+              width="70"
             >
               粗利
             </TableHeaderColumn>
@@ -544,9 +535,9 @@ class partnerCompaniesInfoSearch extends React.Component {
             </TableHeaderColumn> */}
             <TableHeaderColumn
               tdStyle={{ padding: ".45em" }}
-              dataField="employeeName"
+              dataField="employeeStr"
               
-              width="250"
+              width="360"
             >
               要員リスト
             </TableHeaderColumn>
