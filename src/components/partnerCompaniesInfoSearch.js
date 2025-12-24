@@ -49,7 +49,10 @@ class partnerCompaniesInfoSearch extends React.Component {
     CustomerSaleslListInfoList: [],
     totalGrossProfitAdd: 0,
     countPeo: 0,
-    allData:[]
+    allData:[],
+    curAllData:[],
+    manMonths: 0,//稼動人月
+    customerList: []
   };
 
   getAuthorityCode = async () => {
@@ -110,6 +113,15 @@ class partnerCompaniesInfoSearch extends React.Component {
     }
   };
 
+  displayInfo = () => {
+    let manMonths = this.state.allData.reduce((sum, item) => {
+                    return sum + (item.manMonths || 0);
+                  }, 0);
+    this.setState({
+        manMonths
+    });
+  }
+
   searchCustomer = () => {
     const customerSalesListInfo = {
       unitPriceStartMonth: publicUtils.formateDate(
@@ -125,6 +137,7 @@ class partnerCompaniesInfoSearch extends React.Component {
         customerSalesListInfo
       )
       .then((response) => {
+
         if (response.data.errorsMessage != null) {
           this.setState({
             errorsMessageShow: true,
@@ -138,11 +151,27 @@ class partnerCompaniesInfoSearch extends React.Component {
         } else {
        
           console.log('loading data =>',response.data.bpInfoList);
+          console.log('loading data =>',response.data.allbpInfoList);
+
+          let custList = new Map(
+              response.data.bpInfoCusList.map(item => [
+                item.adminCustomerAbbCode,                  
+                { name: item.adminCustomerAbb+'('+item.adminCustomerAbbCode+')', code: item.adminCustomerAbbCode }
+              ])
+            ).values()
+          
+
+          this.setState(
+            { customerList: Array.from(custList) },
+            () => {
+              console.log('111111 =>',this.state.customerList);
+            }
+          );
           
           this.setState(
-            { allData: response.data.allbpInfoList },
+            { allData: response.data.bpInfoList },
             () => {
-              console.log("loading all data =>", this.state.allData);
+              this.displayInfo()
             }
           );
 
@@ -316,15 +345,27 @@ class partnerCompaniesInfoSearch extends React.Component {
     }
   }
 
+
   // 鼠标悬停显示全文
   customerNameFormat = (cell) => {
     return <span title={cell}>{cell}</span>;
   };
 
   handleRowSelect = (row, isSelected, e) => {
-    console.log('handleRowSelect=>',isSelected)
+    console.log('handleRowSelect=>',row)
     if (isSelected) {
-
+      this.setState(
+            { curAllData: [row,...this.state.curAllData] },
+            () => {
+              let manMonths = this.state.curAllData.reduce((sum, item) => {
+                    return sum + (item.manMonths || 0);
+                  }, 0);
+              this.setState({
+                manMonths
+              });
+            }
+      );
+      
     } else {
     
     }
@@ -357,7 +398,7 @@ class partnerCompaniesInfoSearch extends React.Component {
             <h2>協力会社売上一覧</h2>
           </Col>
         </Row>
-        <Row>
+        <Row style={{ paddingTop: '15px' }}>
           <Col>
             <InputGroup size="sm"  className="mb-3">
               <InputGroup.Prepend>
@@ -371,6 +412,7 @@ class partnerCompaniesInfoSearch extends React.Component {
                   showMonthYearPicker
                   showFullMonthYearPicker
                   showDisabledMonthNavigation
+                  className="form-control form-control-sm"
                   id="customerSalesListDatePicker"
                   dateFormat={"yyyy/MM"}
                   name="customerSalesListYearAndMonth"
@@ -388,13 +430,19 @@ class partnerCompaniesInfoSearch extends React.Component {
                 <Autocomplete
                   id="customerNo"
                   name="customerNo"
+                  // value={
+                  //   store
+                  //     .getState()
+                  //     .dropDown[53].slice(1)
+                  //     .find((v) => v.code === this.state.customerCode) || ""
+                  // }
                   value={
-                    store
-                      .getState()
-                      .dropDown[53].slice(1)
+                    this.state.customerList
                       .find((v) => v.code === this.state.customerCode) || ""
                   }
-                  options={store.getState().dropDown[53].slice(1)}
+                  //options={store.getState().dropDown[53].slice(1)}
+                  options={this.state.customerList}
+                  
                   // options={[
                   //       { code: "", name: "" },
                   //       ...store.getState().dropDown[53].slice(1)
@@ -471,7 +519,7 @@ class partnerCompaniesInfoSearch extends React.Component {
                   稼動人月
                 </InputGroup.Text>
               </InputGroup.Prepend>
-              <FormControl value={this.state.unitPTotal} disabled />
+              <FormControl value={this.state.manMonths} disabled />
             </InputGroup>
           </Col>
         </Row>
@@ -536,7 +584,6 @@ class partnerCompaniesInfoSearch extends React.Component {
             <TableHeaderColumn
               tdStyle={{ padding: ".45em" }}
               dataField="employeeStr"
-              
               width="360"
             >
               要員リスト
