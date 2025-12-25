@@ -25,6 +25,7 @@ class partnerCompaniesInfoSearch extends React.Component {
     perCal: [],
     totalHidden: "",
   };
+  curAllData=[];
   constructor(props) {
     super(props);
     this.state = this.initialState; //初期化
@@ -50,7 +51,6 @@ class partnerCompaniesInfoSearch extends React.Component {
     totalGrossProfitAdd: 0,
     countPeo: 0,
     allData:[],
-    curAllData:[],
     manMonths: 0,//稼動人月
     customerList: []
   };
@@ -112,14 +112,31 @@ class partnerCompaniesInfoSearch extends React.Component {
       });
     }
   };
+  toNumber = (v) => Number(v) || 0;
 
-  displayInfo = () => {
-    let manMonths = this.state.allData.reduce((sum, item) => {
-                    return sum + (item.manMonths || 0);
+  displayInfo = (isAll = true) => {
+    let data = isAll ? this.state.allData : this.curAllData; 
+    console.log('displayInfo===>',isAll,data)
+    let manMonths = data.reduce((sum, item) => {
+                    return sum + (item.countPeo || 0);
                   }, 0);
+    let averUnitPrice = data.reduce((sum, item) => {
+                    return sum + (this.toNumber(item.averUnitPrice));
+                  }, 0);
+    let allDataverUnitPrice = this.state.allData.reduce((sum, item) => {
+                    return sum + (this.toNumber(item.averUnitPrice));
+                  }, 0);
+    let unitPTotal = averUnitPrice/manMonths
+    unitPTotal = unitPTotal.toFixed(2);
+    const percentages = `${(averUnitPrice/allDataverUnitPrice).toFixed(2) * 100}%`;
+    let totalpercent = isAll ? '100%': percentages;
     this.setState({
-        manMonths
+        manMonths,
+        grossProfitPercent : averUnitPrice,
+        unitPTotal,
+        totalpercent
     });
+
   }
 
   searchCustomer = () => {
@@ -152,7 +169,7 @@ class partnerCompaniesInfoSearch extends React.Component {
        
           console.log('loading data =>',response.data.bpInfoList);
           console.log('loading data =>',response.data.allbpInfoList);
-
+          //this.curAllData = [...response.data.bpInfoList]
           let custList = new Map(
               response.data.bpInfoCusList.map(item => [
                 item.adminCustomerAbbCode,                  
@@ -177,8 +194,6 @@ class partnerCompaniesInfoSearch extends React.Component {
 
           this.setState({ errorsMessageShow: false });
           this.setState({ CustomerSaleslListInfoList: response.data.bpInfoList });
-         
-          
         }
       })
       .catch((error) => {
@@ -345,6 +360,12 @@ class partnerCompaniesInfoSearch extends React.Component {
     }
   }
 
+  renderHtml = (cell)=> {
+    return (
+      <span dangerouslySetInnerHTML={{ __html: cell }} />
+    );
+  }
+
 
   // 鼠标悬停显示全文
   customerNameFormat = (cell) => {
@@ -352,22 +373,20 @@ class partnerCompaniesInfoSearch extends React.Component {
   };
 
   handleRowSelect = (row, isSelected, e) => {
-    console.log('handleRowSelect=>',row)
+    console.log('handleRowSelect=>',isSelected)
+
     if (isSelected) {
-      this.setState(
-            { curAllData: [row,...this.state.curAllData] },
-            () => {
-              let manMonths = this.state.curAllData.reduce((sum, item) => {
-                    return sum + (item.manMonths || 0);
-                  }, 0);
-              this.setState({
-                manMonths
-              });
-            }
-      );
-      
+      if(this.state.allData.length == this.curAllData.length) {
+        this.displayInfo();
+      }else{
+        this.curAllData.push(row);
+        this.displayInfo(false)
+      }
     } else {
-    
+        console.log('handleRowSelect=>',row.bpBelongCustomerCode)
+
+        this.curAllData = this.curAllData.filter(item => item.bpBelongCustomerCode != row.bpBelongCustomerCode);
+        this.displayInfo(this.curAllData.length == 0)
     }
   };
 
@@ -585,6 +604,7 @@ class partnerCompaniesInfoSearch extends React.Component {
               tdStyle={{ padding: ".45em" }}
               dataField="employeeStr"
               width="360"
+              dataFormat={this.renderHtml}
             >
               要員リスト
             </TableHeaderColumn>
