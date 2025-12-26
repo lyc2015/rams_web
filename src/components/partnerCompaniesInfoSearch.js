@@ -128,7 +128,7 @@ class partnerCompaniesInfoSearch extends React.Component {
                   }, 0);
     let unitPTotal = averUnitPrice/manMonths
     unitPTotal = unitPTotal.toFixed(2);
-    const percentages = `${(averUnitPrice/allDataverUnitPrice).toFixed(2) * 100}%`;
+    const percentages = `${((averUnitPrice/allDataverUnitPrice) * 100).toFixed(2)}%`;
     let totalpercent = isAll ? '100%': percentages;
     this.setState({
         manMonths,
