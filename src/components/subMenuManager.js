@@ -27,6 +27,7 @@ import profitChartist from "./profitChartist";
 import CustomerInfoSearch from "./customerInfoSearch";
 import siteInfo from "./siteInfo";
 import sendInvoice from "./sendInvoice";
+import voteResult from "./voteResult";
 import invoicePDF from "./invoicePDF";
 import ManageSituation from "./manageSituation";
 import salaryDetailSend from "./salaryDetailSend";
@@ -675,6 +676,42 @@ class SubMenu extends Component {
                                           icon={faFileInvoiceDollar}
                                         />{" "}
                                         請求書一覧
+                                      </Link>
+                                    </div>
+                                  </ListGroup.Item>
+                                  <ListGroup.Item
+                                    style={
+                                      this.state.hover.search("8") !== -1
+                                        ? subMenuHover
+                                        : subMenu
+                                    }
+                                    onMouseEnter={this.toggleHover.bind(
+                                      this,
+                                      "社員・BP-8"
+                                    )}
+                                    onMouseLeave={this.toggleHover.bind(
+                                      this,
+                                      "社員・BP"
+                                    )}
+                                    onClick={this.shuseiTo.bind(this, {
+                                      pathname: "/subMenuManager/voteResult",
+                                    })}
+                                  >
+                                    <div>
+                                      <Link
+                                        className={
+                                          this.state.hover.search("8") !== -1
+                                            ? "my-tabcolor-font-hover"
+                                            : "my-tabcolor-font"
+                                        }
+                                        to="/subMenuManager/voteResult"
+                                      >
+                                        <FontAwesomeIcon
+                                          className="fa-fw"
+                                          size="lg"
+                                          icon={faFileInvoiceDollar}
+                                        />{" "}投票結果
+                                        
                                       </Link>
                                     </div>
                                   </ListGroup.Item>
@@ -2369,6 +2406,11 @@ class SubMenu extends Component {
                   exact
                   path={`${this.props.match.url}/sendInvoice`}
                   component={sendInvoice}
+                />
+                <Route
+                  exact
+                  path={`${this.props.match.url}/voteResult`}
+                  component={voteResult}
                 />
                 <Route
                   exact
