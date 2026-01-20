@@ -710,8 +710,8 @@ class SubMenu extends Component {
                                           className="fa-fw"
                                           size="lg"
                                           icon={faFileInvoiceDollar}
-                                        />{" "}投票結果
-                                        
+                                        />{" "}
+                                        投票結果
                                       </Link>
                                     </div>
                                   </ListGroup.Item>

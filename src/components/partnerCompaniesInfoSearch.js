@@ -417,80 +417,82 @@ class partnerCompaniesInfoSearch extends React.Component {
             <h2>協力会社売上一覧</h2>
           </Col>
         </Row>
-        <Row style={{ paddingTop: '15px' }}>
-          <Col>
-            <InputGroup size="sm"  className="mb-3">
+        <br />
+        <Row>
+          <Col sm={3}>
+            <InputGroup size="sm"  className="mb-3 flexWrapNoWrap">
               <InputGroup.Prepend>
-                <InputGroup.Text id="inputGroup-sizing-sm">
+                <InputGroup.Text id="inputGroup-sizing-sm" style={{ width: "90px" }}>
                   年月
                 </InputGroup.Text>
-                <DatePicker
-                  selected={this.state.customerSalesListYearAndMonth}
-                  onChange={this.customerSalesListYearAndMonth}
-                  autoComplete="off"
-                  showMonthYearPicker
-                  showFullMonthYearPicker
-                  showDisabledMonthNavigation
-                  className="form-control form-control-sm"
-                  id="customerSalesListDatePicker"
-                  dateFormat={"yyyy/MM"}
-                  name="customerSalesListYearAndMonth"
-                  locale="ja"
-                />
               </InputGroup.Prepend>
+              <DatePicker
+                selected={this.state.customerSalesListYearAndMonth}
+                onChange={this.customerSalesListYearAndMonth}
+                autoComplete="off"
+                showMonthYearPicker
+                showFullMonthYearPicker
+                showDisabledMonthNavigation
+                className="form-control form-control-sm"
+                id="customerSalesListDatePicker"
+                dateFormat={"yyyy/MM"}
+                name="customerSalesListYearAndMonth"
+                locale="ja"
+              />
             </InputGroup>
           </Col>
 
-          <Col>
-            <InputGroup size="sm" className="mb-3">
-                <InputGroup.Prepend>
-                  <InputGroup.Text>お客様名</InputGroup.Text>
-                </InputGroup.Prepend>
-                <Autocomplete
-                  id="customerNo"
-                  name="customerNo"
-                  // value={
-                  //   store
-                  //     .getState()
-                  //     .dropDown[53].slice(1)
-                  //     .find((v) => v.code === this.state.customerCode) || ""
-                  // }
-                  value={
-                    this.state.customerList
-                      .find((v) => v.code === this.state.customerCode) || ""
-                  }
-                  //options={store.getState().dropDown[53].slice(1)}
-                  options={this.state.customerList}
-                  
-                  // options={[
-                  //       { code: "", name: "" },
-                  //       ...store.getState().dropDown[53].slice(1)
-                  //     ]}
-                  getOptionLabel={(option) => (option.name ? option.name : "")}
-                  renderOption={(option) => {
-                    return <React.Fragment>{option.name || ""}</React.Fragment>;
-                  }}
-                  onChange={this.customerNoChange}
-                  renderInput={(params) => (
-                    <div ref={params.InputProps.ref}>
-                      <input
-                        type="text"
-                        {...params.inputProps}
-                        className="auto form-control Autocompletestyle-customerInfoSearch w100p"
-                      />
-                    </div>
-                  )}
-                />
-              </InputGroup>
+          <Col sm={3}>
+            <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
+              <InputGroup.Prepend>
+                <InputGroup.Text style={{ width: "90px" }}>お客様名</InputGroup.Text>
+              </InputGroup.Prepend>
+              <Autocomplete
+                id="customerNo"
+                name="customerNo"
+                // value={
+                //   store
+                //     .getState()
+                //     .dropDown[53].slice(1)
+                //     .find((v) => v.code === this.state.customerCode) || ""
+                // }
+                value={
+                  this.state.customerList
+                    .find((v) => v.code === this.state.customerCode) || ""
+                }
+                //options={store.getState().dropDown[53].slice(1)}
+                options={this.state.customerList}
+                
+                // options={[
+                //       { code: "", name: "" },
+                //       ...store.getState().dropDown[53].slice(1)
+                //     ]}
+                getOptionLabel={(option) => (option.name ? option.name : "")}
+                renderOption={(option) => {
+                  return <React.Fragment>{option.name || ""}</React.Fragment>;
+                }}
+                onChange={this.customerNoChange}
+                renderInput={(params) => (
+                  <div ref={params.InputProps.ref}>
+                    <input
+                      type="text"
+                      {...params.inputProps}
+                      className="auto form-control Autocompletestyle-customerInfoSearch w100p"
+                    />
+                  </div>
+                )}
+              />
+            </InputGroup>
           </Col>
         </Row>
         <Row>
-          <Col>
+          <Col sm={3}>
             <InputGroup size="sm">
               <InputGroup.Prepend>
                 <InputGroup.Text
                   id="inputGroup-sizing-sm"
                   className="input-group-indiv"
+                  style={{ width: "90px" }}
                 >
                   全体比率
                 </InputGroup.Text>
@@ -499,12 +501,13 @@ class partnerCompaniesInfoSearch extends React.Component {
             </InputGroup>
           </Col>
 
-          <Col>
+          <Col sm={3}>
             <InputGroup size="sm">
               <InputGroup.Prepend>
                 <InputGroup.Text
                   id="inputGroup-sizing-sm"
                   className="input-group-indiv"
+                  style={{ width: "90px" }}
                 >
                   売上合計
                 </InputGroup.Text>

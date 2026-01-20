@@ -14,11 +14,12 @@ import "../asserts/css/style.css";
 import DatePicker from "react-datepicker";
 import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSave, faUndo, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faSave, faUndo, faTrash, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import * as utils from "./utils/publicUtils.js";
 import store from "./redux/store";
 import MyToast from "./myToast";
+import ErrorsMessageToast from "./errorsMessageToast";
 import { InputNumber } from "antd";
 import $ from "jquery";
 axios.defaults.withCredentials = true;
@@ -41,6 +42,9 @@ class bpInfo extends React.Component {
     bpOtherCompanyAdmissionEndDate: "",
     oldUnitPriceStartMonth: null,
     myToastShow: false,
+    errorsMessageShow: false, // 错误消息显示标志
+    errorsMessageValue: "", // 错误消息内容
+    bpInfoTable: [], // 初始化列表为空数组，避免undefined
     customer: store.getState().dropDown[15].slice(1),
     salesProgressCodes: store.getState().dropDown[16].slice(1),
     serverIP: store.getState().dropDown[store.getState().dropDown.length - 1],
@@ -144,8 +148,22 @@ class bpInfo extends React.Component {
         //let monthList = data.bpInfoList.map(item =>
         //    !!item.unitPriceStartMonth && utils.converToLocalTime(item.unitPriceStartMonth, false)
         //)
+        // 过滤掉空数据行（如果unitPriceStartMonth为空或null，则认为该行为空数据）
+        const filteredList = (data.bpInfoList || []).filter(item => {
+          if (!item) return false;
+          const unitPriceStartMonth = item.unitPriceStartMonth;
+          return unitPriceStartMonth !== null && 
+                 unitPriceStartMonth !== undefined && 
+                 unitPriceStartMonth !== "" &&
+                 String(unitPriceStartMonth).trim() !== "";
+        });
+        // 为每行添加rowNo，从1开始
+        const listWithRowNo = filteredList.map((item, index) => ({
+          ...item,
+          rowNo: index + 1
+        }));
         this.setState({
-          bpInfoTable: data.bpInfoList,
+          bpInfoTable: listWithRowNo,
           bpBelongCustomerCode:
             data.model === null ? "" : data.model.bpBelongCustomerCode, // 選択中のBP所属
           bpSalesProgressCode:
@@ -211,6 +229,30 @@ class bpInfo extends React.Component {
   };
 
   insertOrUpdateBpInfo = () => {
+    // 验证単価開始年月是否为必填项
+    if (!this.state.unitPriceStartMonth || 
+        this.state.unitPriceStartMonth === "" || 
+        this.state.unitPriceStartMonth === null) {
+      this.setState({
+        errorsMessageShow: true,
+        errorsMessageValue: "単価開始年月は必須項目です。",
+      });
+      setTimeout(() => this.setState({ errorsMessageShow: false }), 3000);
+      return;
+    }
+    // 验证BP単価是否为必填项
+    if (!this.state.bpUnitPrice || 
+        this.state.bpUnitPrice === "" || 
+        this.state.bpUnitPrice === null ||
+        this.state.bpUnitPrice === 0) {
+      this.setState({
+        errorsMessageShow: true,
+        errorsMessageValue: "BP単価は必須項目です。",
+      });
+      setTimeout(() => this.setState({ errorsMessageShow: false }), 3000);
+      return;
+    }
+
     const bpInfoModel = {
       bpEmployeeNo: this.props.employeeNo,
       bpBelongCustomerCode: this.state.bpBelongCustomerCode,
@@ -303,6 +345,13 @@ class bpInfo extends React.Component {
                 type={"success"}
               />
             </div>
+            <div style={{ display: this.state.errorsMessageShow ? "block" : "none" }}>
+              <ErrorsMessageToast
+                errorsMessageShow={this.state.errorsMessageShow}
+                message={this.state.errorsMessageValue}
+                type={"danger"}
+              />
+            </div>
             <Row>
               <Col sm={6}>
                 <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
@@ -381,62 +430,72 @@ class bpInfo extends React.Component {
             </Row>
             <Row>
               <Col sm={6}>
-                <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
-                  <InputGroup.Prepend>
-                    <InputGroup.Text id="sixKanji">
-                      単価開始年月
-                    </InputGroup.Text>
-                  </InputGroup.Prepend>
-                  <DatePicker
-                    selected={this.state.unitPriceStartMonth}
-                    onChange={this.unitPriceStartMonthChange}
-                    autoComplete="off"
-                    showMonthYearPicker
-                    showFullMonthYearPicker
-                    //minDate={utils.getMonthFirstDay()}
-                    //excludeDates={this.state.monthList}
-                    showDisabledMonthNavigation
-                    className="form-control form-control-sm"
-                    id={
-                      this.state.actionType === "detail" ||
-                        bpSalesProgressCode === "4"
-                        ? "datePickerReadonlyDefault-bpInfo"
-                        : "datePicker-bpInfo"
-                    }
-                    dateFormat={"yyyy/MM"}
-                    locale="ja"
-                    disabled={
-                      this.state.actionType === "detail" ||
-                        !!(bpSalesProgressCode === "4")
-                    }
-                  />
-                </InputGroup>
+                <div style={{ position: "relative", display: "inline-block", width: "100%" }}>
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
+                    <InputGroup.Prepend>
+                      <InputGroup.Text id="sixKanji">
+                        単価開始年月
+                      </InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <DatePicker
+                      selected={this.state.unitPriceStartMonth}
+                      onChange={this.unitPriceStartMonthChange}
+                      autoComplete="off"
+                      showMonthYearPicker
+                      showFullMonthYearPicker
+                      //minDate={utils.getMonthFirstDay()}
+                      //excludeDates={this.state.monthList}
+                      showDisabledMonthNavigation
+                      className="form-control form-control-sm"
+                      id={
+                        this.state.actionType === "detail" ||
+                          bpSalesProgressCode === "4"
+                          ? "datePickerReadonlyDefault-bpInfo"
+                          : "datePicker-bpInfo"
+                      }
+                      dateFormat={"yyyy/MM"}
+                      locale="ja"
+                      disabled={
+                        this.state.actionType === "detail" ||
+                          !!(bpSalesProgressCode === "4")
+                      }
+                    />
+                  </InputGroup>
+                  <font color="red" style={{ position: "absolute", right: "-15px", top: "38%", transform: "translateY(-50%)", marginLeft: "5px", lineHeight: "1", fontSize: "14px" }}>
+                    ★
+                  </font>
+                </div>
               </Col>
               <Col sm={6}>
-                <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
-                  <InputGroup.Prepend>
-                    <InputGroup.Text id="inputGroup-sizing-sm">
-                      BP単価
-                    </InputGroup.Text>
-                  </InputGroup.Prepend>
-                  <InputNumber
-                    className="w100p form-control"
-                    placeholder="BP単価"
-                    value={bpUnitPrice}
-                    autoComplete="off"
-                    onChange={(value) =>
-                      this.handleValueChange(value, "bpUnitPrice")
-                    }
-                    size="sm"
-                    name="bpUnitPrice"
-                    disabled={!!(this.props.actionType === "detail")}
-                    maxLength="3"
-                    controls={false}
-                  />
-                  <InputGroup.Prepend>
-                    <InputGroup.Text id="twoKanji">万円</InputGroup.Text>
-                  </InputGroup.Prepend>
-                </InputGroup>
+                <div style={{ position: "relative", display: "inline-block", width: "100%" }}>
+                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
+                    <InputGroup.Prepend>
+                      <InputGroup.Text id="inputGroup-sizing-sm">
+                        BP単価
+                      </InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <InputNumber
+                      className="w100p form-control"
+                      placeholder="BP単価"
+                      value={bpUnitPrice}
+                      autoComplete="off"
+                      onChange={(value) =>
+                        this.handleValueChange(value, "bpUnitPrice")
+                      }
+                      size="sm"
+                      name="bpUnitPrice"
+                      disabled={!!(this.props.actionType === "detail")}
+                      maxLength="3"
+                      controls={false}
+                    />
+                    <InputGroup.Prepend>
+                      <InputGroup.Text id="twoKanji">万円</InputGroup.Text>
+                    </InputGroup.Prepend>
+                  </InputGroup>
+                  <font color="red" style={{ position: "absolute", right: "-15px", top: "38%", transform: "translateY(-50%)", marginLeft: "5px", lineHeight: "1", fontSize: "14px" }}>
+                    ★
+                  </font>
+                </div>
               </Col>
             </Row>
             <Row>
