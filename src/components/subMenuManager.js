@@ -65,7 +65,6 @@ import customerSalesList from "./customerSalesList";
 import ReactTooltip from "react-tooltip";
 import { connect } from "react-redux";
 import EventEmitter from "./utils/EventEmitter";
-import PartnerCompaniesInfoSearch from "./partnerCompaniesInfoSearch";
 
 import {
   faAddressBook,
