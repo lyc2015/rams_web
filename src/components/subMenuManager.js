@@ -22,10 +22,12 @@ import masterInsert from "./masterInsert";
 import masterUpdate from "./masterUpdate";
 import dataShare from "./dataShare";
 import systemSet from "./systemSet";
+import PartnerCompaniesInfoSearch from "./partnerCompaniesInfoSearch";
 import profitChartist from "./profitChartist";
 import CustomerInfoSearch from "./customerInfoSearch";
 import siteInfo from "./siteInfo";
 import sendInvoice from "./sendInvoice";
+import voteResult from "./voteResult";
 import invoicePDF from "./invoicePDF";
 import ManageSituation from "./manageSituation";
 import salaryDetailSend from "./salaryDetailSend";
@@ -678,6 +680,42 @@ class SubMenu extends Component {
                                       </Link>
                                     </div>
                                   </ListGroup.Item>
+                                  <ListGroup.Item
+                                    style={
+                                      this.state.hover.search("8") !== -1
+                                        ? subMenuHover
+                                        : subMenu
+                                    }
+                                    onMouseEnter={this.toggleHover.bind(
+                                      this,
+                                      "社員・BP-8"
+                                    )}
+                                    onMouseLeave={this.toggleHover.bind(
+                                      this,
+                                      "社員・BP"
+                                    )}
+                                    onClick={this.shuseiTo.bind(this, {
+                                      pathname: "/subMenuManager/voteResult",
+                                    })}
+                                  >
+                                    <div>
+                                      <Link
+                                        className={
+                                          this.state.hover.search("8") !== -1
+                                            ? "my-tabcolor-font-hover"
+                                            : "my-tabcolor-font"
+                                        }
+                                        to="/subMenuManager/voteResult"
+                                      >
+                                        <FontAwesomeIcon
+                                          className="fa-fw"
+                                          size="lg"
+                                          icon={faFileInvoiceDollar}
+                                        />{" "}
+                                        投票結果
+                                      </Link>
+                                    </div>
+                                  </ListGroup.Item>
                                 </Accordion>
                               </ListGroup>
                             </div>
@@ -1252,6 +1290,26 @@ class SubMenu extends Component {
                                           お客様売上一覧
                                         </Link>
                                       </div>
+                                    </ListGroup.Item>
+                                                                        <ListGroup.Item
+                                      style={
+                                        this.state.hover.search("5") !== -1
+                                          ? subMenuHover
+                                          : subMenu
+                                      }
+                                      onMouseEnter={this.toggleHover.bind(
+                                        this,
+                                        "給料・売上-5"
+                                      )}
+                                      onMouseLeave={this.toggleHover.bind(
+                                        this,
+                                        "給料・売上"
+                                      )}
+                                      onClick={this.shuseiTo.bind(this, {
+                                        pathname:
+                                          "/subMenuManager/customerSalesList",
+                                      })}
+                                    >
                                     </ListGroup.Item>
                                     {
                                       authorityCode === "4" ? <ListGroup.Item
@@ -2357,6 +2415,11 @@ class SubMenu extends Component {
                 />
                 <Route
                   exact
+                  path={`${this.props.match.url}/voteResult`}
+                  component={voteResult}
+                />
+                <Route
+                  exact
                   path={`${this.props.match.url}/invoicePDF`}
                   component={invoicePDF}
                 />
@@ -2369,6 +2432,11 @@ class SubMenu extends Component {
                   exact
                   path={`${this.props.match.url}/customerInfoSearch`}
                   component={CustomerInfoSearch}
+                />
+                <Route
+                  exact
+                  path={`${this.props.match.url}/partnerCompaniesInfoSearch`}
+                  component={PartnerCompaniesInfoSearch}
                 />
                 <Route
                   exact
