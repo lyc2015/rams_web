@@ -87,7 +87,15 @@ class partnerCompaniesInfoSearch extends React.Component {
   };
 
   customerNoChange = (event, newValue)=>{
-    if (newValue && newValue.hasOwnProperty('code') && newValue.code !== null) {
+    // 处理空选项或取消选择的情况
+    if (newValue === null || (newValue && newValue.code === "")) {
+      this.setState(
+        {
+          customerCode: "",
+        },
+        () => this.searchCustomer()
+      );
+    } else if (newValue && newValue.hasOwnProperty('code') && newValue.code !== null) {
       this.setState(
         {
           customerCode: newValue.code,
@@ -95,7 +103,6 @@ class partnerCompaniesInfoSearch extends React.Component {
         () => this.searchCustomer()
       );
     }
-
   }
 
   customerSalesListYearAndMonth = (date) => {
@@ -126,13 +133,21 @@ class partnerCompaniesInfoSearch extends React.Component {
     let allDataverUnitPrice = this.state.allData.reduce((sum, item) => {
                     return sum + (this.toNumber(item.averUnitPrice));
                   }, 0);
-    let unitPTotal = averUnitPrice/manMonths
-    unitPTotal = unitPTotal.toFixed(2);
+    let unitPTotal = averUnitPrice/manMonths;
+    // 去掉小数部分，转换为整数
+    unitPTotal = Math.floor(unitPTotal);
+    // 添加千位分隔符
+    unitPTotal = publicUtils.addComma(unitPTotal.toString());
+    
+    // 売上合計：去掉小数部分，转换为整数，并添加千位分隔符
+    let grossProfitPercentFormatted = Math.floor(averUnitPrice);
+    grossProfitPercentFormatted = publicUtils.addComma(grossProfitPercentFormatted.toString());
+    
     const percentages = `${((averUnitPrice/allDataverUnitPrice) * 100).toFixed(2)}%`;
     let totalpercent = isAll ? '100%': percentages;
     this.setState({
         manMonths,
-        grossProfitPercent : averUnitPrice,
+        grossProfitPercent : grossProfitPercentFormatted,
         unitPTotal,
         totalpercent
     });
@@ -178,22 +193,40 @@ class partnerCompaniesInfoSearch extends React.Component {
             ).values()
           
 
+          // 在列表开头添加空选项，表示不筛选
+          const customerListWithEmpty = [
+            { code: "", name: "" },
+            ...Array.from(custList)
+          ];
           this.setState(
-            { customerList: Array.from(custList) },
+            { customerList: customerListWithEmpty },
             () => {
               console.log('111111 =>',this.state.customerList);
             }
           );
           
+          // 按照稼働人数（countPeo）从大到小排序
+          const sortedList = [...response.data.bpInfoList].sort((a, b) => {
+            const countPeoA = Number(a.countPeo) || 0;
+            const countPeoB = Number(b.countPeo) || 0;
+            return countPeoB - countPeoA; // 从大到小排序
+          });
+
+          // 为每行添加rowNo，从1开始累加
+          const listWithRowNo = sortedList.map((item, index) => ({
+            ...item,
+            rowNo: index + 1
+          }));
+
           this.setState(
-            { allData: response.data.bpInfoList },
+            { allData: listWithRowNo },
             () => {
               this.displayInfo()
             }
           );
 
           this.setState({ errorsMessageShow: false });
-          this.setState({ CustomerSaleslListInfoList: response.data.bpInfoList });
+          this.setState({ CustomerSaleslListInfoList: listWithRowNo });
         }
       })
       .catch((error) => {
@@ -376,29 +409,24 @@ class partnerCompaniesInfoSearch extends React.Component {
     console.log('handleRowSelect=>',isSelected)
 
     if (isSelected) {
-      if(this.state.allData.length == this.curAllData.length) {
-        this.displayInfo();
-      }else{
-        this.curAllData.push(row);
-        this.displayInfo(false)
-      }
+      // 单选模式：只保存当前选中的一行
+      this.curAllData = [row];
+      this.displayInfo(false);
     } else {
-        console.log('handleRowSelect=>',row.bpBelongCustomerCode)
-
-        this.curAllData = this.curAllData.filter(item => item.bpBelongCustomerCode != row.bpBelongCustomerCode);
-        this.displayInfo(this.curAllData.length == 0)
+      // 取消选中：清空选中的数据
+      this.curAllData = [];
+      this.displayInfo(true);
     }
   };
 
   render() {
     const { errorsMessageValue } = this.state;
     const selectRow = {
-      mode: "checkbox",
+      mode: "radio",
       bgColor: "pink",
       hideSelectColumn: true,
       clickToSelect: true,
       clickToExpand: true,
-      singleSelect: false,
       onSelect: this.handleRowSelect.bind(this),
     };
     return (
@@ -469,7 +497,14 @@ class partnerCompaniesInfoSearch extends React.Component {
                 //     ]}
                 getOptionLabel={(option) => (option.name ? option.name : "")}
                 renderOption={(option) => {
-                  return <React.Fragment>{option.name || ""}</React.Fragment>;
+                if (option.code === "" && option.name === "") {
+                  return (
+                    <div style={{ padding: "8px 14px", minHeight: "24px", display: "flex", alignItems: "center" }}>
+                      {option.name || ""}
+                    </div>
+                  );
+                }
+                return <React.Fragment>{option.name || ""}</React.Fragment>;
                 }}
                 onChange={this.customerNoChange}
                 renderInput={(params) => (
