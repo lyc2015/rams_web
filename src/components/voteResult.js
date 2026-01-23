@@ -363,11 +363,11 @@ class VoteResult extends React.Component {
                     <th style={{ textAlign: "center", width: "8%" }}>順番</th>
                     <th style={{ textAlign: "center", width: "15%" }}>社員番号</th>
                     <th style={{ textAlign: "center", width: "22%" }}>時間</th>
-                    <th style={{ textAlign: "center", width: "5%" }}>操作</th>
+                    <th style={{ textAlign: "center", width: "5%" }}>備考</th>
                     <th style={{ textAlign: "center", width: "8%" }}>順番</th>
                     <th style={{ textAlign: "center", width: "15%" }}>社員番号</th>
                     <th style={{ textAlign: "center", width: "22%" }}>時間</th>
-                    <th style={{ textAlign: "center", width: "5%" }}>操作</th>
+                    <th style={{ textAlign: "center", width: "5%" }}>備考</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -426,6 +426,7 @@ class VoteResult extends React.Component {
                                 color: "#dc3545",
                                 cursor: "pointer",
                                 padding: "5px",
+                                display: "none",
                               }}
                               title="削除"
                             >
@@ -481,6 +482,7 @@ class VoteResult extends React.Component {
                                     color: "#dc3545",
                                     cursor: "pointer",
                                     padding: "5px",
+                                    display: "none",
                                   }}
                                   title="削除"
                                 >
