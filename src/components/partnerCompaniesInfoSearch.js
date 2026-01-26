@@ -394,15 +394,36 @@ class partnerCompaniesInfoSearch extends React.Component {
   }
 
   renderHtml = (cell)=> {
-    return (
-      <span dangerouslySetInnerHTML={{ __html: cell }} />
-    );
+    if (!cell) return null;
+    
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = cell;
+    const text = tempDiv.textContent || cell;
+    
+    const pattern = /(\d+\([^)]+\))/g;
+    const matches = text.match(pattern);
+    
+    if (!matches || matches.length === 0) {
+      return <span dangerouslySetInnerHTML={{ __html: cell }} />;
+    }
+    
+    const rows = [];
+    for (let i = 0; i < matches.length; i += 3) {
+      const rowItems = matches.slice(i, i + 3);
+      rows.push(
+        <div key={i} style={{ marginBottom: i + 3 < matches.length ? '4px' : '0', lineHeight: '1.4' }}>
+          {rowItems.join(' ')}
+        </div>
+      );
+    }
+    
+    return <div style={{ whiteSpace: 'normal' }}>{rows}</div>;
   }
 
 
-  // 鼠标悬停显示全文
-  customerNameFormat = (cell) => {
-    return <span title={cell}>{cell}</span>;
+  customerNameFormat = (cell, row) => {
+    const displayText = row.levelName ? `${cell}(${row.levelName})` : cell;
+    return <span title={displayText}>{displayText}</span>;
   };
 
   handleRowSelect = (row, isSelected, e) => {
@@ -527,12 +548,11 @@ class partnerCompaniesInfoSearch extends React.Component {
                 <InputGroup.Text
                   id="inputGroup-sizing-sm"
                   className="input-group-indiv"
-                  style={{ width: "90px" }}
                 >
-                  全体比率
+                  稼動人月
                 </InputGroup.Text>
               </InputGroup.Prepend>
-              <FormControl value={this.state.totalpercent} disabled />
+              <FormControl value={this.state.manMonths} disabled />
             </InputGroup>
           </Col>
 
@@ -572,11 +592,12 @@ class partnerCompaniesInfoSearch extends React.Component {
                 <InputGroup.Text
                   id="inputGroup-sizing-sm"
                   className="input-group-indiv"
+                  style={{ width: "90px" }}
                 >
-                  稼動人月
+                  全体比率
                 </InputGroup.Text>
               </InputGroup.Prepend>
-              <FormControl value={this.state.manMonths} disabled />
+              <FormControl value={this.state.totalpercent} disabled />
             </InputGroup>
           </Col>
         </Row>
@@ -596,7 +617,7 @@ class partnerCompaniesInfoSearch extends React.Component {
               tdStyle={{ padding: ".45em" }}
               dataField="rowNo"
               isKey
-              width="40"
+              width="30"
             >
               番号
             </TableHeaderColumn>
@@ -620,7 +641,7 @@ class partnerCompaniesInfoSearch extends React.Component {
               tdStyle={{ padding: ".45em" }}
               dataField="averUnitPrice"
               dataFormat={this.averUnitPriceFormat}
-              width="70"
+              width="50"
             >
               粗利
             </TableHeaderColumn>
