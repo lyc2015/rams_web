@@ -109,8 +109,8 @@ class bpInfo extends React.Component {
             this.setState({ myToastShow: true, errorsMessageShow: false });
             setTimeout(() => this.setState({ myToastShow: false }), 3000);
           }
+          // 重新加载数据，会自动选中新的最后一条数据并填充表单字段
           this.getbpInfoList();
-          this.resetButton(true);
         })
         .catch((error) => {
           console.error("Error - " + error);
@@ -162,7 +162,22 @@ class bpInfo extends React.Component {
           ...item,
           rowNo: index + 1
         }));
-        this.setState({
+        
+        // 找到単価開始月最大的那条数据（列表最下面的数据）
+        // 按unitPriceStartMonth排序，找到最大的
+        let maxUnitPriceStartMonthRow = null;
+        if (listWithRowNo.length > 0) {
+          // 找到unitPriceStartMonth最大的那条数据
+          maxUnitPriceStartMonthRow = listWithRowNo.reduce((max, current) => {
+            if (!max || !max.unitPriceStartMonth) return current;
+            if (!current || !current.unitPriceStartMonth) return max;
+            // 比较日期字符串，格式应该是YYYY-MM-DD或类似
+            return current.unitPriceStartMonth > max.unitPriceStartMonth ? current : max;
+          });
+        }
+        
+        // 初始化数据
+        const initialState = {
           bpInfoTable: listWithRowNo,
           bpBelongCustomerCode:
             data.model === null ? "" : data.model.bpBelongCustomerCode, // 選択中のBP所属
@@ -176,6 +191,19 @@ class bpInfo extends React.Component {
                 false
               ),
           //monthList: monthList.filter(item => !!item)
+        };
+        
+        this.setState(initialState, () => {
+          // 自动选中最大単価開始月的那条数据（最后一条数据）
+          if (maxUnitPriceStartMonthRow && maxUnitPriceStartMonthRow.unitPriceStartMonth && this.refs.bpInfoTable) {
+            const key = maxUnitPriceStartMonthRow.unitPriceStartMonth;
+            this.refs.bpInfoTable.store.selected = [key];
+            this.refs.bpInfoTable.setState({
+              selectedRowKeys: [key],
+            });
+            // 触发handleRowSelect来自动填充表单字段（包括単価開始年月和BP単価）
+            this.handleRowSelect(maxUnitPriceStartMonthRow, true, null);
+          }
         });
       });
   };
@@ -211,6 +239,7 @@ class bpInfo extends React.Component {
         unitPriceStartMonth: "",
         bpUnitPrice: "",
         bpRemark: "",
+        bpOtherCompanyAdmissionEndDate: "",
         actionType: this.props.actionType === 'updateInsert' ? 'updateInsert' : this.props.actionType
       });
     }
@@ -252,16 +281,24 @@ class bpInfo extends React.Component {
       setTimeout(() => this.setState({ errorsMessageShow: false }), 3000);
       return;
     }
+    
+    // 如果是更新操作，必须要有oldUnitPriceStartMonth来标识要更新的记录
+    if ((this.state.actionType === "update" || this.state.actionType === 'updateInsert') && 
+        (!this.state.oldUnitPriceStartMonth || this.state.oldUnitPriceStartMonth === null || this.state.oldUnitPriceStartMonth === "")) {
+      this.setState({
+        errorsMessageShow: true,
+        errorsMessageValue: "更新するデータを選択してください。",
+      });
+      setTimeout(() => this.setState({ errorsMessageShow: false }), 3000);
+      return;
+    }
 
+    // 构建更新模型，确保oldUnitPriceStartMonth存在（用于标识要更新的记录）
     const bpInfoModel = {
       bpEmployeeNo: this.props.employeeNo,
       bpBelongCustomerCode: this.state.bpBelongCustomerCode,
       bpUnitPrice: this.state.bpUnitPrice,
       bpSalesProgressCode: this.state.bpSalesProgressCode,
-      bpOtherCompanyAdmissionEndDate: utils.formateDate(
-        this.state.bpOtherCompanyAdmissionEndDate,
-        false
-      ),
       unitPriceStartMonth: utils.formateDate(
         this.state.unitPriceStartMonth,
         false
@@ -269,7 +306,36 @@ class bpInfo extends React.Component {
       bpRemark: this.state.bpRemark,
       oldUnitPriceStartMonth: this.state.oldUnitPriceStartMonth,
     };
+    
+    // 只有在有值时才包含bpOtherCompanyAdmissionEndDate
+    if (this.state.bpOtherCompanyAdmissionEndDate && 
+        this.state.bpOtherCompanyAdmissionEndDate !== "" && 
+        this.state.bpOtherCompanyAdmissionEndDate !== null) {
+      bpInfoModel.bpOtherCompanyAdmissionEndDate = utils.formateDate(
+        this.state.bpOtherCompanyAdmissionEndDate,
+        false
+      );
+    }
+    
+    // 添加调试日志，确认发送的数据
+    console.log("更新BP信息 - 发送的数据:", {
+      oldUnitPriceStartMonth: bpInfoModel.oldUnitPriceStartMonth,
+      unitPriceStartMonth: bpInfoModel.unitPriceStartMonth,
+      bpOtherCompanyAdmissionEndDate: bpInfoModel.bpOtherCompanyAdmissionEndDate,
+      actionType: this.state.actionType
+    });
+    
     if (this.state.actionType === "update" || this.state.actionType === 'updateInsert') {
+      // 再次确认oldUnitPriceStartMonth存在
+      if (!bpInfoModel.oldUnitPriceStartMonth) {
+        this.setState({
+          errorsMessageShow: true,
+          errorsMessageValue: "更新するデータを選択してください。",
+        });
+        setTimeout(() => this.setState({ errorsMessageShow: false }), 3000);
+        return;
+      }
+      
       axios
         .post(this.state.serverIP + "employee/updatebpInfo", bpInfoModel)
         .then((response) => {
