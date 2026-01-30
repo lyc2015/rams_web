@@ -42,6 +42,7 @@ class WagesInfo extends Component {
   constructor(props) {
     super(props);
     this.state = this.initialState; //初期化
+    this._isMounted = false;
   }
 
   initialState = {
@@ -190,9 +191,11 @@ class WagesInfo extends Component {
   };
 
   componentDidMount() {
+    this._isMounted = true;
     axios
       .post(this.state.serverIP + "subMenu/getCompanyDate")
       .then((response) => {
+        if (!this._isMounted) return;
         this.setState({
           empNoHead: response.data.empNoHead,
         });
@@ -225,6 +228,7 @@ class WagesInfo extends Component {
   }
 
   getemployeeStatus = (employeeNo) => {
+    if (!this._isMounted) return;
     if (employeeNo === null) {
       this.setState({ newEmployeeStatus: "" });
     } else if (employeeNo.substring(0, 2) === "SP") {
@@ -404,72 +408,74 @@ class WagesInfo extends Component {
     });
   };
   /**
+   * 获取重置状态的对象（不直接调用setState）
+   */
+  getResetValueState = () => {
+    if (this.state.bonus !== null && this.state.bonus !== undefined) {
+      return {
+        socialInsuranceFlag: "",
+        salary: "",
+        waitingCost: "",
+        welfarePensionAmount: "",
+        healthInsuranceAmount: "",
+        insuranceFeeAmount: "",
+        lastTimeBonusAmount: "",
+        fristTimeBonusAmount: "",
+        secondTimeBonusAmount: "",
+        totalAmount: "",
+        employeeFormCode: this.state.employeeFormCodeStart,
+        remark: "",
+        raiseStartDate: "",
+        reflectStartDate: "",
+        bonusNo: this.state.bonus.bonusNo,
+        scheduleOfBonusAmount: utils.addComma(
+          this.state.bonus.scheduleOfBonusAmount
+        ),
+        fristBonusMonth: utils.converToLocalTime(
+          this.state.bonus.fristBonusMonth,
+          false
+        ),
+        secondBonusMonth: utils.converToLocalTime(
+          this.state.bonus.secondBonusMonth,
+          false
+        ),
+        period: ''
+      };
+    } else {
+      return {
+        socialInsuranceFlag: "",
+        salary: "",
+        waitingCost: "",
+        welfarePensionAmount: "",
+        healthInsuranceAmount: "",
+        insuranceFeeAmount: "",
+        lastTimeBonusAmount: "",
+        fristTimeBonusAmount: "",
+        secondTimeBonusAmount: "",
+        totalAmount: "",
+        employeeFormCode: this.state.employeeFormCodeStart,
+        remark: "",
+        raiseStartDate: "",
+        reflectStartDate: "",
+        bonusNo: "0",
+        scheduleOfBonusAmount: "",
+        fristBonusMonth: "",
+        secondBonusMonth: "",
+        period: ''
+      };
+    }
+  };
+
+  /**
    * 値をリセット
    */
   resetValue = () => {
-    if (this.state.bonus !== null && this.state.bonus !== undefined) {
-      this.setState(
-        {
-          socialInsuranceFlag: "",
-          salary: "",
-          waitingCost: "",
-          welfarePensionAmount: "",
-          healthInsuranceAmount: "",
-          insuranceFeeAmount: "",
-          lastTimeBonusAmount: "",
-          fristTimeBonusAmount: "",
-          secondTimeBonusAmount: "",
-          totalAmount: "",
-          employeeFormCode: this.state.employeeFormCodeStart,
-          remark: "",
-          raiseStartDate: "",
-          reflectStartDate: "",
-          bonusNo: this.state.bonus.bonusNo,
-          scheduleOfBonusAmount: utils.addComma(
-            this.state.bonus.scheduleOfBonusAmount
-          ),
-          fristBonusMonth: utils.converToLocalTime(
-            this.state.bonus.fristBonusMonth,
-            false
-          ),
-          secondBonusMonth: utils.converToLocalTime(
-            this.state.bonus.secondBonusMonth,
-            false
-          ),
-        },
-        () => {
-          this.totalKeisan();
-        }
-      );
-    } else {
-      this.setState(
-        {
-          socialInsuranceFlag: "",
-          salary: "",
-          waitingCost: "",
-          welfarePensionAmount: "",
-          healthInsuranceAmount: "",
-          insuranceFeeAmount: "",
-          lastTimeBonusAmount: "",
-          fristTimeBonusAmount: "",
-          secondTimeBonusAmount: "",
-          totalAmount: "",
-          employeeFormCode: this.state.employeeFormCodeStart,
-          remark: "",
-          raiseStartDate: "",
-          reflectStartDate: "",
-          bonusNo: "0",
-          scheduleOfBonusAmount: "",
-          fristBonusMonth: "",
-          secondBonusMonth: "",
-        },
-        () => {
-          this.totalKeisan();
-        }
-      );
-    }
+    if (!this._isMounted) return;
+    const resetState = this.getResetValueState();
     this.getemployeeStatus(this.state.employeeNo);
-    this.setState({period: ''})
+    this.setState(resetState, () => {
+      this.totalKeisan();
+    });
   };
 
   /**
@@ -513,52 +519,34 @@ class WagesInfo extends Component {
   };
 
   getWagesInfo = (event, values) => {
+    var employeeNo = null;
+    var actionType = "detail";
+    var employeeFormCodeStart = "";
+    
+    if (values !== null) {
+      employeeNo = values.code;
+      actionType = "insert";
+    }
+    
+    var wagesInfoMod = {
+      employeeNo: employeeNo,
+    };
+    
+    // 先设置员工状态（同步操作）
+    this.getemployeeStatus(employeeNo);
+    
+    // 然后更新基本状态
     this.setState(
       {
         [event.target.name]: event.target.value,
+        employeeNo: employeeNo,
+        employeeName: employeeNo,
+        actionType: actionType,
+        employeeFormCodeStart: employeeFormCodeStart,
       },
       () => {
-        var employeeNo = null;
-        if (values !== null) {
-          employeeNo = values.code;
-          this.setState({
-            actionType: "insert",
-          });
-        } else {
-          this.setState({
-            actionType: "detail",
-            employeeFormCodeStart: "",
-          });
-        }
-        var wagesInfoMod = {
-          employeeNo: employeeNo,
-        };
-        this.setState({
-          employeeNo: employeeNo,
-          employeeName: employeeNo,
-        });
+        // 调用搜索，搜索完成后会通过handleRowSelect触发resetValue
         this.search(wagesInfoMod);
-        if (values !== null) {
-          this.setState(
-            {
-              actionType: "insert",
-            },
-            () => {
-              this.resetValue();
-            }
-          );
-        } else {
-          this.setState(
-            {
-              actionType: "detail",
-              employeeFormCodeStart: "",
-            },
-            () => {
-              this.resetValue();
-            }
-          );
-        }
-        this.getemployeeStatus(employeeNo);
       }
     );
   };
@@ -566,11 +554,14 @@ class WagesInfo extends Component {
     axios
       .post(this.state.serverIP + "wagesInfo/getWagesInfo", wagesInfoMod)
       .then((result) => {
+        // 检查组件是否已挂载，避免在卸载后更新状态
+        if (!this._isMounted) return;
         if (
           result.data.errorsMessage === null ||
           result.data.errorsMessage === undefined
         ) {
           $("#expensesInfoBtn").attr("disabled", false);
+          if (!this._isMounted) return;
           this.setState({
             wagesInfoList: result.data.wagesInfoList,
             kadouCheck: result.data.kadouCheck,
@@ -586,6 +577,7 @@ class WagesInfo extends Component {
             workingCondition: "0",
           });
           if (result.data.bonus !== null) {
+            if (!this._isMounted) return;
             this.setState(
               {
                 bonusNo:
@@ -625,6 +617,7 @@ class WagesInfo extends Component {
               }
             );
           } else {
+            if (!this._isMounted) return;
             this.setState(
               {
                 bonusNo: "0",
@@ -640,6 +633,7 @@ class WagesInfo extends Component {
           }
         } else {
           $("#expensesInfoBtn").attr("disabled", true);
+          if (!this._isMounted) return;
           this.setState(
             {
               wagesInfoList: [],
@@ -667,16 +661,19 @@ class WagesInfo extends Component {
               this.totalKeisan();
             }
           );
+          if (!this._isMounted) return;
           this.setState({
             errorsMessageShow: true,
             errorsMessageValue: result.data.errorsMessage,
           });
         }
+        if (!this._isMounted) return;
         let _row = result.data.wagesInfoList?.length >= 1 && result.data.wagesInfoList[result.data.wagesInfoList.length-1]
         this.handleRowSelect(_row, true)
       })
       .catch((error) => {
         console.log(error);
+        if (!this._isMounted) return;
         this.setState({
           errorsMessageShow: true,
           errorsMessageValue:
@@ -688,47 +685,94 @@ class WagesInfo extends Component {
    * 行Selectファンクション
    */
   handleRowSelect = (row, isSelected, e) => {
+    if (!this._isMounted) return;
+    
     if (isSelected) {
-      this.shuseiBtn(row);
+      // 准备选中行时的所有状态更新
+      const selectedWagesInfo = { ...row };
+      var salary = "";
+      if (
+        selectedWagesInfo.waitingCost !== "" &&
+        selectedWagesInfo.waitingCost !== null &&
+        selectedWagesInfo.waitingCost !== undefined
+      ) {
+        salary = selectedWagesInfo.salary;
+        selectedWagesInfo["salary"] = "";
+      }
+      
+      // 获取 giveValue 需要设置的状态
+      const giveValueState = {
+        socialInsuranceFlag: selectedWagesInfo.socialInsuranceFlag,
+        salary: utils.addComma(selectedWagesInfo.salary),
+        waitingCost: utils.addComma(selectedWagesInfo.waitingCost),
+        welfarePensionAmount: utils.addComma(selectedWagesInfo.welfarePensionAmount),
+        healthInsuranceAmount: utils.addComma(selectedWagesInfo.healthInsuranceAmount),
+        insuranceFeeAmount: utils.addComma(selectedWagesInfo.insuranceFeeAmount),
+        fristTimeBonusAmount: utils.addComma(selectedWagesInfo.fristTimeBonusAmount),
+        secondTimeBonusAmount: utils.addComma(selectedWagesInfo.secondTimeBonusAmount),
+        scheduleOfBonusAmount: utils.addComma(selectedWagesInfo.scheduleOfBonusAmount),
+        bonusNo: selectedWagesInfo.bonusNo === null ? "0" : selectedWagesInfo.bonusNo,
+        totalAmount: utils.addComma(selectedWagesInfo.totalAmount),
+        employeeFormCode: selectedWagesInfo.employeeFormCode,
+        remark: selectedWagesInfo.remark,
+        fristBonusMonth: utils.converToLocalTime(selectedWagesInfo.fristBonusMonth, false),
+        secondBonusMonth: utils.converToLocalTime(selectedWagesInfo.secondBonusMonth, false),
+        raiseStartDate: utils.converToLocalTime(selectedWagesInfo.nextRaiseMonth, false),
+        reflectStartDate: utils.converToLocalTime(selectedWagesInfo.reflectYearAndMonth, false),
+        workingCondition: selectedWagesInfo.workingCondition,
+      };
+      
+      // 恢复salary
+      if (
+        row.waitingCost !== "" &&
+        row.waitingCost !== null &&
+        row.waitingCost !== undefined
+      ) {
+        selectedWagesInfo["salary"] = salary;
+      }
+      
+      // 确定其他状态
+      let torokuText = "登録";
+      let deleteFlag = true;
+      let actionType = "update";
+      
       if (
         row.reflectYearAndMonth ===
         this.state.wagesInfoList[this.state.wagesInfoList.length - 1]
           .reflectYearAndMonth
       ) {
-        this.setState({
-          torokuText: "更新",
-          deleteFlag: false,
-        });
+        torokuText = "更新";
+        deleteFlag = false;
       } else {
-        // this.resetValue();
-        this.setState({
-          actionType: "detail",
-          torokuText: "登録",
-          deleteFlag: true,
-        });
+        actionType = "detail";
       }
-      if (row.expensesInfoModels != null) {
-        this.setState({
-          expensesInfoModels: row.expensesInfoModels,
-        });
-      } else {
-        this.setState({
-          expensesInfoModels: [],
-        });
-      }
+      
+      const expensesInfoModels = row.expensesInfoModels != null ? row.expensesInfoModels : [];
+      
+      // 合并所有状态更新为一个setState调用
       this.setState({
+        ...giveValueState,
+        actionType: actionType,
+        torokuText: torokuText,
+        deleteFlag: deleteFlag,
+        expensesInfoModels: expensesInfoModels,
         period: row.period,
         rowReflectYearAndMonth: row.reflectYearAndMonth,
       });
     } else {
-      this.resetValue();
+      // 取消选择时，合并resetValue和其他状态更新
+      const resetState = this.getResetValueState();
       this.setState({
+        ...resetState,
         actionType: "insert",
         torokuText: "登録",
         expensesInfoModels: this.state.allExpensesInfoList,
         deleteFlag: true,
         period: "",
         rowReflectYearAndMonth: "",
+      }, () => {
+        // 在setState完成后调用totalKeisan
+        this.totalKeisan();
       });
     }
   };
@@ -1449,8 +1493,7 @@ class WagesInfo extends Component {
                         ) || {}
                       }
                       options={this.state.employeeNameDrop}
-                      getOptionDisabled={(option) => option.name || ""}
-                      getOptionLabel={(option) => option.text || ""}
+                      getOptionLabel={(option) => option.name || option.text || ""}
                       onChange={(event, values) =>
                         this.getWagesInfo(event, values)
                       }
@@ -2091,6 +2134,10 @@ class WagesInfo extends Component {
         </div>
       </div>
     );
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 }
 export default WagesInfo;
