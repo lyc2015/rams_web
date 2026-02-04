@@ -160,34 +160,76 @@ class WagesInfo extends Component {
   };
   //onchange(保険)
   valueChangeInsurance = (event) => {
-    if (event.target.value === "1") {
-      this.setState({
-        employeeFormCode: "2",
-      });
-    }
-    this.setState(
-      {
-        [event.target.name]: event.target.value,
-      },
-      () => {
-        this.hokenKeisan();
-      }
-    );
+    // 社会保険下拉框已注释，此函数暂时不再使用
+    // if (event.target.value === "1") {
+    //   this.setState({
+    //     employeeFormCode: "2",
+    //   });
+    // }
+    // this.setState(
+    //   {
+    //     [event.target.name]: event.target.value,
+    //   },
+    //   () => {
+    //     this.hokenKeisan();
+    //   }
+    // );
   };
   //onchange(保険金額)
   valueChangeInsuranceMoney = (event) => {
     var name = event.target.name;
     var value = event.target.value;
-    this.setState(
-      {
-        [event.target.name]: event.target.value,
-      },
-      () => {
-        this.setState({
-          [name]: utils.addComma(value),
-        });
-      }
-    );
+    
+    // 移除所有非数字字符（保留逗号用于千位分隔符显示）
+    var numericValue = value.replace(/[^\d,]/g, '');
+    
+    // 如果输入为空，直接设置
+    if (numericValue === "" || numericValue === ",") {
+      this.setState({
+        [name]: "",
+      }, () => {
+        // 当厚生或健康金额变化时，自动计算总金额
+        this.calculateInsuranceFeeAmount();
+      });
+      return;
+    }
+    
+    // 移除逗号，只保留数字
+    var numberValue = numericValue.replace(/,/g, '');
+    
+    // 验证：不能为负数（实际上输入时已经过滤掉了非数字字符）
+    // 确保是整数（不包含小数点）
+    if (numberValue.includes('.')) {
+      numberValue = numberValue.split('.')[0];
+    }
+    
+    // 添加千位分隔符
+    var formattedValue = utils.addComma(numberValue);
+    
+    this.setState({
+      [name]: formattedValue,
+    }, () => {
+      // 当厚生或健康金额变化时，自动计算总金额
+      this.calculateInsuranceFeeAmount();
+    });
+  };
+  
+  // 计算保険総額（厚生 + 健康）
+  calculateInsuranceFeeAmount = () => {
+    var welfarePensionAmount = utils.deleteComma(this.state.welfarePensionAmount);
+    var healthInsuranceAmount = utils.deleteComma(this.state.healthInsuranceAmount);
+    
+    var welfareNum = welfarePensionAmount === "" ? 0 : Number(welfarePensionAmount);
+    var healthNum = healthInsuranceAmount === "" ? 0 : Number(healthInsuranceAmount);
+    
+    var total = welfareNum + healthNum;
+    var insuranceFeeAmount = total > 0 ? utils.addComma(total.toString()) : "";
+    
+    this.setState({
+      insuranceFeeAmount: insuranceFeeAmount,
+    }, () => {
+      this.totalKeisan();
+    });
   };
 
   componentDidMount() {
@@ -261,29 +303,51 @@ class WagesInfo extends Component {
    * select取得
    */
   getDropDowns = () => {
+    if (!this._isMounted) return;
     var methodArray = [
       "getInsurance",
       "getBonus",
       "getEmployeeForm",
       "getEmployeeNameNoBP",
     ];
-    var data = utils.getPublicDropDown(methodArray, this.state.serverIP);
-    var bonusFlagDrop = [];
-    bonusFlagDrop.push({ code: "0", name: "0" });
-    bonusFlagDrop.push({ code: "1", name: "1" });
-    bonusFlagDrop.push({ code: "2", name: "2" });
-    var EmployeeFormCodeDrop = [];
-    for (let i in data[2]) {
-      if (data[2][i].code != "4") EmployeeFormCodeDrop.push(data[2][i]);
-    }
-    this.setState({
-      socialInsuranceFlagDrop: data[0].slice(1),
-      //bonusFlagDrop: data[1].slice(1),
-      bonusFlagDrop: bonusFlagDrop,
-      EmployeeFormCodeDrop: EmployeeFormCodeDrop,
-      employeeNameDrop: data[3].slice(1),
-      employeeInfo: data[3].slice(1),
-    });
+    utils.getPublicDropDown(methodArray, this.state.serverIP)
+      .then((data) => {
+        if (!this._isMounted) return;
+        var bonusFlagDrop = [];
+        bonusFlagDrop.push({ code: "0", name: "0" });
+        bonusFlagDrop.push({ code: "1", name: "1" });
+        bonusFlagDrop.push({ code: "2", name: "2" });
+        var EmployeeFormCodeDrop = [];
+        if (data && data[2]) {
+          for (let i in data[2]) {
+            if (data[2][i].code != "4") EmployeeFormCodeDrop.push(data[2][i]);
+          }
+        }
+        this.setState({
+          socialInsuranceFlagDrop: data && data[0] ? data[0].slice(1) : [],
+          //bonusFlagDrop: data[1].slice(1),
+          bonusFlagDrop: bonusFlagDrop,
+          EmployeeFormCodeDrop: EmployeeFormCodeDrop,
+          employeeNameDrop: data && data[3] ? data[3].slice(1) : [],
+          employeeInfo: data && data[3] ? data[3].slice(1) : [],
+        });
+      })
+      .catch((error) => {
+        console.error("Error loading dropdown data:", error);
+        if (!this._isMounted) return;
+        // 设置默认值，避免页面崩溃
+        this.setState({
+          socialInsuranceFlagDrop: [],
+          bonusFlagDrop: [
+            { code: "0", name: "0" },
+            { code: "1", name: "1" },
+            { code: "2", name: "2" },
+          ],
+          EmployeeFormCodeDrop: [],
+          employeeNameDrop: [],
+          employeeInfo: [],
+        });
+      });
   };
   /**
    * ボーナス期日の変化
@@ -497,13 +561,24 @@ class WagesInfo extends Component {
       }
       this.setState({ employeeNameDrop: newEmpInfoList, employeeName: "" });
     } else if (value === "2") {
+      // 個人事業主
       let newEmpInfoList = [];
       for (let i in employeeInfoList) {
         if (employeeInfoList[i].code.substring(0, 2) === "SP") {
           newEmpInfoList.push(employeeInfoList[i]);
         }
       }
-      this.setState({ employeeNameDrop: newEmpInfoList, employeeName: "" });
+      this.setState({ 
+        employeeNameDrop: newEmpInfoList, 
+        employeeName: "",
+        // 清空厚生和健康字段，并设置 socialInsuranceFlag 为 "0"
+        socialInsuranceFlag: "0",
+        welfarePensionAmount: "",
+        healthInsuranceAmount: "",
+        insuranceFeeAmount: "",
+      }, () => {
+        this.totalKeisan();
+      });
     } else if (value === "3") {
       let newEmpInfoList = [];
       for (let i in employeeInfoList) {
@@ -668,8 +743,13 @@ class WagesInfo extends Component {
           });
         }
         if (!this._isMounted) return;
-        let _row = result.data.wagesInfoList?.length >= 1 && result.data.wagesInfoList[result.data.wagesInfoList.length-1]
-        this.handleRowSelect(_row, true)
+        // 只有当 wagesInfoList 存在且有元素时才自动选择最后一行
+        if (result.data.wagesInfoList && result.data.wagesInfoList.length >= 1) {
+          let _row = result.data.wagesInfoList[result.data.wagesInfoList.length - 1];
+          if (_row) {
+            this.handleRowSelect(_row, true);
+          }
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -736,7 +816,13 @@ class WagesInfo extends Component {
       let deleteFlag = true;
       let actionType = "update";
       
+      // 检查 row 和 wagesInfoList 是否存在，避免访问 undefined 属性
       if (
+        row &&
+        row.reflectYearAndMonth &&
+        this.state.wagesInfoList &&
+        this.state.wagesInfoList.length > 0 &&
+        this.state.wagesInfoList[this.state.wagesInfoList.length - 1] &&
         row.reflectYearAndMonth ===
         this.state.wagesInfoList[this.state.wagesInfoList.length - 1]
           .reflectYearAndMonth
@@ -811,7 +897,12 @@ class WagesInfo extends Component {
     if (this.state.workingCondition === "0") {
       salary = utils.deleteComma(this.state.salary);
     } else if (this.state.workingCondition === "1") {
-      if (this.state.wagesInfoList.length > 0) {
+      // 优先使用当前输入的 salary 值
+      var currentSalary = utils.deleteComma(this.state.salary);
+      if (currentSalary !== "" && currentSalary !== "0") {
+        salary = currentSalary;
+      } else if (this.state.wagesInfoList.length > 0) {
+        // 如果当前输入的 salary 为空，则从 wagesInfoList 中获取
         if (
           this.state.wagesInfoList[this.state.wagesInfoList.length - 1]
             .workingCondition === "1"
@@ -830,62 +921,69 @@ class WagesInfo extends Component {
           salary = utils.deleteComma(
             this.state.wagesInfoList[this.state.wagesInfoList.length - 1].salary
           );
-      } else salary = utils.deleteComma(this.state.waitingCost);
-    }
-    if (this.state.socialInsuranceFlag === "1") {
-      if (salary === "") {
-        this.setState({
-          errorsMessageShow: true,
-          errorsMessageValue: "給料を入力してください",
-          socialInsuranceFlag: "0",
-          healthInsuranceAmount: "",
-          welfarePensionAmount: "",
-          insuranceFeeAmount: "",
-        });
-        setTimeout(() => this.setState({ errorsMessageValue: false }), 3000);
-      } else if (salary === "0") {
-        this.setState({
-          errorsMessageShow: true,
-          errorsMessageValue: "給料を0以上に入力してください",
-          socialInsuranceFlag: "0",
-          healthInsuranceAmount: "",
-          welfarePensionAmount: "",
-          insuranceFeeAmount: "",
-        });
-        setTimeout(() => this.setState({ errorsMessageValue: false }), 3000);
       } else {
-        if (salary > 1000000) salary = 1000000;
-        await axios
-          .post("/api/getSocialInsurance202003?salary=" + salary + "&kaigo=0")
-          .then((result) => {
-            var welfarePensionAmount = utils.addComma(
-              result.data.pension.payment
-            );
-            var healthInsuranceAmount = utils.addComma(
-              result.data.insurance.payment
-            );
-            var insuranceFeeAmount = utils.addComma(
-              result.data.insurance.payment + result.data.pension.payment
-            );
-            this.setState({
-              welfarePensionAmount: welfarePensionAmount,
-              healthInsuranceAmount: healthInsuranceAmount,
-              insuranceFeeAmount: insuranceFeeAmount,
-            });
-          })
-          .catch((error) => {
-            this.setState({
-              errorsMessageShow: true,
-              errorsMessageValue:
-                "エラーが発生してしまいました、画面をリフレッシュしてください",
-              socialInsuranceFlag: "0",
-            });
-            setTimeout(
-              () => this.setState({ errorsMessageValue: false }),
-              3000
-            );
-          });
+        // 如果 wagesInfoList 也为空，则使用 waitingCost
+        salary = utils.deleteComma(this.state.waitingCost);
       }
+    }
+    // 社会保険接口调用逻辑已注释，改为手动录入方式
+    // 当 socialInsuranceFlag === "1" 时，不再调用第三方接口，改为手动输入厚生和健康金额
+    if (this.state.socialInsuranceFlag === "1") {
+      // 以下代码已注释：不再验证工资和调用接口，改为手动录入
+      // if (salary === "") {
+      //   this.setState({
+      //     errorsMessageShow: true,
+      //     errorsMessageValue: "給料を入力してください",
+      //     socialInsuranceFlag: "0",
+      //     healthInsuranceAmount: "",
+      //     welfarePensionAmount: "",
+      //     insuranceFeeAmount: "",
+      //   });
+      //   setTimeout(() => this.setState({ errorsMessageValue: false }), 3000);
+      // } else if (salary === "0") {
+      //   this.setState({
+      //     errorsMessageShow: true,
+      //     errorsMessageValue: "給料を0以上に入力してください",
+      //     socialInsuranceFlag: "0",
+      //     healthInsuranceAmount: "",
+      //     welfarePensionAmount: "",
+      //     insuranceFeeAmount: "",
+      //   });
+      //   setTimeout(() => this.setState({ errorsMessageValue: false }), 3000);
+      // } else {
+      //   if (salary > 1000000) salary = 1000000;
+      //   await axios
+      //     .post("/api/getSocialInsurance202003?salary=" + salary + "&kaigo=0")
+      //     .then((result) => {
+      //       var welfarePensionAmount = utils.addComma(
+      //         result.data.pension.payment
+      //       );
+      //       var healthInsuranceAmount = utils.addComma(
+      //         result.data.insurance.payment
+      //       );
+      //       var insuranceFeeAmount = utils.addComma(
+      //         result.data.insurance.payment + result.data.pension.payment
+      //       );
+      //       this.setState({
+      //         welfarePensionAmount: welfarePensionAmount,
+      //         healthInsuranceAmount: healthInsuranceAmount,
+      //         insuranceFeeAmount: insuranceFeeAmount,
+      //       });
+      //     })
+      //     .catch((error) => {
+      //       this.setState({
+      //         errorsMessageShow: true,
+      //         errorsMessageValue:
+      //           "エラーが発生してしまいました、画面をリフレッシュしてください",
+      //         socialInsuranceFlag: "0",
+      //       });
+      //       setTimeout(
+      //         () => this.setState({ errorsMessageValue: false }),
+      //         3000
+      //       );
+      //     });
+      // }
+      // 手动录入模式下，只需要计算总金额，不需要调用接口
       this.totalKeisan();
     } else {
       this.setState(
@@ -924,6 +1022,58 @@ class WagesInfo extends Component {
    * 登録ボタン
    */
   toroku = () => {
+    // 验证厚生和健康字段：根据社員区分判断是否必填
+    var welfarePensionAmount = utils.deleteComma(this.state.welfarePensionAmount);
+    var healthInsuranceAmount = utils.deleteComma(this.state.healthInsuranceAmount);
+    
+    // 如果是社员（employeeStatus === "0"），则厚生和健康必填
+    if (this.state.employeeStatus === "0") {
+      // 必填验证
+      if (welfarePensionAmount === "" || welfarePensionAmount === null || welfarePensionAmount === undefined) {
+        this.setState({
+          errorsMessageShow: true,
+          errorsMessageValue: "厚生を入力してください",
+        });
+        setTimeout(() => this.setState({ errorsMessageValue: false }), 3000);
+        return;
+      }
+      
+      if (healthInsuranceAmount === "" || healthInsuranceAmount === null || healthInsuranceAmount === undefined) {
+        this.setState({
+          errorsMessageShow: true,
+          errorsMessageValue: "健康を入力してください",
+        });
+        setTimeout(() => this.setState({ errorsMessageValue: false }), 3000);
+        return;
+      }
+      
+      // 数字验证：必须是整数、非负数
+      var welfareNum = Number(welfarePensionAmount);
+      var healthNum = Number(healthInsuranceAmount);
+      
+      if (isNaN(welfareNum) || welfareNum < 0 || !Number.isInteger(welfareNum)) {
+        this.setState({
+          errorsMessageShow: true,
+          errorsMessageValue: "厚生は0以上の整数を入力してください",
+        });
+        setTimeout(() => this.setState({ errorsMessageValue: false }), 3000);
+        return;
+      }
+      
+      if (isNaN(healthNum) || healthNum < 0 || !Number.isInteger(healthNum)) {
+        this.setState({
+          errorsMessageShow: true,
+          errorsMessageValue: "健康は0以上の整数を入力してください",
+        });
+        setTimeout(() => this.setState({ errorsMessageValue: false }), 3000);
+        return;
+      }
+    } else if (this.state.employeeStatus === "2") {
+      // 如果是個人事業主（社員区分 === "2"），清空厚生和健康字段
+      welfarePensionAmount = "";
+      healthInsuranceAmount = "";
+    }
+    
     var wagesInfoModel = {};
     $("#socialInsuranceFlag").attr("disabled", false);
     $("#bonusNo").attr("disabled", false);
@@ -980,6 +1130,26 @@ class WagesInfo extends Component {
     wagesInfoModel["expensesInfoModel"] = this.state.expensesInfoModel;
     wagesInfoModel["newEmployeeNo"] = this.state.newEmployeeNo;
     wagesInfoModel["employeeStatus"] = this.state.employeeFormCode;
+    
+    // socialInsuranceFlag 必传：新增时如果没有值，根据社員区分设置默认值
+    // 如果是個人事業主（employeeStatus === "2"），设置为 "0"
+    // 如果是社员（employeeStatus === "0"），根据是否有厚生和健康金额来判断
+    if (!wagesInfoModel["socialInsuranceFlag"] || wagesInfoModel["socialInsuranceFlag"] === "") {
+      if (this.state.employeeStatus === "2") {
+        wagesInfoModel["socialInsuranceFlag"] = "0";
+      } else if (this.state.employeeStatus === "0" && (welfarePensionAmount !== "" || healthInsuranceAmount !== "")) {
+        wagesInfoModel["socialInsuranceFlag"] = "1";
+      } else {
+        wagesInfoModel["socialInsuranceFlag"] = this.state.socialInsuranceFlag || "0";
+      }
+    }
+    
+    // 如果是個人事業主（社員区分 === "2"），确保厚生和健康为空
+    if (this.state.employeeStatus === "2") {
+      wagesInfoModel["welfarePensionAmount"] = "";
+      wagesInfoModel["healthInsuranceAmount"] = "";
+      wagesInfoModel["insuranceFeeAmount"] = "";
+    }
     if (this.state.employeeFormCode === "3") {
       $("#socialInsuranceFlag").attr("disabled", true);
       $("#bonusNo").attr("disabled", true);
@@ -1218,6 +1388,19 @@ class WagesInfo extends Component {
               scheduleOfBonusAmount: "",
               fristBonusMonth: "",
               secondBonusMonth: "",
+            },
+            () => {
+              this.totalKeisan();
+            }
+          );
+        } else if (this.state.employeeFormCode === "2") {
+          // 如果是個人事業主，清空厚生和健康字段，并设置 socialInsuranceFlag 为 "0"
+          this.setState(
+            {
+              socialInsuranceFlag: "0",
+              welfarePensionAmount: "",
+              healthInsuranceAmount: "",
+              insuranceFeeAmount: "",
             },
             () => {
               this.totalKeisan();
@@ -1608,7 +1791,8 @@ class WagesInfo extends Component {
                     </InputGroup.Prepend>
                   </InputGroup>
                 </Col>
-                <Col sm={3}>
+                {/* 社会保険下拉框已注释，改为手动录入方式 */}
+                {/* <Col sm={3}>
                   <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
                     <InputGroup.Prepend>
                       <InputGroup.Text>社会保険</InputGroup.Text>
@@ -1634,40 +1818,44 @@ class WagesInfo extends Component {
                       ))}
                     </FormControl>
                   </InputGroup>
-                </Col>
+                </Col> */}
                 <Col sm={3}>
-                  <InputGroup size="sm" className="mb-3 flexWrapNoWrap">
+                  <InputGroup size="sm" className={`mb-3 flexWrapNoWrap ${this.state.employeeStatus === "0" ? "required-mark" : ""}`}>
                     <InputGroup.Prepend>
                       <InputGroup.Text id="niKanji">厚生</InputGroup.Text>
                     </InputGroup.Prepend>
                     <FormControl
                       maxLength="6"
-                      readOnly={
-                        socialInsuranceFlag === "1" &&
-                        this.state.workingCondition === "1"
-                          ? false
-                          : true
-                      }
+                      readOnly={false}
                       onChange={this.valueChangeInsuranceMoney}
-                      disabled={actionType === "detail" ? true : false}
+                      disabled={
+                        actionType === "detail" 
+                          ? true 
+                          : this.state.employeeStatus === "2" 
+                          ? true 
+                          : false
+                      }
                       name="welfarePensionAmount"
                       value={welfarePensionAmount}
+                      type="text"
                     />
                     <InputGroup.Prepend>
                       <InputGroup.Text id="niKanji">健康</InputGroup.Text>
                     </InputGroup.Prepend>
                     <FormControl
                       maxLength="6"
-                      readOnly={
-                        socialInsuranceFlag === "1" &&
-                        this.state.workingCondition === "1"
-                          ? false
-                          : true
+                      readOnly={false}
+                      disabled={
+                        actionType === "detail" 
+                          ? true 
+                          : this.state.employeeStatus === "2" 
+                          ? true 
+                          : false
                       }
-                      disabled={actionType === "detail" ? true : false}
                       name="healthInsuranceAmount"
                       onChange={this.valueChangeInsuranceMoney}
                       value={healthInsuranceAmount}
+                      type="text"
                     />
                     <InputGroup.Prepend hidden>
                       <InputGroup.Text id="niKanji">総額</InputGroup.Text>
