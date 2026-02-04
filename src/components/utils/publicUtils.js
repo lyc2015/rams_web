@@ -143,30 +143,41 @@ export function getdropDown(method, serverIP) {
 }
 // ドロップダウン 多くメソッド
 export function getPublicDropDown(methodNameList, serverIP) {
-  var outArray = [];
-  var par = JSON.stringify(methodNameList);
-  $.ajax({
-    type: "POST",
-    url: serverIP + "initializationPage",
-    data: par,
-    async: false,
-    xhrFields: {
-      // 允许带上凭据
-      withCredentials: true,
-    },
-    contentType: "application/json",
-    success: function (resultList) {
-      for (let j = 0; j < resultList.length; j++) {
-        var array = [{ code: "", name: "" }];
-        var list = resultList[j];
-        for (var i in list) {
-          array.push(list[i]);
+  return new Promise((resolve, reject) => {
+    var outArray = [];
+    var par = JSON.stringify(methodNameList);
+    $.ajax({
+      type: "POST",
+      url: serverIP + "initializationPage",
+      data: par,
+      async: true,
+      xhrFields: {
+        // 允许带上凭据
+        withCredentials: true,
+      },
+      contentType: "application/json",
+      success: function (resultList) {
+        try {
+          for (let j = 0; j < resultList.length; j++) {
+            var array = [{ code: "", name: "" }];
+            var list = resultList[j];
+            for (var i in list) {
+              array.push(list[i]);
+            }
+            outArray.push(array);
+          }
+          resolve(outArray);
+        } catch (error) {
+          console.error("Error processing dropdown data:", error);
+          reject(error);
         }
-        outArray.push(array);
-      }
-    },
+      },
+      error: function (xhr, status, error) {
+        console.error("AJAX error in getPublicDropDown:", error);
+        reject(new Error(error || "Failed to fetch dropdown data"));
+      },
+    });
   });
-  return outArray;
 }
 
 // ドロップダウン 多くメソッド react-bootstrap-table---->select専用

@@ -131,12 +131,15 @@ class TopCustomerInfo extends Component {
               });
               setTimeout(() => this.setState({ myToastShow: false }), 3000);
               var methodArray = ["getTopCustomer"];
-              var selectDataList = utils.getPublicDropDown(
-                methodArray,
-                this.state.serverIP
-              );
-              var topCustomerDrop = selectDataList[0];
-              this.props.topCustomerToroku(topCustomerDrop);
+              utils.getPublicDropDown(methodArray, this.state.serverIP)
+                .then((selectDataList) => {
+                  var topCustomerDrop = selectDataList && selectDataList[0] ? selectDataList[0] : [];
+                  this.props.topCustomerToroku(topCustomerDrop);
+                })
+                .catch((error) => {
+                  console.error("Error loading top customer dropdown:", error);
+                  this.props.topCustomerToroku([]);
+                });
             } else {
               this.setState({
                 myToastShow: true,
